@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 캠페인일정관리목록</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+<style>
+  .tbl-scroll .tbl { min-width: 1560px; }
+</style>
+</head>
+<body data-active-tab="캠페인관리">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">캠페인일정관리목록</h1>
+      <div class="pg-crumb">캠페인관리 / <b>캠페인일정관리목록</b></div>
+    </div>
+
+    <!-- Chip bar: 국가 + 필터 칩 + 밀도 토글 -->
+    <div class="chip-bar">
+      <div class="filter-chips" aria-label="필터">
+        <div class="country-selector-wrap">
+          <button class="country-selector" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="국가 선택">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
+            <span class="country-selector-label">국가</span>
+            <span class="country-selector-value" data-code="ALL">전체</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <ul class="country-dropdown" role="listbox" aria-label="국가 목록">
+            <li role="option" aria-selected="true" data-code="ALL">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              전체<span class="country-dropdown-code">ALL</span>
+            </li>
+            <li role="option" data-code="KR"><svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>한국<span class="country-dropdown-code">KR</span></li>
+            <li role="option" data-code="JP"><svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>일본<span class="country-dropdown-code">JP</span></li>
+            <li role="option" data-code="CN"><svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>중국<span class="country-dropdown-code">CN</span></li>
+            <li role="option" data-code="RU"><svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>러시아<span class="country-dropdown-code">RU</span></li>
+            <li role="option" data-code="TW"><svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>대만<span class="country-dropdown-code">TW</span></li>
+            <li role="option" data-code="HK"><svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>홍콩<span class="country-dropdown-code">HK</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="chip-bar-right">
+        <button class="btn btn-sm btn-secondary btn-icon" onclick="document.getElementById('page-filters').classList.toggle('expanded')" aria-label="전체 필터 펼치기/접기" title="전체 필터">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </button>
+        <div class="density-group" role="group" aria-label="테이블 밀도">
+          <button class="density-btn" data-density="compact" aria-pressed="false" aria-label="Compact">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <button class="density-btn" data-density="default" aria-pressed="true" aria-label="Default">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+          </button>
+          <button class="density-btn" data-density="comfortable" aria-pressed="false" aria-label="Comfortable">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전체 필터 (기본 접힘) -->
+    <div class="filters collapsible" id="page-filters">
+      <div class="f-row">
+        <span class="f-label">캠페인</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:160px"><option>캠페인 선택</option></select>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">검색어</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:110px"><option>전체</option><option>캠페인명</option><option>인플루언서</option></select>
+          <input class="f-input" style="width:200px" placeholder="검색어 입력">
+          <span class="f-charcount">0/30</span>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">기간검색</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:140px"><option>검수완료일</option><option>신청일</option><option>선정일</option><option>등록완료일</option></select>
+          <input class="f-input" style="width:120px" placeholder="2026-01-01">
+          <span class="f-sep">~</span>
+          <input class="f-input" style="width:120px" placeholder="2026-04-17">
+          <div class="f-presets">
+            <button class="f-pre on">전체</button>
+            <button class="f-pre">오늘</button>
+            <button class="f-pre">7일</button>
+            <button class="f-pre">15일</button>
+            <button class="f-pre">1개월</button>
+            <button class="f-pre">3개월</button>
+          </div>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">캠페인 형태</span>
+        <div class="f-body">
+          <label class="f-radio"><input type="radio" name="camp-type" checked> 전체</label>
+          <label class="f-radio"><input type="radio" name="camp-type"> 배송형</label>
+          <label class="f-radio"><input type="radio" name="camp-type"> 방문형</label>
+          <label class="f-radio"><input type="radio" name="camp-type"> 리뷰형</label>
+        </div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-primary btn-sm">검색하기</button>
+        <button class="btn btn-ghost btn-sm">초기화</button>
+      </div>
+    </div>
+
+    <!-- 툴바 -->
+    <div class="t-toolbar">
+      <div class="t-count">전체 <strong>38</strong>건 / 검색 <strong>38</strong>건</div>
+      <div class="t-right">
+        <select class="t-sel"><option>검수완료일 올림차순정렬</option><option>신청일 올림차순정렬</option><option>등록완료일 내림차순정렬</option></select>
+        <select class="t-sel"><option>페이지당 20개 표시</option><option>페이지당 50개 표시</option></select>
+        <button class="btn btn-sm btn-secondary">
+          <svg width="13" height="13" viewBox="0 0 24 24" class="icon-stroke"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          엑셀 다운
+        </button>
+      </div>
+    </div>
+
+    <!-- 테이블 -->
+    <div class="tbl-wrap" data-bulk-scope="#schedule-bulk-bar">
+      <div class="tbl-scroll">
+      <table class="tbl has-sticky">
+        <thead>
+          <tr>
+            <th class="c-chk"><input class="checkbox-input" type="checkbox"></th>
+            <th class="sortable sticky-col">국가</th>
+            <th>인플루언서</th>
+            <th class="sortable">캠페인명 / 코드</th>
+            <th class="sortable">담당자</th>
+            <th>형태</th>
+            <th class="sortable">신청일</th>
+            <th class="sortable">선정일</th>
+            <th class="sortable">방문예정일</th>
+            <th class="sortable">검수완료일</th>
+            <th class="sortable">등록완료일</th>
+            <th>신청채널</th>
+            <th>인기게시물</th>
+            <th>슈퍼패스</th>
+            <th>액션</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">JP</td>
+            <td>Kocchan11</td>
+            <td><div class="c-camp-name">ロダムクリニック釜山</div><div class="c-camp-sub">1739439117</div></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2025-09-26</td>
+            <td><span class="c-null">—</span></td>
+            <td>2025-11-21</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">JP</td>
+            <td>kuroobisan</td>
+            <td><div class="c-camp-name">ロダムクリニック釜山</div><div class="c-camp-sub">1739439117</div></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2025-09-23</td>
+            <td><span class="c-null">—</span></td>
+            <td>2025-10-26</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">JP</td>
+            <td>naru060708</td>
+            <td><div class="c-camp-name">ロダムクリニック釜山</div><div class="c-camp-sub">1739439117</div></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2025-08-19</td>
+            <td><span class="c-null">—</span></td>
+            <td>2025-10-26</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-tw">트위터</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">JP</td>
+            <td>Sarang</td>
+            <td><div class="c-camp-name">ロダムクリニック釜山</div><div class="c-camp-sub">1739439117</div></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2025-05-23</td>
+            <td>2025-05-29</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla</td>
+            <td><div class="c-camp-name">visit testet</div><div class="c-camp-sub">1774412991</div></td>
+            <td>sarah (CN)</td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2026-03-25</td>
+            <td>2026-03-27</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla3</td>
+            <td><div class="c-camp-name">인기게시물 진행 테스트</div><div class="c-camp-sub">1769756657</div></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span></td>
+            <td>2026-03-13</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-dy">더우인</span> <span class="c-followers">1천 이하</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla</td>
+            <td><div class="c-camp-name">인기게시물 진행 테스트</div><div class="c-camp-sub">1769756657</div></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span></td>
+            <td>2026-01-30</td>
+            <td>2026-01-30</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>2026-04-10</td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span> <span class="c-followers">1천~1만</span></td>
+            <td><span class="c-badge-warn">인기게시물</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla</td>
+            <td><div class="c-camp-name">인기게시물 진행 테스트</div><div class="c-camp-sub">1769756657</div></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span></td>
+            <td>2026-01-30</td>
+            <td>2026-01-30</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>2026-01-30</td>
+            <td><span class="c-tag c-tag-dy">더우인</span> <span class="c-followers">1천~1만</span></td>
+            <td><span class="c-badge-warn">인기게시물</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla2</td>
+            <td><div class="c-camp-name">test5</div><div class="c-camp-sub">1767340856</div></td>
+            <td>sarah (CN)</td>
+            <td><span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span></td>
+            <td>2026-01-19</td>
+            <td>2026-03-11</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-yt">유튜브</span> <span class="c-followers">1만~5만</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla</td>
+            <td><div class="c-camp-name">test_캠페인 여러명</div><div class="c-camp-sub">1768538532</div></td>
+            <td>sarah (CN)</td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2026-01-16</td>
+            <td>2026-01-19</td>
+            <td>2026-01-18</td>
+            <td>2026-01-19</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span> <span class="c-followers">1천~1만</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla</td>
+            <td><div class="c-camp-name">방문형 테스트2</div><div class="c-camp-sub">1766993536</div></td>
+            <td>sarah (CN)</td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2026-01-14</td>
+            <td>2026-03-24</td>
+            <td>2026-01-21</td>
+            <td>2026-01-15</td>
+            <td>2026-01-15</td>
+            <td><span class="c-tag c-tag-tw">트위터</span> <span class="c-followers">1천~1만</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla</td>
+            <td><div class="c-camp-name">방문형 테스트2</div><div class="c-camp-sub">1766993536</div></td>
+            <td>sarah (CN)</td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2026-01-14</td>
+            <td>2026-01-14</td>
+            <td>2026-01-21</td>
+            <td>2026-01-15</td>
+            <td>2026-01-15</td>
+            <td><span class="c-tag c-tag-yt">유튜브</span> <span class="c-followers">1천~1만</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">RU</td>
+            <td>milla</td>
+            <td><div class="c-camp-name">방문형 테스트2</div><div class="c-camp-sub">1766993536</div></td>
+            <td>sarah (CN)</td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>방문형</span></td>
+            <td>2026-01-14</td>
+            <td>2026-01-14</td>
+            <td>2026-01-21</td>
+            <td>2026-01-15</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span> <span class="c-followers">1천~1만</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">CN</td>
+            <td>xiaomei_cn</td>
+            <td><div class="c-camp-name">샤오홍슈 진행 테스트</div><div class="c-camp-sub">1771914476</div></td>
+            <td>sarah (CN)</td>
+            <td><span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span></td>
+            <td>2026-03-06</td>
+            <td>2026-03-06</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-xhs">샤오홍슈</span> <span class="c-followers">5만~10만</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><button class="c-link">상세보기</button></td>
+          </tr>
+          <!-- Empty state 예시: 실제 데이터가 0건일 때 <tbody> 를 이것으로 교체
+          <tr class="empty-row">
+            <td colspan="15">
+              <div class="empty-state">
+                <div class="empty-state-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="empty-state-title">캠페인 일정이 없습니다</div>
+                <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
+                <button class="btn btn-secondary btn-sm">필터 초기화</button>
+              </div>
+            </td>
+          </tr>
+          -->
+        </tbody>
+      </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="pg-btn nav">처음</button>
+        <button class="pg-btn nav">이전</button>
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn nav">다음</button>
+        <button class="pg-btn nav">끝</button>
+      </div>
+    </div>
+
+    <!-- Floating bulk action bar -->
+    <div class="bulk-bar" id="schedule-bulk-bar" role="region" aria-label="일괄 작업 도구">
+      <span class="bulk-count"><strong data-bulk-count>0</strong>건 선택</span>
+      <span class="bulk-divider"></span>
+      <button class="bulk-action">
+        <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        엑셀 다운
+      </button>
+      <button class="bulk-action">
+        <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        알림 발송
+      </button>
+      <button class="bulk-close" aria-label="선택 해제">
+        <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+  </div>
+</main>
+
+</div>
+
+<!-- Country selector dropdown 로직 -->
+<script>
+(function(){
+  const wrap = document.querySelector('.country-selector-wrap');
+  if (!wrap) return;
+  const btn = wrap.querySelector('.country-selector');
+  const list = wrap.querySelector('.country-dropdown');
+  const value = btn.querySelector('.country-selector-value');
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    list.classList.toggle('open');
+    btn.setAttribute('aria-expanded', list.classList.contains('open'));
+  });
+  list.addEventListener('click', (e) => {
+    const li = e.target.closest('li[role="option"]');
+    if (!li) return;
+    list.querySelectorAll('li[role="option"]').forEach(l => l.removeAttribute('aria-selected'));
+    li.setAttribute('aria-selected', 'true');
+    const clone = li.cloneNode(true);
+    clone.querySelectorAll('svg, .country-dropdown-code').forEach(el => el.remove());
+    value.textContent = clone.textContent.trim();
+    value.dataset.code = li.dataset.code;
+    list.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  });
+  document.addEventListener('click', (e) => {
+    if (!wrap.contains(e.target)) { list.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { list.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+  });
+})();
+</script>
+
+<script src="js/components.js"></script>
+</body>
+</html>

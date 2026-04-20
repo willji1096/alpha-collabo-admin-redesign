@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 입점업체 공지사항</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+<style>
+  .tbl .c-title {
+    text-align: left;
+    font-weight: 500;
+  }
+  .tbl .c-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .tbl .c-title a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .tbl th.col-title { text-align: left; }
+  .tbl-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-light);
+  }
+</style>
+</head>
+<body data-active-tab="사이트관리">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">입점업체 공지사항</h1>
+      <div class="pg-crumb">사이트관리 &gt; 게시판 &gt; <b>입점업체 공지사항</b></div>
+    </div>
+
+    <div class="chip-bar">
+      <div class="chip-bar-summary">
+        <span class="f-summary-label">현재 조건</span>
+        분류 <strong>전체</strong><span class="f-summary-sep">·</span>기간 <strong>전체</strong>
+      </div>
+      <div class="chip-bar-right">
+        <button class="btn btn-sm btn-secondary btn-icon" onclick="document.getElementById('page-filters').classList.toggle('expanded')" aria-label="전체 필터 펼치기/접기" title="전체 필터">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="filters collapsible" id="page-filters">
+      <div class="f-row">
+        <span class="f-label">분류</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:150px"><option>전체</option><option>공지</option><option>이벤트</option></select>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">검색어</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:110px"><option>전체</option><option>제목</option><option>내용</option></select>
+          <input class="f-input" style="width:200px" placeholder="검색어 입력">
+          <span class="f-charcount">0/30</span>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">기간검색</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:130px"><option>등록일자</option></select>
+          <input class="f-input" style="width:120px" placeholder="2025-01-01">
+          <span class="f-sep">~</span>
+          <input class="f-input" style="width:120px" placeholder="2026-04-17">
+          <div class="f-presets">
+            <button class="f-pre on">전체</button>
+            <button class="f-pre">오늘</button>
+            <button class="f-pre">7일</button>
+            <button class="f-pre">15일</button>
+            <button class="f-pre">1개월</button>
+            <button class="f-pre">3개월</button>
+          </div>
+        </div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-primary btn-sm">검색하기</button>
+      </div>
+    </div>
+
+    <div class="t-toolbar">
+      <div class="t-count">전체 <strong>1</strong>건 / 검색 <strong>1</strong>건</div>
+      <div class="t-right">
+        <select class="t-sel"><option>등록일자 올림차순정렬</option></select>
+        <select class="t-sel"><option>페이지당 15개 표시</option></select>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th class="c-chk"><input class="checkbox-input" type="checkbox"></th>
+            <th>분류</th>
+            <th class="col-title">제목</th>
+            <th class="sortable">등록일자</th>
+            <th class="sortable">조회수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td><span class="c-approve c-approve-done">공지</span></td>
+            <td class="c-title"><a href="#">입점업체 공지사항</a></td>
+            <td>2025-01-03</td>
+            <td class="c-num">11</td>
+          </tr>
+          <!-- Empty State 예시 (데이터 없을 때)
+          <tr class="empty-row">
+            <td colspan="5">
+              <div class="empty-state">
+                <div class="empty-state-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="empty-state-title">등록된 공지사항이 없습니다</div>
+                <div class="empty-state-desc">검색 조건을 변경하거나 새 공지사항을 등록해 보세요.</div>
+                <button class="btn btn-primary btn-sm">공지 등록</button>
+              </div>
+            </td>
+          </tr>
+          -->
+        </tbody>
+      </table>
+      <div class="tbl-actions">
+        <button class="btn btn-primary btn-sm">공지 등록</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</div>
+<script src="js/components.js"></script>
+</body>
+</html>

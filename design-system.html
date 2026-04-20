@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — Design System</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<style>
+  body { background: var(--bg-page); padding: 0; }
+
+  .ds-layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  .ds-side {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-default);
+    padding: var(--space-6) var(--space-4);
+  }
+  .ds-side-title {
+    font-size: 13px;
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+    padding: 0 var(--space-3);
+  }
+  .ds-side-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--space-5);
+    padding: 0 var(--space-3);
+  }
+  .ds-side-logo strong { font-size: 15px; letter-spacing: -0.2px; }
+  .ds-side-logo small { font-size: 11px; color: var(--text-tertiary); font-weight: 500; }
+  .ds-side-link {
+    display: block;
+    padding: 6px var(--space-3);
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+  .ds-side-link:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .ds-side-group {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--text-tertiary);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    padding: var(--space-4) var(--space-3) var(--space-2);
+  }
+
+  .ds-main { padding: var(--space-10) var(--space-10); max-width: 1080px; }
+  .ds-section { margin-bottom: var(--space-16); scroll-margin-top: var(--space-6); }
+  .ds-section-head { margin-bottom: var(--space-6); }
+  .ds-eyebrow {
+    display: inline-block;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--space-2);
+  }
+  .ds-section h2 {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+  }
+  .ds-section > p { color: var(--text-secondary); font-size: var(--fs-base); }
+
+  h3.ds-sub {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    margin: var(--space-10) 0 var(--space-4);
+  }
+
+  /* Token cards */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-3);
+  }
+  .swatch {
+    padding: var(--space-3);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+  }
+  .swatch-chip {
+    height: 56px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: var(--space-2);
+  }
+  .swatch-name {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  .swatch-hex {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  .token-row {
+    display: grid;
+    grid-template-columns: 220px 120px 1fr;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    align-items: center;
+  }
+  .token-row:last-child { border-bottom: none; }
+  .token-name { font-family: var(--font-mono); color: var(--text-primary); font-size: var(--fs-xs); }
+  .token-value { font-family: var(--font-mono); color: var(--text-tertiary); font-size: var(--fs-xs); }
+  .token-preview-chip { width: 24px; height: 24px; border-radius: var(--radius-xs); border: 1px solid var(--border-light); }
+
+  /* Demo boxes */
+  .demo {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-3);
+  }
+  .demo-row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
+  .demo-stack { display: flex; flex-direction: column; gap: var(--space-3); }
+  .demo-caption {
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    margin-top: var(--space-2);
+    font-family: var(--font-mono);
+  }
+
+  /* Spacing visual */
+  .space-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .space-label { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-secondary); width: 60px; }
+  .space-visual { background: var(--accent); height: 16px; border-radius: var(--radius-xs); }
+  .space-value { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-tertiary); margin-left: auto; }
+
+  /* Shadow preview */
+  .shadow-card {
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+
+  /* Status grid */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 960px) {
+    .ds-layout { grid-template-columns: 1fr; }
+    .ds-side { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border-default); }
+    .ds-main { padding: var(--space-6); }
+    .token-row { grid-template-columns: 1fr; gap: 4px; }
+    .status-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+<div class="ds-layout">
+
+  <!-- Side nav -->
+  <aside class="ds-side" aria-label="Design system navigation">
+    <div class="ds-side-logo">
+      <svg width="24" height="24" viewBox="47 46 177 205" fill="none"><path d="M120.517 50.6437C123.264 49.8334 128.444 48.6491 132.064 47.9634C136.495 47.2154 141.8 46.7791 148.416 46.7791C154.345 46.7168 160.587 47.0908 164.019 47.6517C167.202 48.1504 172.632 49.2724 176.065 50.145C179.498 51.0177 185.24 53.0123 188.86 54.5706C192.48 56.1289 195.975 57.5625 200.094 60.2428C204.33 62.9985 207.147 65.541 210.08 68.4706C214.262 72.6468 216.01 75.0155 218.256 79.441C219.879 82.5576 221.502 86.6092 222.001 88.4792C222.438 90.3491 222.813 94.1514 222.813 96.894C222.75 99.7612 222.313 103.439 221.689 105.62C221.065 107.677 219.879 110.607 218.943 112.165C218.069 113.724 216.01 116.404 214.387 118.087C212.764 119.832 209.706 122.138 207.521 123.26C205.337 124.382 201.53 125.691 199.158 126.19C196.786 126.689 192.667 127.125 190.108 127.125C187.549 127.125 183.055 126.689 180.122 126.128C177.189 125.567 172.82 124.445 170.448 123.572C168.076 122.699 163.957 120.954 161.398 119.707C158.839 118.461 153.908 115.905 150.476 114.098C147.043 112.228 141.551 109.921 138.305 108.924C135.06 107.927 129.567 106.555 126.135 105.87C122.702 105.184 116.086 104.374 111.468 104.062C106.162 103.688 100.608 103.688 96.4884 104.124C92.8684 104.436 87.813 105.184 85.254 105.683C82.6951 106.244 78.3262 107.366 75.58 108.238C72.8338 109.111 68.34 110.794 65.5939 112.041C62.8477 113.225 58.7284 115.282 56.3567 116.591C54.0474 117.962 51.5469 119.021 51.5469 119.021C51.5469 119.021 52.0502 116.716 52.8616 114.347C53.6106 111.978 55.4205 107.553 56.9184 104.561C58.4164 101.507 60.8505 97.2056 62.2236 94.8993C63.6591 92.5307 66.5925 88.4168 68.7145 85.6742C70.8366 82.9316 75.3927 78.0074 78.8255 74.7661C82.2582 71.5249 87.5633 67.0993 90.6215 65.0423C93.6798 62.9231 98.548 59.9311 101.481 58.3728C104.415 56.8145 108.784 54.7576 111.155 53.8226C113.527 52.95 117.771 51.5163 120.517 50.6437Z" fill="#EE2128"/></svg>
+      <div>
+        <strong>Design System</strong><br>
+        <small>v2 · 알파콜라보</small>
+      </div>
+    </div>
+
+    <div class="ds-side-group">Foundation</div>
+    <a class="ds-side-link" href="#color">Color</a>
+    <a class="ds-side-link" href="#typography">Typography</a>
+    <a class="ds-side-link" href="#spacing">Spacing</a>
+    <a class="ds-side-link" href="#elevation">Elevation</a>
+    <a class="ds-side-link" href="#motion">Motion</a>
+
+    <div class="ds-side-group">Components</div>
+    <a class="ds-side-link" href="#buttons">Buttons</a>
+    <a class="ds-side-link" href="#forms">Forms</a>
+    <a class="ds-side-link" href="#badges">Badges</a>
+    <a class="ds-side-link" href="#tabs">Tabs</a>
+    <a class="ds-side-link" href="#alerts">Alerts & Toast</a>
+    <a class="ds-side-link" href="#tooltip">Tooltip</a>
+    <a class="ds-side-link" href="#progress">Progress</a>
+    <a class="ds-side-link" href="#skeleton">Skeleton</a>
+    <a class="ds-side-link" href="#empty">Empty State</a>
+    <a class="ds-side-link" href="#modal">Modal & Drawer</a>
+    <a class="ds-side-link" href="#sns">SNS Tags</a>
+
+    <div class="ds-side-group">2025 Patterns</div>
+    <a class="ds-side-link" href="#cmdk-demo">Command Palette</a>
+    <a class="ds-side-link" href="#bulk">Bulk Actions</a>
+    <a class="ds-side-link" href="#chips">Filter Chips</a>
+    <a class="ds-side-link" href="#country">Country Selector</a>
+    <a class="ds-side-link" href="#density">Density</a>
+    <a class="ds-side-link" href="#kbd">Kbd Hints</a>
+    <a class="ds-side-link" href="#avatars">Avatar Stack</a>
+    <a class="ds-side-link" href="#copy">Inline Copy</a>
+    <a class="ds-side-link" href="#pulse">Status Pulse</a>
+    <a class="ds-side-link" href="#kpi">KPI + Sparkline</a>
+    <a class="ds-side-link" href="#timeline">Timeline</a>
+
+    <div class="ds-side-group">Calendar System</div>
+    <a class="ds-side-link" href="#cal-monthnav">Month Nav</a>
+    <a class="ds-side-link" href="#cal-events">Event Pills</a>
+    <a class="ds-side-link" href="#sns-ico">SNS Icons</a>
+    <a class="ds-side-link" href="#drawer-wide">Wide Drawer</a>
+  </aside>
+
+  <!-- Main -->
+  <main class="ds-main" id="main">
+
+    <header class="ds-section" style="margin-bottom:var(--space-12)">
+      <span class="ds-eyebrow">Design System v2</span>
+      <h1 class="text-display" style="letter-spacing:-0.6px">알파콜라보 어드민</h1>
+      <p class="text-body" style="color:var(--text-secondary); max-width:560px; margin-top:var(--space-3)">
+        Pretendard + warm-neutral · 알파콜라보 레드를 단일 액센트로 사용하는 라이트 어드민 시스템.
+        3-tier 토큰 구조(primitive · semantic · component)로 개발팀 인수인계가 용이합니다.
+      </p>
+    </header>
+
+    <!-- Color -->
+    <section class="ds-section" id="color">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Foundation</span>
+        <h2>Color</h2>
+        <p>3티어 토큰 구조. 화면에서는 Semantic 토큰만 사용하고 Primitive는 직접 참조하지 않습니다.</p>
+      </div>
+
+      <h3 class="ds-sub">Accent scale</h3>
+      <div class="swatch-grid" id="accent-scale"></div>
+
+      <h3 class="ds-sub">Neutral scale</h3>
+      <div class="swatch-grid" id="neutral-scale"></div>
+
+      <h3 class="ds-sub">Status</h3>
+      <div class="status-grid">
+        <div class="demo" style="padding:var(--space-4)">
+          <div class="text-overline" style="margin-bottom:8px">Success</div>
+          <div class="demo-row">
+            <span class="badge badge-success badge-md"><span class="badge-dot"></span>완료</span>
+            <span class="badge badge-solid-success badge-md">완료</span>
+            <span class="badge badge-outline-success badge-md"><span class="badge-dot"></span>완료</span>
+          </div>
+        </div>
+        <div class="demo" style="padding:var(--space-4)">
+          <div class="text-overline" style="margin-bottom:8px">Warning</div>
+          <div class="demo-row">
+            <span class="badge badge-warning badge-md"><span class="badge-dot"></span>대기</span>
+            <span class="badge badge-solid-warning badge-md">대기</span>
+            <span class="badge badge-outline-warning badge-md"><span class="badge-dot"></span>대기</span>
+          </div>
+        </div>
+        <div class="demo" style="padding:var(--space-4)">
+          <div class="text-overline" style="margin-bottom:8px">Error</div>
+          <div class="demo-row">
+            <span class="badge badge-error badge-md"><span class="badge-dot"></span>거절</span>
+            <span class="badge badge-solid-error badge-md">거절</span>
+            <span class="badge badge-outline-error badge-md"><span class="badge-dot"></span>거절</span>
+          </div>
+        </div>
+        <div class="demo" style="padding:var(--space-4)">
+          <div class="text-overline" style="margin-bottom:8px">Info</div>
+          <div class="demo-row">
+            <span class="badge badge-info badge-md"><span class="badge-dot"></span>모집중</span>
+            <span class="badge badge-solid-info badge-md">모집중</span>
+            <span class="badge badge-outline-info badge-md"><span class="badge-dot"></span>모집중</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="ds-sub">Semantic 토큰 매핑</h3>
+      <div class="demo">
+        <div class="token-row"><code class="token-name">--bg-page</code><code class="token-value">neutral-25</code><span class="token-preview-chip" style="background:var(--bg-page)"></span></div>
+        <div class="token-row"><code class="token-name">--bg-surface</code><code class="token-value">neutral-0</code><span class="token-preview-chip" style="background:var(--bg-surface)"></span></div>
+        <div class="token-row"><code class="token-name">--bg-elevated</code><code class="token-value">neutral-50</code><span class="token-preview-chip" style="background:var(--bg-elevated)"></span></div>
+        <div class="token-row"><code class="token-name">--bg-hover</code><code class="token-value">neutral-100</code><span class="token-preview-chip" style="background:var(--bg-hover)"></span></div>
+        <div class="token-row"><code class="token-name">--bg-inverse</code><code class="token-value">neutral-900</code><span class="token-preview-chip" style="background:var(--bg-inverse)"></span></div>
+        <div class="token-row"><code class="token-name">--text-primary</code><code class="token-value">neutral-900</code><span class="token-preview-chip" style="background:var(--text-primary)"></span></div>
+        <div class="token-row"><code class="token-name">--text-secondary</code><code class="token-value">neutral-700</code><span class="token-preview-chip" style="background:var(--text-secondary)"></span></div>
+        <div class="token-row"><code class="token-name">--accent</code><code class="token-value">red-500</code><span class="token-preview-chip" style="background:var(--accent)"></span></div>
+        <div class="token-row"><code class="token-name">--accent-light</code><code class="token-value">red-50</code><span class="token-preview-chip" style="background:var(--accent-light)"></span></div>
+      </div>
+    </section>
+
+    <!-- Typography -->
+    <section class="ds-section" id="typography">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Foundation</span>
+        <h2>Typography</h2>
+        <p>Pretendard Variable (본문) · Geist Mono (숫자). 모든 숫자는 <code class="token-value">tabular-nums</code>.</p>
+      </div>
+
+      <div class="demo demo-stack">
+        <div>
+          <div class="text-display">36 Display</div>
+          <div class="demo-caption">.text-display · 36/700/-0.5px</div>
+        </div>
+        <div>
+          <div class="text-h1">24 Page Title</div>
+          <div class="demo-caption">.text-h1 (= .text-page-title) · 24/700/-0.3px</div>
+        </div>
+        <div>
+          <div class="text-h2">18 Section Title</div>
+          <div class="demo-caption">.text-h2 · 18/600/-0.2px</div>
+        </div>
+        <div>
+          <div class="text-h3">16 Card Title</div>
+          <div class="demo-caption">.text-h3 · 16/600/-0.1px</div>
+        </div>
+        <div>
+          <p class="text-body">14 본문 — 클라이언트가 인플루언서를 채택하고 캠페인 진행 상태를 관리합니다.</p>
+          <div class="demo-caption">.text-body · 14/400/1.6</div>
+        </div>
+        <div>
+          <p class="text-small">13 small — 메타 정보 또는 보조 텍스트에 사용합니다.</p>
+          <div class="demo-caption">.text-small · 13/400/1.5</div>
+        </div>
+        <div>
+          <span class="text-caption">12 Caption</span>
+          <span style="margin-left:16px" class="text-overline">11 Overline</span>
+          <div class="demo-caption">.text-caption · .text-overline</div>
+        </div>
+        <div>
+          <span class="text-kpi">24,521</span>
+          <span style="margin-left:16px" class="text-data">1,734,200</span>
+          <div class="demo-caption">.text-kpi · .text-data (mono)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spacing -->
+    <section class="ds-section" id="spacing">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Foundation</span>
+        <h2>Spacing & Radius</h2>
+        <p>8px 베이스 스케일. <code class="token-value">--space-1</code>부터 <code class="token-value">--space-24</code>까지.</p>
+      </div>
+
+      <h3 class="ds-sub">Spacing</h3>
+      <div class="demo">
+        <div class="space-bar"><span class="space-label">--space-1</span><span class="space-visual" style="width:4px"></span><span class="space-value">4px</span></div>
+        <div class="space-bar"><span class="space-label">--space-2</span><span class="space-visual" style="width:8px"></span><span class="space-value">8px</span></div>
+        <div class="space-bar"><span class="space-label">--space-3</span><span class="space-visual" style="width:12px"></span><span class="space-value">12px</span></div>
+        <div class="space-bar"><span class="space-label">--space-4</span><span class="space-visual" style="width:16px"></span><span class="space-value">16px</span></div>
+        <div class="space-bar"><span class="space-label">--space-5</span><span class="space-visual" style="width:20px"></span><span class="space-value">20px</span></div>
+        <div class="space-bar"><span class="space-label">--space-6</span><span class="space-visual" style="width:24px"></span><span class="space-value">24px</span></div>
+        <div class="space-bar"><span class="space-label">--space-8</span><span class="space-visual" style="width:32px"></span><span class="space-value">32px</span></div>
+        <div class="space-bar"><span class="space-label">--space-12</span><span class="space-visual" style="width:48px"></span><span class="space-value">48px</span></div>
+        <div class="space-bar"><span class="space-label">--space-16</span><span class="space-visual" style="width:64px"></span><span class="space-value">64px</span></div>
+      </div>
+
+      <h3 class="ds-sub">Radius</h3>
+      <div class="demo demo-row">
+        <div style="width:72px; height:72px; background:var(--accent-light); border:1px solid var(--border-default); border-radius:var(--radius-xs); display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)">xs 4</div>
+        <div style="width:72px; height:72px; background:var(--accent-light); border:1px solid var(--border-default); border-radius:var(--radius-sm); display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)">sm 6</div>
+        <div style="width:72px; height:72px; background:var(--accent-light); border:1px solid var(--border-default); border-radius:var(--radius-md); display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)">md 8</div>
+        <div style="width:72px; height:72px; background:var(--accent-light); border:1px solid var(--border-default); border-radius:var(--radius-lg); display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)">lg 12</div>
+        <div style="width:72px; height:72px; background:var(--accent-light); border:1px solid var(--border-default); border-radius:var(--radius-xl); display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)">xl 16</div>
+        <div style="width:72px; height:72px; background:var(--accent-light); border:1px solid var(--border-default); border-radius:var(--radius-2xl); display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)">2xl 24</div>
+        <div style="width:72px; height:72px; background:var(--accent-light); border:1px solid var(--border-default); border-radius:var(--radius-full); display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)">full</div>
+      </div>
+    </section>
+
+    <!-- Elevation -->
+    <section class="ds-section" id="elevation">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Foundation</span>
+        <h2>Elevation</h2>
+        <p>Shadow는 레이어에 따라 xs~4. 컬러드 섀도우는 브랜드/상태 요소에만 제한 사용.</p>
+      </div>
+
+      <div class="demo" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--space-6);padding:var(--space-10) var(--space-6)">
+        <div class="shadow-card" style="box-shadow:var(--shadow-xs)">xs</div>
+        <div class="shadow-card" style="box-shadow:var(--shadow-1)">shadow-1</div>
+        <div class="shadow-card" style="box-shadow:var(--shadow-2)">shadow-2</div>
+        <div class="shadow-card" style="box-shadow:var(--shadow-3)">shadow-3</div>
+        <div class="shadow-card" style="box-shadow:var(--shadow-4)">shadow-4</div>
+      </div>
+
+      <h3 class="ds-sub">Colored shadow</h3>
+      <div class="demo demo-row" style="padding:var(--space-8) var(--space-6); background:var(--bg-subtle)">
+        <button class="btn btn-md btn-primary">Primary hover (accent shadow)</button>
+      </div>
+    </section>
+
+    <!-- Motion -->
+    <section class="ds-section" id="motion">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Foundation</span>
+        <h2>Motion</h2>
+        <p>기본 <code class="token-value">200ms ease</code>, 진입 <code class="token-value">250ms ease-out</code>. <code class="token-value">transform/opacity</code>만 애니메이션.</p>
+      </div>
+      <div class="demo">
+        <div class="token-row"><code class="token-name">--duration-instant</code><code class="token-value">80ms</code><span style="color:var(--text-tertiary)">즉각 피드백</span></div>
+        <div class="token-row"><code class="token-name">--duration-fast</code><code class="token-value">150ms</code><span style="color:var(--text-tertiary)">hover / focus</span></div>
+        <div class="token-row"><code class="token-name">--duration</code><code class="token-value">200ms</code><span style="color:var(--text-tertiary)">기본</span></div>
+        <div class="token-row"><code class="token-name">--duration-slow</code><code class="token-value">250ms</code><span style="color:var(--text-tertiary)">모달/드로어 진입</span></div>
+        <div class="token-row"><code class="token-name">--ease-out</code><code class="token-value">cubic-bezier(0.16, 1, 0.3, 1)</code><span style="color:var(--text-tertiary)">enter</span></div>
+        <div class="token-row"><code class="token-name">--ease-spring</code><code class="token-value">cubic-bezier(0.34, 1.56, 0.64, 1)</code><span style="color:var(--text-tertiary)">탄성</span></div>
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <section class="ds-section" id="buttons">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Buttons</h2>
+        <p><code class="token-value">.btn</code> + <strong>크기</strong>(sm/md/lg) + <strong>변형</strong>(primary/secondary/ghost/danger/link) + 수정자(btn-icon/btn-block/is-loading)</p>
+      </div>
+
+      <h3 class="ds-sub">Variants (5종)</h3>
+      <div class="demo demo-row">
+        <button class="btn btn-md btn-primary">Primary</button>
+        <button class="btn btn-md btn-secondary">Secondary</button>
+        <button class="btn btn-md btn-ghost">Ghost</button>
+        <button class="btn btn-md btn-danger">Danger</button>
+        <a class="btn btn-link" href="#">Link</a>
+      </div>
+
+      <h3 class="ds-sub">Sizes (3단)</h3>
+      <div class="demo demo-row" style="align-items:flex-end">
+        <button class="btn btn-sm btn-primary">Small 32</button>
+        <button class="btn btn-md btn-primary">Medium 40</button>
+        <button class="btn btn-lg btn-primary">Large 48</button>
+      </div>
+
+      <h3 class="ds-sub">Icon-only (.btn-icon)</h3>
+      <div class="demo demo-row" style="align-items:flex-end">
+        <button class="btn btn-sm btn-secondary btn-icon" aria-label="편집">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </button>
+        <button class="btn btn-md btn-secondary btn-icon" aria-label="편집">
+          <svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </button>
+        <button class="btn btn-lg btn-secondary btn-icon" aria-label="편집">
+          <svg width="18" height="18" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </button>
+        <span class="divider-vertical"></span>
+        <button class="btn btn-md btn-primary btn-icon" aria-label="추가">
+          <svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button class="btn btn-md btn-ghost btn-icon" aria-label="닫기">
+          <svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <button class="btn btn-md btn-danger btn-icon" aria-label="삭제">
+          <svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+
+      <h3 class="ds-sub">With icon (아이콘 + 라벨)</h3>
+      <div class="demo demo-row">
+        <button class="btn btn-md btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 5v14M5 12h14"/></svg>
+          새 캠페인
+        </button>
+        <button class="btn btn-md btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          엑셀 다운
+        </button>
+        <button class="btn btn-md btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          새로고침
+        </button>
+      </div>
+
+      <h3 class="ds-sub">Block (full-width)</h3>
+      <div class="demo" style="max-width:360px">
+        <button class="btn btn-lg btn-primary btn-block">로그인</button>
+      </div>
+
+      <h3 class="ds-sub">Loading</h3>
+      <div class="demo demo-row">
+        <button class="btn btn-md btn-primary is-loading">저장 중</button>
+        <button class="btn btn-md btn-secondary is-loading">처리</button>
+        <button class="btn btn-md btn-danger is-loading">삭제</button>
+      </div>
+
+      <h3 class="ds-sub">Disabled</h3>
+      <div class="demo demo-row">
+        <button class="btn btn-md btn-primary" disabled>Primary</button>
+        <button class="btn btn-md btn-secondary" disabled>Secondary</button>
+        <button class="btn btn-md btn-danger" disabled>Danger</button>
+      </div>
+
+      <h3 class="ds-sub">Button Group (세그먼트)</h3>
+      <div class="demo demo-row">
+        <div class="btn-group">
+          <button class="btn btn-sm btn-secondary">일간</button>
+          <button class="btn btn-sm btn-secondary">주간</button>
+          <button class="btn btn-sm btn-secondary">월간</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Forms -->
+    <section class="ds-section" id="forms">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Forms</h2>
+      </div>
+
+      <div class="demo" style="max-width:420px">
+        <div class="form-group">
+          <label class="form-label" for="ds-input-1">아이디</label>
+          <input class="form-input" id="ds-input-1" placeholder="영문 + 숫자 6~16자" value="milla_company">
+        </div>
+        <div class="form-group has-error">
+          <label class="form-label" for="ds-input-2">비밀번호</label>
+          <input class="form-input" id="ds-input-2" type="password" value="1234">
+          <p class="form-error">최소 8자 이상 입력해 주세요.</p>
+        </div>
+        <label class="checkbox-label">
+          <input class="checkbox-input" type="checkbox" checked>
+          자동 로그인 유지
+        </label>
+      </div>
+    </section>
+
+    <!-- Badges -->
+    <section class="ds-section" id="badges">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Badges</h2>
+        <p>Subtle(기본) · Solid · Outline 3가지 variant, sm/md/lg 3사이즈.</p>
+      </div>
+      <div class="demo demo-row">
+        <span class="badge badge-info badge-sm"><span class="badge-dot"></span>sm</span>
+        <span class="badge badge-info badge-md"><span class="badge-dot"></span>md (기본)</span>
+        <span class="badge badge-info badge-lg"><span class="badge-dot"></span>lg</span>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="ds-section" id="tabs">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Tabs</h2>
+      </div>
+
+      <h3 class="ds-sub">Underline</h3>
+      <div class="demo" style="padding:var(--space-4) var(--space-6) 0">
+        <div class="tabs" role="tablist">
+          <button class="tab is-active" role="tab" aria-selected="true">신청목록<span class="tab-count">7</span></button>
+          <button class="tab" role="tab">선정목록<span class="tab-count">1</span></button>
+          <button class="tab" role="tab">검수요청목록<span class="tab-count">10</span></button>
+          <button class="tab" role="tab">수정요청목록<span class="tab-count">1</span></button>
+          <button class="tab" role="tab">등록완료</button>
+        </div>
+      </div>
+
+      <h3 class="ds-sub">Pill (segmented)</h3>
+      <div class="demo">
+        <div class="tabs tabs-pill" role="tablist">
+          <button class="tab is-active" role="tab" aria-selected="true">전체</button>
+          <button class="tab" role="tab">오늘</button>
+          <button class="tab" role="tab">이번 주</button>
+          <button class="tab" role="tab">이번 달</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alerts & Toast -->
+    <section class="ds-section" id="alerts">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Alerts & Toast</h2>
+      </div>
+
+      <h3 class="ds-sub">Inline Alert</h3>
+      <div class="demo demo-stack">
+        <div class="alert alert-success">저장되었습니다. 변경사항은 즉시 반영됩니다.</div>
+        <div class="alert alert-info">5명이 지원했습니다. 채택 심사를 진행해 주세요.</div>
+        <div class="alert alert-warning">캠페인 마감일이 3일 남았습니다.</div>
+        <div class="alert alert-error">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+      </div>
+
+      <h3 class="ds-sub">Toast</h3>
+      <div class="demo" style="padding:var(--space-6); background:var(--bg-subtle); position:relative; min-height:240px">
+        <div style="position:absolute; top:var(--space-4); right:var(--space-4); display:flex; flex-direction:column; gap:var(--space-2)">
+          <div class="toast toast-success">
+            <svg class="toast-icon icon-stroke" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <div class="toast-body">
+              <div class="toast-title">저장되었습니다</div>
+              <div class="toast-desc">변경사항이 자동으로 반영됩니다.</div>
+            </div>
+            <button class="toast-close" aria-label="닫기">
+              <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+          </div>
+          <div class="toast toast-error">
+            <svg class="toast-icon icon-stroke" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="toast-body">
+              <div class="toast-title">업로드에 실패했습니다</div>
+              <div class="toast-desc">파일 크기가 10MB를 초과했습니다.</div>
+            </div>
+            <button class="toast-close" aria-label="닫기">
+              <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tooltip -->
+    <section class="ds-section" id="tooltip">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Tooltip</h2>
+      </div>
+      <div class="demo demo-row" style="padding:var(--space-8); justify-content:center">
+        <span class="tooltip-wrap">
+          <button class="btn btn-md btn-secondary">마우스 오버</button>
+          <span class="tooltip">위쪽 기본 툴팁</span>
+        </span>
+        <span class="tooltip-wrap">
+          <button class="btn btn-md btn-secondary">Bottom</button>
+          <span class="tooltip tooltip-bottom">아래쪽으로 표시됩니다</span>
+        </span>
+      </div>
+    </section>
+
+    <!-- Progress -->
+    <section class="ds-section" id="progress">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Progress</h2>
+      </div>
+      <div class="demo demo-stack">
+        <div>
+          <div class="text-small" style="margin-bottom:6px">기본 42%</div>
+          <div class="progress"><div class="progress-bar" style="width:42%"></div></div>
+        </div>
+        <div>
+          <div class="text-small" style="margin-bottom:6px">Success (완료 87%)</div>
+          <div class="progress progress-lg"><div class="progress-bar is-success" style="width:87%"></div></div>
+        </div>
+        <div>
+          <div class="text-small" style="margin-bottom:6px">Indeterminate</div>
+          <div class="progress progress-indeterminate"><div class="progress-bar"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skeleton -->
+    <section class="ds-section" id="skeleton">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Skeleton</h2>
+      </div>
+      <div class="demo">
+        <div style="display:flex; gap:var(--space-4); align-items:center">
+          <div class="skeleton skeleton-avatar"></div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:6px">
+            <div class="skeleton skeleton-title" style="width:40%"></div>
+            <div class="skeleton skeleton-text" style="width:80%"></div>
+            <div class="skeleton skeleton-text" style="width:60%"></div>
+          </div>
+          <div class="skeleton skeleton-btn"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty State -->
+    <section class="ds-section" id="empty">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Empty State</h2>
+      </div>
+      <div class="demo" style="padding:0">
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" class="icon-stroke"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="empty-state-title">등록된 캠페인이 없습니다</div>
+          <div class="empty-state-desc">첫 캠페인을 등록하고 인플루언서 모집을 시작해 보세요.</div>
+          <button class="btn btn-primary btn-md">새 캠페인 등록</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal & Drawer -->
+    <section class="ds-section" id="modal">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Modal & Drawer</h2>
+        <p>단일 의사결정은 Modal, 상세/다량 정보는 Drawer.</p>
+      </div>
+
+      <div class="demo demo-row">
+        <button class="btn btn-md btn-secondary" onclick="document.getElementById('demo-modal').hidden=false">Open Modal</button>
+        <button class="btn btn-md btn-secondary" onclick="document.getElementById('demo-drawer-bd').classList.add('open');document.getElementById('demo-drawer').classList.add('open')">Open Drawer</button>
+      </div>
+    </section>
+
+    <!-- SNS Tags -->
+    <section class="ds-section" id="sns">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>SNS Channel Tags</h2>
+        <p>7개 플랫폼 — 풀텍스트 태그(.tag-sns) / 테이블 셀 태그(.c-tag-*) / SVG 아이콘 배지(.sns-ico) 3가지 사용 패턴.</p>
+      </div>
+
+      <h3 class="ds-sub">풀 텍스트 태그</h3>
+      <div class="demo demo-row">
+        <span class="tag-sns tag-instagram">인스타그램</span>
+        <span class="tag-sns tag-youtube">유튜브</span>
+        <span class="tag-sns tag-tiktok">틱톡</span>
+        <span class="tag-sns tag-xiaohongshu">샤오홍슈</span>
+        <span class="tag-sns tag-facebook">페이스북</span>
+        <span class="tag-sns tag-twitter">트위터/X</span>
+        <span class="tag-sns tag-douyin">더우인</span>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         2025 Patterns
+         ============================================================ -->
+    <section class="ds-section" id="cmdk-demo" style="margin-top:var(--space-16); padding-top:var(--space-8); border-top:1px solid var(--border-default)">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Command Palette</h2>
+        <p>Linear/Notion/Vercel/Raycast 스타일. <kbd class="kbd">⌘</kbd><kbd class="kbd">K</kbd> 또는 <kbd class="kbd">/</kbd>로 열고 ↑↓로 이동, <kbd class="kbd">↵</kbd>로 실행.</p>
+      </div>
+      <div class="demo demo-row">
+        <button class="btn btn-md btn-primary" onclick="document.getElementById('cmdk').classList.add('open')">Command Palette 열기</button>
+        <span class="text-small text-tertiary">또는 이 페이지 어디서든 <kbd class="kbd">⌘</kbd><kbd class="kbd">K</kbd></span>
+      </div>
+    </section>
+
+    <section class="ds-section" id="bulk">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Bulk Action Toolbar</h2>
+        <p>테이블 행 선택 시 하단에 플로팅 툴바가 등장. 선택 개수 + 벌크 액션 + 닫기.</p>
+      </div>
+      <div class="demo" style="padding:0; overflow:visible; position:relative">
+        <table class="tbl" id="demo-bulk-tbl" data-bulk-scope="#demo-bulk-bar">
+          <thead>
+            <tr>
+              <th class="c-chk"><input class="checkbox-input" type="checkbox"></th>
+              <th style="text-align:left">캠페인</th>
+              <th style="text-align:left">인플루언서</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="c-chk"><input class="checkbox-input" type="checkbox"></td><td style="text-align:left">로담한의원 부산점</td><td style="text-align:left">김민지</td><td><span class="badge badge-info badge-sm"><span class="status-pulse is-info"></span>진행중</span></td></tr>
+            <tr><td class="c-chk"><input class="checkbox-input" type="checkbox"></td><td style="text-align:left">테스트 캠페인 3</td><td style="text-align:left">박지영</td><td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>대기</span></td></tr>
+            <tr><td class="c-chk"><input class="checkbox-input" type="checkbox"></td><td style="text-align:left">방문형 테스트 2</td><td style="text-align:left">田中ゆき</td><td><span class="badge badge-success badge-sm"><span class="badge-dot"></span>완료</span></td></tr>
+          </tbody>
+        </table>
+        <div class="bulk-bar" id="demo-bulk-bar" role="region" aria-label="일괄 작업 도구">
+          <span class="bulk-count"><strong data-bulk-count>0</strong>개 선택</span>
+          <span class="bulk-divider"></span>
+          <button class="bulk-action">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polyline points="20 6 9 17 4 12"/></svg>
+            일괄 채택
+          </button>
+          <button class="bulk-action">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            엑셀 다운
+          </button>
+          <button class="bulk-action bulk-action-danger">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            거절
+          </button>
+          <button class="bulk-close" aria-label="선택 해제">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+      </div>
+      <p class="demo-caption">체크박스를 선택해 보세요. 바가 스프링 모션으로 등장합니다.</p>
+    </section>
+
+    <section class="ds-section" id="chips">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Chip Bar Summary</h2>
+        <p>활성 필터를 read-only 텍스트로 요약. 본 프로젝트는 이 패턴을 채택 (filter-chip 편집 팝오버 부재로 인한 혼란 방지).</p>
+      </div>
+      <div class="demo">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); flex-wrap:wrap">
+          <div class="chip-bar-summary">
+            <span class="f-summary-label">현재 조건</span>
+            기간 <strong>전체</strong>
+            <span class="f-summary-sep">·</span>
+            접속기기 <strong>전체</strong>
+          </div>
+          <div style="display:inline-flex; gap:var(--space-2); align-items:center">
+            <button class="btn btn-sm btn-secondary btn-icon" aria-label="전체 필터" title="전체 필터">
+              <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            </button>
+            <div class="density-group" role="group" aria-label="테이블 밀도">
+              <button class="density-btn" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+              <button class="density-btn" aria-pressed="true"><svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
+              <button class="density-btn" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="ds-sub" style="margin-top:var(--space-6)">Legacy: Filter Chips (편집 팝오버 필요 — 본 프로젝트 미사용)</h3>
+      <div class="demo">
+        <div class="filter-chips">
+          <div class="filter-chip"><strong>국적</strong>일본<button class="filter-chip-remove" aria-label="국적 필터 해제">
+            <svg width="10" height="10" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button></div>
+          <div class="filter-chip"><strong>팔로워</strong>1천~1만<button class="filter-chip-remove" aria-label="팔로워 필터 해제">
+            <svg width="10" height="10" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button></div>
+          <div class="filter-chip"><strong>채널</strong>인스타그램 · 유튜브<button class="filter-chip-remove" aria-label="채널 필터 해제">
+            <svg width="10" height="10" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button></div>
+          <button class="filter-chip-add">
+            <svg width="10" height="10" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 5v14M5 12h14"/></svg>
+            필터 추가
+          </button>
+          <button class="filter-chip-clear">전체 해제</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="density">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Density Toggle</h2>
+        <p>데이터 밀도를 <strong>Compact / Default / Comfortable</strong>로 전환. 설정은 <code>localStorage</code>에 저장됩니다.</p>
+      </div>
+      <div class="demo demo-row">
+        <div class="density-group" role="group" aria-label="테이블 밀도">
+          <button class="density-btn" data-density="compact" aria-pressed="false" aria-label="Compact">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <button class="density-btn" data-density="default" aria-pressed="true" aria-label="Default">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+          </button>
+          <button class="density-btn" data-density="comfortable" aria-pressed="false" aria-label="Comfortable">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg>
+          </button>
+        </div>
+        <span class="text-small text-tertiary">오른쪽 테이블에 즉시 반영</span>
+      </div>
+    </section>
+
+    <section class="ds-section" id="kbd">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Keyboard Hints</h2>
+      </div>
+      <div class="demo demo-row">
+        <span>저장 <span class="kbd-group"><kbd class="kbd">⌘</kbd><kbd class="kbd">S</kbd></span></span>
+        <span>검색 열기 <span class="kbd-group"><kbd class="kbd">⌘</kbd><kbd class="kbd">K</kbd></span></span>
+        <span>새 항목 <kbd class="kbd">N</kbd></span>
+        <span>목록 이동 <span class="kbd-group"><kbd class="kbd">G</kbd><span class="kbd-sep">then</span><kbd class="kbd">L</kbd></span></span>
+      </div>
+    </section>
+
+    <section class="ds-section" id="avatars">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Avatar Stack</h2>
+      </div>
+      <div class="demo demo-row">
+        <div class="avatar-stack">
+          <span class="avatar avatar-md" style="background:#FCE7F3;color:#BE185D">민</span>
+          <span class="avatar avatar-md" style="background:#DBEAFE;color:#1D4ED8">지</span>
+          <span class="avatar avatar-md" style="background:#DCFCE7;color:#15803D">수</span>
+          <span class="avatar-stack-more">+4</span>
+        </div>
+        <span class="text-small text-tertiary" style="margin-left:12px">지원자 7명 참여</span>
+      </div>
+    </section>
+
+    <section class="ds-section" id="copy">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Inline Copy</h2>
+        <p>마우스 오버 시 복사 버튼이 표시됩니다. 누르면 체크 마크로 피드백.</p>
+      </div>
+      <div class="demo demo-stack">
+        <div class="copyable" data-copy="1739439117">
+          <span class="text-data">1739439117</span>
+          <button class="copy-btn" aria-label="캠페인 코드 복사">
+            <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+        <div class="copyable" data-copy="https://instagram.com/minji_beauty">
+          <span class="text-data">instagram.com/minji_beauty</span>
+          <button class="copy-btn" aria-label="URL 복사">
+            <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="pulse">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Status Pulse (live)</h2>
+        <p>진행 중/라이브 상태만 펄스. 완료/정적 상태는 일반 닷.</p>
+      </div>
+      <div class="demo demo-row">
+        <span class="badge badge-info badge-md"><span class="status-pulse is-info"></span>진행중</span>
+        <span class="badge badge-warning badge-md"><span class="status-pulse is-warning"></span>검수 대기</span>
+        <span class="badge badge-success badge-md"><span class="badge-dot"></span>완료 (정적)</span>
+        <span class="badge badge-error badge-md"><span class="badge-dot"></span>거절 (정적)</span>
+      </div>
+    </section>
+
+    <section class="ds-section" id="kpi">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>KPI Card + Sparkline</h2>
+      </div>
+      <div class="demo" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--space-4)">
+        <div class="kpi-card">
+          <div class="kpi-head">
+            <span class="kpi-label">활성 캠페인</span>
+            <span class="kpi-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><path d="M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+            </span>
+          </div>
+          <div class="kpi-row">
+            <span class="kpi-value">47</span>
+            <span class="kpi-delta kpi-delta-up">↑ 12%</span>
+          </div>
+          <div class="kpi-sub">지난 주 대비</div>
+          <svg class="kpi-spark kpi-spark-up" viewBox="0 0 240 40" preserveAspectRatio="none">
+            <path class="spark-area" d="M0,30 L20,28 L40,25 L60,22 L80,18 L100,20 L120,14 L140,16 L160,11 L180,13 L200,9 L220,6 L240,4 L240,40 L0,40 Z"/>
+            <path class="spark-line" d="M0,30 L20,28 L40,25 L60,22 L80,18 L100,20 L120,14 L140,16 L160,11 L180,13 L200,9 L220,6 L240,4"/>
+          </svg>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-head">
+            <span class="kpi-label">신규 지원자</span>
+            <span class="kpi-icon"><svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
+          </div>
+          <div class="kpi-row">
+            <span class="kpi-value">1,284</span>
+            <span class="kpi-delta kpi-delta-up">↑ 8.4%</span>
+          </div>
+          <div class="kpi-sub">누적 12,432명</div>
+          <svg class="kpi-spark" viewBox="0 0 240 40" preserveAspectRatio="none">
+            <path class="spark-area" d="M0,26 L20,22 L40,28 L60,20 L80,24 L100,16 L120,22 L140,12 L160,18 L180,8 L200,14 L220,10 L240,6 L240,40 L0,40 Z"/>
+            <path class="spark-line" d="M0,26 L20,22 L40,28 L60,20 L80,24 L100,16 L120,22 L140,12 L160,18 L180,8 L200,14 L220,10 L240,6"/>
+          </svg>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-head">
+            <span class="kpi-label">완료 리뷰</span>
+            <span class="kpi-icon"><svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </div>
+          <div class="kpi-row">
+            <span class="kpi-value">892</span>
+            <span class="kpi-delta kpi-delta-down">↓ 2.1%</span>
+          </div>
+          <div class="kpi-sub">전주 대비 소폭 하락</div>
+          <svg class="kpi-spark kpi-spark-down" viewBox="0 0 240 40" preserveAspectRatio="none">
+            <path class="spark-area" d="M0,10 L20,14 L40,12 L60,18 L80,16 L100,22 L120,20 L140,26 L160,24 L180,28 L200,25 L220,30 L240,32 L240,40 L0,40 Z"/>
+            <path class="spark-line" d="M0,10 L20,14 L40,12 L60,18 L80,16 L100,22 L120,20 L140,26 L160,24 L180,28 L200,25 L220,30 L240,32"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="timeline">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Activity Timeline</h2>
+      </div>
+      <div class="demo">
+        <ul class="timeline">
+          <li class="timeline-item">
+            <span class="timeline-dot timeline-dot-accent">
+              <svg width="10" height="10" viewBox="0 0 24 24" class="icon-stroke" style="color:var(--accent)"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/></svg>
+            </span>
+            <span class="timeline-title">김민지 님이 리뷰를 제출했습니다</span>
+            <span class="timeline-meta">2026-04-17 오전 9:42 · 로담한의원 부산점</span>
+            <div class="timeline-body">인스타그램 포스팅 1건 + 스토리 2건. 해시태그 5개 포함.</div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot timeline-dot-success">
+              <svg width="10" height="10" viewBox="0 0 24 24" class="icon-stroke" style="color:var(--status-success);stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="timeline-title">박지영 님이 채택되었습니다</span>
+            <span class="timeline-meta">2026-04-16 오후 6:18 · 방문형 테스트 2</span>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot timeline-dot-warning"></span>
+            <span class="timeline-title">수정 요청이 도착했습니다</span>
+            <span class="timeline-meta">2026-04-15 오후 3:07 · 테스트 캠페인 3</span>
+            <div class="timeline-body">캡션에 브랜드명 누락 — 클라이언트가 재업로드 요청.</div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot"></span>
+            <span class="timeline-title">새 캠페인이 등록되었습니다</span>
+            <span class="timeline-meta">2026-04-14 오전 11:20 · milla_company</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Country Selector -->
+    <section class="ds-section" id="country" style="margin-top:var(--space-16); padding-top:var(--space-8); border-top:1px solid var(--border-default)">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">2025 Patterns</span>
+        <h2>Country Selector</h2>
+        <p>다국가 데이터 페이지의 Primary 필터. 필수 1개 선택, × 제거 없음.</p>
+      </div>
+      <div class="demo demo-row">
+        <div class="country-selector-wrap" id="ds-country-wrap">
+          <button class="country-selector" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
+            <span class="country-selector-label">국가</span>
+            <span class="country-selector-value">일본</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <ul class="country-dropdown" role="listbox">
+            <li role="option">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              한국<span class="country-dropdown-code">KR</span>
+            </li>
+            <li role="option" aria-selected="true">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              일본<span class="country-dropdown-code">JP</span>
+            </li>
+            <li role="option">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              중국<span class="country-dropdown-code">CN</span>
+            </li>
+            <li role="option">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              러시아<span class="country-dropdown-code">RU</span>
+            </li>
+          </ul>
+        </div>
+        <span class="text-small text-tertiary">클릭해 열어 보세요</span>
+      </div>
+    </section>
+
+    <!-- Calendar Month Nav -->
+    <section class="ds-section" id="cal-monthnav">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">Calendar System</span>
+        <h2>Month Navigation</h2>
+        <p>3분할 그리드 — 이전 달(좌) / 현재 달(중앙, 큰 제목) / 다음 달 + 오늘 버튼(우).</p>
+      </div>
+      <div class="demo" style="padding:0">
+        <div class="cal-monthnav">
+          <button class="cal-monthnav-side cal-monthnav-prev" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polyline points="15 18 9 12 15 6"/></svg>
+            <span><small>이전 달</small>2026년 3월</span>
+          </button>
+          <h2 class="cal-monthnav-title">2026년 4월</h2>
+          <div class="cal-monthnav-actions">
+            <button class="cal-today-btn" type="button">오늘</button>
+            <button class="cal-monthnav-side cal-monthnav-next" type="button">
+              <span><small>다음 달</small>2026년 5월</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calendar Event Pills -->
+    <section class="ds-section" id="cal-events">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">Calendar System</span>
+        <h2>Event Pills</h2>
+        <p>캘린더 셀 내부 이벤트 — 4가지 타입(accent/info/warning/success) dot + 라벨.</p>
+      </div>
+      <div class="demo demo-row">
+        <button class="cal-event cal-event-accent"><span class="cal-event-dot"></span>캠페인 신청 시작</button>
+        <button class="cal-event cal-event-info"><span class="cal-event-dot"></span>리뷰등록 시작</button>
+        <button class="cal-event cal-event-warning"><span class="cal-event-dot"></span>검수 마감</button>
+        <button class="cal-event cal-event-success"><span class="cal-event-dot"></span>캠페인 종료</button>
+      </div>
+    </section>
+
+    <!-- SNS Icon Badges -->
+    <section class="ds-section" id="sns-ico">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">Calendar System</span>
+        <h2>SNS Icon Badges</h2>
+        <p>28x28 rounded square, 브랜드별 컬러 배경 + SVG 로고. 밀도 높은 테이블/리스트에서 풀텍스트 태그 대체.</p>
+      </div>
+      <div class="demo demo-row">
+        <span class="sns-ico tag-instagram" title="인스타그램"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+        <span class="sns-ico tag-youtube" title="유튜브"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg></span>
+        <span class="sns-ico tag-tiktok" title="틱톡"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg></span>
+        <span class="sns-ico tag-xiaohongshu" title="샤오홍슈"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+        <span class="sns-ico tag-facebook" title="페이스북"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></span>
+        <span class="sns-ico tag-twitter" title="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+        <span class="sns-ico tag-douyin" title="더우인"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 8.5a7.4 7.4 0 0 1-4.3-1.4V15a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V2h3a4.4 4.4 0 0 0 4.8 4.5z"/></svg></span>
+      </div>
+    </section>
+
+    <!-- Wide Drawer -->
+    <section class="ds-section" id="drawer-wide">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow" style="color:var(--text-tertiary)">Calendar System</span>
+        <h2>Wide Drawer + Day Table</h2>
+        <p><code class="token-value">.drawer.drawer-wide</code> (960px) + <code class="token-value">.day-tbl</code> 캠페인 테이블 + <code class="token-value">.day-event-filter</code> 유형 탭.</p>
+      </div>
+      <div class="demo">
+        <p class="text-body" style="margin-bottom:var(--space-3)">실제 동작 예시는 <a href="campaign-calendar.html" class="text-accent" style="text-decoration:underline">campaign-calendar.html</a>에서 아무 이벤트 날짜(1, 7, 17, 22, 30일 등)를 클릭해 보세요.</p>
+        <div class="day-event-filter" role="tablist" style="margin-bottom:var(--space-4)">
+          <button class="day-event-filter-btn is-active">전체<span class="count">3</span></button>
+          <button class="day-event-filter-btn">신청<span class="count">1</span></button>
+          <button class="day-event-filter-btn">진행<span class="count">1</span></button>
+          <button class="day-event-filter-btn">마감<span class="count">1</span></button>
+        </div>
+      </div>
+    </section>
+
+    <footer style="margin-top:var(--space-16); padding-top:var(--space-6); border-top:1px solid var(--border-light); color:var(--text-tertiary); font-size:var(--fs-sm)">
+      Alphacollabo Admin Design System v2 · 전체 토큰은 <code class="token-value">css/common.css</code> 참조 · <kbd class="kbd">⌘</kbd><kbd class="kbd">K</kbd>로 Command Palette
+    </footer>
+  </main>
+</div>
+
+<!-- Demo Modal -->
+<div class="modal-backdrop" id="demo-modal" hidden role="dialog" aria-modal="true" aria-labelledby="demo-modal-title" onclick="if(event.target===this)this.hidden=true">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="demo-modal-title">캠페인을 종료할까요?</h2>
+      <button class="modal-close" aria-label="닫기" onclick="document.getElementById('demo-modal').hidden=true">
+        <svg width="18" height="18" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="text-body">진행 중인 인플루언서 7명이 리뷰를 작성 중입니다. 종료 시 미제출 리뷰는 자동으로 취소됩니다.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sm btn-ghost" onclick="document.getElementById('demo-modal').hidden=true">취소</button>
+      <button class="btn btn-sm btn-danger">캠페인 종료</button>
+    </div>
+  </div>
+</div>
+
+<!-- Demo Drawer -->
+<div class="drawer-backdrop" id="demo-drawer-bd" onclick="this.classList.remove('open');document.getElementById('demo-drawer').classList.remove('open')"></div>
+<aside class="drawer" id="demo-drawer" role="dialog" aria-modal="true" aria-labelledby="demo-drawer-title">
+  <div class="drawer-header">
+    <h2 class="drawer-title" id="demo-drawer-title">인플루언서 프로필</h2>
+    <button class="modal-close" aria-label="닫기" onclick="document.getElementById('demo-drawer-bd').classList.remove('open');document.getElementById('demo-drawer').classList.remove('open')">
+      <svg width="18" height="18" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div style="display:flex; gap:var(--space-4); align-items:center; margin-bottom:var(--space-6)">
+      <div class="skeleton skeleton-avatar" style="width:56px; height:56px"></div>
+      <div>
+        <div class="text-h3">김민지</div>
+        <div class="text-small text-tertiary">instagram.com/minji_beauty · 팔로워 4.2만</div>
+      </div>
+    </div>
+    <hr class="divider">
+    <h3 class="text-overline" style="margin-bottom:var(--space-3)">최근 캠페인</h3>
+    <div class="demo-stack">
+      <div class="alert alert-success">로담한의원 부산점 — 완료 · 12일 전</div>
+      <div class="alert alert-info">테스트 캠페인 3 — 진행중 · 마감 5일</div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-sm btn-ghost" onclick="document.getElementById('demo-drawer-bd').classList.remove('open');document.getElementById('demo-drawer').classList.remove('open')">닫기</button>
+    <button class="btn btn-sm btn-primary">저장</button>
+  </div>
+</aside>
+
+<script>
+  // Auto-populate color scales
+  const accentSteps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+  const neutralSteps = [0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+
+  function renderSwatches(prefix, steps, target) {
+    const host = document.getElementById(target);
+    if (!host) return;
+    host.innerHTML = steps.map(n => {
+      const varName = `--${prefix}-${n}`;
+      return `
+        <div class="swatch">
+          <div class="swatch-chip" style="background:var(${varName})"></div>
+          <div class="swatch-name">${prefix}-${n}</div>
+          <div class="swatch-hex" id="hex-${prefix}-${n}"></div>
+        </div>
+      `;
+    }).join('');
+
+    // Read computed values
+    const root = getComputedStyle(document.documentElement);
+    steps.forEach(n => {
+      const val = root.getPropertyValue(`--${prefix}-${n}`).trim();
+      const el = document.getElementById(`hex-${prefix}-${n}`);
+      if (el) el.textContent = val || '—';
+    });
+  }
+
+  renderSwatches('red', accentSteps, 'accent-scale');
+  renderSwatches('neutral', neutralSteps, 'neutral-scale');
+
+  // Country selector demo
+  (function(){
+    const wrap = document.getElementById('ds-country-wrap');
+    if (!wrap) return;
+    const btn = wrap.querySelector('.country-selector');
+    const list = wrap.querySelector('.country-dropdown');
+    const value = btn.querySelector('.country-selector-value');
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      list.classList.toggle('open');
+      btn.setAttribute('aria-expanded', list.classList.contains('open'));
+    });
+    list.addEventListener('click', (e) => {
+      const li = e.target.closest('li[role="option"]');
+      if (!li) return;
+      list.querySelectorAll('li[role="option"]').forEach(l => l.removeAttribute('aria-selected'));
+      li.setAttribute('aria-selected', 'true');
+      const clone = li.cloneNode(true);
+      clone.querySelectorAll('svg, .country-dropdown-code').forEach(el => el.remove());
+      value.textContent = clone.textContent.trim();
+      list.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target)) { list.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+    });
+  })();
+
+  // day-event-filter interactive
+  document.querySelectorAll('.day-event-filter').forEach(group => {
+    group.addEventListener('click', (e) => {
+      const btn = e.target.closest('.day-event-filter-btn');
+      if (!btn) return;
+      group.querySelectorAll('.day-event-filter-btn').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    });
+  });
+
+  // Keyboard close for modal/drawer
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.getElementById('demo-modal').hidden = true;
+      document.getElementById('demo-drawer-bd').classList.remove('open');
+      document.getElementById('demo-drawer').classList.remove('open');
+    }
+  });
+</script>
+<script src="js/components.js"></script>
+
+</body>
+</html>

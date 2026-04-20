@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 선정목록</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-active-tab="신청서관리">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">선정목록</h1>
+      <div class="pg-crumb">신청서관리 / 리뷰통합관리 / <b>선정목록</b></div>
+    </div>
+
+    <div class="chip-bar">
+      <div class="chip-bar-summary">
+        <span class="f-summary-label">현재 조건</span>
+        기간 <strong>전체</strong>
+      </div>
+      <div class="chip-bar-right">
+        <button class="btn btn-sm btn-secondary btn-icon" onclick="document.getElementById('page-filters').classList.toggle('expanded')" aria-label="전체 필터 펼치기/접기" title="전체 필터">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </button>
+        <div class="density-group" role="group" aria-label="테이블 밀도">
+          <button class="density-btn" data-density="compact" aria-pressed="false" aria-label="Compact">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <button class="density-btn" data-density="default" aria-pressed="true" aria-label="Default">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+          </button>
+          <button class="density-btn" data-density="comfortable" aria-pressed="false" aria-label="Comfortable">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters collapsible" id="page-filters">
+      <div class="f-row">
+        <span class="f-label">캠페인</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:150px"><option>캠페인</option></select>
+          <span class="f-label" style="margin-left:16px; width:auto">접속기기</span>
+          <label class="f-radio"><input type="radio" name="dv" checked> 전체</label>
+          <label class="f-radio"><input type="radio" name="dv"> PC</label>
+          <label class="f-radio"><input type="radio" name="dv"> 모바일</label>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">검색어</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:110px"><option>검색 항목</option></select>
+          <input class="f-input" style="width:180px" placeholder="검색어 입력">
+          <span class="f-charcount">0/30</span>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">기간검색</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:120px"><option>선정일자</option></select>
+          <input class="f-input" style="width:120px" placeholder="2026-01-01">
+          <span class="f-sep">~</span>
+          <input class="f-input" style="width:120px" placeholder="2026-04-16">
+          <div class="f-presets">
+            <button class="f-pre on">전체</button>
+            <button class="f-pre">오늘</button>
+            <button class="f-pre">7일</button>
+            <button class="f-pre">15일</button>
+            <button class="f-pre">1개월</button>
+            <button class="f-pre">3개월</button>
+          </div>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">국가 필터</span>
+        <div class="f-body">
+          <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> 국가별 필터 사용</label>
+        </div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-primary btn-sm">검색하기</button>
+        <button class="btn btn-ghost btn-sm">엑셀다운</button>
+      </div>
+    </div>
+
+    <div class="t-toolbar">
+      <div class="t-count">전체 <strong>1</strong>건 / 검색 <strong>1</strong>건</div>
+      <div class="t-right">
+        <select class="t-sel"><option>선정일자 올림차순정렬</option></select>
+        <select class="t-sel"><option>페이지당 20개 표시</option></select>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+      <table class="tbl has-sticky">
+        <thead>
+          <tr>
+            <th class="c-chk"><input class="checkbox-input" type="checkbox"></th>
+            <th class="sortable sticky-col">국가</th>
+            <th class="sortable">신청번호</th>
+            <th>유형</th>
+            <th class="sortable">캠페인명/코드</th>
+            <th>회원정보</th>
+            <th>신청채널</th>
+            <th>인플루언서</th>
+            <th>상세정보</th>
+            <th>리뷰제출지연</th>
+            <th>신청일/선정일</th>
+            <th>방문일정/관리</th>
+            <th>인기게시물</th>
+            <th>수퍼패스</th>
+            <th>배송정보</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇨🇳 CN</td>
+            <td class="c-num">123</td>
+            <td><span class="badge badge-info"><span class="badge-dot"></span>배송형</span></td>
+            <td><div class="c-camp-name">test3</div><div class="c-camp-sub">1771914476 · milla_company</div></td>
+            <td>milla</td>
+            <td><div class="c-ch-url">instagram.com/esg</div><span class="c-tag c-tag-ig">인스타그램</span><span class="c-followers">1천~1만</span></td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">정보보기</button></td>
+            <td class="c-num">42일</td>
+            <td><div>2026-03-06</div><div class="c-camp-sub">2026-03-06</div></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><button class="c-link">정보입력</button></td>
+          </tr>
+          <!-- Empty state 예시: 실제 데이터가 0건일 때 <tbody> 를 이것으로 교체
+          <tr class="empty-row">
+            <td colspan="15">
+              <div class="empty-state">
+                <div class="empty-state-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="empty-state-title">선정된 리뷰가 없습니다</div>
+                <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
+                <button class="btn btn-secondary btn-sm">필터 초기화</button>
+              </div>
+            </td>
+          </tr>
+          -->
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</div>
+<script src="js/components.js"></script>
+</body>
+</html>

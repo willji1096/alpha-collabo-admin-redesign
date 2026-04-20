@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 제품형/방문형</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+<style>
+  .price-info {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+  }
+
+  .price-section {
+    margin-bottom: 28px;
+  }
+
+  .price-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-default);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.1px;
+  }
+  .price-section-title::before {
+    content: '';
+    width: 3px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .price-section-title .country-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 22px;
+    padding: 0 8px;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-radius: var(--radius-sm);
+    margin-left: auto;
+  }
+
+  .price-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .price-tbl th {
+    background: var(--bg-elevated);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-align: center;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-default);
+    border-right: 1px solid var(--border-light);
+    white-space: nowrap;
+  }
+  .price-tbl th:last-child { border-right: none; }
+
+  .price-tbl td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    text-align: center;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+  .price-tbl td:last-child { border-right: none; }
+  .price-tbl tbody tr:last-child td { border-bottom: none; }
+  .price-tbl tbody tr:hover { background: var(--bg-hover); }
+
+  .price-tbl .row-label {
+    text-align: left;
+    font-weight: 500;
+    background: var(--bg-page);
+    white-space: nowrap;
+  }
+
+  .price-tbl .total-row td {
+    font-weight: 700;
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border-default);
+  }
+
+  .edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body data-active-tab="요금표">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">제품형/방문형</h1>
+      <div class="pg-crumb">요금표 &gt; 요금관리 &gt; <b>제품형/방문형</b></div>
+    </div>
+
+    <div class="price-info">
+      현재적용 요금 · 2025-04-09 11:26:38 기준
+    </div>
+
+    <button class="btn btn-primary btn-sm edit-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      수정 요청
+    </button>
+
+    <!-- 일본 -->
+    <div class="price-section">
+      <div class="price-section-title">일본<span class="country-code">JP</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>120,000원</td>
+            <td>12,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>50,000원</td>
+            <td>50,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>150,000원</td>
+            <td>15,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>100,000원</td>
+            <td>100,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>400,000원</td>
+            <td>40,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>400,000원</td>
+            <td>400,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>700,000원</td>
+            <td>70,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 중국 -->
+    <div class="price-section">
+      <div class="price-section-title">중국<span class="country-code">CN</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>100,000원</td>
+            <td>10,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>40,000원</td>
+            <td>40,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>130,000원</td>
+            <td>13,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>80,000원</td>
+            <td>80,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>350,000원</td>
+            <td>35,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>350,000원</td>
+            <td>350,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>600,000원</td>
+            <td>60,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 대만 -->
+    <div class="price-section">
+      <div class="price-section-title">대만<span class="country-code">TW</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>110,000원</td>
+            <td>11,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>45,000원</td>
+            <td>45,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>140,000원</td>
+            <td>14,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>90,000원</td>
+            <td>90,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>380,000원</td>
+            <td>38,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>380,000원</td>
+            <td>380,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>650,000원</td>
+            <td>65,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 베트남 -->
+    <div class="price-section">
+      <div class="price-section-title">베트남<span class="country-code">VN</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>80,000원</td>
+            <td>8,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>30,000원</td>
+            <td>30,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>100,000원</td>
+            <td>10,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>60,000원</td>
+            <td>60,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>250,000원</td>
+            <td>25,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>250,000원</td>
+            <td>250,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>500,000원</td>
+            <td>50,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 러시아 -->
+    <div class="price-section">
+      <div class="price-section-title">러시아<span class="country-code">RU</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>90,000원</td>
+            <td>9,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>35,000원</td>
+            <td>35,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>120,000원</td>
+            <td>12,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>70,000원</td>
+            <td>70,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>300,000원</td>
+            <td>30,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>300,000원</td>
+            <td>300,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>550,000원</td>
+            <td>55,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 홍콩 -->
+    <div class="price-section">
+      <div class="price-section-title">홍콩<span class="country-code">HK</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>130,000원</td>
+            <td>13,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>55,000원</td>
+            <td>55,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>170,000원</td>
+            <td>17,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>110,000원</td>
+            <td>110,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>420,000원</td>
+            <td>42,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>420,000원</td>
+            <td>420,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>750,000원</td>
+            <td>75,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 싱가포르 -->
+    <div class="price-section">
+      <div class="price-section-title">싱가포르<span class="country-code">SG</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>140,000원</td>
+            <td>14,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>60,000원</td>
+            <td>60,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>180,000원</td>
+            <td>18,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>120,000원</td>
+            <td>120,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>450,000원</td>
+            <td>45,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>450,000원</td>
+            <td>450,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>800,000원</td>
+            <td>80,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 태국 -->
+    <div class="price-section">
+      <div class="price-section-title">태국<span class="country-code">TH</span></div>
+      <table class="price-tbl">
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>사이트종류</th>
+            <th>가격</th>
+            <th>인스타/기타</th>
+            <th>숏폼</th>
+            <th>롱폼/사이트</th>
+            <th>팔로워</th>
+            <th>가격</th>
+            <th>단가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label">1만 이하</td>
+            <td>85,000원</td>
+            <td>8,500원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>10,000이하</td>
+            <td>32,000원</td>
+            <td>32,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">1만~10만</td>
+            <td>110,000원</td>
+            <td>11,000원</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>제공상가</td>
+            <td>50,000~100,000</td>
+            <td>65,000원</td>
+            <td>65,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">10만~100만</td>
+            <td>280,000원</td>
+            <td>28,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>100,000~400,000</td>
+            <td>280,000원</td>
+            <td>280,000원</td>
+          </tr>
+          <tr>
+            <td class="row-label">100만 이상</td>
+            <td>520,000원</td>
+            <td>52,000원</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+            <td>500,000이상</td>
+            <td>협의상가</td>
+            <td>협의상가</td>
+          </tr>
+          <tr class="total-row">
+            <td class="row-label">포인트수수료</td>
+            <td colspan="8">협의상가 / 5,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
+
+</div>
+<script src="js/components.js"></script>
+</body>
+</html>

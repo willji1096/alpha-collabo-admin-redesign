@@ -1,0 +1,8 @@
+.DS_Store
+.venv/
+.aing/
+.claude/
+screenshots/
+node_modules/
+.netlify/
+*.log

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 인플루언서 탐색</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+<style>
+  .tbl-scroll .tbl { min-width: 1600px; }
+</style>
+</head>
+<body data-active-tab="인플루언서 탐색">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">인플루언서 탐색</h1>
+      <div class="pg-crumb">인플루언서 탐색 &gt; 인플루언서 &gt; <b>인플루언서 탐색</b></div>
+    </div>
+
+    <div class="chip-bar">
+      <div class="chip-bar-summary">
+        <span class="f-summary-label">현재 조건</span>
+        국적 <strong>일본</strong>
+      </div>
+      <div class="chip-bar-right">
+        <button class="btn btn-sm btn-secondary btn-icon" onclick="document.getElementById('page-filters').classList.toggle('expanded')" aria-label="전체 필터 펼치기/접기" title="전체 필터">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </button>
+        <div class="density-group" role="group" aria-label="테이블 밀도">
+          <button class="density-btn" data-density="compact" aria-pressed="false" aria-label="Compact">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <button class="density-btn" data-density="default" aria-pressed="true" aria-label="Default">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+          </button>
+          <button class="density-btn" data-density="comfortable" aria-pressed="false" aria-label="Comfortable">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters collapsible" id="page-filters">
+      <div class="f-row">
+        <span class="f-label">국적</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:150px"><option>일본</option><option>한국</option><option>중국</option><option>러시아</option></select>
+          <span class="f-label" style="margin-left:16px; width:auto">플랫폼</span>
+          <div class="f-platform-group" role="group" aria-label="플랫폼 필터">
+            <label class="sns-chip sns-chip-ig"><input type="checkbox"> 인스타그램</label>
+            <label class="sns-chip sns-chip-yt"><input type="checkbox"> 유튜브</label>
+            <label class="sns-chip sns-chip-tt"><input type="checkbox"> 틱톡</label>
+            <label class="sns-chip sns-chip-xhs"><input type="checkbox"> 시아오홍슈</label>
+            <label class="sns-chip sns-chip-fb"><input type="checkbox"> 페이스북</label>
+            <label class="sns-chip sns-chip-tw"><input type="checkbox"> 트위터/X</label>
+          </div>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">팔로워 수</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:150px"><option>선택</option><option>1천 미만</option><option>1천~1만</option><option>1만~5만</option><option>5만~10만</option><option>10만 이상</option></select>
+          <span class="f-label" style="margin-left:16px; width:auto">성별</span>
+          <select class="f-sel" style="width:120px"><option>선택</option><option>남성</option><option>여성</option></select>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">방문예정일시</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:120px"><option>선택</option></select>
+          <span class="f-sep">/</span>
+          <input class="f-input" style="width:140px" value="2026-04-16">
+          <span class="f-sep">~</span>
+          <input class="f-input" style="width:140px" placeholder="연도. 월. 일.">
+        </div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-primary btn-sm">검색</button>
+      </div>
+    </div>
+
+    <div class="t-toolbar">
+      <div class="t-count">전체 <strong>30</strong>건 / 검색 <strong>30</strong>건</div>
+      <div class="t-right">
+        <select class="t-sel"><option>페이지당 15개 표시</option><option>페이지당 20개 표시</option><option>페이지당 50개 표시</option></select>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" data-bulk-scope="#search-bulk-bar">
+      <div class="tbl-scroll">
+      <table class="tbl has-sticky">
+        <thead>
+          <tr>
+            <th class="c-chk"><input class="checkbox-input" type="checkbox"></th>
+            <th class="sortable sticky-col">국가</th>
+            <th class="sortable">아이디</th>
+            <th class="sortable">이름</th>
+            <th>성별</th>
+            <th class="sortable">단가</th>
+            <th>캠페인<br>진행 횟수</th>
+            <th class="sortable">방문예정일시</th>
+            <th class="sortable">평균 좋아요</th>
+            <th class="sortable">평균 조회수</th>
+            <th class="sortable">저장 업체수</th>
+            <th>승인여부</th>
+            <th class="sortable">SNS 계정 수</th>
+            <th class="sortable">팔로워수</th>
+            <th>상세보기</th>
+            <th>저장하기</th>
+            <th>제안하기</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇯🇵 JP</td>
+            <td>yuki_beauty</td>
+            <td>田中ゆき</td>
+            <td>여</td>
+            <td class="c-num">180,000</td>
+            <td class="c-num">3회</td>
+            <td>2026-05-10</td>
+            <td class="c-num">1,240</td>
+            <td class="c-num">8,500</td>
+            <td class="c-num">5</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">3/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇯🇵 JP</td>
+            <td>miku_travel</td>
+            <td>佐藤みく</td>
+            <td>여</td>
+            <td class="c-num">250,000</td>
+            <td class="c-num">5회</td>
+            <td>2026-05-15</td>
+            <td class="c-num">3,820</td>
+            <td class="c-num">24,100</td>
+            <td class="c-num">12</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">5/7</td>
+            <td>10~50k</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇯🇵 JP</td>
+            <td>kenji_style</td>
+            <td>鈴木健二</td>
+            <td>남</td>
+            <td class="c-num">120,000</td>
+            <td class="c-num">1회</td>
+            <td>2026-04-28</td>
+            <td class="c-num">580</td>
+            <td class="c-num">3,200</td>
+            <td class="c-num">2</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇷🇺 RU</td>
+            <td>anna_moscow</td>
+            <td>Анна К.</td>
+            <td>여</td>
+            <td class="c-num">95,000</td>
+            <td class="c-num">2회</td>
+            <td>2026-06-01</td>
+            <td class="c-num">920</td>
+            <td class="c-num">4,600</td>
+            <td class="c-num">3</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇨🇳 CN</td>
+            <td>xiaomei_cn</td>
+            <td>王小美</td>
+            <td>여</td>
+            <td class="c-num">300,000</td>
+            <td class="c-num">8회</td>
+            <td>2026-05-20</td>
+            <td class="c-num">5,400</td>
+            <td class="c-num">32,000</td>
+            <td class="c-num">18</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">4/7</td>
+            <td>50~100k</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇻🇳 VN</td>
+            <td>linh_saigon</td>
+            <td>Nguyễn Linh</td>
+            <td>여</td>
+            <td class="c-num">85,000</td>
+            <td class="c-num">1회</td>
+            <td>2026-05-05</td>
+            <td class="c-num">760</td>
+            <td class="c-num">2,800</td>
+            <td class="c-num">1</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">1/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇹🇼 TW</td>
+            <td>mei_taipei</td>
+            <td>陳美玲</td>
+            <td>여</td>
+            <td class="c-num">150,000</td>
+            <td class="c-num">4회</td>
+            <td>2026-05-22</td>
+            <td class="c-num">2,100</td>
+            <td class="c-num">15,300</td>
+            <td class="c-num">7</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">3/7</td>
+            <td>10~50k</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇭🇰 HK</td>
+            <td>hk_foodie</td>
+            <td>李嘉欣</td>
+            <td>여</td>
+            <td class="c-num">200,000</td>
+            <td class="c-num">6회</td>
+            <td>2026-04-30</td>
+            <td class="c-num">4,200</td>
+            <td class="c-num">28,700</td>
+            <td class="c-num">9</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">4/7</td>
+            <td>10~50k</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇯🇵 JP</td>
+            <td>rina_osaka</td>
+            <td>山田りな</td>
+            <td>여</td>
+            <td class="c-num">160,000</td>
+            <td class="c-num">2회</td>
+            <td>2026-05-18</td>
+            <td class="c-num">1,050</td>
+            <td class="c-num">6,400</td>
+            <td class="c-num">4</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇸🇬 SG</td>
+            <td>sg_glam</td>
+            <td>Rachel Tan</td>
+            <td>여</td>
+            <td class="c-num">220,000</td>
+            <td class="c-num">3회</td>
+            <td>2026-06-10</td>
+            <td class="c-num">2,800</td>
+            <td class="c-num">19,500</td>
+            <td class="c-num">6</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">3/7</td>
+            <td>10~50k</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇹🇭 TH</td>
+            <td>thai_beauty</td>
+            <td>Ploy S.</td>
+            <td>여</td>
+            <td class="c-num">110,000</td>
+            <td class="c-num">2회</td>
+            <td>2026-05-25</td>
+            <td class="c-num">890</td>
+            <td class="c-num">5,100</td>
+            <td class="c-num">3</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇷🇺 RU</td>
+            <td>ivan_vlg</td>
+            <td>Иван П.</td>
+            <td>남</td>
+            <td class="c-num">75,000</td>
+            <td class="c-num">0회</td>
+            <td>2026-07-01</td>
+            <td class="c-num">340</td>
+            <td class="c-num">1,800</td>
+            <td class="c-num">0</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">1/7</td>
+            <td>0~1k</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇲🇾 MY</td>
+            <td>kl_style</td>
+            <td>Aisha R.</td>
+            <td>여</td>
+            <td class="c-num">130,000</td>
+            <td class="c-num">1회</td>
+            <td>2026-05-12</td>
+            <td class="c-num">1,580</td>
+            <td class="c-num">9,200</td>
+            <td class="c-num">4</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇵🇭 PH</td>
+            <td>manila_glow</td>
+            <td>Maria C.</td>
+            <td>여</td>
+            <td class="c-num">90,000</td>
+            <td class="c-num">1회</td>
+            <td>2026-06-05</td>
+            <td class="c-num">620</td>
+            <td class="c-num">3,400</td>
+            <td class="c-num">2</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">1/7</td>
+            <td>1천~1만</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">🇯🇵 JP</td>
+            <td>taro_tokyo</td>
+            <td>高橋太郎</td>
+            <td>남</td>
+            <td class="c-num">1,500,000</td>
+            <td class="c-num">12회</td>
+            <td>2026-04-25</td>
+            <td class="c-num">15,200</td>
+            <td class="c-num">98,000</td>
+            <td class="c-num">24</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">6/7</td>
+            <td>100k+</td>
+            <td><button class="c-link">상세보기</button></td>
+            <td><button class="c-btn">저장</button></td>
+            <td><button class="c-btn">제안하기</button></td>
+          </tr>
+          <!-- Empty state 예시: 실제 데이터가 0건일 때 <tbody> 를 이것으로 교체
+          <tr class="empty-row">
+            <td colspan="17">
+              <div class="empty-state">
+                <div class="empty-state-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="empty-state-title">조건에 맞는 인플루언서가 없습니다</div>
+                <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
+                <button class="btn btn-secondary btn-sm">필터 초기화</button>
+              </div>
+            </td>
+          </tr>
+          -->
+        </tbody>
+      </table>
+      </div>
+
+      <div class="pagination">
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn nav">다음</button>
+        <button class="pg-btn nav">끝</button>
+      </div>
+    </div>
+
+    <div class="bulk-bar" id="search-bulk-bar" role="region" aria-label="일괄 작업 도구">
+      <span class="bulk-count"><strong data-bulk-count>0</strong>명 선택</span>
+      <span class="bulk-divider"></span>
+      <button class="bulk-action">
+        <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16Z"/></svg>
+        일괄 저장
+      </button>
+      <button class="bulk-action">
+        <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        제안 보내기
+      </button>
+      <button class="bulk-close" aria-label="선택 해제">
+        <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+  </div>
+</main>
+
+</div>
+<script src="js/components.js"></script>
+</body>
+</html>

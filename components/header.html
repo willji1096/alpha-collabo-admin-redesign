@@ -1,0 +1,59 @@
+<header class="header">
+  <button class="h-menu-btn" aria-label="메뉴" aria-expanded="false" aria-controls="sidebar-slot">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <nav class="header-tabs" aria-label="주요 메뉴">
+    <a class="htab" href="campaign-calendar.html" data-tab="캠페인관리">캠페인관리</a>
+    <a class="htab" href="list.html" data-tab="신청서관리">신청서관리</a>
+    <a class="htab" href="influencer-search.html" data-tab="인플루언서 탐색">인플루언서 탐색</a>
+    <a class="htab" href="notice.html" data-tab="사이트관리">사이트관리</a>
+    <a class="htab" href="pricing.html" data-tab="요금표">요금표</a>
+  </nav>
+  <div class="header-right">
+    <div class="h-popover-wrap" id="notif-wrap">
+      <button class="h-icon-btn" type="button" aria-label="알림 3건" id="notif-btn" aria-haspopup="true" aria-expanded="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="h-icon-dot" aria-hidden="true"></span>
+      </button>
+      <div class="h-popover" id="notif-popover" role="dialog" aria-label="알림">
+        <div class="h-popover-head">
+          <span class="h-popover-title">알림 <span style="color:var(--accent);font-weight:600">3</span></span>
+          <button class="h-popover-action" type="button">모두 읽음</button>
+        </div>
+        <div class="h-popover-body">
+          <div class="notif-item is-unread">
+            <span class="notif-dot"></span>
+            <div class="notif-body">
+              <div class="notif-title">김민지 님이 리뷰를 제출했습니다</div>
+              <div class="notif-meta">2분 전 · 로담 부산점</div>
+            </div>
+          </div>
+          <div class="notif-item is-unread">
+            <span class="notif-dot"></span>
+            <div class="notif-body">
+              <div class="notif-title">배송형 테스트 2 검수 마감 임박</div>
+              <div class="notif-meta">1시간 전 · 4건 대기 중</div>
+            </div>
+          </div>
+          <div class="notif-item is-unread">
+            <span class="notif-dot"></span>
+            <div class="notif-body">
+              <div class="notif-title">신규 지원자 3명이 도착했습니다</div>
+              <div class="notif-meta">3시간 전 · 방문형 테스트 2</div>
+            </div>
+          </div>
+          <div class="notif-item">
+            <span class="notif-dot"></span>
+            <div class="notif-body">
+              <div class="notif-title">3월 캠페인 최종 정산 완료</div>
+              <div class="notif-meta">어제 · 42명 리뷰</div>
+            </div>
+          </div>
+        </div>
+        <div class="h-popover-foot"><a href="#">모든 알림 보기</a></div>
+      </div>
+    </div>
+    <span class="h-balance">잔액 <strong>1,284,500</strong>원</span>
+    <button class="h-btn danger" type="button">로그아웃</button>
+  </div>
+</header>

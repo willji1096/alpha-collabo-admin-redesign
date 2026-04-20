@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 캠페인 일정</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-active-tab="캠페인관리">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">캠페인 일정</h1>
+      <div class="pg-crumb">캠페인관리 / <b>캠페인 일정</b></div>
+    </div>
+
+    <!-- Chip bar: 국가 선택 + 보조 필터 + 액션 -->
+    <div class="chip-bar">
+      <div class="filter-chips" aria-label="필터">
+        <div class="country-selector-wrap">
+          <button class="country-selector" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="국가 선택" id="country-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
+            <span class="country-selector-label">국가</span>
+            <span class="country-selector-value" data-code="JP">일본</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <ul class="country-dropdown" id="country-dropdown" role="listbox" aria-label="국가 목록">
+            <li role="option" data-code="KR">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              한국<span class="country-dropdown-code">KR</span>
+            </li>
+            <li role="option" data-code="JP" aria-selected="true">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              일본<span class="country-dropdown-code">JP</span>
+            </li>
+            <li role="option" data-code="CN">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              중국<span class="country-dropdown-code">CN</span>
+            </li>
+            <li role="option" data-code="TW">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              대만<span class="country-dropdown-code">TW</span>
+            </li>
+            <li role="option" data-code="US">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              미국<span class="country-dropdown-code">US</span>
+            </li>
+            <li role="option" data-code="VN">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              베트남<span class="country-dropdown-code">VN</span>
+            </li>
+            <li role="option" data-code="SG">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              싱가포르<span class="country-dropdown-code">SG</span>
+            </li>
+            <li role="option" data-code="HK">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              홍콩<span class="country-dropdown-code">HK</span>
+            </li>
+            <li role="option" data-code="ID">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              인도네시아<span class="country-dropdown-code">ID</span>
+            </li>
+            <li role="option" data-code="MY">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              말레이시아<span class="country-dropdown-code">MY</span>
+            </li>
+            <li role="option" data-code="PH">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              필리핀<span class="country-dropdown-code">PH</span>
+            </li>
+            <li role="option" data-code="RU">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              러시아<span class="country-dropdown-code">RU</span>
+            </li>
+            <li role="option" data-code="TH">
+              <svg class="country-dropdown-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              태국<span class="country-dropdown-code">TH</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="chip-bar-right">
+        <button class="btn btn-md btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 5v14M5 12h14"/></svg>
+          새 일정
+        </button>
+      </div>
+    </div>
+
+    <!-- 월 네비게이션: 3분할 (원본 스타일) -->
+    <div class="cal-monthnav">
+      <button class="cal-monthnav-side cal-monthnav-prev" type="button" aria-label="이전 달로 이동">
+        <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polyline points="15 18 9 12 15 6"/></svg>
+        <span><small>이전 달</small>2026년 3월</span>
+      </button>
+      <h2 class="cal-monthnav-title">2026년 4월</h2>
+      <div class="cal-monthnav-actions">
+        <button class="cal-today-btn" type="button">오늘</button>
+        <button class="cal-monthnav-side cal-monthnav-next" type="button" aria-label="다음 달로 이동">
+          <span><small>다음 달</small>2026년 5월</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 캘린더 -->
+    <div class="cal">
+      <div class="cal-grid-head">
+        <div class="cal-dow sun">일</div>
+        <div class="cal-dow">월</div>
+        <div class="cal-dow">화</div>
+        <div class="cal-dow">수</div>
+        <div class="cal-dow">목</div>
+        <div class="cal-dow">금</div>
+        <div class="cal-dow sat">토</div>
+      </div>
+
+      <div class="cal-grid-body">
+
+        <!-- Week 1 : Mar 29(일) ~ Apr 4(토) -->
+        <div class="cal-cell other-month"><span class="cal-day sun">29</span></div>
+        <div class="cal-cell other-month"><span class="cal-day">30</span></div>
+        <div class="cal-cell other-month"><span class="cal-day">31</span></div>
+        <div class="cal-cell" data-day="1">
+          <span class="cal-day">1</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-accent"><span class="cal-event-dot"></span>로담 부산점 신청 시작</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day">2</span></div>
+        <div class="cal-cell" data-day="3">
+          <span class="cal-day">3</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-success"><span class="cal-event-dot"></span>3월 캠페인 종료</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day sat">4</span></div>
+
+        <!-- Week 2 : Apr 5~11 -->
+        <div class="cal-cell"><span class="cal-day sun">5</span></div>
+        <div class="cal-cell"><span class="cal-day">6</span></div>
+        <div class="cal-cell" data-day="7">
+          <span class="cal-day">7</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-accent"><span class="cal-event-dot"></span>배송형 테스트 2 시작</button>
+            <button class="cal-event cal-event-accent"><span class="cal-event-dot"></span>방문형 테스트 2 시작</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day">8</span></div>
+        <div class="cal-cell" data-day="9">
+          <span class="cal-day">9</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-info"><span class="cal-event-dot"></span>리뷰어 모집 시작</button>
+          </div>
+        </div>
+        <div class="cal-cell" data-day="10">
+          <span class="cal-day">10</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-info"><span class="cal-event-dot"></span>리뷰어 선정</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day sat">11</span></div>
+
+        <!-- Week 3 : Apr 12~18 -->
+        <div class="cal-cell"><span class="cal-day sun">12</span></div>
+        <div class="cal-cell"><span class="cal-day">13</span></div>
+        <div class="cal-cell" data-day="14">
+          <span class="cal-day">14</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-warning"><span class="cal-event-dot"></span>신청 마감</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day">15</span></div>
+        <div class="cal-cell"><span class="cal-day">16</span></div>
+        <div class="cal-cell" data-day="17">
+          <span class="cal-day">17</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-accent"><span class="cal-event-dot"></span>캠페인 신청 시작 (1)</button>
+            <button class="cal-event cal-event-info"><span class="cal-event-dot"></span>리뷰등록 시작 (1)</button>
+            <button class="cal-event cal-event-warning"><span class="cal-event-dot"></span>리뷰등록 종료 (1)</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day sat today">18</span></div>
+
+        <!-- Week 4 : Apr 19~25 -->
+        <div class="cal-cell"><span class="cal-day sun">19</span></div>
+        <div class="cal-cell" data-day="20">
+          <span class="cal-day">20</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-info"><span class="cal-event-dot"></span>검수 시작</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day">21</span></div>
+        <div class="cal-cell" data-day="22">
+          <span class="cal-day">22</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-warning"><span class="cal-event-dot"></span>검수 마감</button>
+            <button class="cal-event cal-event-info"><span class="cal-event-dot"></span>수정요청 시작</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day">23</span></div>
+        <div class="cal-cell"><span class="cal-day">24</span></div>
+        <div class="cal-cell"><span class="cal-day sat">25</span></div>
+
+        <!-- Week 5 : Apr 26~30 + May 1~2 -->
+        <div class="cal-cell"><span class="cal-day sun">26</span></div>
+        <div class="cal-cell"><span class="cal-day">27</span></div>
+        <div class="cal-cell" data-day="28">
+          <span class="cal-day">28</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-info"><span class="cal-event-dot"></span>리뷰 최종 등록</button>
+          </div>
+        </div>
+        <div class="cal-cell"><span class="cal-day">29</span></div>
+        <div class="cal-cell" data-day="30">
+          <span class="cal-day">30</span>
+          <div class="cal-events">
+            <button class="cal-event cal-event-success"><span class="cal-event-dot"></span>로담 부산점 종료</button>
+          </div>
+        </div>
+        <div class="cal-cell other-month"><span class="cal-day">1</span></div>
+        <div class="cal-cell other-month"><span class="cal-day sat">2</span></div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Day detail drawer -->
+<div class="drawer-backdrop" id="day-drawer-bd" aria-hidden="true"></div>
+<aside class="drawer drawer-wide" id="day-drawer" role="dialog" aria-modal="true" aria-labelledby="day-drawer-title" aria-hidden="true">
+  <div class="drawer-header">
+    <div class="drawer-header-body">
+      <h2 class="drawer-title" id="day-drawer-title">—</h2>
+      <div class="drawer-subtitle" id="day-drawer-sub">—</div>
+    </div>
+    <button class="btn btn-md btn-ghost btn-icon modal-close" aria-label="닫기" id="day-drawer-close">
+      <svg width="18" height="18" viewBox="0 0 24 24" class="icon-stroke"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="day-event-filter" id="day-drawer-filter" role="tablist" aria-label="이벤트 유형 필터"></div>
+    <div id="day-drawer-events"></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-sm btn-ghost" id="day-drawer-cancel">닫기</button>
+    <button class="btn btn-sm btn-secondary">
+      <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      엑셀 다운
+    </button>
+    <button class="btn btn-sm btn-primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><path d="M12 5v14M5 12h14"/></svg>
+      새 일정
+    </button>
+  </div>
+</aside>
+
+</div>
+
+<!-- Calendar event data (in real admin, populated from server)
+     각 일자별 이벤트: 이벤트 타입 + 연결된 캠페인 전체 정보 (타임라인 포함)
+     stage: 0=신청, 1=선정, 2=리뷰 시작, 3=리뷰 마감, 4=결과 발표
+     status per milestone: done / current / pending -->
+<script type="application/json" id="cal-events-data">
+{
+  "1": [{
+    "type":"accent","typeLabel":"신청 시작","eventTitle":"로담 부산점 신청 개시",
+    "campaign":{"name":"로담 부산점 5월 캠페인","code":"1739439117","thumbInit":"로",
+      "status":"approved","sns":["instagram"],"recruit":"0/10","views":4,
+      "created":"2026-03-30","updated":"2026-04-01"},
+    "timeline":[
+      {"label":"신청","date":"04-01","count":"0/10","state":"current"},
+      {"label":"선정","date":"04-12","count":"—","state":"pending"},
+      {"label":"리뷰","date":"04-15","count":"—","state":"pending"},
+      {"label":"마감","date":"04-29","count":"—","state":"pending"},
+      {"label":"결과","date":"04-30","count":"—","state":"pending"}
+    ]
+  }],
+  "3": [{
+    "type":"success","typeLabel":"캠페인 종료","eventTitle":"3월 캠페인 최종 종료",
+    "campaign":{"name":"3월 스킨케어 캠페인","code":"1733221155","thumbInit":"스",
+      "status":"approved","sns":["instagram","youtube"],"recruit":"42/42","views":328,
+      "created":"2026-02-18","updated":"2026-04-03"},
+    "timeline":[
+      {"label":"신청","date":"02-20","count":"67/42","state":"done"},
+      {"label":"선정","date":"02-28","count":"42명","state":"done"},
+      {"label":"리뷰","date":"03-05","count":"42건","state":"done"},
+      {"label":"마감","date":"03-25","count":"40건","state":"done"},
+      {"label":"결과","date":"04-03","count":"완료","state":"done"}
+    ]
+  }],
+  "7": [
+    {
+      "type":"accent","typeLabel":"신청 시작","eventTitle":"배송형 테스트 2 개시",
+      "campaign":{"name":"배송형 테스트 2","code":"1766993260","thumbInit":"배",
+        "status":"approved","sns":["instagram","youtube","xiaohongshu"],"recruit":"0/5","views":14,
+        "created":"2026-04-03","updated":"2026-04-07"},
+      "timeline":[
+        {"label":"신청","date":"04-07","count":"0/5","state":"current"},
+        {"label":"선정","date":"04-12","count":"—","state":"pending"},
+        {"label":"리뷰","date":"04-15","count":"—","state":"pending"},
+        {"label":"마감","date":"04-22","count":"—","state":"pending"},
+        {"label":"결과","date":"04-28","count":"—","state":"pending"}
+      ]
+    },
+    {
+      "type":"accent","typeLabel":"신청 시작","eventTitle":"방문형 테스트 2 개시",
+      "campaign":{"name":"방문형 테스트 2","code":"1766993536","thumbInit":"방",
+        "status":"approved","sns":["instagram","youtube"],"recruit":"1/7","views":13,
+        "created":"2026-04-04","updated":"2026-04-07"},
+      "timeline":[
+        {"label":"신청","date":"04-07","count":"1/7","state":"current"},
+        {"label":"선정","date":"04-14","count":"—","state":"pending"},
+        {"label":"리뷰","date":"04-17","count":"—","state":"pending"},
+        {"label":"마감","date":"04-24","count":"—","state":"pending"},
+        {"label":"결과","date":"04-30","count":"—","state":"pending"}
+      ]
+    }
+  ],
+  "9": [{
+    "type":"info","typeLabel":"리뷰어 모집","eventTitle":"리뷰어 모집 시작",
+    "campaign":{"name":"배송형 테스트 2","code":"1766993260","thumbInit":"배",
+      "status":"approved","sns":["instagram","youtube","xiaohongshu"],"recruit":"3/5","views":14,
+      "created":"2026-04-03","updated":"2026-04-09"},
+    "timeline":[
+      {"label":"신청","date":"04-07","count":"3/5","state":"done"},
+      {"label":"선정","date":"04-12","count":"—","state":"current"},
+      {"label":"리뷰","date":"04-15","count":"—","state":"pending"},
+      {"label":"마감","date":"04-22","count":"—","state":"pending"},
+      {"label":"결과","date":"04-28","count":"—","state":"pending"}
+    ]
+  }],
+  "10": [{
+    "type":"info","typeLabel":"리뷰어 선정","eventTitle":"리뷰어 최종 선정",
+    "campaign":{"name":"배송형 테스트 2","code":"1766993260","thumbInit":"배",
+      "status":"approved","sns":["instagram","youtube","xiaohongshu"],"recruit":"5/5","views":14,
+      "created":"2026-04-03","updated":"2026-04-10"},
+    "timeline":[
+      {"label":"신청","date":"04-07","count":"5/5","state":"done"},
+      {"label":"선정","date":"04-10","count":"5명","state":"current"},
+      {"label":"리뷰","date":"04-15","count":"—","state":"pending"},
+      {"label":"마감","date":"04-22","count":"—","state":"pending"},
+      {"label":"결과","date":"04-28","count":"—","state":"pending"}
+    ]
+  }],
+  "14": [{
+    "type":"warning","typeLabel":"신청 마감","eventTitle":"방문형 테스트 2 신청 마감",
+    "campaign":{"name":"방문형 테스트 2","code":"1766993536","thumbInit":"방",
+      "status":"approved","sns":["instagram","youtube"],"recruit":"12/7","views":20,
+      "created":"2026-04-04","updated":"2026-04-14"},
+    "timeline":[
+      {"label":"신청","date":"04-07","count":"12/7","state":"done"},
+      {"label":"선정","date":"04-14","count":"7명","state":"current"},
+      {"label":"리뷰","date":"04-17","count":"—","state":"pending"},
+      {"label":"마감","date":"04-24","count":"—","state":"pending"},
+      {"label":"결과","date":"04-30","count":"—","state":"pending"}
+    ]
+  }],
+  "17": [
+    {
+      "type":"accent","typeLabel":"신청 시작","eventTitle":"캠페인 신청 시작",
+      "campaign":{"name":"로담 부산점 5월 캠페인","code":"1739439200","thumbInit":"로",
+        "status":"approved","sns":["instagram","xiaohongshu"],"recruit":"0/15","views":2,
+        "created":"2026-04-16","updated":"2026-04-17"},
+      "timeline":[
+        {"label":"신청","date":"04-17","count":"0/15","state":"current"},
+        {"label":"선정","date":"04-28","count":"—","state":"pending"},
+        {"label":"리뷰","date":"05-05","count":"—","state":"pending"},
+        {"label":"마감","date":"05-12","count":"—","state":"pending"},
+        {"label":"결과","date":"05-20","count":"—","state":"pending"}
+      ]
+    },
+    {
+      "type":"info","typeLabel":"리뷰등록 시작","eventTitle":"리뷰 등록 개시",
+      "campaign":{"name":"방문형 테스트 2","code":"1766993536","thumbInit":"방",
+        "status":"approved","sns":["instagram","youtube"],"recruit":"7/7","views":20,
+        "created":"2026-04-04","updated":"2026-04-17"},
+      "timeline":[
+        {"label":"신청","date":"04-07","count":"12/7","state":"done"},
+        {"label":"선정","date":"04-14","count":"7명","state":"done"},
+        {"label":"리뷰","date":"04-17","count":"0/7","state":"current"},
+        {"label":"마감","date":"04-24","count":"—","state":"pending"},
+        {"label":"결과","date":"04-30","count":"—","state":"pending"}
+      ]
+    },
+    {
+      "type":"warning","typeLabel":"리뷰등록 종료","eventTitle":"리뷰 등록 마감",
+      "campaign":{"name":"배송형 테스트 1","code":"1765334337","thumbInit":"배",
+        "status":"approved","sns":["instagram","tiktok","douyin","facebook","twitter"],"recruit":"2/2","views":4,
+        "created":"2026-03-28","updated":"2026-04-17"},
+      "timeline":[
+        {"label":"신청","date":"04-01","count":"2/2","state":"done"},
+        {"label":"선정","date":"04-12","count":"2명","state":"done"},
+        {"label":"리뷰","date":"04-15","count":"2/2","state":"done"},
+        {"label":"마감","date":"04-17","count":"4건","state":"current"},
+        {"label":"결과","date":"04-29","count":"—","state":"pending"}
+      ]
+    }
+  ],
+  "20": [{
+    "type":"info","typeLabel":"검수 시작","eventTitle":"리뷰 검수 개시",
+    "campaign":{"name":"방문형 테스트 2","code":"1766993536","thumbInit":"방",
+      "status":"approved","sns":["instagram","youtube"],"recruit":"7/7","views":22,
+      "created":"2026-04-04","updated":"2026-04-20"},
+    "timeline":[
+      {"label":"신청","date":"04-07","count":"12/7","state":"done"},
+      {"label":"선정","date":"04-14","count":"7명","state":"done"},
+      {"label":"리뷰","date":"04-17","count":"7/7","state":"done"},
+      {"label":"마감","date":"04-24","count":"검수중","state":"current"},
+      {"label":"결과","date":"04-30","count":"—","state":"pending"}
+    ]
+  }],
+  "22": [
+    {
+      "type":"warning","typeLabel":"검수 마감","eventTitle":"리뷰 검수 완료",
+      "campaign":{"name":"방문형 테스트 2","code":"1766993536","thumbInit":"방",
+        "status":"approved","sns":["instagram","youtube"],"recruit":"7/7","views":24,
+        "created":"2026-04-04","updated":"2026-04-22"},
+      "timeline":[
+        {"label":"신청","date":"04-07","count":"12/7","state":"done"},
+        {"label":"선정","date":"04-14","count":"7명","state":"done"},
+        {"label":"리뷰","date":"04-17","count":"7건","state":"done"},
+        {"label":"마감","date":"04-22","count":"승인5 반려2","state":"current"},
+        {"label":"결과","date":"04-30","count":"—","state":"pending"}
+      ]
+    },
+    {
+      "type":"info","typeLabel":"수정요청 시작","eventTitle":"반려 건 수정요청",
+      "campaign":{"name":"방문형 테스트 2","code":"1766993536","thumbInit":"방",
+        "status":"approved","sns":["instagram","youtube"],"recruit":"7/7","views":24,
+        "created":"2026-04-04","updated":"2026-04-22"},
+      "timeline":[
+        {"label":"신청","date":"04-07","count":"12/7","state":"done"},
+        {"label":"선정","date":"04-14","count":"7명","state":"done"},
+        {"label":"리뷰","date":"04-17","count":"7건","state":"done"},
+        {"label":"마감","date":"04-22","count":"2건 수정중","state":"current"},
+        {"label":"결과","date":"04-30","count":"—","state":"pending"}
+      ]
+    }
+  ],
+  "28": [{
+    "type":"info","typeLabel":"리뷰 최종 등록","eventTitle":"수정 완료 리뷰 등록",
+    "campaign":{"name":"방문형 테스트 2","code":"1766993536","thumbInit":"방",
+      "status":"approved","sns":["instagram","youtube"],"recruit":"7/7","views":26,
+      "created":"2026-04-04","updated":"2026-04-28"},
+    "timeline":[
+      {"label":"신청","date":"04-07","count":"12/7","state":"done"},
+      {"label":"선정","date":"04-14","count":"7명","state":"done"},
+      {"label":"리뷰","date":"04-17","count":"7건","state":"done"},
+      {"label":"마감","date":"04-28","count":"7건 완료","state":"current"},
+      {"label":"결과","date":"04-30","count":"—","state":"pending"}
+    ]
+  }],
+  "30": [{
+    "type":"success","typeLabel":"캠페인 종료","eventTitle":"로담 부산점 캠페인 완료",
+    "campaign":{"name":"로담 부산점","code":"1739439117","thumbInit":"로",
+      "status":"approved","sns":["instagram"],"recruit":"10/10","views":142,
+      "created":"2026-03-30","updated":"2026-04-30"},
+    "timeline":[
+      {"label":"신청","date":"04-01","count":"15/10","state":"done"},
+      {"label":"선정","date":"04-12","count":"10명","state":"done"},
+      {"label":"리뷰","date":"04-15","count":"10건","state":"done"},
+      {"label":"마감","date":"04-29","count":"10건","state":"done"},
+      {"label":"결과","date":"04-30","count":"완료","state":"current"}
+    ]
+  }]
+}
+</script>
+
+<script>
+/* Country selector dropdown */
+(function(){
+  const wrap = document.querySelector('.country-selector-wrap');
+  if (!wrap) return;
+  const btn = wrap.querySelector('.country-selector');
+  const list = wrap.querySelector('.country-dropdown');
+  const value = btn.querySelector('.country-selector-value');
+
+  function open() {
+    list.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    list.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    list.classList.contains('open') ? close() : open();
+  });
+
+  list.addEventListener('click', (e) => {
+    const li = e.target.closest('li[role="option"]');
+    if (!li) return;
+    list.querySelectorAll('li[role="option"]').forEach(l => l.removeAttribute('aria-selected'));
+    li.setAttribute('aria-selected', 'true');
+    value.textContent = li.firstChild.nextSibling.textContent.trim() || li.textContent.trim().split(/\s+/)[0];
+    // 더 안전하게 첫 텍스트만 뽑기
+    const clone = li.cloneNode(true);
+    clone.querySelectorAll('svg, .country-dropdown-code').forEach(el => el.remove());
+    value.textContent = clone.textContent.trim();
+    value.dataset.code = li.dataset.code;
+    close();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!wrap.contains(e.target)) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && list.classList.contains('open')) close();
+  });
+})();
+
+(function(){
+  const DOW = ['일','월','화','수','목','금','토'];
+  const YEAR = 2026, MONTH = 4;
+
+  const events = JSON.parse(document.getElementById('cal-events-data').textContent);
+
+  const backdrop = document.getElementById('day-drawer-bd');
+  const drawer = document.getElementById('day-drawer');
+  const titleEl = document.getElementById('day-drawer-title');
+  const subEl = document.getElementById('day-drawer-sub');
+  const listEl = document.getElementById('day-drawer-events');
+  const closeBtn = document.getElementById('day-drawer-close');
+  const cancelBtn = document.getElementById('day-drawer-cancel');
+
+  const STATUS_LABEL = {
+    approved: { label: '승인', cls: 'badge-success' },
+    pending:  { label: '심사중', cls: 'badge-warning' },
+    rejected: { label: '거절', cls: 'badge-error' }
+  };
+  const SNS_MAP = {
+    instagram:   { label: '인스타그램', cls: 'tag-instagram',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>' },
+    youtube:     { label: '유튜브', cls: 'tag-youtube',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg>' },
+    tiktok:      { label: '틱톡', cls: 'tag-tiktok',
+      icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg>' },
+    xiaohongshu: { label: '샤오홍슈', cls: 'tag-xiaohongshu',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>' },
+    facebook:    { label: '페이스북', cls: 'tag-facebook',
+      icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>' },
+    twitter:     { label: 'X', cls: 'tag-twitter',
+      icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>' },
+    douyin:      { label: '더우인', cls: 'tag-douyin',
+      icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 8.5a7.4 7.4 0 0 1-4.3-1.4V15a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V2h3a4.4 4.4 0 0 0 4.8 4.5z"/></svg>' }
+  };
+
+  const filterEl = document.getElementById('day-drawer-filter');
+  let currentDay = null;
+  let currentType = 'all';
+
+  function getDow(y, m, d) {
+    return DOW[new Date(y, m-1, d).getDay()];
+  }
+
+  /** 타임라인에서 특정 label의 milestone 찾기 */
+  function findMs(timeline, label) {
+    return timeline.find(m => m.label === label);
+  }
+
+  function renderTable(evList, day) {
+    if (evList.length === 0) {
+      return `
+        <div class="drawer-empty">
+          <span class="drawer-empty-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </span>
+          <div class="drawer-empty-title">이 유형의 일정이 없어요</div>
+          <div class="drawer-empty-desc">다른 유형 탭을 선택해 보세요.</div>
+        </div>`;
+    }
+
+    const rows = evList.map(ev => {
+      const c = ev.campaign;
+      const status = STATUS_LABEL[c.status] || STATUS_LABEL.approved;
+      const snsTags = (c.sns || []).map(s => {
+        const v = SNS_MAP[s];
+        return v ? `<span class="sns-ico ${v.cls}" title="${v.label}" aria-label="${v.label}">${v.icon}</span>` : '';
+      }).join('');
+
+      const msApp = findMs(ev.timeline, '신청');
+      const msSel = findMs(ev.timeline, '선정');
+      const msRev = findMs(ev.timeline, '리뷰');
+      const msClo = findMs(ev.timeline, '마감');
+      const msRes = findMs(ev.timeline, '결과');
+
+      const cellDate = (ms) => {
+        if (!ms) return '<span class="day-tbl-date-empty">—</span>';
+        return `<div class="day-tbl-date">
+          <span>${ms.date}</span>
+          <small>${ms.count}</small>
+        </div>`;
+      };
+
+      return `
+        <tr tabindex="0" aria-label="${c.name} 상세보기">
+          <td class="col-campaign">
+            <div class="day-tbl-campaign">
+              <div class="day-tbl-thumb">${c.thumbInit || '?'}</div>
+              <div class="day-tbl-camp-body">
+                <div class="day-tbl-camp-name">${c.name}</div>
+                <div class="day-tbl-camp-meta">
+                  <code>${c.code}</code>
+                </div>
+                <div class="day-tbl-sns">${snsTags}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="day-tbl-stack">
+              <span class="badge ${status.cls} badge-sm"><span class="badge-dot"></span>${status.label}</span>
+              <span class="day-tbl-recruit">모집 ${c.recruit}</span>
+            </div>
+          </td>
+          <td>${cellDate(msApp)}</td>
+          <td>${cellDate(msSel)}</td>
+          <td>${cellDate(msRev)}</td>
+          <td>${cellDate(msClo)}</td>
+          <td>${cellDate(msRes)}</td>
+          <td>
+            <div class="day-tbl-date">
+              <span>${c.created}</span>
+              <small>${c.updated}</small>
+            </div>
+          </td>
+          <td class="day-tbl-views">${c.views}</td>
+        </tr>`;
+    }).join('');
+
+    return `
+      <div class="day-tbl-wrap">
+        <table class="day-tbl">
+          <thead>
+            <tr>
+              <th class="col-campaign">캠페인</th>
+              <th>상태 / 모집</th>
+              <th>신청</th>
+              <th>선정</th>
+              <th>리뷰 등록</th>
+              <th>리뷰 마감</th>
+              <th>결과 발표</th>
+              <th>등록 / 수정</th>
+              <th>조회</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function renderFilter(dayEvents) {
+    const counts = dayEvents.reduce((acc, ev) => {
+      acc.all = (acc.all || 0) + 1;
+      acc[ev.type] = (acc[ev.type] || 0) + 1;
+      return acc;
+    }, {});
+
+    const TYPES = [
+      { key: 'all', label: '전체' },
+      { key: 'accent', label: '신청' },
+      { key: 'info', label: '진행' },
+      { key: 'warning', label: '마감' },
+      { key: 'success', label: '종료' }
+    ];
+
+    filterEl.innerHTML = TYPES.filter(t => counts[t.key]).map(t => `
+      <button type="button" class="day-event-filter-btn ${currentType === t.key ? 'is-active' : ''}" data-type="${t.key}">
+        ${t.label}<span class="count">${counts[t.key]}</span>
+      </button>
+    `).join('');
+  }
+
+  function render(day, type) {
+    currentDay = day;
+    currentType = type || 'all';
+    const dayEvents = events[String(day)] || [];
+    const dow = getDow(YEAR, MONTH, day);
+    titleEl.textContent = `${MONTH}월 ${day}일 (${dow})`;
+
+    const filtered = currentType === 'all'
+      ? dayEvents
+      : dayEvents.filter(ev => ev.type === currentType);
+
+    subEl.textContent = dayEvents.length > 0
+      ? `관련 캠페인 ${filtered.length}건${currentType !== 'all' ? ` (전체 ${dayEvents.length}건 중)` : ''}`
+      : '등록된 일정이 없습니다';
+
+    renderFilter(dayEvents);
+    listEl.innerHTML = renderTable(filtered, day);
+  }
+
+  // 필터 탭 클릭
+  filterEl.addEventListener('click', (e) => {
+    const btn = e.target.closest('.day-event-filter-btn');
+    if (!btn) return;
+    render(currentDay, btn.dataset.type);
+  });
+
+  function open(day, srcCell) {
+    // highlight selected cell
+    document.querySelectorAll('.cal-cell.is-selected').forEach(c => c.classList.remove('is-selected'));
+    if (srcCell) srcCell.classList.add('is-selected');
+
+    render(day);
+    backdrop.classList.add('open');
+    drawer.classList.add('open');
+    backdrop.setAttribute('aria-hidden', 'false');
+    drawer.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
+  }
+
+  function close() {
+    backdrop.classList.remove('open');
+    drawer.classList.remove('open');
+    backdrop.setAttribute('aria-hidden', 'true');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.querySelectorAll('.cal-cell.is-selected').forEach(c => c.classList.remove('is-selected'));
+  }
+
+  // Cell & event click → open drawer
+  document.querySelectorAll('.cal-cell[data-day]').forEach(cell => {
+    cell.setAttribute('role', 'button');
+    cell.setAttribute('tabindex', '0');
+    cell.addEventListener('click', () => open(Number(cell.dataset.day), cell));
+    cell.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open(Number(cell.dataset.day), cell);
+      }
+    });
+  });
+
+  closeBtn.addEventListener('click', close);
+  cancelBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) close();
+  });
+})();
+</script>
+
+<script src="js/components.js"></script>
+</body>
+</html>

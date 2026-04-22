@@ -1153,21 +1153,111 @@ body { background: var(--bg-page); }
 }
 .mm-summary .mm-count { color: var(--accent); font-weight: var(--fw-bold); margin: 0 2px; }
 
-/* 메시지 테이블 */
-.mm-tbl { font-size: var(--fs-sm); }
-.mm-tbl th { font-size: var(--fs-xs); }
-.mm-tbl .c-chk { width: 36px; }
-.mm-tbl-content {
-  max-width: 280px;
+/* 메시지 리스트 (확장 가능한 카드) */
+.mm-list {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mm-msg {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-fast) var(--ease);
+}
+.mm-msg.is-open { border-color: var(--border-strong); }
+.mm-msg[data-msg-read="false"] { background: var(--accent-light); border-color: var(--accent-subtle); }
+
+.mm-msg-head {
+  display: grid;
+  grid-template-columns: auto auto 110px 1fr auto auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px var(--space-3);
+  cursor: pointer;
+}
+.mm-msg-chk { margin: 0; }
+.mm-msg-unread {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+.mm-msg-sender {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text-secondary);
 }
+.mm-msg-snippet {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mm-msg-time {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+.mm-msg-chev {
+  width: 16px;
+  height: 16px;
+  color: var(--text-tertiary);
+  transition: transform var(--duration-fast) var(--ease);
+}
+.mm-msg.is-open .mm-msg-chev { transform: rotate(180deg); }
+
+.mm-msg-body {
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.mm-msg-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  flex-wrap: wrap;
+}
+.mm-msg-meta strong { color: var(--text-secondary); font-weight: var(--fw-medium); }
+.mm-msg-dot { color: var(--text-disabled); }
+.mm-msg-unread-label { color: var(--status-warning); font-weight: var(--fw-medium); }
+.mm-msg-text {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-page);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.mm-msg-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
 .mm-tbl-footer {
   margin-top: var(--space-3);
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .mm-msg-head { grid-template-columns: auto auto 1fr auto auto; }
+  .mm-msg-snippet { display: none; }
 }
 
 .mm-form {

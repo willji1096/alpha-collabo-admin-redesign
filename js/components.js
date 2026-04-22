@@ -63,6 +63,40 @@ async function wireMessageModal() {
     });
   });
 
+  // 메시지 카드 펼치기/접기 (헤더 클릭)
+  backdrop.addEventListener('click', (e) => {
+    if (e.target.closest('.mm-msg-chk, .mm-msg-actions, button')) return;
+    const head = e.target.closest('.mm-msg-head');
+    if (!head) return;
+    const msg = head.closest('.mm-msg');
+    const body = msg && msg.querySelector('.mm-msg-body');
+    if (!msg || !body) return;
+    const opening = body.hidden;
+    body.hidden = !opening;
+    msg.classList.toggle('is-open', opening);
+    if (opening && msg.dataset.msgRead === 'false') {
+      msg.dataset.msgRead = 'true';
+      const unreadDot = msg.querySelector('.mm-msg-unread');
+      if (unreadDot) unreadDot.remove();
+    }
+  });
+
+  // 답장 버튼 — 작성 탭으로 전환 + 수신자 채움
+  backdrop.addEventListener('click', (e) => {
+    const btn = e.target.closest('.js-msg-reply');
+    if (!btn) return;
+    const to = btn.dataset.msgTo;
+    if (to) {
+      backdrop.querySelectorAll('[data-message-recipient]').forEach(el => {
+        if (el.tagName === 'INPUT') el.value = to;
+        else el.textContent = to;
+      });
+    }
+    activateTab('compose');
+    const ta = backdrop.querySelector('.mm-textarea');
+    if (ta) setTimeout(() => ta.focus(), 50);
+  });
+
   // 텍스트 카운트
   const textarea = backdrop.querySelector('.mm-textarea');
   const counter = backdrop.querySelector('[data-message-count]');

@@ -14,8 +14,8 @@
 
     <div class="tabs mm-tabs" role="tablist" aria-label="메시지 모드">
       <button class="tab is-active" role="tab" data-msg="compose" aria-selected="true">메시지 작성</button>
-      <button class="tab" role="tab" data-msg="inbox" aria-selected="false">받은 메시지 <span class="tab-count" data-message-inbox-count>0</span></button>
-      <button class="tab" role="tab" data-msg="sent" aria-selected="false">보낸 메시지 <span class="tab-count" data-message-sent-count>0</span></button>
+      <button class="tab" role="tab" data-msg="inbox" aria-selected="false">받은 메시지 <span class="tab-count" data-message-inbox-count>2</span></button>
+      <button class="tab" role="tab" data-msg="sent" aria-selected="false">보낸 메시지 <span class="tab-count" data-message-sent-count>2</span></button>
     </div>
 
     <!-- 메시지 작성 -->
@@ -42,37 +42,76 @@
       <div class="mm-summary">
         수신 <strong class="mm-count">2</strong>건 · 미확인 <strong class="mm-count">1</strong>건
       </div>
-      <div class="tbl-wrap">
-        <table class="tbl mm-tbl">
-          <thead>
-            <tr>
-              <th class="c-chk"><input class="checkbox-input" type="checkbox" aria-label="전체 선택"></th>
-              <th>발신자</th>
-              <th>내용</th>
-              <th>발송시간</th>
-              <th>읽은시간</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-              <td><strong>mika_seoul</strong></td>
-              <td class="mm-tbl-content">안녕하세요! 방문 일정 확정 부탁드립니다.</td>
-              <td class="is-mono">2026-04-22 16:20</td>
-              <td class="c-null">—</td>
-            </tr>
-            <tr>
-              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-              <td><strong>natasha_mood</strong></td>
-              <td class="mm-tbl-content">캠페인 리뷰 마감이 언제인가요?</td>
-              <td class="is-mono">2026-04-21 11:03</td>
-              <td class="is-mono">2026-04-21 11:18</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="mm-list">
+
+        <article class="mm-msg js-msg-toggle" data-msg-read="true">
+          <header class="mm-msg-head">
+            <input class="checkbox-input mm-msg-chk" type="checkbox" aria-label="선택">
+            <span class="mm-msg-sender">mika_seoul</span>
+            <span class="mm-msg-snippet">안녕하세요! 방문 일정 확정 부탁드립니다.</span>
+            <span class="mm-msg-time is-mono">04-22 16:20</span>
+            <svg class="mm-msg-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </header>
+          <section class="mm-msg-body" hidden>
+            <div class="mm-msg-meta">
+              <span>발송 <strong class="is-mono">2026-04-22 16:20:14</strong></span>
+              <span class="mm-msg-dot">·</span>
+              <span>읽음 <strong class="is-mono">2026-04-22 16:28:02</strong></span>
+            </div>
+            <p class="mm-msg-text">안녕하세요! 로담한의원 부산점 방문 일정 관련 문의드립니다.
+
+4월 25일 오후 2시 방문 가능할까요? 스케줄 확정 부탁드립니다.
+
+그리고 당일 필요한 준비물이나 주의사항이 있다면 미리 공유 부탁드립니다. 감사합니다.</p>
+            <div class="mm-msg-actions">
+              <button type="button" class="btn btn-ghost btn-sm js-msg-reply" data-msg-to="mika_seoul">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+                답장
+              </button>
+              <button type="button" class="btn btn-ghost btn-sm mm-msg-del">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                삭제
+              </button>
+            </div>
+          </section>
+        </article>
+
+        <article class="mm-msg js-msg-toggle" data-msg-read="false">
+          <header class="mm-msg-head">
+            <input class="checkbox-input mm-msg-chk" type="checkbox" aria-label="선택">
+            <span class="mm-msg-unread"></span>
+            <span class="mm-msg-sender">natasha_mood</span>
+            <span class="mm-msg-snippet">캠페인 리뷰 마감이 언제인가요?</span>
+            <span class="mm-msg-time is-mono">04-21 11:03</span>
+            <svg class="mm-msg-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </header>
+          <section class="mm-msg-body" hidden>
+            <div class="mm-msg-meta">
+              <span>발송 <strong class="is-mono">2026-04-21 11:03:47</strong></span>
+              <span class="mm-msg-dot">·</span>
+              <span class="mm-msg-unread-label">미확인</span>
+            </div>
+            <p class="mm-msg-text">봄 신메뉴 체험단 캠페인 관련 문의입니다.
+
+리뷰 제출 마감일이 언제인지 확인 부탁드립니다. 저는 4월 30일까지 가능할 것 같은데 괜찮을까요?
+
+답변 기다리겠습니다.</p>
+            <div class="mm-msg-actions">
+              <button type="button" class="btn btn-ghost btn-sm js-msg-reply" data-msg-to="natasha_mood">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+                답장
+              </button>
+              <button type="button" class="btn btn-ghost btn-sm mm-msg-del">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                삭제
+              </button>
+            </div>
+          </section>
+        </article>
+
       </div>
       <div class="mm-tbl-footer">
-        <button type="button" class="btn btn-secondary btn-sm">선택 삭제</button>
+        <button type="button" class="btn btn-secondary btn-md">선택 삭제</button>
       </div>
     </div>
 
@@ -81,37 +120,67 @@
       <div class="mm-summary">
         발송 <strong class="mm-count">2</strong>건
       </div>
-      <div class="tbl-wrap">
-        <table class="tbl mm-tbl">
-          <thead>
-            <tr>
-              <th class="c-chk"><input class="checkbox-input" type="checkbox" aria-label="전체 선택"></th>
-              <th>수신자</th>
-              <th>내용</th>
-              <th>발송시간</th>
-              <th>읽은시간</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-              <td><strong data-message-recipient>mika_seoul</strong></td>
-              <td class="mm-tbl-content">캠페인 신청 확인되었습니다. 추가 안내 드리겠습니다.</td>
-              <td class="is-mono">2026-04-22 15:48</td>
-              <td class="is-mono">2026-04-22 15:51</td>
-            </tr>
-            <tr>
-              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-              <td><strong>yuki_tokyo</strong></td>
-              <td class="mm-tbl-content">리뷰 제출 부탁드립니다.</td>
-              <td class="is-mono">2026-04-19 10:12</td>
-              <td class="c-null">—</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="mm-list">
+
+        <article class="mm-msg js-msg-toggle">
+          <header class="mm-msg-head">
+            <input class="checkbox-input mm-msg-chk" type="checkbox" aria-label="선택">
+            <span class="mm-msg-sender">→ mika_seoul</span>
+            <span class="mm-msg-snippet">캠페인 신청 확인되었습니다. 추가 안내 드리겠습니다.</span>
+            <span class="badge badge-success badge-sm"><span class="badge-dot"></span>읽음</span>
+            <span class="mm-msg-time is-mono">04-22 15:48</span>
+            <svg class="mm-msg-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </header>
+          <section class="mm-msg-body" hidden>
+            <div class="mm-msg-meta">
+              <span>발송 <strong class="is-mono">2026-04-22 15:48:30</strong></span>
+              <span class="mm-msg-dot">·</span>
+              <span>읽음 <strong class="is-mono">2026-04-22 15:51:12</strong></span>
+            </div>
+            <p class="mm-msg-text">안녕하세요 mika_seoul 님, 로담한의원 부산점 캠페인 신청 확인되었습니다.
+
+방문 일정 확정되는 대로 추가 안내 드리겠습니다. 궁금하신 점 있으시면 언제든 메시지 주세요.
+
+감사합니다.</p>
+            <div class="mm-msg-actions">
+              <button type="button" class="btn btn-ghost btn-sm mm-msg-del">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                삭제
+              </button>
+            </div>
+          </section>
+        </article>
+
+        <article class="mm-msg js-msg-toggle">
+          <header class="mm-msg-head">
+            <input class="checkbox-input mm-msg-chk" type="checkbox" aria-label="선택">
+            <span class="mm-msg-sender">→ yuki_tokyo</span>
+            <span class="mm-msg-snippet">리뷰 제출 부탁드립니다.</span>
+            <span class="badge badge-info badge-sm badge-outline"><span class="badge-dot"></span>미확인</span>
+            <span class="mm-msg-time is-mono">04-19 10:12</span>
+            <svg class="mm-msg-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </header>
+          <section class="mm-msg-body" hidden>
+            <div class="mm-msg-meta">
+              <span>발송 <strong class="is-mono">2026-04-19 10:12:08</strong></span>
+              <span class="mm-msg-dot">·</span>
+              <span class="mm-msg-unread-label">미확인</span>
+            </div>
+            <p class="mm-msg-text">yuki_tokyo 님, 캠페인 리뷰 제출 마감이 임박했습니다.
+
+아직 리뷰 등록 전이시면 4월 25일까지 제출 부탁드립니다. 가능 여부 회신 주시면 감사하겠습니다.</p>
+            <div class="mm-msg-actions">
+              <button type="button" class="btn btn-ghost btn-sm mm-msg-del">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                삭제
+              </button>
+            </div>
+          </section>
+        </article>
+
       </div>
       <div class="mm-tbl-footer">
-        <button type="button" class="btn btn-secondary btn-sm">선택 삭제</button>
+        <button type="button" class="btn btn-secondary btn-md">선택 삭제</button>
       </div>
     </div>
 

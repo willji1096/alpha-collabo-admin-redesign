@@ -33,7 +33,104 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireSortableHeaders();
   wireHeaderPopovers();
   wireInfluencerDrawer();
+  wireMessageModal();
 });
+
+/** 메시지 모달 (슈퍼패스 보내기) — 페이지 로드 시 상주 */
+async function wireMessageModal() {
+  if (document.querySelectorAll('.js-open-message').length === 0) return;
+  const bust = `?v=${Date.now()}`;
+  const res = await fetch('components/modal-message.html' + bust, { cache: 'no-store' });
+  const html = await res.text();
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  Array.from(wrap.children).forEach(el => document.body.appendChild(el));
+
+  const backdrop = document.querySelector('.js-message-backdrop');
+  const modal = backdrop && backdrop.querySelector('.modal-message');
+  if (!backdrop || !modal) return;
+
+  // 탭 전환
+  const tabs = backdrop.querySelectorAll('[data-msg]');
+  const panels = backdrop.querySelectorAll('[data-msg-panel]');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+      const code = tab.dataset.msg;
+      panels.forEach(p => { p.hidden = p.dataset.msgPanel !== code; });
+    });
+  });
+
+  // 텍스트 카운트
+  const textarea = backdrop.querySelector('.mm-textarea');
+  const counter = backdrop.querySelector('[data-message-count]');
+  if (textarea && counter) {
+    textarea.addEventListener('input', () => {
+      counter.textContent = textarea.value.length;
+    });
+  }
+
+  // 발송 버튼 — 토스트 + 모달 닫기 + textarea 리셋
+  backdrop.querySelectorAll('.js-send-message').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const content = textarea && textarea.value.trim();
+      if (!content) {
+        if (typeof showToast === 'function') showToast('warning', '내용을 입력하세요');
+        return;
+      }
+      if (typeof showToast === 'function') showToast('success', '메시지 발송 완료');
+      if (textarea) { textarea.value = ''; if (counter) counter.textContent = '0'; }
+      close();
+    });
+  });
+
+  // 닫기
+  backdrop.querySelectorAll('.js-close-message').forEach(b => b.addEventListener('click', close));
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (!backdrop.hidden && e.key === 'Escape') close();
+  });
+
+  function open(triggerEl) {
+    // 트리거 행에서 인플루언서 이름 추출해서 수신자 자리에 표시
+    let recipient = null;
+    const row = triggerEl && triggerEl.closest('tr');
+    if (row) {
+      const table = row.closest('table');
+      const headers = table ? Array.from(table.querySelectorAll('thead th')) : [];
+      const idx = headers.findIndex(h => /인플루언서|회원정보/.test(h.textContent.trim()));
+      if (idx >= 0 && row.cells[idx]) {
+        const txt = row.cells[idx].textContent.trim().split(/\s+/)[0];
+        if (txt) recipient = txt;
+      }
+    }
+    if (recipient) {
+      backdrop.querySelectorAll('[data-message-recipient]').forEach(el => {
+        if (el.tagName === 'INPUT') el.value = recipient;
+        else el.textContent = recipient;
+      });
+    }
+    backdrop.hidden = false;
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => { if (textarea) textarea.focus(); }, 50);
+  }
+
+  function close() {
+    backdrop.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  // 트리거 버튼 클릭
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.js-open-message');
+    if (!trigger) return;
+    e.preventDefault();
+    open(trigger);
+  });
+}
 
 /** 인플루언서 상세 Drawer — 페이지 로드 시 상주 (이미지 preload 보장) */
 async function wireInfluencerDrawer() {
@@ -268,7 +365,7 @@ function wireToastAutoTriggers() {
     if (!btn) return;
     // 모달/드로어/필터 토글/복사버튼 등 기능성 버튼은 제외
     if (btn.closest('.modal, .drawer, .cmdk, .toast') ||
-        btn.matches('.js-open-influencer, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
+        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
     // href가 있는 a 태그면 네비게이션이므로 제외
     if (btn.tagName === 'A' && btn.getAttribute('href') && btn.getAttribute('href') !== '#') return;
 

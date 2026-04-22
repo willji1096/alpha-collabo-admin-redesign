@@ -1118,6 +1118,90 @@ body { background: var(--bg-page); }
 .tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
 .tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
 
+/* ===== Modal: Message (메시지함) ===== */
+.modal-message { max-width: 560px; width: 100%; }
+.modal-message .modal-body { padding: var(--space-5) var(--space-6); max-height: 70vh; overflow-y: auto; }
+.modal-message .mm-tabs { margin-bottom: var(--space-4); }
+.mm-list { list-style: none; margin: 0 0 var(--space-4); padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.mm-item {
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+.mm-item-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: 4px;
+}
+.mm-item-from {
+  flex: 1;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.mm-item-time {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}
+.mm-item-text {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.mm-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-light);
+}
+.mm-field { display: flex; flex-direction: column; gap: 6px; }
+.mm-label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.mm-input, .mm-textarea {
+  width: 100%;
+  padding: 10px var(--space-3);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+.mm-input:focus, .mm-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+.mm-input.is-readonly {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+.mm-textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
+.mm-charcount {
+  align-self: flex-end;
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+.mm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
 /* ===== Drawer: Influencer Detail (원본 무손실 + SNS 마이페이지 톤) ===== */
 /* drawer-wide의 960px를 override — 이 드로어는 720px면 충분 */
 .drawer.drawer-influencer { width: 720px; max-width: calc(100vw - 48px); }

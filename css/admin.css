@@ -1407,34 +1407,12 @@ body { background: var(--bg-page); }
   -webkit-backdrop-filter: blur(4px);
 }
 
-/* Empty posts state (Threads) */
-.drawer-influencer .di-empty-posts {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-8) var(--space-4);
+/* 빈 영역 (Threads 게시물 없음 — 아이콘/문구 없이 공백만) */
+.drawer-influencer .di-empty-blank {
+  min-height: 120px;
   background: var(--bg-page);
-  border: 1px dashed var(--border-default);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  color: var(--text-tertiary);
-  text-align: center;
-  gap: 6px;
-}
-.drawer-influencer .di-empty-icon {
-  width: 32px;
-  height: 32px;
-  color: var(--text-disabled);
-  margin-bottom: var(--space-2);
-}
-.drawer-influencer .di-empty-title {
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--text-secondary);
-}
-.drawer-influencer .di-empty-desc {
-  font-size: var(--fs-xs);
-  color: var(--text-tertiary);
 }
 
 @media (max-width: 640px) {

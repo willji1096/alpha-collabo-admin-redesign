@@ -133,6 +133,17 @@ async function wireInfluencerDrawer() {
     e.preventDefault();
     open(trigger);
   });
+
+  // 행 어디를 눌러도 드로어 열기 (단, interactive element 클릭은 각자 처리)
+  document.addEventListener('click', (e) => {
+    // 이미 직접 트리거 버튼 클릭했거나 interactive 요소인 경우 skip
+    if (e.target.closest('button, a, input, label, select, textarea')) return;
+    const row = e.target.closest('tbody tr');
+    if (!row) return;
+    const trigger = row.querySelector('.js-open-influencer');
+    if (!trigger) return;
+    open(trigger);
+  });
 }
 
 /** 헤더/사이드바 팝오버 (알림 벨, 유저 메뉴) */

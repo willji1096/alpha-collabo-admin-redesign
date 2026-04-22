@@ -32,7 +32,91 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireToastAutoTriggers();
   wireSortableHeaders();
   wireHeaderPopovers();
+  wireInfluencerModal();
 });
+
+/** 인플루언서 상세 모달 — 지연 로드 + 전역 단일 인스턴스 */
+function wireInfluencerModal() {
+  // 이 페이지에 트리거가 하나도 없으면 로드 스킵
+  const triggers = () => document.querySelectorAll('.js-open-influencer');
+  if (triggers().length === 0) return;
+
+  let loaded = false;
+  let root = null;
+
+  async function ensureLoaded() {
+    if (loaded) return;
+    const bust = `?v=${Date.now()}`;
+    const res = await fetch('components/modal-influencer.html' + bust, { cache: 'no-store' });
+    const html = await res.text();
+    const wrap = document.createElement('div');
+    wrap.innerHTML = html;
+    root = wrap.firstElementChild;
+    document.body.appendChild(root);
+
+    // SNS 탭 전환
+    const tabs = root.querySelectorAll('.tabs [data-sns]');
+    const panels = root.querySelectorAll('[data-sns-panel]');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        const code = tab.dataset.sns;
+        panels.forEach(p => { p.hidden = p.dataset.snsPanel !== code; });
+      });
+    });
+
+    // 닫기 버튼 · 백드롭 · ESC
+    root.querySelectorAll('.js-close-influencer').forEach(b =>
+      b.addEventListener('click', close)
+    );
+    root.addEventListener('click', (e) => {
+      if (e.target === root) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!root.hidden && e.key === 'Escape') close();
+    });
+
+    loaded = true;
+  }
+
+  function open(triggerEl) {
+    // 트리거에서 인플루언서 데이터 추출 (data-*)
+    if (triggerEl && root) {
+      const name = triggerEl.dataset.influencerName;
+      const country = triggerEl.dataset.influencerCountry;
+      const mbno = triggerEl.dataset.influencerMbno;
+      if (name) {
+        root.querySelectorAll('[data-influencer-name]').forEach(el => el.textContent = name);
+        root.querySelectorAll('[data-influencer-handle]').forEach(el => el.textContent = '@' + name);
+        root.querySelectorAll('[data-influencer-initial]').forEach(el => el.textContent = (name[0] || 'M').toUpperCase());
+      }
+      if (country) root.querySelectorAll('[data-influencer-country]').forEach(el => el.textContent = country);
+      if (mbno)    root.querySelectorAll('[data-influencer-mbno]').forEach(el => el.textContent = '관리번호 ' + mbno);
+    }
+    root.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    if (!root) return;
+    root.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  // 이벤트 위임: 동적으로 붙는 트리거까지 대응
+  document.addEventListener('click', async (e) => {
+    const trigger = e.target.closest('.js-open-influencer');
+    if (!trigger) return;
+    e.preventDefault();
+    await ensureLoaded();
+    open(trigger);
+  });
+}
 
 /** 헤더/사이드바 팝오버 (알림 벨, 유저 메뉴) */
 function wireHeaderPopovers() {

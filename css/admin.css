@@ -157,7 +157,7 @@ body { background: var(--bg-page); }
   padding: 0 12px;
   margin: 1px 8px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 150ms ease;
@@ -758,7 +758,7 @@ body { background: var(--bg-page); }
 }
 
 .pg-crumb {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-disabled);
 }
 .pg-crumb b { color: var(--text-secondary); font-weight: 500; }
@@ -911,7 +911,7 @@ body { background: var(--bg-page); }
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
   cursor: pointer;
 }
@@ -982,7 +982,7 @@ body { background: var(--bg-page); }
   height: 34px;
   padding: 0 30px 0 12px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
@@ -1011,7 +1011,7 @@ body { background: var(--bg-page); }
 
 .tbl th {
   background: var(--bg-elevated);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-tertiary);
   text-align: center;
@@ -1701,10 +1701,10 @@ body { background: var(--bg-page); }
 
 /* Cell: campaign */
 .c-camp-name { font-weight: 500; font-size: 14px; margin-bottom: 2px; }
-.c-camp-sub { font-size: 12px; color: var(--text-disabled); }
+.c-camp-sub { font-size: 13px; color: var(--text-disabled); }
 
 /* Cell: channel */
-.c-ch-url { font-size: 12px; color: var(--text-tertiary); word-break: break-all; margin-bottom: 2px; }
+.c-ch-url { font-size: 13px; color: var(--text-tertiary); word-break: break-all; margin-bottom: 2px; }
 
 /* Cell: tag */
 .c-tag {

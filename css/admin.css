@@ -1118,6 +1118,24 @@ body { background: var(--bg-page); }
 .tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
 .tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
 
+/* Cell: country code chip — replaces flag emoji per DESIGN.md §9 */
+.c-country-code,
+.country-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
 /* Cell: campaign */
 .c-camp-name { font-weight: 500; font-size: 14px; margin-bottom: 2px; }
 .c-camp-sub { font-size: 12px; color: var(--text-disabled); }

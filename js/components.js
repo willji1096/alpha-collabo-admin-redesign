@@ -35,63 +35,52 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireInfluencerDrawer();
 });
 
-/** 인플루언서 상세 Drawer — 지연 로드 + 전역 단일 인스턴스 */
-function wireInfluencerDrawer() {
+/** 인플루언서 상세 Drawer — 페이지 로드 시 상주 (이미지 preload 보장) */
+async function wireInfluencerDrawer() {
   // 이 페이지에 트리거가 하나도 없으면 로드 스킵
-  const triggers = () => document.querySelectorAll('.js-open-influencer');
-  if (triggers().length === 0) return;
+  if (document.querySelectorAll('.js-open-influencer').length === 0) return;
 
-  let loaded = false;
-  let drawer = null;
-  let backdrop = null;
+  // 페이지 로드 시 즉시 주입 — 이미지가 초기 파싱에 바로 fetch 시작됨
+  const bust = `?v=${Date.now()}`;
+  const res = await fetch('components/drawer-influencer.html' + bust, { cache: 'no-store' });
+  const html = await res.text();
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  Array.from(wrap.children).forEach(el => document.body.appendChild(el));
 
-  async function ensureLoaded() {
-    if (loaded) return;
-    const bust = `?v=${Date.now()}`;
-    const res = await fetch('components/drawer-influencer.html' + bust, { cache: 'no-store' });
-    const html = await res.text();
-    const wrap = document.createElement('div');
-    wrap.innerHTML = html;
-    // 백드롭 + aside 두 개를 body에 순서대로 삽입
-    Array.from(wrap.children).forEach(el => document.body.appendChild(el));
-    backdrop = document.querySelector('.js-drawer-influencer-backdrop');
-    drawer   = document.querySelector('.js-drawer-influencer');
+  const backdrop = document.querySelector('.js-drawer-influencer-backdrop');
+  const drawer   = document.querySelector('.js-drawer-influencer');
+  if (!drawer || !backdrop) return;
 
-    // 모든 탭의 이미지를 강제 preload
-    // (Chrome은 드로어가 translateX(100%) 상태일 때 비활성 탭 내부 img 요청을 스킵함)
-    drawer.querySelectorAll('img').forEach(img => {
-      img.loading = 'eager';
-      const pre = new Image();
-      pre.src = img.src;
-    });
+  // 모든 탭 이미지 fetch 기반 강제 preload (Chrome이 <img>만으론 skip할 때 대비)
+  drawer.querySelectorAll('img').forEach(img => {
+    fetch(img.src, { mode: 'no-cors' }).catch(() => {});
+  });
 
-    // SNS 탭 전환
-    const tabs = drawer.querySelectorAll('[data-sns]');
-    const panels = drawer.querySelectorAll('[data-sns-panel]');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => {
-          t.classList.remove('is-active');
-          t.setAttribute('aria-selected', 'false');
-        });
-        tab.classList.add('is-active');
-        tab.setAttribute('aria-selected', 'true');
-        const code = tab.dataset.sns;
-        panels.forEach(p => { p.hidden = p.dataset.snsPanel !== code; });
+  // SNS 탭 전환
+  const tabs = drawer.querySelectorAll('[data-sns]');
+  const panels = drawer.querySelectorAll('[data-sns-panel]');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
       });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+      const code = tab.dataset.sns;
+      panels.forEach(p => { p.hidden = p.dataset.snsPanel !== code; });
     });
+  });
 
-    // 닫기 — 버튼 / 백드롭 / ESC
-    drawer.querySelectorAll('.js-close-influencer').forEach(b =>
-      b.addEventListener('click', close)
-    );
-    backdrop.addEventListener('click', close);
-    document.addEventListener('keydown', (e) => {
-      if (drawer.classList.contains('open') && e.key === 'Escape') close();
-    });
-
-    loaded = true;
-  }
+  // 닫기 이벤트
+  drawer.querySelectorAll('.js-close-influencer').forEach(b =>
+    b.addEventListener('click', close)
+  );
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => {
+    if (drawer.classList.contains('open') && e.key === 'Escape') close();
+  });
 
   // 실제 구현 시 이 함수에서 `fetch('/api/influencer/' + mbNo)` 로 교체
   // 현재는 테이블 행에서 관리번호만 추출해서 반영 (데모)
@@ -137,12 +126,11 @@ function wireInfluencerDrawer() {
     document.body.style.overflow = '';
   }
 
-  // 이벤트 위임: 동적으로 붙는 트리거까지 대응
-  document.addEventListener('click', async (e) => {
+  // 트리거 버튼 클릭 시 드로어 오픈
+  document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.js-open-influencer');
     if (!trigger) return;
     e.preventDefault();
-    await ensureLoaded();
     open(trigger);
   });
 }

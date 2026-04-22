@@ -1239,26 +1239,53 @@ body { background: var(--bg-page); }
   padding: 14px 8px;
   background: transparent;
   border: none;
-  border-top: 1px solid transparent;
-  color: var(--text-tertiary);
-  font-size: var(--fs-xs);
+  border-top: 2px solid transparent;
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
   cursor: pointer;
-  transition: color var(--duration-fast) var(--ease);
+  transition: all var(--duration-fast) var(--ease);
   margin-top: -1px;
 }
-.drawer-influencer .di-tab:hover { color: var(--text-secondary); }
-.drawer-influencer .di-tab.is-active {
-  color: var(--text-primary);
-  border-top-color: var(--text-primary);
-}
-.drawer-influencer .di-tab-icon { width: 14px; height: 14px; }
+.drawer-influencer .di-tab:hover { color: var(--text-primary); background: var(--bg-hover); }
+.drawer-influencer .di-tab.is-active { color: var(--text-primary); }
+
+/* SNS 로고 — 항상 브랜드 색으로 명확하게 */
+.drawer-influencer .di-tab-icon { width: 18px; height: 18px; flex-shrink: 0; }
+.drawer-influencer .di-tab[data-sns="fb"] .di-tab-icon { color: var(--sns-fb); }
+.drawer-influencer .di-tab[data-sns="ig"] .di-tab-icon { color: var(--sns-ig); }
+.drawer-influencer .di-tab[data-sns="th"] .di-tab-icon { color: var(--neutral-900); }
+.drawer-influencer .di-tab[data-sns="tt"] .di-tab-icon { color: var(--sns-tt); }
+
+/* 활성 탭: 브랜드별 top-border 액센트 */
+.drawer-influencer .di-tab[data-sns="fb"].is-active { border-top-color: var(--sns-fb); }
+.drawer-influencer .di-tab[data-sns="ig"].is-active { border-top-color: var(--sns-ig); }
+.drawer-influencer .di-tab[data-sns="th"].is-active { border-top-color: var(--neutral-900); }
+.drawer-influencer .di-tab[data-sns="tt"].is-active { border-top-color: var(--sns-tt); }
 
 /* ===== Per-tab panel ===== */
 .drawer-influencer .di-panel { display: flex; flex-direction: column; gap: var(--space-4); }
 .drawer-influencer .di-panel[hidden] { display: none; }
+.drawer-influencer .di-panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.drawer-influencer .di-panel-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.drawer-influencer .di-panel-logo svg { width: 20px; height: 20px; }
+.drawer-influencer .di-logo-fb { background: var(--sns-fb-bg); color: var(--sns-fb); }
+.drawer-influencer .di-logo-ig { background: var(--sns-ig-bg); color: var(--sns-ig); }
+.drawer-influencer .di-logo-th { background: var(--neutral-50); color: var(--neutral-900); }
+.drawer-influencer .di-logo-tt { background: var(--sns-tt-bg); color: var(--sns-tt); }
+
 .drawer-influencer .di-panel-title {
   font-size: var(--fs-lg);
   font-weight: var(--fw-semibold);

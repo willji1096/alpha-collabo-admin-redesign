@@ -34,7 +34,96 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireHeaderPopovers();
   wireInfluencerDrawer();
   wireMessageModal();
+  wireImageLightbox();
 });
+
+/** 이미지 라이트박스 — 드로어 내 post 썸네일 클릭 시 풀사이즈 확장 */
+function wireImageLightbox() {
+  let lb = null;
+  let images = [];
+  let idx = 0;
+
+  function ensureEl() {
+    if (lb) return;
+    lb = document.createElement('div');
+    lb.className = 'img-lightbox';
+    lb.innerHTML = `
+      <button class="img-lightbox-btn img-lightbox-close" aria-label="닫기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18"/></svg>
+      </button>
+      <button class="img-lightbox-btn img-lightbox-prev" aria-label="이전">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="img-lightbox-btn img-lightbox-next" aria-label="다음">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <img class="img-lightbox-img" alt="">
+      <div class="img-lightbox-counter"></div>
+    `;
+    document.body.appendChild(lb);
+    lb.querySelector('.img-lightbox-close').addEventListener('click', close);
+    lb.querySelector('.img-lightbox-prev').addEventListener('click', (e) => { e.stopPropagation(); nav(-1); });
+    lb.querySelector('.img-lightbox-next').addEventListener('click', (e) => { e.stopPropagation(); nav(1); });
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('is-open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') nav(-1);
+      if (e.key === 'ArrowRight') nav(1);
+    });
+  }
+
+  function upscale(url) {
+    // Unsplash URL의 w/h 400→1200, 600→1600 으로 확장
+    return url.replace(/([?&])w=\d+/, '$1w=1200').replace(/([&?])h=\d+/, '$1h=1200');
+  }
+
+  function render() {
+    if (!lb || !images[idx]) return;
+    const img = lb.querySelector('.img-lightbox-img');
+    img.src = upscale(images[idx]);
+    lb.querySelector('.img-lightbox-counter').textContent = `${idx + 1} / ${images.length}`;
+    lb.querySelector('.img-lightbox-prev').hidden = images.length <= 1;
+    lb.querySelector('.img-lightbox-next').hidden = images.length <= 1;
+  }
+
+  function nav(delta) {
+    idx = (idx + delta + images.length) % images.length;
+    render();
+  }
+
+  function open(triggerEl) {
+    ensureEl();
+    // 같은 그리드 안의 모든 이미지 URL 수집
+    const grid = triggerEl.closest('.di-grid');
+    if (grid) {
+      const posts = Array.from(grid.querySelectorAll('.di-post img'));
+      images = posts.map(im => im.src);
+      idx = Math.max(0, posts.findIndex(im => im === triggerEl.querySelector('img')));
+    } else {
+      images = [triggerEl.querySelector('img').src];
+      idx = 0;
+    }
+    lb.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    render();
+  }
+
+  function close() {
+    if (!lb) return;
+    lb.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  // 드로어 내 포스트 클릭 시 라이트박스 오픈
+  document.addEventListener('click', (e) => {
+    const post = e.target.closest('.di-post');
+    if (!post) return;
+    if (!post.querySelector('img')) return;
+    e.preventDefault();
+    open(post);
+  });
+}
 
 /** 메시지 모달 (슈퍼패스 보내기) — 페이지 로드 시 상주 */
 async function wireMessageModal() {

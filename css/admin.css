@@ -1118,6 +1118,73 @@ body { background: var(--bg-page); }
 .tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
 .tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
 
+/* ===== Image Lightbox ===== */
+.img-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-toast, 150);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: lb-fade var(--duration) var(--ease-out);
+}
+.img-lightbox.is-open { display: flex; }
+.img-lightbox-img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: lb-zoom var(--duration-slow) var(--ease-out);
+}
+.img-lightbox-btn {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--duration-fast) var(--ease);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.img-lightbox-btn svg { width: 22px; height: 22px; }
+.img-lightbox-btn:hover { background: rgba(255, 255, 255, 0.22); }
+.img-lightbox-close { top: 24px; right: 24px; }
+.img-lightbox-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+.img-lightbox-next { right: 24px; top: 50%; transform: translateY(-50%); }
+.img-lightbox-counter {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+@keyframes lb-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes lb-zoom {
+  from { transform: scale(0.94); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 /* ===== Modal: Message (메시지함 — 3탭) ===== */
 .modal-message { max-width: 720px; width: 100%; }
 .modal-message .modal-body { padding: var(--space-5) var(--space-6); max-height: 74vh; overflow-y: auto; }

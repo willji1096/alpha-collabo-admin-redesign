@@ -94,6 +94,15 @@ async function wireMessageModal() {
     if (!backdrop.hidden && e.key === 'Escape') close();
   });
 
+  function activateTab(code) {
+    tabs.forEach(t => {
+      const on = t.dataset.msg === code;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', String(on));
+    });
+    panels.forEach(p => { p.hidden = p.dataset.msgPanel !== code; });
+  }
+
   function open(triggerEl) {
     // 트리거 행에서 인플루언서 이름 추출해서 수신자 자리에 표시
     let recipient = null;
@@ -113,6 +122,8 @@ async function wireMessageModal() {
         else el.textContent = recipient;
       });
     }
+    // 행에서 열렸으면 '작성' 탭, 그 외는 '받은 메시지' 탭
+    activateTab(triggerEl ? 'compose' : 'inbox');
     backdrop.hidden = false;
     document.body.style.overflow = 'hidden';
     setTimeout(() => { if (textarea) textarea.focus(); }, 50);

@@ -1118,46 +1118,62 @@ body { background: var(--bg-page); }
 .tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
 .tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
 
-/* ===== Modal: Message (메시지함) ===== */
-.modal-message { max-width: 560px; width: 100%; }
-.modal-message .modal-body { padding: var(--space-5) var(--space-6); max-height: 70vh; overflow-y: auto; }
+/* ===== Modal: Message (메시지함 — 3탭) ===== */
+.modal-message { max-width: 720px; width: 100%; }
+.modal-message .modal-body { padding: var(--space-5) var(--space-6); max-height: 74vh; overflow-y: auto; }
 .modal-message .mm-tabs { margin-bottom: var(--space-4); }
-.mm-list { list-style: none; margin: 0 0 var(--space-4); padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
-.mm-item {
+.modal-message .tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  background: var(--bg-elevated);
+  color: var(--text-tertiary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+}
+.modal-message .tab.is-active .tab-count {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* 요약 행 */
+.mm-summary {
   padding: var(--space-3) var(--space-4);
   background: var(--bg-elevated);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-}
-.mm-item-head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: 4px;
-}
-.mm-item-from {
-  flex: 1;
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--text-primary);
-}
-.mm-item-time {
-  font-size: var(--fs-xs);
-  color: var(--text-tertiary);
-}
-.mm-item-text {
-  margin: 0;
   font-size: var(--fs-sm);
   color: var(--text-secondary);
-  line-height: 1.5;
+  margin-bottom: var(--space-3);
+}
+.mm-summary .mm-count { color: var(--accent); font-weight: var(--fw-bold); margin: 0 2px; }
+
+/* 메시지 테이블 */
+.mm-tbl { font-size: var(--fs-sm); }
+.mm-tbl th { font-size: var(--fs-xs); }
+.mm-tbl .c-chk { width: 36px; }
+.mm-tbl-content {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+.mm-tbl-footer {
+  margin-top: var(--space-3);
+  display: flex;
+  justify-content: center;
 }
 
 .mm-form {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--border-light);
 }
 .mm-field { display: flex; flex-direction: column; gap: 6px; }
 .mm-label {

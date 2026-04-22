@@ -12,38 +12,22 @@
 
   <div class="modal-body">
 
-    <div class="tabs mm-tabs" role="tablist" aria-label="메시지 탭">
-      <button class="tab is-active" role="tab" data-msg="inbox" aria-selected="true">받은 메시지</button>
-      <button class="tab" role="tab" data-msg="sent" aria-selected="false">보낸 메시지</button>
+    <div class="tabs mm-tabs" role="tablist" aria-label="메시지 모드">
+      <button class="tab is-active" role="tab" data-msg="compose" aria-selected="true">메시지 작성</button>
+      <button class="tab" role="tab" data-msg="inbox" aria-selected="false">받은 메시지 <span class="tab-count" data-message-inbox-count>0</span></button>
+      <button class="tab" role="tab" data-msg="sent" aria-selected="false">보낸 메시지 <span class="tab-count" data-message-sent-count>0</span></button>
     </div>
 
-    <!-- 받은 메시지 + 새 메시지 작성 -->
-    <div data-msg-panel="inbox">
-      <ul class="mm-list">
-        <li class="mm-item">
-          <div class="mm-item-head">
-            <span class="mm-item-from" data-message-recipient>mika_seoul</span>
-            <span class="mm-item-time">2시간 전</span>
-          </div>
-          <p class="mm-item-text">안녕하세요! 방문 일정 확정 부탁드립니다.</p>
-        </li>
-        <li class="mm-item">
-          <div class="mm-item-head">
-            <span class="mm-item-from" data-message-recipient>mika_seoul</span>
-            <span class="mm-item-time">어제</span>
-          </div>
-          <p class="mm-item-text">캠페인 관련 문의드립니다. 리뷰 제출 마감이 언제인가요?</p>
-        </li>
-      </ul>
-
+    <!-- 메시지 작성 -->
+    <div data-msg-panel="compose">
       <form class="mm-form" onsubmit="return false;">
         <div class="mm-field">
-          <label class="mm-label" for="mm-recipient">받는 사람</label>
+          <label class="mm-label" for="mm-recipient">받는 사람 ID</label>
           <input class="mm-input is-readonly" id="mm-recipient" type="text" value="mika_seoul" data-message-recipient readonly>
         </div>
         <div class="mm-field">
           <label class="mm-label" for="mm-content">내용</label>
-          <textarea class="mm-textarea" id="mm-content" rows="6" placeholder="메시지를 입력하세요"></textarea>
+          <textarea class="mm-textarea" id="mm-content" rows="7" placeholder="메시지를 입력하세요"></textarea>
           <div class="mm-charcount"><span data-message-count>0</span> / 1000</div>
         </div>
         <div class="mm-actions">
@@ -53,26 +37,82 @@
       </form>
     </div>
 
+    <!-- 받은 메시지 -->
+    <div data-msg-panel="inbox" hidden>
+      <div class="mm-summary">
+        수신 <strong class="mm-count">2</strong>건 · 미확인 <strong class="mm-count">1</strong>건
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl mm-tbl">
+          <thead>
+            <tr>
+              <th class="c-chk"><input class="checkbox-input" type="checkbox" aria-label="전체 선택"></th>
+              <th>발신자</th>
+              <th>내용</th>
+              <th>발송시간</th>
+              <th>읽은시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+              <td><strong>mika_seoul</strong></td>
+              <td class="mm-tbl-content">안녕하세요! 방문 일정 확정 부탁드립니다.</td>
+              <td class="is-mono">2026-04-22 16:20</td>
+              <td class="c-null">—</td>
+            </tr>
+            <tr>
+              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+              <td><strong>natasha_mood</strong></td>
+              <td class="mm-tbl-content">캠페인 리뷰 마감이 언제인가요?</td>
+              <td class="is-mono">2026-04-21 11:03</td>
+              <td class="is-mono">2026-04-21 11:18</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mm-tbl-footer">
+        <button type="button" class="btn btn-secondary btn-sm">선택 삭제</button>
+      </div>
+    </div>
+
     <!-- 보낸 메시지 -->
     <div data-msg-panel="sent" hidden>
-      <ul class="mm-list">
-        <li class="mm-item">
-          <div class="mm-item-head">
-            <span class="mm-item-from">→ <span data-message-recipient>mika_seoul</span></span>
-            <span class="mm-item-time">30분 전</span>
-            <span class="badge badge-success badge-sm"><span class="badge-dot"></span>읽음</span>
-          </div>
-          <p class="mm-item-text">캠페인 신청 확인되었습니다. 추가 안내 드리겠습니다.</p>
-        </li>
-        <li class="mm-item">
-          <div class="mm-item-head">
-            <span class="mm-item-from">→ <span data-message-recipient>mika_seoul</span></span>
-            <span class="mm-item-time">3일 전</span>
-            <span class="badge badge-info badge-sm badge-outline"><span class="badge-dot"></span>미확인</span>
-          </div>
-          <p class="mm-item-text">리뷰 제출 부탁드립니다.</p>
-        </li>
-      </ul>
+      <div class="mm-summary">
+        발송 <strong class="mm-count">2</strong>건
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl mm-tbl">
+          <thead>
+            <tr>
+              <th class="c-chk"><input class="checkbox-input" type="checkbox" aria-label="전체 선택"></th>
+              <th>수신자</th>
+              <th>내용</th>
+              <th>발송시간</th>
+              <th>읽은시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+              <td><strong data-message-recipient>mika_seoul</strong></td>
+              <td class="mm-tbl-content">캠페인 신청 확인되었습니다. 추가 안내 드리겠습니다.</td>
+              <td class="is-mono">2026-04-22 15:48</td>
+              <td class="is-mono">2026-04-22 15:51</td>
+            </tr>
+            <tr>
+              <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+              <td><strong>yuki_tokyo</strong></td>
+              <td class="mm-tbl-content">리뷰 제출 부탁드립니다.</td>
+              <td class="is-mono">2026-04-19 10:12</td>
+              <td class="c-null">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mm-tbl-footer">
+        <button type="button" class="btn btn-secondary btn-sm">선택 삭제</button>
+      </div>
     </div>
 
   </div>

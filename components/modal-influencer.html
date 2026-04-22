@@ -12,114 +12,189 @@
 
   <div class="modal-body">
 
-    <section class="info-section">
-      <div class="profile-head">
-        <span class="avatar avatar-lg" style="background: var(--accent-light); color: var(--accent)" aria-hidden="true" data-influencer-initial>M</span>
-        <div class="profile-head-meta">
-          <div class="profile-name" data-influencer-name>mika_seoul</div>
-          <div class="profile-handle" data-influencer-handle>@mika_seoul</div>
-          <div class="profile-chips">
-            <span class="c-country-code" data-influencer-country>JP</span>
-            <span class="badge badge-info badge-sm"><span class="badge-dot"></span>여성</span>
-            <span class="text-caption" data-influencer-mbno>관리번호 2173</span>
-          </div>
-        </div>
+    <!-- Profile hero (Instagram profile 스타일) -->
+    <header class="mi-profile">
+      <div class="mi-profile-avatar" aria-hidden="true">
+        <span>경</span>
       </div>
-    </section>
-
-    <section class="info-section">
-      <h3 class="info-section-title">연락처</h3>
-      <div class="info-grid">
-        <div class="info-item">
-          <span class="info-label">이메일</span>
-          <span class="info-value is-mono">ni**************op</span>
+      <div class="mi-profile-main">
+        <div class="mi-profile-name-row">
+          <h3 class="mi-profile-name">*경채</h3>
+          <span class="mi-profile-handle">***la</span>
         </div>
-        <div class="info-item">
-          <span class="info-label">연락처</span>
-          <span class="info-value is-mono">010-****-**36</span>
+        <div class="mi-profile-chips">
+          <span class="badge badge-info badge-sm"><span class="badge-dot"></span>여성</span>
+          <span class="text-caption text-tertiary">관리번호 <strong data-influencer-mbno>2173</strong></span>
         </div>
-        <div class="info-item">
-          <span class="info-label">가입일</span>
-          <span class="info-value">2025-11-08</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">최근 접속</span>
-          <span class="info-value">3시간 전</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="info-section">
-      <h3 class="info-section-title">SNS 채널</h3>
-
-      <div class="tabs" role="tablist" aria-label="SNS 채널">
-        <button class="tab" role="tab" data-sns="fb" aria-selected="false">페이스북</button>
-        <button class="tab is-active" role="tab" data-sns="ig" aria-selected="true">인스타그램<span class="tab-count">12.4k</span></button>
-        <button class="tab" role="tab" data-sns="th" aria-selected="false">스레드</button>
-        <button class="tab" role="tab" data-sns="tt" aria-selected="false">틱톡<span class="tab-count">4.2k</span></button>
-      </div>
-
-      <div data-sns-panel="fb" hidden>
-        <div class="sns-empty">
-          <div class="sns-empty-title">등록된 페이스북 계정이 없습니다</div>
-          인증된 SNS가 없거나 토큰이 만료되었습니다.
-        </div>
-      </div>
-
-      <div data-sns-panel="ig">
-        <div class="sns-panel">
-          <div class="sns-panel-head">
-            <span class="sns-ico tag-instagram" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            </span>
-            <span class="sns-panel-handle">@mika_seoul</span>
-            <span class="badge badge-success badge-sm"><span class="badge-dot"></span>인증됨</span>
+        <dl class="mi-profile-stats">
+          <div class="mi-stat">
+            <dt>합산 팔로워</dt>
+            <dd>11.2k<span class="mi-stat-note">~62k</span></dd>
           </div>
-          <div class="info-grid">
-            <div class="info-item"><span class="info-label">팔로워</span><span class="info-value">1천~1만 <span class="text-caption text-tertiary">(12,487)</span></span></div>
-            <div class="info-item"><span class="info-label">최근 30일 증감</span><span class="info-value" style="color: var(--status-success)">↑ 4.2%</span></div>
-            <div class="info-item"><span class="info-label">인증 만료</span><span class="info-value">2026-06-30</span></div>
-            <div class="info-item"><span class="info-label">평균 인게이지먼트</span><span class="info-value">3.8%</span></div>
+          <div class="mi-stat">
+            <dt>게시물</dt>
+            <dd>68</dd>
           </div>
-          <div class="sns-panel-actions">
-            <a class="btn btn-sm btn-secondary" href="https://instagram.com/mika_seoul" target="_blank" rel="noopener">
-              프로필 열기
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            </a>
+          <div class="mi-stat">
+            <dt>연동 채널</dt>
+            <dd>4 <span class="mi-stat-note">/ 4</span></dd>
           </div>
-        </div>
+        </dl>
       </div>
+    </header>
 
-      <div data-sns-panel="th" hidden>
-        <div class="sns-empty">
-          <div class="sns-empty-title">등록된 스레드 계정이 없습니다</div>
-          인증된 SNS가 없거나 토큰이 만료되었습니다.
+    <!-- SNS Tabs (아이콘 + 이름) -->
+    <nav class="mi-tabs" role="tablist" aria-label="SNS 채널">
+      <button class="mi-tab" role="tab" data-sns="fb" aria-selected="false">
+        <svg class="mi-tab-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073"/></svg>
+        <span>페이스북</span>
+      </button>
+      <button class="mi-tab is-active" role="tab" data-sns="ig" aria-selected="true">
+        <svg class="mi-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <span>인스타그램</span>
+      </button>
+      <button class="mi-tab" role="tab" data-sns="th" aria-selected="false">
+        <svg class="mi-tab-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.2 11.3c-.1 0-.2-.1-.2-.1-.1-2-1.1-3.2-3-3.3-.1 0-1.7-.1-2.7.4-.4-.6-.9-.9-1.6-.9-.9 0-1.6.6-1.8 1.6v.1c-.1-.1-.2-.2-.3-.3-.6-.5-1.3-.8-2-.8-1.5 0-2.8 1-3.3 2.4-.1.4-.2.9-.2 1.4v.1c0 2.5 1.8 4.3 4.3 4.3.6 0 1.2-.1 1.7-.3-.3-.4-.6-.9-.8-1.5-.3.1-.5.1-.9.1-1.4 0-2.4-1-2.4-2.4 0-1.4 1-2.5 2.4-2.5.4 0 .8.1 1.1.3v-.1c0-.4.3-.7.7-.7.4 0 .7.3.7.7v2.4c0 .1 0 .2.1.3.7 1.2 1.9 1.9 3.4 1.9.1 0 .3 0 .4-.1v-.1c0-.1 0-.2-.1-.3-.8-.4-1.4-1.1-1.7-2-.3-.8-.2-1.7.1-2.5.7.1 1.3.1 1.9.1.8 0 1.4.3 1.7.7 0-.8.6-1.3 1.4-1.3.9 0 1.4.7 1.4 1.5 0 .1 0 .3-.1.5v.1h.3z"/></svg>
+        <span>스레드</span>
+      </button>
+      <button class="mi-tab" role="tab" data-sns="tt" aria-selected="false">
+        <svg class="mi-tab-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg>
+        <span>틱톡</span>
+      </button>
+    </nav>
+
+    <!-- ===== 페이스북 ===== -->
+    <div class="mi-panel" data-sns-panel="fb" hidden>
+      <div class="mi-panel-bar">
+        <div class="mi-panel-handle">
+          <a class="mi-handle-link" href="https://www.facebook.com/26093226033678355" target="_blank" rel="noopener">
+            @26093226033678355
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <span class="mi-handle-follow">팔로워 <strong>10~50k</strong></span>
         </div>
+        <span class="badge badge-success badge-sm"><span class="badge-dot"></span>인증됨</span>
       </div>
+      <div class="mi-grid mi-grid-3">
+        <a class="mi-post" href="#" aria-label="게시물 1"><img src="https://picsum.photos/seed/fb1/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 2"><img src="https://picsum.photos/seed/fb2/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 3"><img src="https://picsum.photos/seed/fb3/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 4"><img src="https://picsum.photos/seed/fb4/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 5"><img src="https://picsum.photos/seed/fb5/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 6"><img src="https://picsum.photos/seed/fb6/400/400" alt=""></a>
+      </div>
+    </div>
 
-      <div data-sns-panel="tt" hidden>
-        <div class="sns-panel">
-          <div class="sns-panel-head">
-            <span class="sns-ico tag-tiktok" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg>
-            </span>
-            <span class="sns-panel-handle">@mika.kr</span>
-            <span class="badge badge-warning badge-sm"><span class="badge-dot"></span>인증 만료</span>
-          </div>
-          <div class="info-grid">
-            <div class="info-item"><span class="info-label">팔로워</span><span class="info-value">1천~1만 <span class="text-caption text-tertiary">(4,218)</span></span></div>
-            <div class="info-item"><span class="info-label">인증 만료일</span><span class="info-value" style="color: var(--status-warning)">2026-02-10 (72일 전)</span></div>
-          </div>
-          <div class="sns-panel-actions">
-            <a class="btn btn-sm btn-secondary" href="https://tiktok.com/@mika.kr" target="_blank" rel="noopener">
-              프로필 열기
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            </a>
-          </div>
+    <!-- ===== 인스타그램 ===== -->
+    <div class="mi-panel" data-sns-panel="ig">
+      <div class="mi-panel-bar">
+        <div class="mi-panel-handle">
+          <a class="mi-handle-link" href="https://www.instagram.com/gyeongchae_pack/" target="_blank" rel="noopener">
+            @gyeongchae_pack
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <span class="mi-handle-follow">팔로워 <strong>0~1k</strong></span>
         </div>
+        <span class="badge badge-success badge-sm"><span class="badge-dot"></span>인증됨</span>
       </div>
+      <div class="mi-grid mi-grid-3">
+        <a class="mi-post" href="#" aria-label="게시물 1"><img src="https://picsum.photos/seed/ig1/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 2"><img src="https://picsum.photos/seed/ig2/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 3"><img src="https://picsum.photos/seed/ig3/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 4"><img src="https://picsum.photos/seed/ig4/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 5"><img src="https://picsum.photos/seed/ig5/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 6"><img src="https://picsum.photos/seed/ig6/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 7"><img src="https://picsum.photos/seed/ig7/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 8"><img src="https://picsum.photos/seed/ig8/400/400" alt=""></a>
+        <a class="mi-post" href="#" aria-label="게시물 9"><img src="https://picsum.photos/seed/ig9/400/400" alt=""></a>
+      </div>
+    </div>
 
-    </section>
+    <!-- ===== 스레드 ===== -->
+    <div class="mi-panel" data-sns-panel="th" hidden>
+      <div class="mi-panel-bar">
+        <div class="mi-panel-handle">
+          <a class="mi-handle-link" href="https://www.threads.net/@gyeongchae_pack" target="_blank" rel="noopener">
+            @gyeongchae_pack
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <span class="mi-handle-follow">팔로워 <strong class="mi-empty-inline">미집계</strong></span>
+        </div>
+        <span class="badge badge-success badge-sm"><span class="badge-dot"></span>인증됨</span>
+      </div>
+      <ul class="mi-threads">
+        <li class="mi-thread">
+          <img class="mi-thread-media" src="https://picsum.photos/seed/th1/600/400" alt="">
+          <div class="mi-thread-body">
+            <div class="mi-thread-handle">@gyeongchae_pack</div>
+            <p class="mi-thread-text">산책길에 만난 친구 🐕</p>
+            <div class="mi-thread-meta">3시간 전 · 좋아요 42</div>
+          </div>
+        </li>
+        <li class="mi-thread">
+          <div class="mi-thread-body is-full">
+            <div class="mi-thread-handle">@gyeongchae_pack</div>
+            <p class="mi-thread-text">안녕</p>
+            <div class="mi-thread-meta">1일 전 · 좋아요 7</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ===== 틱톡 ===== -->
+    <div class="mi-panel" data-sns-panel="tt" hidden>
+      <div class="mi-panel-bar">
+        <div class="mi-panel-handle">
+          <a class="mi-handle-link" href="https://vm.tiktok.com/ZS9dmA2op/" target="_blank" rel="noopener">
+            @gyeongchae_pack
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <span class="mi-handle-follow">팔로워 <strong>0~1k</strong></span>
+        </div>
+        <span class="badge badge-warning badge-sm" title="TikTok은 24시간 단기 토큰"><span class="badge-dot"></span>단기 토큰</span>
+      </div>
+      <div class="mi-grid mi-grid-3">
+        <a class="mi-post mi-post-video" href="#" aria-label="영상 1">
+          <img src="https://picsum.photos/seed/tt1/400/600" alt="">
+          <span class="mi-post-play" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <span class="mi-post-views">12.3k</span>
+        </a>
+        <a class="mi-post mi-post-video" href="#" aria-label="영상 2">
+          <img src="https://picsum.photos/seed/tt2/400/600" alt="">
+          <span class="mi-post-play" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <span class="mi-post-views">8.1k</span>
+        </a>
+        <a class="mi-post mi-post-video" href="#" aria-label="영상 3">
+          <img src="https://picsum.photos/seed/tt3/400/600" alt="">
+          <span class="mi-post-play" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <span class="mi-post-views">3.4k</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 관리 정보 (접히는 부가 영역) -->
+    <details class="mi-admin">
+      <summary>
+        <span>관리 정보</span>
+        <svg class="mi-admin-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <dl class="mi-admin-grid">
+        <div class="mi-admin-row"><dt>번호</dt><dd class="is-mono" data-influencer-mbno>***</dd></div>
+        <div class="mi-admin-row"><dt>닉네임</dt><dd class="is-mono">***la</dd></div>
+        <div class="mi-admin-row"><dt>이메일</dt><dd class="is-mono">**************om</dd></div>
+        <div class="mi-admin-row"><dt>연락처</dt><dd class="is-mono">***********36</dd></div>
+        <div class="mi-admin-row"><dt>FB 토큰</dt><dd class="is-mono">~2026-06-19</dd></div>
+        <div class="mi-admin-row"><dt>IG 토큰</dt><dd class="is-mono">~2026-06-19</dd></div>
+        <div class="mi-admin-row"><dt>TH 토큰</dt><dd class="is-mono">~2026-06-20</dd></div>
+        <div class="mi-admin-row"><dt>TT 토큰</dt><dd class="is-mono">~2026-04-23 (24h)</dd></div>
+      </dl>
+    </details>
 
   </div>
 

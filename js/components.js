@@ -55,7 +55,7 @@ function wireInfluencerModal() {
     document.body.appendChild(root);
 
     // SNS 탭 전환
-    const tabs = root.querySelectorAll('.tabs [data-sns]');
+    const tabs = root.querySelectorAll('[data-sns]');
     const panels = root.querySelectorAll('[data-sns-panel]');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
@@ -84,38 +84,20 @@ function wireInfluencerModal() {
     loaded = true;
   }
 
+  // 실제 구현 시 이 함수에서 `fetch('/api/influencer/' + mbNo)` 로 교체
+  // 현재는 테이블 행에서 관리번호만 추출해서 반영 (데모)
   function extractRowData(triggerEl) {
     const data = {};
-    // 1) 트리거에 명시적으로 지정된 값이 있으면 그것을 우선
-    if (triggerEl.dataset.influencerName)    data.name    = triggerEl.dataset.influencerName;
-    if (triggerEl.dataset.influencerCountry) data.country = triggerEl.dataset.influencerCountry;
-    if (triggerEl.dataset.influencerMbno)    data.mbno    = triggerEl.dataset.influencerMbno;
+    if (triggerEl.dataset.influencerMbno) data.mbno = triggerEl.dataset.influencerMbno;
 
-    // 2) 행에서 자동 추출
     const row = triggerEl.closest('tr');
-    if (row) {
-      // 국가: c-country-code 칩에서
-      if (!data.country) {
-        data.country = row.querySelector('.c-country-code')?.textContent.trim();
-      }
-      // 인플루언서 핸들: 헤더에 '인플루언서' 또는 '회원정보' 가 들어간 컬럼의 셀 텍스트
-      if (!data.name) {
-        const table = row.closest('table');
-        const headers = table ? Array.from(table.querySelectorAll('thead th')) : [];
-        const idx = headers.findIndex(h => /인플루언서|회원정보/.test(h.textContent.trim()));
-        if (idx >= 0 && row.cells[idx]) {
-          // 캠페인명/코드 같은 복합 셀이 아닌, 단순 텍스트 셀 기준
-          data.name = row.cells[idx].textContent.trim().split(/\s+/)[0];
-        }
-      }
-      // 관리번호 후보: 신청번호 컬럼이 있다면
-      if (!data.mbno) {
-        const table = row.closest('table');
-        const headers = table ? Array.from(table.querySelectorAll('thead th')) : [];
-        const idx = headers.findIndex(h => /신청번호|관리번호/.test(h.textContent.trim()));
-        if (idx >= 0 && row.cells[idx]) {
-          data.mbno = row.cells[idx].textContent.trim();
-        }
+    if (row && !data.mbno) {
+      const table = row.closest('table');
+      const headers = table ? Array.from(table.querySelectorAll('thead th')) : [];
+      const idx = headers.findIndex(h => /신청번호|관리번호|번호/.test(h.textContent.trim()));
+      if (idx >= 0 && row.cells[idx]) {
+        const txt = row.cells[idx].textContent.trim();
+        if (/^\d+$/.test(txt)) data.mbno = txt;
       }
     }
     return data;
@@ -123,16 +105,8 @@ function wireInfluencerModal() {
 
   function populate(data) {
     if (!root) return;
-    if (data.name) {
-      root.querySelectorAll('[data-influencer-name]').forEach(el => el.textContent = data.name);
-      root.querySelectorAll('[data-influencer-handle]').forEach(el => el.textContent = '@' + data.name);
-      root.querySelectorAll('[data-influencer-initial]').forEach(el => el.textContent = (data.name[0] || 'M').toUpperCase());
-    }
-    if (data.country) {
-      root.querySelectorAll('[data-influencer-country]').forEach(el => el.textContent = data.country);
-    }
     if (data.mbno) {
-      root.querySelectorAll('[data-influencer-mbno]').forEach(el => el.textContent = '관리번호 ' + data.mbno);
+      root.querySelectorAll('[data-influencer-mbno]').forEach(el => el.textContent = data.mbno);
     }
   }
 

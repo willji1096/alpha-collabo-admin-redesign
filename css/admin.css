@@ -1118,141 +1118,357 @@ body { background: var(--bg-page); }
 .tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
 .tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
 
-/* ===== Modal: Influencer Detail (공유) ===== */
-.modal-influencer { max-width: 680px; }
-.modal-influencer .modal-body { padding: var(--space-5) var(--space-6); }
+/* ===== Modal: Influencer Detail (Instagram 마이페이지 톤) ===== */
+.modal-influencer { max-width: 720px; }
+.modal-influencer .modal-body {
+  padding: var(--space-5) var(--space-6);
+  max-height: 74vh;
+  overflow-y: auto;
+}
 .modal-influencer .modal-header { padding: var(--space-4) var(--space-6); }
 .modal-influencer .modal-footer { padding: var(--space-3) var(--space-6); }
 
-.modal-influencer .info-section { margin-bottom: var(--space-6); }
-.modal-influencer .info-section:last-child { margin-bottom: 0; }
-.modal-influencer .info-section-title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--text-tertiary);
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
-  margin-bottom: var(--space-3);
+.modal-influencer .is-mono {
+  font-family: var(--font-mono, 'Geist Mono', 'SF Mono', monospace);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
 }
-.modal-influencer .info-section-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border-light);
+.modal-influencer .mi-empty-inline {
+  color: var(--text-disabled);
+  font-weight: var(--fw-regular);
 }
 
-.modal-influencer .profile-head {
+/* ===== Profile hero ===== */
+.modal-influencer .mi-profile {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  column-gap: var(--space-5);
+  align-items: center;
+  margin-bottom: var(--space-5);
+}
+.modal-influencer .mi-profile-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #F5A623);
+  padding: 2px;
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  justify-content: center;
 }
-.modal-influencer .profile-head .avatar { flex-shrink: 0; }
-.modal-influencer .profile-head-meta { min-width: 0; }
-.modal-influencer .profile-name {
-  font-size: var(--fs-xl);
+.modal-influencer .mi-profile-avatar > span {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-3xl);
   font-weight: var(--fw-semibold);
   color: var(--text-primary);
+  letter-spacing: -1px;
+}
+.modal-influencer .mi-profile-main { min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.modal-influencer .mi-profile-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.modal-influencer .mi-profile-name {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
   letter-spacing: var(--tracking-tight);
-  margin-bottom: 2px;
+  margin: 0;
 }
-.modal-influencer .profile-handle {
+.modal-influencer .mi-profile-handle {
   font-family: var(--font-mono, 'Geist Mono', monospace);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   color: var(--text-tertiary);
-  margin-bottom: var(--space-2);
 }
-.modal-influencer .profile-chips {
+.modal-influencer .mi-profile-chips {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   flex-wrap: wrap;
 }
-.modal-influencer .profile-chips .text-caption { color: var(--text-tertiary); }
+.modal-influencer .mi-profile-chips .text-caption { color: var(--text-tertiary); }
+.modal-influencer .mi-profile-chips strong { color: var(--text-secondary); font-weight: var(--fw-semibold); }
 
-.modal-influencer .info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3) var(--space-6);
+/* Stats row (Instagram style) */
+.modal-influencer .mi-profile-stats {
+  display: flex;
+  gap: var(--space-6);
+  margin: var(--space-2) 0 0;
+  padding: 0;
 }
-.modal-influencer .info-item { display: flex; flex-direction: column; gap: 4px; }
-.modal-influencer .info-label {
+.modal-influencer .mi-stat { display: flex; align-items: baseline; gap: var(--space-2); }
+.modal-influencer .mi-stat dt {
+  order: 2;
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+  font-weight: var(--fw-regular);
+}
+.modal-influencer .mi-stat dd {
+  order: 1;
+  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-tight);
+}
+.modal-influencer .mi-stat-note {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  font-weight: var(--fw-regular);
+  margin-left: 2px;
+}
+
+/* ===== Tabs (icon + name, Instagram 피드 탭 느낌) ===== */
+.modal-influencer .mi-tabs {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  margin: 0 calc(var(--space-6) * -1) var(--space-4);
+  padding: 0 var(--space-6);
+}
+.modal-influencer .mi-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 14px 8px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid transparent;
+  color: var(--text-tertiary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease);
+  margin-top: -1px;
+}
+.modal-influencer .mi-tab:hover { color: var(--text-secondary); }
+.modal-influencer .mi-tab.is-active {
+  color: var(--text-primary);
+  border-top-color: var(--text-primary);
+}
+.modal-influencer .mi-tab-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== Panel (per SNS) ===== */
+.modal-influencer .mi-panel { display: flex; flex-direction: column; gap: var(--space-3); }
+.modal-influencer .mi-panel[hidden] { display: none; }
+
+.modal-influencer .mi-panel-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: var(--space-2);
+}
+.modal-influencer .mi-panel-handle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.modal-influencer .mi-handle-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, 'Geist Mono', monospace);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.modal-influencer .mi-handle-link:hover { color: var(--accent); text-decoration: underline; }
+.modal-influencer .mi-handle-link svg { color: var(--text-tertiary); }
+.modal-influencer .mi-handle-follow {
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+}
+.modal-influencer .mi-handle-follow strong {
+  color: var(--text-secondary);
+  font-weight: var(--fw-semibold);
+  margin-left: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Posts grid */
+.modal-influencer .mi-grid {
+  display: grid;
+  gap: 3px;
+}
+.modal-influencer .mi-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+.modal-influencer .mi-post {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  background: var(--bg-elevated);
+  overflow: hidden;
+  text-decoration: none;
+}
+.modal-influencer .mi-post img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--duration) var(--ease);
+}
+.modal-influencer .mi-post:hover img { transform: scale(1.03); }
+
+.modal-influencer .mi-post-video { aspect-ratio: 9 / 14; }
+.modal-influencer .mi-post-play {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.modal-influencer .mi-post-views {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: #fff;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Threads feed-style */
+.modal-influencer .mi-threads {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.modal-influencer .mi-thread {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+.modal-influencer .mi-thread-media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+.modal-influencer .mi-thread-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.modal-influencer .mi-thread-body.is-full { grid-column: 1 / -1; }
+.modal-influencer .mi-thread-handle {
+  font-family: var(--font-mono, 'Geist Mono', monospace);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.modal-influencer .mi-thread-text {
+  margin: 2px 0 4px;
+  font-size: var(--fs-base);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.modal-influencer .mi-thread-meta {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}
+
+/* ===== Admin info (접히는 하단) ===== */
+.modal-influencer .mi-admin {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-light);
+}
+.modal-influencer .mi-admin summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  cursor: pointer;
+  padding: 6px 0;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease);
+}
+.modal-influencer .mi-admin summary::-webkit-details-marker { display: none; }
+.modal-influencer .mi-admin summary:hover { color: var(--text-secondary); }
+.modal-influencer .mi-admin[open] summary { color: var(--text-primary); }
+.modal-influencer .mi-admin[open] .mi-admin-chev { transform: rotate(180deg); }
+.modal-influencer .mi-admin-chev {
+  transition: transform var(--duration-fast) var(--ease);
+  color: currentColor;
+}
+.modal-influencer .mi-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px var(--space-5);
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+}
+.modal-influencer .mi-admin-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: var(--space-2);
+  align-items: baseline;
+  min-width: 0;
+}
+.modal-influencer .mi-admin-row dt {
   font-size: var(--fs-xs);
   font-weight: var(--fw-medium);
   color: var(--text-tertiary);
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
 }
-.modal-influencer .info-value {
-  font-size: var(--fs-base);
+.modal-influencer .mi-admin-row dd {
+  margin: 0;
+  font-size: var(--fs-sm);
   color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
-}
-.modal-influencer .info-value.is-mono {
-  font-family: var(--font-mono, 'Geist Mono', monospace);
-  letter-spacing: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.modal-influencer .sns-panel {
-  padding: var(--space-4);
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  margin-top: var(--space-3);
-}
-.modal-influencer .sns-panel-head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--border-light);
-}
-.modal-influencer .sns-panel-handle {
-  flex: 1;
-  font-family: var(--font-mono, 'Geist Mono', monospace);
-  font-size: var(--fs-base);
-  color: var(--text-primary);
-}
-.modal-influencer .sns-panel-actions {
-  margin-top: var(--space-3);
-  display: flex;
-  justify-content: flex-end;
-}
-.modal-influencer .tab-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 6px;
-  background: var(--bg-elevated);
-  color: var(--text-tertiary);
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-  border-radius: var(--radius-full);
-  margin-left: var(--space-1);
-}
-.modal-influencer .tab.is-active .tab-count {
-  background: var(--accent-light);
-  color: var(--accent);
-}
-.modal-influencer .sns-empty {
-  padding: var(--space-5) var(--space-4);
-  background: var(--bg-page);
-  border: 1px dashed var(--border-default);
-  border-radius: var(--radius-md);
-  text-align: center;
-  color: var(--text-tertiary);
-  font-size: var(--fs-sm);
-  margin-top: var(--space-3);
-}
-.modal-influencer .sns-empty-title {
-  color: var(--text-secondary);
-  font-weight: var(--fw-medium);
-  margin-bottom: 4px;
+@media (max-width: 640px) {
+  .modal-influencer .mi-profile { grid-template-columns: 72px 1fr; column-gap: var(--space-3); }
+  .modal-influencer .mi-profile-avatar { width: 72px; height: 72px; }
+  .modal-influencer .mi-profile-stats { gap: var(--space-4); }
+  .modal-influencer .mi-admin-grid { grid-template-columns: 1fr; }
+  .modal-influencer .mi-thread { grid-template-columns: 96px 1fr; }
 }
 
 /* Cell: country code chip — replaces flag emoji per DESIGN.md §9 */

@@ -57,6 +57,14 @@ function wireInfluencerDrawer() {
     backdrop = document.querySelector('.js-drawer-influencer-backdrop');
     drawer   = document.querySelector('.js-drawer-influencer');
 
+    // 모든 탭의 이미지를 강제 preload
+    // (Chrome은 드로어가 translateX(100%) 상태일 때 비활성 탭 내부 img 요청을 스킵함)
+    drawer.querySelectorAll('img').forEach(img => {
+      img.loading = 'eager';
+      const pre = new Image();
+      pre.src = img.src;
+    });
+
     // SNS 탭 전환
     const tabs = drawer.querySelectorAll('[data-sns]');
     const panels = drawer.querySelectorAll('[data-sns-panel]');

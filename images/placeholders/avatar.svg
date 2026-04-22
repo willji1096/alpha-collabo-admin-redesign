@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#FFE4E6"/><stop offset="100%" stop-color="#F472B6"/>
+</linearGradient></defs>
+<rect width="200" height="200" fill="url(#g)"/>
+<circle cx="140" cy="70" r="36" fill="#9F1239" opacity="0.15"/>
+<circle cx="50" cy="150" r="56" fill="#9F1239" opacity="0.1"/>
+<text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle"
+  font-family="system-ui,-apple-system,sans-serif" font-size="28"
+  fill="#9F1239" opacity="0.45" font-weight="600">경</text>
+</svg>

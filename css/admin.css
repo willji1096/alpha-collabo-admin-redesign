@@ -1118,37 +1118,33 @@ body { background: var(--bg-page); }
 .tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
 .tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
 
-/* ===== Modal: Influencer Detail (Instagram 마이페이지 톤) ===== */
-.modal-influencer { max-width: 720px; }
-.modal-influencer .modal-body {
-  padding: var(--space-5) var(--space-6);
-  max-height: 74vh;
-  overflow-y: auto;
-}
-.modal-influencer .modal-header { padding: var(--space-4) var(--space-6); }
-.modal-influencer .modal-footer { padding: var(--space-3) var(--space-6); }
+/* ===== Drawer: Influencer Detail (원본 무손실 + SNS 마이페이지 톤) ===== */
+.drawer-influencer { /* drawer-wide 960px 활용 */ }
+.drawer-influencer .drawer-header { padding: var(--space-4) var(--space-6); }
+.drawer-influencer .drawer-body { padding: var(--space-5) var(--space-6); }
+.drawer-influencer .drawer-footer { padding: var(--space-3) var(--space-6); gap: var(--space-2); }
 
-.modal-influencer .is-mono {
+.drawer-influencer .is-mono {
   font-family: var(--font-mono, 'Geist Mono', 'SF Mono', monospace);
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
-.modal-influencer .mi-empty-inline {
+.drawer-influencer .di-empty {
   color: var(--text-disabled);
   font-weight: var(--fw-regular);
 }
 
-/* ===== Profile hero ===== */
-.modal-influencer .mi-profile {
+/* ===== Profile hero (간결) ===== */
+.drawer-influencer .di-profile {
   display: grid;
-  grid-template-columns: 88px 1fr;
-  column-gap: var(--space-5);
+  grid-template-columns: 64px 1fr;
+  column-gap: var(--space-4);
   align-items: center;
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-4);
 }
-.modal-influencer .mi-profile-avatar {
-  width: 88px;
-  height: 88px;
+.drawer-influencer .di-avatar {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), #F5A623);
   padding: 2px;
@@ -1156,7 +1152,7 @@ body { background: var(--bg-page); }
   align-items: center;
   justify-content: center;
 }
-.modal-influencer .mi-profile-avatar > span {
+.drawer-influencer .di-avatar > span {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -1164,79 +1160,77 @@ body { background: var(--bg-page); }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--fs-3xl);
+  font-size: var(--fs-xl);
   font-weight: var(--fw-semibold);
   color: var(--text-primary);
-  letter-spacing: -1px;
 }
-.modal-influencer .mi-profile-main { min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
-.modal-influencer .mi-profile-name-row {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-.modal-influencer .mi-profile-name {
+.drawer-influencer .di-profile-main { min-width: 0; }
+.drawer-influencer .di-profile-name {
   font-size: var(--fs-2xl);
   font-weight: var(--fw-bold);
   color: var(--text-primary);
   letter-spacing: var(--tracking-tight);
   margin: 0;
-}
-.modal-influencer .mi-profile-handle {
-  font-family: var(--font-mono, 'Geist Mono', monospace);
-  font-size: var(--fs-base);
-  color: var(--text-tertiary);
-}
-.modal-influencer .mi-profile-chips {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-2);
   flex-wrap: wrap;
 }
-.modal-influencer .mi-profile-chips .text-caption { color: var(--text-tertiary); }
-.modal-influencer .mi-profile-chips strong { color: var(--text-secondary); font-weight: var(--fw-semibold); }
-
-/* Stats row (Instagram style) */
-.modal-influencer .mi-profile-stats {
-  display: flex;
-  gap: var(--space-6);
-  margin: var(--space-2) 0 0;
-  padding: 0;
-}
-.modal-influencer .mi-stat { display: flex; align-items: baseline; gap: var(--space-2); }
-.modal-influencer .mi-stat dt {
-  order: 2;
-  font-size: var(--fs-sm);
-  color: var(--text-tertiary);
+.drawer-influencer .di-profile-nick {
   font-weight: var(--fw-regular);
+  font-size: var(--fs-lg);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono, 'Geist Mono', monospace);
 }
-.modal-influencer .mi-stat dd {
-  order: 1;
-  margin: 0;
-  font-size: var(--fs-xl);
-  font-weight: var(--fw-bold);
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--tracking-tight);
+
+/* ===== Info strip (5 필드 원본 그대로) ===== */
+.drawer-influencer .di-strip {
+  display: grid;
+  grid-template-columns: repeat(5, auto 1fr);
+  column-gap: var(--space-3);
+  row-gap: var(--space-2);
+  align-items: baseline;
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
 }
-.modal-influencer .mi-stat-note {
+.drawer-influencer .di-strip-item { display: contents; }
+.drawer-influencer .di-strip dt {
   font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
   color: var(--text-tertiary);
-  font-weight: var(--fw-regular);
-  margin-left: 2px;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.drawer-influencer .di-strip dd {
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 960px) {
+  .drawer-influencer .di-strip { grid-template-columns: auto 1fr auto 1fr; }
+}
+@media (max-width: 640px) {
+  .drawer-influencer .di-strip { grid-template-columns: auto 1fr; }
 }
 
-/* ===== Tabs (icon + name, Instagram 피드 탭 느낌) ===== */
-.modal-influencer .mi-tabs {
+/* ===== Tabs ===== */
+.drawer-influencer .di-tabs {
   display: flex;
   gap: 0;
   border-top: 1px solid var(--border-default);
   border-bottom: 1px solid var(--border-default);
-  margin: 0 calc(var(--space-6) * -1) var(--space-4);
+  margin: 0 calc(var(--space-6) * -1) var(--space-5);
   padding: 0 var(--space-6);
 }
-.modal-influencer .mi-tab {
+.drawer-influencer .di-tab {
   flex: 1;
   display: inline-flex;
   align-items: center;
@@ -1255,220 +1249,139 @@ body { background: var(--bg-page); }
   transition: color var(--duration-fast) var(--ease);
   margin-top: -1px;
 }
-.modal-influencer .mi-tab:hover { color: var(--text-secondary); }
-.modal-influencer .mi-tab.is-active {
+.drawer-influencer .di-tab:hover { color: var(--text-secondary); }
+.drawer-influencer .di-tab.is-active {
   color: var(--text-primary);
   border-top-color: var(--text-primary);
 }
-.modal-influencer .mi-tab-icon {
-  width: 14px;
-  height: 14px;
-}
+.drawer-influencer .di-tab-icon { width: 14px; height: 14px; }
 
-/* ===== Panel (per SNS) ===== */
-.modal-influencer .mi-panel { display: flex; flex-direction: column; gap: var(--space-3); }
-.modal-influencer .mi-panel[hidden] { display: none; }
-
-.modal-influencer .mi-panel-bar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding-bottom: var(--space-2);
-}
-.modal-influencer .mi-panel-handle {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-.modal-influencer .mi-handle-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono, 'Geist Mono', monospace);
-  font-size: var(--fs-sm);
+/* ===== Per-tab panel ===== */
+.drawer-influencer .di-panel { display: flex; flex-direction: column; gap: var(--space-4); }
+.drawer-influencer .di-panel[hidden] { display: none; }
+.drawer-influencer .di-panel-title {
+  font-size: var(--fs-lg);
   font-weight: var(--fw-semibold);
   color: var(--text-primary);
-  text-decoration: none;
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
 }
-.modal-influencer .mi-handle-link:hover { color: var(--accent); text-decoration: underline; }
-.modal-influencer .mi-handle-link svg { color: var(--text-tertiary); }
-.modal-influencer .mi-handle-follow {
+
+/* Facts (URL / 팔로워 / 토큰 / 만료일 — 원본 무손실) */
+.drawer-influencer .di-facts {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px var(--space-4);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+.drawer-influencer .di-fact { display: contents; }
+.drawer-influencer .di-fact dt {
   font-size: var(--fs-sm);
   color: var(--text-tertiary);
+  align-self: center;
 }
-.modal-influencer .mi-handle-follow strong {
-  color: var(--text-secondary);
-  font-weight: var(--fw-semibold);
+.drawer-influencer .di-fact dd {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  align-self: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.drawer-influencer .di-url {
+  color: var(--text-link);
+  text-decoration: none;
+}
+.drawer-influencer .di-url:hover { text-decoration: underline; }
+.drawer-influencer .di-note {
+  color: var(--text-tertiary);
+  font-size: var(--fs-xs);
   margin-left: 2px;
+}
+.drawer-influencer .di-note-warning { color: var(--status-warning); }
+
+/* Recent posts header */
+.drawer-influencer .di-recent-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+.drawer-influencer .di-recent-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+.drawer-influencer .di-recent-sync {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
 }
 
 /* Posts grid */
-.modal-influencer .mi-grid {
-  display: grid;
-  gap: 3px;
-}
-.modal-influencer .mi-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.drawer-influencer .di-grid { display: grid; gap: 4px; }
+.drawer-influencer .di-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.drawer-influencer .di-grid-2 { grid-template-columns: repeat(2, 1fr); }
 
-.modal-influencer .mi-post {
+.drawer-influencer .di-post {
   position: relative;
   display: block;
   aspect-ratio: 1 / 1;
   background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
   overflow: hidden;
   text-decoration: none;
 }
-.modal-influencer .mi-post img {
+.drawer-influencer .di-post img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   transition: transform var(--duration) var(--ease);
 }
-.modal-influencer .mi-post:hover img { transform: scale(1.03); }
-
-.modal-influencer .mi-post-video { aspect-ratio: 9 / 14; }
-.modal-influencer .mi-post-play {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 26px;
-  height: 26px;
+.drawer-influencer .di-post:hover img { transform: scale(1.03); }
+.drawer-influencer .di-post-text {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+}
+.drawer-influencer .di-post-excerpt {
+  font-size: var(--fs-base);
+  color: var(--text-secondary);
+  font-weight: var(--fw-medium);
+  padding: var(--space-3);
+}
+.drawer-influencer .di-post-video { aspect-ratio: 9 / 14; }
+.drawer-influencer .di-post-play {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border-radius: 50%;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
-.modal-influencer .mi-post-views {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-  color: #fff;
-  padding: 2px 6px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: var(--radius-sm);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Threads feed-style */
-.modal-influencer .mi-threads {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.modal-influencer .mi-thread {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-}
-.modal-influencer .mi-thread-media {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
-  display: block;
-}
-.modal-influencer .mi-thread-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.modal-influencer .mi-thread-body.is-full { grid-column: 1 / -1; }
-.modal-influencer .mi-thread-handle {
-  font-family: var(--font-mono, 'Geist Mono', monospace);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--text-primary);
-}
-.modal-influencer .mi-thread-text {
-  margin: 2px 0 4px;
-  font-size: var(--fs-base);
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-.modal-influencer .mi-thread-meta {
-  font-size: var(--fs-xs);
-  color: var(--text-tertiary);
-}
-
-/* ===== Admin info (접히는 하단) ===== */
-.modal-influencer .mi-admin {
-  margin-top: var(--space-5);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--border-light);
-}
-.modal-influencer .mi-admin summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  list-style: none;
-  cursor: pointer;
-  padding: 6px 0;
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-  color: var(--text-tertiary);
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
-  transition: color var(--duration-fast) var(--ease);
-}
-.modal-influencer .mi-admin summary::-webkit-details-marker { display: none; }
-.modal-influencer .mi-admin summary:hover { color: var(--text-secondary); }
-.modal-influencer .mi-admin[open] summary { color: var(--text-primary); }
-.modal-influencer .mi-admin[open] .mi-admin-chev { transform: rotate(180deg); }
-.modal-influencer .mi-admin-chev {
-  transition: transform var(--duration-fast) var(--ease);
-  color: currentColor;
-}
-.modal-influencer .mi-admin-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px var(--space-5);
-  margin: var(--space-3) 0 0;
-  padding: var(--space-3) var(--space-4);
-  background: var(--bg-elevated);
-  border-radius: var(--radius-md);
-}
-.modal-influencer .mi-admin-row {
-  display: grid;
-  grid-template-columns: 90px 1fr;
-  gap: var(--space-2);
-  align-items: baseline;
-  min-width: 0;
-}
-.modal-influencer .mi-admin-row dt {
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-medium);
-  color: var(--text-tertiary);
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
-}
-.modal-influencer .mi-admin-row dd {
-  margin: 0;
-  font-size: var(--fs-sm);
-  color: var(--text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 @media (max-width: 640px) {
-  .modal-influencer .mi-profile { grid-template-columns: 72px 1fr; column-gap: var(--space-3); }
-  .modal-influencer .mi-profile-avatar { width: 72px; height: 72px; }
-  .modal-influencer .mi-profile-stats { gap: var(--space-4); }
-  .modal-influencer .mi-admin-grid { grid-template-columns: 1fr; }
-  .modal-influencer .mi-thread { grid-template-columns: 96px 1fr; }
+  .drawer-influencer .di-profile { grid-template-columns: 48px 1fr; }
+  .drawer-influencer .di-avatar { width: 48px; height: 48px; }
+  .drawer-influencer .di-facts { grid-template-columns: 90px 1fr; }
 }
 
 /* Cell: country code chip — replaces flag emoji per DESIGN.md §9 */

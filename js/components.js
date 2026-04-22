@@ -32,31 +32,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireToastAutoTriggers();
   wireSortableHeaders();
   wireHeaderPopovers();
-  wireInfluencerModal();
+  wireInfluencerDrawer();
 });
 
-/** 인플루언서 상세 모달 — 지연 로드 + 전역 단일 인스턴스 */
-function wireInfluencerModal() {
+/** 인플루언서 상세 Drawer — 지연 로드 + 전역 단일 인스턴스 */
+function wireInfluencerDrawer() {
   // 이 페이지에 트리거가 하나도 없으면 로드 스킵
   const triggers = () => document.querySelectorAll('.js-open-influencer');
   if (triggers().length === 0) return;
 
   let loaded = false;
-  let root = null;
+  let drawer = null;
+  let backdrop = null;
 
   async function ensureLoaded() {
     if (loaded) return;
     const bust = `?v=${Date.now()}`;
-    const res = await fetch('components/modal-influencer.html' + bust, { cache: 'no-store' });
+    const res = await fetch('components/drawer-influencer.html' + bust, { cache: 'no-store' });
     const html = await res.text();
     const wrap = document.createElement('div');
     wrap.innerHTML = html;
-    root = wrap.firstElementChild;
-    document.body.appendChild(root);
+    // 백드롭 + aside 두 개를 body에 순서대로 삽입
+    Array.from(wrap.children).forEach(el => document.body.appendChild(el));
+    backdrop = document.querySelector('.js-drawer-influencer-backdrop');
+    drawer   = document.querySelector('.js-drawer-influencer');
 
     // SNS 탭 전환
-    const tabs = root.querySelectorAll('[data-sns]');
-    const panels = root.querySelectorAll('[data-sns-panel]');
+    const tabs = drawer.querySelectorAll('[data-sns]');
+    const panels = drawer.querySelectorAll('[data-sns-panel]');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => {
@@ -70,15 +73,13 @@ function wireInfluencerModal() {
       });
     });
 
-    // 닫기 버튼 · 백드롭 · ESC
-    root.querySelectorAll('.js-close-influencer').forEach(b =>
+    // 닫기 — 버튼 / 백드롭 / ESC
+    drawer.querySelectorAll('.js-close-influencer').forEach(b =>
       b.addEventListener('click', close)
     );
-    root.addEventListener('click', (e) => {
-      if (e.target === root) close();
-    });
+    backdrop.addEventListener('click', close);
     document.addEventListener('keydown', (e) => {
-      if (!root.hidden && e.key === 'Escape') close();
+      if (drawer.classList.contains('open') && e.key === 'Escape') close();
     });
 
     loaded = true;
@@ -104,23 +105,27 @@ function wireInfluencerModal() {
   }
 
   function populate(data) {
-    if (!root) return;
+    if (!drawer) return;
     if (data.mbno) {
-      root.querySelectorAll('[data-influencer-mbno]').forEach(el => el.textContent = data.mbno);
+      drawer.querySelectorAll('[data-influencer-mbno]').forEach(el => el.textContent = data.mbno);
     }
   }
 
   function open(triggerEl) {
-    if (triggerEl && root) {
+    if (triggerEl && drawer) {
       populate(extractRowData(triggerEl));
     }
-    root.hidden = false;
+    drawer.setAttribute('aria-hidden', 'false');
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
   function close() {
-    if (!root) return;
-    root.hidden = true;
+    if (!drawer) return;
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    backdrop.classList.remove('open');
     document.body.style.overflow = '';
   }
 

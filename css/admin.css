@@ -1203,8 +1203,8 @@ body { background: var(--bg-page); }
 }
 
 /* ===== Drawer: Influencer Detail (원본 무손실 + SNS 마이페이지 톤) ===== */
-/* drawer-wide의 960px를 override — 이 드로어는 720px면 충분 */
-.drawer.drawer-influencer { width: 720px; max-width: calc(100vw - 48px); }
+/* drawer-wide의 960px를 override — 이 드로어는 580px면 충분 */
+.drawer.drawer-influencer { width: 580px; max-width: calc(100vw - 48px); }
 
 /* 행 전체를 클릭 가능하게 — 드로어 트리거 버튼이 있는 행만 */
 .tbl tbody tr:has(.js-open-influencer) { cursor: pointer; }

@@ -1,0 +1,106 @@
+<!-- Alphacollabo Chatbot Widget — 우하단 고정. js/components.js wireChatbot()로 활성화 -->
+<div class="chatbot" id="chatbot" data-state="idle">
+
+  <!-- AI 봇 — 눈알 2개만 (미니멀) -->
+  <button class="chatbot-bubble" type="button" aria-label="AI 상담 열기" aria-expanded="false">
+    <svg class="chatbot-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- 배경 원 (알파콜라보 레드) -->
+      <circle class="bubble-bg" cx="50" cy="50" r="46"/>
+
+      <!-- 눈알 2개 (동공+글린트 한 덩어리로 마우스 추적) -->
+      <g class="eye eye-l">
+        <circle class="eye-white" cx="35" cy="50" r="12"/>
+        <g class="pupil-wrap">
+          <circle class="pupil" cx="35" cy="50" r="6.5"/>
+          <circle class="glint" cx="32.8" cy="46.8" r="2.3"/>
+        </g>
+      </g>
+      <g class="eye eye-r">
+        <circle class="eye-white" cx="65" cy="50" r="12"/>
+        <g class="pupil-wrap">
+          <circle class="pupil" cx="65" cy="50" r="6.5"/>
+          <circle class="glint" cx="62.8" cy="46.8" r="2.3"/>
+        </g>
+      </g>
+
+      <!-- 입 -->
+      <path class="mouth mouth-smile" d="M 44 72 Q 50 78 56 72" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse class="mouth mouth-yawn" cx="50" cy="74" rx="4.5" ry="5.5"/>
+
+      <!-- 졸음 ZZZ -->
+      <g class="zzz" aria-hidden="true">
+        <text class="zzz-1" x="78" y="22">z</text>
+        <text class="zzz-2" x="86" y="14">Z</text>
+      </g>
+    </svg>
+    <span class="chatbot-tooltip">무엇을 도와드릴까요?</span>
+  </button>
+
+  <!-- 채팅 패널 -->
+  <div class="chatbot-panel" role="dialog" aria-modal="false" aria-label="AI 상담">
+    <div class="chatbot-panel-head">
+      <div class="chatbot-panel-title">
+        <span class="chatbot-panel-avatar">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+            <circle cx="38" cy="50" r="11" fill="#FFFFFF"/>
+            <circle cx="62" cy="50" r="11" fill="#FFFFFF"/>
+            <circle cx="38" cy="50" r="6" fill="#111"/>
+            <circle cx="62" cy="50" r="6" fill="#111"/>
+          </svg>
+        </span>
+        <div>
+          <div class="chatbot-panel-name">알파봇</div>
+          <div class="chatbot-panel-status"><span class="chatbot-status-dot"></span>온라인</div>
+        </div>
+      </div>
+      <button class="chatbot-panel-close" type="button" aria-label="닫기">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="chatbot-panel-body">
+      <div class="chatbot-greeting">
+        <p>안녕하세요 👋</p>
+        <p>알파콜라보 운영을 도와드리는 <strong>알파봇</strong>이에요.<br>아래 항목 중 궁금한 걸 골라주세요.</p>
+      </div>
+
+      <div class="chatbot-faq">
+        <button class="chatbot-faq-item" type="button" data-topic="campaign-register">
+          <span class="chatbot-faq-icon">📋</span>
+          <span class="chatbot-faq-text">캠페인 등록은 어떻게 하나요?</span>
+        </button>
+        <button class="chatbot-faq-item" type="button" data-topic="influencer-select">
+          <span class="chatbot-faq-icon">👥</span>
+          <span class="chatbot-faq-text">인플루언서 선정 기준이 궁금해요</span>
+        </button>
+        <button class="chatbot-faq-item" type="button" data-topic="pricing">
+          <span class="chatbot-faq-icon">💰</span>
+          <span class="chatbot-faq-text">요금/결제 방식이 어떻게 되나요?</span>
+        </button>
+        <button class="chatbot-faq-item" type="button" data-topic="review">
+          <span class="chatbot-faq-icon">✅</span>
+          <span class="chatbot-faq-text">검수/리뷰 절차를 알려주세요</span>
+        </button>
+        <button class="chatbot-faq-item" type="button" data-topic="cancel">
+          <span class="chatbot-faq-icon">↩️</span>
+          <span class="chatbot-faq-text">캠페인 취소/환불 규정</span>
+        </button>
+      </div>
+
+      <div class="chatbot-answer" hidden>
+        <div class="chatbot-answer-content"></div>
+        <button class="chatbot-back" type="button">← 다른 질문 보기</button>
+      </div>
+    </div>
+
+    <div class="chatbot-panel-foot">
+      <p class="chatbot-foot-text">더 자세한 상담이 필요하시면</p>
+      <a class="chatbot-kakao-btn" href="https://pf.kakao.com/_alphacollabo" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.85 1.86 5.34 4.66 6.78L5.5 21.5l4.34-2.27c.7.1 1.42.16 2.16.16 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/></svg>
+        카카오 채널로 상담하기
+      </a>
+    </div>
+  </div>
+
+</div>

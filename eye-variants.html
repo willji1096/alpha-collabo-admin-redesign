@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eye Variants</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+<style>
+  body { background: var(--bg-page); padding: 48px 32px; font-family: 'Pretendard Variable', sans-serif; }
+  .hd { max-width: 1200px; margin: 0 auto 32px; }
+  .grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+  .c { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: 28px 16px 20px; text-align: center; transition: transform 0.2s; }
+  .c:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+  .b { width: 80px; height: 80px; margin: 0 auto 12px; filter: drop-shadow(0 4px 12px rgba(249,154,158,0.4)); }
+  .b svg { width: 100%; height: 100%; }
+  .l { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <h1 class="text-h1" style="margin-bottom:4px">눈 스타일 변형</h1>
+  <p class="text-body" style="color:var(--text-tertiary); margin:0">마음에 드는 번호 알려주세요</p>
+</div>
+
+<div class="grid">
+
+  <!-- 1. 현재 (원형 + 동공 + 글린트) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="50" r="13" fill="#fff"/>
+      <circle cx="62" cy="50" r="13" fill="#fff"/>
+      <circle cx="38" cy="50" r="7" fill="#111"/>
+      <circle cx="62" cy="50" r="7" fill="#111"/>
+      <circle cx="35.5" cy="46.5" r="2.5" fill="#fff"/>
+      <circle cx="59.5" cy="46.5" r="2.5" fill="#fff"/>
+    </svg></div>
+    <p class="l">1. 현재 (둥근 눈)</p>
+  </div>
+
+  <!-- 2. 반달 눈 (웃는) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <path d="M 28 52 Q 38 40 48 52" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 52 52 Q 62 40 72 52" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+    </svg></div>
+    <p class="l">2. 반달 (웃는)</p>
+  </div>
+
+  <!-- 3. 감은 눈 (가로선) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <line x1="30" y1="50" x2="46" y2="50" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+      <line x1="54" y1="50" x2="70" y2="50" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+    </svg></div>
+    <p class="l">3. 감은 눈 (졸린)</p>
+  </div>
+
+  <!-- 4. 점 (미니멀) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="50" r="5" fill="#111"/>
+      <circle cx="62" cy="50" r="5" fill="#111"/>
+    </svg></div>
+    <p class="l">4. 미니 점</p>
+  </div>
+
+  <!-- 5. 하트 눈 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <path d="M 38 56 L 29 47 C 25 43 31 37 35 41 L 38 44 L 41 41 C 45 37 51 43 47 47 Z" fill="#B11319"/>
+      <path d="M 62 56 L 53 47 C 49 43 55 37 59 41 L 62 44 L 65 41 C 69 37 75 43 71 47 Z" fill="#B11319"/>
+    </svg></div>
+    <p class="l">5. 하트</p>
+  </div>
+
+  <!-- 6. 별 눈 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <path d="M 38 38 L 41 47 L 50 47 L 43 53 L 46 62 L 38 56 L 30 62 L 33 53 L 26 47 L 35 47 Z" fill="#111"/>
+      <path d="M 62 38 L 65 47 L 74 47 L 67 53 L 70 62 L 62 56 L 54 62 L 57 53 L 50 47 L 59 47 Z" fill="#111"/>
+    </svg></div>
+    <p class="l">6. 별</p>
+  </div>
+
+  <!-- 7. ^^ 눈 (행복) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <path d="M 28 52 L 38 42 L 48 52" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 52 52 L 62 42 L 72 52" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg></div>
+    <p class="l">7. ^^ (행복)</p>
+  </div>
+
+  <!-- 8. 놀란 눈 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="50" r="14" fill="#fff" stroke="#111" stroke-width="2"/>
+      <circle cx="62" cy="50" r="14" fill="#fff" stroke="#111" stroke-width="2"/>
+      <circle cx="38" cy="50" r="4" fill="#111"/>
+      <circle cx="62" cy="50" r="4" fill="#111"/>
+    </svg></div>
+    <p class="l">8. 놀람 (큰 흰자)</p>
+  </div>
+
+  <!-- 9. 세로 동공 (고양이) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="50" r="13" fill="#FFD93D"/>
+      <circle cx="62" cy="50" r="13" fill="#FFD93D"/>
+      <ellipse cx="38" cy="50" rx="2.5" ry="10" fill="#111"/>
+      <ellipse cx="62" cy="50" rx="2.5" ry="10" fill="#111"/>
+    </svg></div>
+    <p class="l">9. 세로 동공 (고양이)</p>
+  </div>
+
+  <!-- 10. 윙크 (한쪽 감음) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="50" r="13" fill="#fff"/>
+      <circle cx="38" cy="50" r="7" fill="#111"/>
+      <circle cx="35.5" cy="46.5" r="2.5" fill="#fff"/>
+      <path d="M 52 52 Q 62 40 72 52" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+    </svg></div>
+    <p class="l">10. 윙크</p>
+  </div>
+
+  <!-- 11. > < 눈 (깜찍) -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <path d="M 30 44 L 46 50 L 30 56" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 70 44 L 54 50 L 70 56" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg></div>
+    <p class="l">11. &gt;&lt; (깜찍)</p>
+  </div>
+
+  <!-- 12. LED 가로막대 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <rect x="28" y="47" width="20" height="6" rx="3" fill="#111"/>
+      <rect x="52" y="47" width="20" height="6" rx="3" fill="#111"/>
+      <rect x="30" y="48" width="4" height="4" rx="2" fill="#fff"/>
+      <rect x="54" y="48" width="4" height="4" rx="2" fill="#fff"/>
+    </svg></div>
+    <p class="l">12. LED 막대</p>
+  </div>
+
+  <!-- 13. 속눈썹 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="52" r="11" fill="#fff"/>
+      <circle cx="62" cy="52" r="11" fill="#fff"/>
+      <circle cx="38" cy="52" r="6" fill="#111"/>
+      <circle cx="62" cy="52" r="6" fill="#111"/>
+      <circle cx="36" cy="50" r="2" fill="#fff"/>
+      <circle cx="60" cy="50" r="2" fill="#fff"/>
+      <!-- 위 속눈썹 3개씩 -->
+      <line x1="30" y1="40" x2="28" y2="36" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+      <line x1="38" y1="38" x2="38" y2="34" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+      <line x1="46" y1="40" x2="48" y2="36" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+      <line x1="54" y1="40" x2="52" y2="36" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+      <line x1="62" y1="38" x2="62" y2="34" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+      <line x1="70" y1="40" x2="72" y2="36" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+    </svg></div>
+    <p class="l">13. 속눈썹</p>
+  </div>
+
+  <!-- 14. 픽셀 네모 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100" shape-rendering="crispEdges">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <rect x="30" y="42" width="16" height="16" fill="#111"/>
+      <rect x="54" y="42" width="16" height="16" fill="#111"/>
+      <rect x="34" y="46" width="4" height="4" fill="#fff"/>
+      <rect x="58" y="46" width="4" height="4" fill="#fff"/>
+    </svg></div>
+    <p class="l">14. 픽셀 네모</p>
+  </div>
+
+  <!-- 15. 3D 글로시 눈 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="e15" cx="0.3" cy="0.3" r="0.8">
+          <stop offset="0%" stop-color="#6E7A90"/>
+          <stop offset="60%" stop-color="#1B2A4A"/>
+          <stop offset="100%" stop-color="#000"/>
+        </radialGradient>
+      </defs>
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="50" r="13" fill="#fff"/>
+      <circle cx="62" cy="50" r="13" fill="#fff"/>
+      <circle cx="38" cy="50" r="8" fill="url(#e15)"/>
+      <circle cx="62" cy="50" r="8" fill="url(#e15)"/>
+      <circle cx="35.5" cy="46.5" r="3" fill="#fff"/>
+      <circle cx="59.5" cy="46.5" r="3" fill="#fff"/>
+      <circle cx="40" cy="53" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="64" cy="53" r="1.5" fill="#fff" opacity="0.6"/>
+    </svg></div>
+    <p class="l">15. 3D 글로시</p>
+  </div>
+
+  <!-- 16. 동그란 안경 -->
+  <div class="c">
+    <div class="b"><svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#F99A9E"/>
+      <circle cx="38" cy="50" r="12" fill="none" stroke="#111" stroke-width="2.5"/>
+      <circle cx="62" cy="50" r="12" fill="none" stroke="#111" stroke-width="2.5"/>
+      <line x1="50" y1="50" x2="50" y2="50" stroke="#111" stroke-width="2"/>
+      <circle cx="38" cy="50" r="4" fill="#111"/>
+      <circle cx="62" cy="50" r="4" fill="#111"/>
+      <line x1="48" y1="50" x2="52" y2="50" stroke="#111" stroke-width="2"/>
+    </svg></div>
+    <p class="l">16. 안경</p>
+  </div>
+
+</div>
+
+</body>
+</html>

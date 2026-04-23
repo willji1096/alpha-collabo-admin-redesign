@@ -35,7 +35,171 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireInfluencerDrawer();
   wireMessageModal();
   wireImageLightbox();
+
+  // 챗봇 자동 주입 + 활성화
+  if (!document.getElementById('chatbot')) {
+    const res = await fetch('components/chatbot.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      const el = wrap.firstElementChild;
+      if (el) document.body.appendChild(el);
+    }
+  }
+  wireChatbot();
 });
+
+/** Chatbot Widget — 상태 머신 + 마우스 추적 + 패널 */
+function wireChatbot() {
+  const root = document.getElementById('chatbot');
+  if (!root) return;
+
+  const bubble = root.querySelector('.chatbot-bubble');
+  const panel = root.querySelector('.chatbot-panel');
+  const closeBtn = root.querySelector('.chatbot-panel-close');
+  const pupilWraps = root.querySelectorAll('.chatbot-face .pupil-wrap');
+  const faqItems = root.querySelectorAll('.chatbot-faq-item');
+  const faqList = root.querySelector('.chatbot-faq');
+  const greeting = root.querySelector('.chatbot-greeting');
+  const answer = root.querySelector('.chatbot-answer');
+  const answerContent = root.querySelector('.chatbot-answer-content');
+  const backBtn = root.querySelector('.chatbot-back');
+
+  let state = 'idle';
+  let lastInteraction = Date.now();
+  let yawnTimer, sleepTimer, blinkTimer, talkTimer, alertTimer;
+
+  function setState(next) { state = next; root.dataset.state = next; }
+
+  // 마우스 추적 — 동공이 마우스 방향으로 이동 (눈 흰자 안 반경 제한)
+  const PUPIL_RANGE = 4;      // SVG viewBox 100 기준 동공 이동 반경
+  const ALERT_DISTANCE = 200;
+  function updatePupils(mx, my) {
+    if (state === 'yawn' || state === 'sleep' || state === 'open') return;
+    const rect = bubble.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = mx - cx, dy = my - cy;
+    const angle = Math.atan2(dy, dx);
+    const dist = Math.min(1, Math.hypot(dx, dy) / 400);  // 400px 안에서 최대 이동
+    const offX = Math.cos(angle) * PUPIL_RANGE * dist;
+    const offY = Math.sin(angle) * PUPIL_RANGE * dist;
+    pupilWraps.forEach(w => {
+      w.setAttribute('transform', `translate(${offX} ${offY})`);
+    });
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    lastInteraction = Date.now();
+    updatePupils(e.clientX, e.clientY);
+    if (state !== 'sleep') return;
+    const rect = bubble.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    if (Math.hypot(e.clientX - cx, e.clientY - cy) < ALERT_DISTANCE) {
+      setState('alert');
+      clearTimeout(alertTimer);
+      alertTimer = setTimeout(() => { if (state === 'alert') setState('idle'); }, 1500);
+    }
+  });
+
+  function scheduleBlink() {
+    const d = 4000 + Math.random() * 3000;
+    blinkTimer = setTimeout(() => {
+      if (state === 'idle' || state === 'alert' || state === 'hover') {
+        root.classList.add('blinking');
+        setTimeout(() => root.classList.remove('blinking'), 220);
+        if (Math.random() < 0.25) {
+          setTimeout(() => { root.classList.add('blinking'); setTimeout(() => root.classList.remove('blinking'), 220); }, 320);
+        }
+      }
+      scheduleBlink();
+    }, d);
+  }
+  function scheduleYawn() {
+    const d = 30000 + Math.random() * 60000;
+    yawnTimer = setTimeout(() => {
+      if (state === 'idle') { setState('yawn'); setTimeout(() => { if (state === 'yawn') setState('idle'); }, 1600); }
+      scheduleYawn();
+    }, d);
+  }
+  function scheduleTalk() {
+    const d = 5000 + Math.random() * 7000;
+    talkTimer = setTimeout(() => {
+      if (state === 'idle' || state === 'alert' || state === 'hover') {
+        root.classList.add('talking');
+        setTimeout(() => root.classList.remove('talking'), 480);
+      }
+      scheduleTalk();
+    }, d);
+  }
+  function checkSleep() {
+    sleepTimer = setInterval(() => {
+      if (document.hidden) return;
+      if (state === 'idle' && Date.now() - lastInteraction > 12000) setState('sleep');
+    }, 2000);
+  }
+
+  bubble.addEventListener('mouseenter', () => {
+    if (state === 'sleep') { setState('alert'); clearTimeout(alertTimer); alertTimer = setTimeout(() => { if (state === 'alert') setState('idle'); }, 1500); }
+    else if (state === 'idle') setState('hover');
+    lastInteraction = Date.now();
+  });
+  bubble.addEventListener('mouseleave', () => {
+    if (state === 'hover') setState('idle');
+  });
+
+  function openPanel() {
+    root.classList.add('is-open'); setState('open');
+    bubble.setAttribute('aria-expanded', 'true');
+    lastInteraction = Date.now();
+    panel.querySelector('button, [href]')?.focus();
+  }
+  function closePanel() {
+    root.classList.remove('is-open'); setState('idle');
+    bubble.setAttribute('aria-expanded', 'false');
+    if (answer) answer.hidden = true;
+    if (faqList) faqList.style.display = '';
+    if (greeting) greeting.style.display = '';
+  }
+  bubble.addEventListener('click', () => {
+    if (root.classList.contains('is-open')) closePanel(); else openPanel();
+  });
+  closeBtn?.addEventListener('click', closePanel);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && root.classList.contains('is-open')) closePanel();
+  });
+
+  const ANSWERS = {
+    'campaign-register': { title: '캠페인 등록 방법', body: '<p>좌측 메뉴 <strong>캠페인 일정 → 캠페인일정관리목록</strong>에서 새 캠페인을 등록할 수 있어요.</p><ul><li>캠페인명, 모집 인원, 채널, 기간 입력</li><li>방문형 / 배송형 / 리뷰형 중 선택</li><li>등록 후 인플루언서 신청을 받습니다</li></ul>' },
+    'influencer-select': { title: '인플루언서 선정 기준', body: '<p>각 캠페인에 신청한 인플루언서를 <strong>신청목록</strong>에서 검토 후 선정합니다.</p><ul><li>채널, 팔로워, 진행 이력 확인</li><li>“인플루언서 보기”로 상세 프로필 열람</li><li>“리뷰어 선정” 버튼으로 확정</li></ul>' },
+    'pricing': { title: '요금/결제 방식', body: '<p>요금은 카테고리별로 분리되어 있어요.</p><ul><li>제품형/방문형 — 등급별 단가</li><li>슈퍼패스 — 국가별 지원 금액</li><li>통역 — 시간 단위 (서울 한정)</li><li>계정/댓글 관리 — 월정액</li></ul><p>좌측 <strong>요금표</strong> 메뉴에서 확인하실 수 있어요.</p>' },
+    'review': { title: '검수/리뷰 절차', body: '<p>인플루언서가 리뷰 URL을 등록하면 <strong>검수요청목록</strong>에 자동 표시돼요.</p><ul><li>“리뷰 감수”로 콘텐츠 확인</li><li>수정이 필요하면 “초안 수정 요청”</li><li>승인 후 <strong>등록완료목록</strong>으로 이동</li></ul>' },
+    'cancel': { title: '캠페인 취소/환불 규정', body: '<p>캠페인 진행 단계에 따라 처리 방법이 달라요.</p><ul><li>모집 단계 — 자유 취소</li><li>선정 후 — 사유 검토 후 부분 환불</li><li>리뷰 등록 후 — 환불 불가</li></ul><p>자세한 환불 사유는 카카오 채널로 문의 주세요.</p>' },
+  };
+  faqItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const data = ANSWERS[item.dataset.topic];
+      if (!data || !answer || !answerContent) return;
+      answerContent.innerHTML = `<h4>${data.title}</h4>${data.body}`;
+      answer.hidden = false;
+      if (faqList) faqList.style.display = 'none';
+      if (greeting) greeting.style.display = 'none';
+    });
+  });
+  backBtn?.addEventListener('click', () => {
+    if (answer) answer.hidden = true;
+    if (faqList) faqList.style.display = '';
+    if (greeting) greeting.style.display = '';
+  });
+
+  function stopTimers() { clearTimeout(blinkTimer); clearTimeout(yawnTimer); clearTimeout(talkTimer); clearTimeout(alertTimer); clearInterval(sleepTimer); }
+  function startTimers() { scheduleBlink(); scheduleYawn(); scheduleTalk(); checkSleep(); }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopTimers(); else { stopTimers(); startTimers(); }
+  });
+
+  startTimers();
+}
 
 /** 이미지 라이트박스 — 드로어 내 post 썸네일 클릭 시 풀사이즈 확장 */
 function wireImageLightbox() {

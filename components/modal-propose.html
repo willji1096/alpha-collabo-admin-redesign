@@ -1,0 +1,176 @@
+<div class="modal-backdrop js-propose-backdrop" hidden>
+<div class="modal modal-propose" role="dialog" aria-modal="true" aria-labelledby="modal-propose-title">
+
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-propose-title">캠페인 제안 보내기</h2>
+    <button class="modal-close js-close-propose" aria-label="닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6L18 18M18 6L6 18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <!-- Recipient -->
+    <div class="mp-recipient">
+      <div class="mp-recipient-avatar" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&q=80&auto=format" alt="">
+      </div>
+      <div class="mp-recipient-body">
+        <div class="mp-recipient-label">받는 인플루언서</div>
+        <div class="mp-recipient-name">
+          <span data-propose-recipient-name>yuki_beauty</span>
+          <span class="c-country-code" data-propose-recipient-country>JP</span>
+        </div>
+        <div class="mp-recipient-sub" data-propose-recipient-sub>田中ゆき · 1천~1만 팔로워 · 단가 180,000</div>
+      </div>
+    </div>
+
+    <!-- Campaign selector -->
+    <div class="mp-section">
+      <div class="mp-section-head">
+        <h3 class="mp-section-title">제안할 캠페인 선택</h3>
+        <span class="mp-section-hint">복수 선택 가능 · 최대 3개</span>
+      </div>
+
+      <div class="mp-filter">
+        <div class="mp-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input class="mp-search-input" type="text" placeholder="캠페인명·코드 검색">
+        </div>
+        <div class="mp-filter-chips" role="group" aria-label="캠페인 타입">
+          <label class="mp-chip"><input type="radio" name="mp-type" checked> 전체</label>
+          <label class="mp-chip"><input type="radio" name="mp-type"> 배송형</label>
+          <label class="mp-chip"><input type="radio" name="mp-type"> 방문형</label>
+          <label class="mp-chip"><input type="radio" name="mp-type"> 리뷰형</label>
+        </div>
+      </div>
+
+      <ul class="mp-camp-list" role="listbox" aria-label="캠페인 목록">
+        <li class="mp-camp" data-type="방문형">
+          <label class="mp-camp-label">
+            <input class="mp-camp-chk" type="checkbox">
+            <div class="mp-camp-body">
+              <div class="mp-camp-head">
+                <span class="mp-camp-name">봄 신메뉴 체험단</span>
+                <span class="badge badge-info badge-sm"><span class="badge-dot"></span>방문형</span>
+              </div>
+              <div class="mp-camp-meta">
+                <span class="is-mono">1767340856</span>
+                <span class="mp-dot">·</span>
+                <span>모집 2/10</span>
+                <span class="mp-dot">·</span>
+                <span>단가 <strong>180,000</strong></span>
+                <span class="mp-dot">·</span>
+                <span>마감 2026-05-02</span>
+              </div>
+            </div>
+          </label>
+        </li>
+        <li class="mp-camp" data-type="배송형">
+          <label class="mp-camp-label">
+            <input class="mp-camp-chk" type="checkbox">
+            <div class="mp-camp-body">
+              <div class="mp-camp-head">
+                <span class="mp-camp-name">프리미엄 스킨케어 체험단</span>
+                <span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span>
+              </div>
+              <div class="mp-camp-meta">
+                <span class="is-mono">1771914476</span>
+                <span class="mp-dot">·</span>
+                <span>모집 5/20</span>
+                <span class="mp-dot">·</span>
+                <span>단가 <strong>120,000</strong></span>
+                <span class="mp-dot">·</span>
+                <span>마감 2026-05-10</span>
+              </div>
+            </div>
+          </label>
+        </li>
+        <li class="mp-camp" data-type="방문형">
+          <label class="mp-camp-label">
+            <input class="mp-camp-chk" type="checkbox">
+            <div class="mp-camp-body">
+              <div class="mp-camp-head">
+                <span class="mp-camp-name">로담한의원 부산점</span>
+                <span class="badge badge-info badge-sm"><span class="badge-dot"></span>방문형</span>
+              </div>
+              <div class="mp-camp-meta">
+                <span class="is-mono">1739439117</span>
+                <span class="mp-dot">·</span>
+                <span>모집 3/8</span>
+                <span class="mp-dot">·</span>
+                <span>단가 <strong>250,000</strong></span>
+                <span class="mp-dot">·</span>
+                <span>마감 2026-04-30</span>
+              </div>
+            </div>
+          </label>
+        </li>
+        <li class="mp-camp" data-type="리뷰형">
+          <label class="mp-camp-label">
+            <input class="mp-camp-chk" type="checkbox">
+            <div class="mp-camp-body">
+              <div class="mp-camp-head">
+                <span class="mp-camp-name">여름 리뷰 캠페인</span>
+                <span class="badge badge-info badge-sm"><span class="badge-dot"></span>리뷰형</span>
+              </div>
+              <div class="mp-camp-meta">
+                <span class="is-mono">1766391050</span>
+                <span class="mp-dot">·</span>
+                <span>모집 1/15</span>
+                <span class="mp-dot">·</span>
+                <span>단가 <strong>95,000</strong></span>
+                <span class="mp-dot">·</span>
+                <span>마감 2026-05-20</span>
+              </div>
+            </div>
+          </label>
+        </li>
+        <li class="mp-camp" data-type="배송형">
+          <label class="mp-camp-label">
+            <input class="mp-camp-chk" type="checkbox">
+            <div class="mp-camp-body">
+              <div class="mp-camp-head">
+                <span class="mp-camp-name">인기게시물 진행 테스트</span>
+                <span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span>
+              </div>
+              <div class="mp-camp-meta">
+                <span class="is-mono">1769756657</span>
+                <span class="mp-dot">·</span>
+                <span>모집 0/12</span>
+                <span class="mp-dot">·</span>
+                <span>단가 <strong>160,000</strong></span>
+                <span class="mp-dot">·</span>
+                <span>마감 2026-05-15</span>
+              </div>
+            </div>
+          </label>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Message -->
+    <div class="mp-section">
+      <div class="mp-section-head">
+        <h3 class="mp-section-title">제안 메시지 <span class="mp-optional">(선택)</span></h3>
+      </div>
+      <textarea class="mp-textarea" rows="4" placeholder="예: 안녕하세요. 귀하의 채널 콘셉트와 잘 맞을 것 같아 캠페인을 제안드립니다. 검토 부탁드립니다."></textarea>
+      <div class="mp-charcount"><span data-propose-count>0</span> / 500</div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="mp-footer-summary">
+      선택 <strong data-propose-selected>0</strong>건
+    </div>
+    <div class="mp-footer-actions">
+      <button type="button" class="btn btn-ghost btn-md js-close-propose">취소</button>
+      <button type="button" class="btn btn-primary btn-md js-send-propose" disabled>제안 보내기</button>
+    </div>
+  </div>
+
+</div>
+</div>

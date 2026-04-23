@@ -743,6 +743,12 @@ body { background: var(--bg-page); }
   max-width: var(--content-max-width);
 }
 
+/* 넓은 데이터 페이지용 — 1440 제한 (카드 그리드/테이블 혼용 페이지) */
+.page-wide {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
 /* Page Header */
 .pg-header {
   display: flex;
@@ -2705,7 +2711,11 @@ body { background: var(--bg-page); }
 
 .chatbot[data-state="sleep"] .chatbot-bubble { animation: chatbot-sleep-float 4.5s ease-in-out infinite; }
 @keyframes chatbot-sleep-float { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-2px) rotate(2deg); } }
-.chatbot[data-state="sleep"] .chatbot-face .eye { transform-origin: center; transform-box: fill-box; transform: scaleY(0.08); }
+/* sleep — 눈 흰자/동공 숨기고 아치(⌒) 감은 눈만 표시 (visibility 기반 — SVG 확실 호환) */
+.chatbot-face .eye-closed { visibility: hidden; }
+.chatbot[data-state="sleep"] .chatbot-face .eye-white,
+.chatbot[data-state="sleep"] .chatbot-face .pupil-wrap { visibility: hidden; }
+.chatbot[data-state="sleep"] .chatbot-face .eye-closed { visibility: visible; }
 
 .chatbot-face .zzz { font-family: var(--font-sans); font-weight: 700; fill: var(--accent); opacity: 0; }
 .chatbot[data-state="sleep"] .chatbot-face .zzz { opacity: 1; }
@@ -2864,7 +2874,7 @@ body { background: var(--bg-page); }
 .modal-propose {
   max-width: 600px;
   width: 100%;
-  max-height: min(780px, calc(100vh - 48px));
+  max-height: min(860px, calc(100vh - 40px));
   display: flex;
   flex-direction: column;
 }
@@ -3007,7 +3017,7 @@ body { background: var(--bg-page); }
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 320px;
+  max-height: 380px;
   overflow-y: auto;
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
@@ -3120,6 +3130,163 @@ body { background: var(--bg-page); }
   .modal-propose .modal-footer { padding: var(--space-3) var(--space-4); flex-wrap: wrap; }
   .mp-camp-list { max-height: 200px; }
 }
+
+/* ============================================================
+   View Toggle — 리스트/카드 뷰 전환
+   ============================================================ */
+.view-toggle {
+  display: inline-flex;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  gap: 2px;
+}
+.view-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 6px var(--space-3);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease),
+              color var(--duration-fast) var(--ease);
+}
+.view-toggle-btn:hover { color: var(--text-secondary); }
+.view-toggle-btn.is-active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ============================================================
+   Influencer Card Grid
+   ============================================================ */
+.cards-wrap { margin-top: var(--space-4); }
+.cards-wrap[hidden] { display: none; }
+.influencer-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-4);
+}
+.inf-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--duration-fast) var(--ease),
+              box-shadow var(--duration-fast) var(--ease),
+              transform var(--duration-fast) var(--ease);
+}
+.inf-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-2);
+  transform: translateY(-2px);
+}
+
+.inf-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.inf-card-avatar {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-elevated);
+}
+.inf-card-name-wrap { flex: 1 1 auto; min-width: 0; }
+.inf-card-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+.inf-card-handle {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.inf-card-realname {
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+}
+
+.inf-card-channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.inf-card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+}
+.inf-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.inf-stat-label {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-wide);
+}
+.inf-stat-value {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.inf-stat-suffix {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-regular);
+  color: var(--text-tertiary);
+  margin-left: 1px;
+}
+
+.inf-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}
+.inf-card-meta svg { color: var(--accent); flex: 0 0 auto; }
+.inf-card-meta span { display: inline-flex; align-items: center; gap: 4px; }
+
+.inf-card-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-light);
+}
+.inf-card-actions .btn { flex: 1 1 auto; }
+.inf-card-actions .btn.btn-icon, .inf-card-actions .btn[aria-label] { flex: 0 0 auto; padding: 0; width: 32px; justify-content: center; }
+
+@media (max-width: 768px) {
+  .influencer-cards { grid-template-columns: 1fr; gap: var(--space-3); }
+}
+
 
 
 

@@ -19,7 +19,7 @@
 <div id="header-slot"></div>
 
 <main class="main">
-  <div class="page">
+  <div class="page page-wide">
 
     <div class="pg-header">
       <h1 class="pg-title">한국 방문 예정 인플루언서</h1>
@@ -59,7 +59,7 @@
             <label class="sns-chip sns-chip-ig"><input type="checkbox"> 인스타그램</label>
             <label class="sns-chip sns-chip-yt"><input type="checkbox"> 유튜브</label>
             <label class="sns-chip sns-chip-tt"><input type="checkbox"> 틱톡</label>
-            <label class="sns-chip sns-chip-xhs"><input type="checkbox"> 시아오홍슈</label>
+            <label class="sns-chip sns-chip-xhs"><input type="checkbox"> 샤오홍슈</label>
             <label class="sns-chip sns-chip-fb"><input type="checkbox"> 페이스북</label>
             <label class="sns-chip sns-chip-tw"><input type="checkbox"> 트위터/X</label>
           </div>
@@ -91,11 +91,22 @@
     <div class="t-toolbar">
       <div class="t-count">전체 <strong>30</strong>건 / 검색 <strong>30</strong>건</div>
       <div class="t-right">
+        <!-- 뷰 토글: 리스트 / 카드 -->
+        <div class="view-toggle" role="group" aria-label="보기 방식">
+          <button class="view-toggle-btn is-active" type="button" data-view="list" aria-pressed="true" aria-label="리스트 보기">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            리스트
+          </button>
+          <button class="view-toggle-btn" type="button" data-view="card" aria-pressed="false" aria-label="카드 보기">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            카드
+          </button>
+        </div>
         <select class="t-sel"><option>페이지당 15개 표시</option><option>페이지당 20개 표시</option><option>페이지당 50개 표시</option></select>
       </div>
     </div>
 
-    <div class="tbl-wrap" data-bulk-scope="#search-bulk-bar">
+    <div id="view-list" class="tbl-wrap" data-bulk-scope="#search-bulk-bar">
       <div class="tbl-scroll">
       <table class="tbl has-sticky">
         <thead>
@@ -431,6 +442,222 @@
       </div>
     </div>
 
+
+    <!-- ============ 카드 뷰 ============ -->
+    <div id="view-card" class="cards-wrap" hidden>
+      <div class="influencer-cards">
+
+        <article class="inf-card">
+          <div class="inf-card-header">
+            <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&q=80&auto=format" alt="">
+            <div class="inf-card-name-wrap">
+              <div class="inf-card-name">
+                <span class="inf-card-handle">yuki_beauty</span>
+                <span class="c-country-code">JP</span>
+              </div>
+              <div class="inf-card-realname">田中ゆき · 27세</div>
+            </div>
+            <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+          </div>
+          <div class="inf-card-channels">
+            <span class="c-tag c-tag-ig">인스타그램</span>
+            <span class="c-tag c-tag-tt">틱톡</span>
+          </div>
+          <div class="inf-card-stats">
+            <div class="inf-stat"><span class="inf-stat-label">팔로워</span><span class="inf-stat-value">42,800</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">평균 좋아요</span><span class="inf-stat-value">3,240</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">단가</span><span class="inf-stat-value">180,000<span class="inf-stat-suffix">원</span></span></div>
+          </div>
+          <div class="inf-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>방문예정 2026-05-08</span>
+            <span class="mp-dot">·</span>
+            <span>캠페인 4회</span>
+          </div>
+          <div class="inf-card-actions">
+            <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
+            <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+          </div>
+        </article>
+
+        <article class="inf-card">
+          <div class="inf-card-header">
+            <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&q=80&auto=format" alt="">
+            <div class="inf-card-name-wrap">
+              <div class="inf-card-name">
+                <span class="inf-card-handle">mika_seoul</span>
+                <span class="c-country-code">KR</span>
+              </div>
+              <div class="inf-card-realname">김미카 · 24세</div>
+            </div>
+            <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+          </div>
+          <div class="inf-card-channels">
+            <span class="c-tag c-tag-ig">인스타그램</span>
+            <span class="c-tag c-tag-yt">유튜브</span>
+          </div>
+          <div class="inf-card-stats">
+            <div class="inf-stat"><span class="inf-stat-label">팔로워</span><span class="inf-stat-value">128,500</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">평균 좋아요</span><span class="inf-stat-value">8,720</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">단가</span><span class="inf-stat-value">320,000<span class="inf-stat-suffix">원</span></span></div>
+          </div>
+          <div class="inf-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>방문예정 2026-04-30</span>
+            <span class="mp-dot">·</span>
+            <span>캠페인 12회</span>
+          </div>
+          <div class="inf-card-actions">
+            <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
+            <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+          </div>
+        </article>
+
+        <article class="inf-card">
+          <div class="inf-card-header">
+            <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&h=120&fit=crop&q=80&auto=format" alt="">
+            <div class="inf-card-name-wrap">
+              <div class="inf-card-name">
+                <span class="inf-card-handle">natasha_mood</span>
+                <span class="c-country-code">RU</span>
+              </div>
+              <div class="inf-card-realname">Наталья · 29세</div>
+            </div>
+            <span class="badge badge-warning badge-sm"><span class="badge-dot"></span>대기</span>
+          </div>
+          <div class="inf-card-channels">
+            <span class="c-tag c-tag-ig">인스타그램</span>
+          </div>
+          <div class="inf-card-stats">
+            <div class="inf-stat"><span class="inf-stat-label">팔로워</span><span class="inf-stat-value">87,200</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">평균 좋아요</span><span class="inf-stat-value">5,180</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">단가</span><span class="inf-stat-value">240,000<span class="inf-stat-suffix">원</span></span></div>
+          </div>
+          <div class="inf-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>방문예정 2026-05-15</span>
+            <span class="mp-dot">·</span>
+            <span>캠페인 6회</span>
+          </div>
+          <div class="inf-card-actions">
+            <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
+            <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+          </div>
+        </article>
+
+        <article class="inf-card">
+          <div class="inf-card-header">
+            <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=120&h=120&fit=crop&q=80&auto=format" alt="">
+            <div class="inf-card-name-wrap">
+              <div class="inf-card-name">
+                <span class="inf-card-handle">kumi_osaka</span>
+                <span class="c-country-code">JP</span>
+              </div>
+              <div class="inf-card-realname">久美 · 31세</div>
+            </div>
+            <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+          </div>
+          <div class="inf-card-channels">
+            <span class="c-tag c-tag-yt">유튜브</span>
+            <span class="c-tag c-tag-tt">틱톡</span>
+          </div>
+          <div class="inf-card-stats">
+            <div class="inf-stat"><span class="inf-stat-label">팔로워</span><span class="inf-stat-value">315,000</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">평균 조회수</span><span class="inf-stat-value">24,500</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">단가</span><span class="inf-stat-value">580,000<span class="inf-stat-suffix">원</span></span></div>
+          </div>
+          <div class="inf-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>방문예정 2026-06-02</span>
+            <span class="mp-dot">·</span>
+            <span>캠페인 28회</span>
+          </div>
+          <div class="inf-card-actions">
+            <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
+            <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+          </div>
+        </article>
+
+        <article class="inf-card">
+          <div class="inf-card-header">
+            <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop&q=80&auto=format" alt="">
+            <div class="inf-card-name-wrap">
+              <div class="inf-card-name">
+                <span class="inf-card-handle">lina_k</span>
+                <span class="c-country-code">CN</span>
+              </div>
+              <div class="inf-card-realname">林娜 · 26세</div>
+            </div>
+            <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+          </div>
+          <div class="inf-card-channels">
+            <span class="c-tag c-tag-xhs">샤오홍슈</span>
+            <span class="c-tag c-tag-dy">더우인</span>
+          </div>
+          <div class="inf-card-stats">
+            <div class="inf-stat"><span class="inf-stat-label">팔로워</span><span class="inf-stat-value">52,400</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">평균 좋아요</span><span class="inf-stat-value">2,890</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">단가</span><span class="inf-stat-value">220,000<span class="inf-stat-suffix">원</span></span></div>
+          </div>
+          <div class="inf-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>방문예정 2026-05-22</span>
+            <span class="mp-dot">·</span>
+            <span>캠페인 9회</span>
+          </div>
+          <div class="inf-card-actions">
+            <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
+            <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+          </div>
+        </article>
+
+        <article class="inf-card">
+          <div class="inf-card-header">
+            <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1463453091185-61582044d556?w=120&h=120&fit=crop&q=80&auto=format" alt="">
+            <div class="inf-card-name-wrap">
+              <div class="inf-card-name">
+                <span class="inf-card-handle">sora_taipei</span>
+                <span class="c-country-code">TW</span>
+              </div>
+              <div class="inf-card-realname">蘇拉 · 28세</div>
+            </div>
+            <span class="badge badge-warning badge-sm"><span class="badge-dot"></span>대기</span>
+          </div>
+          <div class="inf-card-channels">
+            <span class="c-tag c-tag-ig">인스타그램</span>
+            <span class="c-tag c-tag-fb">페이스북</span>
+          </div>
+          <div class="inf-card-stats">
+            <div class="inf-stat"><span class="inf-stat-label">팔로워</span><span class="inf-stat-value">73,600</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">평균 좋아요</span><span class="inf-stat-value">4,510</span></div>
+            <div class="inf-stat"><span class="inf-stat-label">단가</span><span class="inf-stat-value">260,000<span class="inf-stat-suffix">원</span></span></div>
+          </div>
+          <div class="inf-card-meta">
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>방문예정 2026-05-19</span>
+            <span class="mp-dot">·</span>
+            <span>캠페인 7회</span>
+          </div>
+          <div class="inf-card-actions">
+            <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
+            <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
     <div class="bulk-bar" id="search-bulk-bar" role="region" aria-label="일괄 작업 도구">
       <span class="bulk-count"><strong data-bulk-count>0</strong>명 선택</span>
       <span class="bulk-divider"></span>

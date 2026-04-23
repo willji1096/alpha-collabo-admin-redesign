@@ -10,6 +10,122 @@
 <style>
   body { background: var(--bg-surface); }
 
+  /* ========== Login Bot — 우하단 fixed (챗봇과 동일 위치) ========== */
+  .login-bot-wrap {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .login-bot-speech {
+    position: relative;
+    padding: 8px 14px;
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+    transition: opacity 200ms ease-out, transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .login-bot-speech.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .login-bot-speech::after {
+    content: "";
+    position: absolute;
+    right: 24px;
+    bottom: -4px;
+    width: 8px;
+    height: 8px;
+    background: #111;
+    transform: rotate(45deg);
+  }
+
+  .login-bot {
+    width: 80px;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 6px 16px rgba(238, 33, 40, 0.28))
+            drop-shadow(0 2px 4px rgba(17, 17, 17, 0.1));
+    animation: login-bot-float 4.5s ease-in-out infinite;
+  }
+  @keyframes login-bot-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
+  .login-bot .bot-bubble-bg { fill: #F99A9E; }
+  .login-bot .bot-eye-white { fill: #FFFFFF; }
+  .login-bot .bot-pupil { fill: #000000; }
+  .login-bot .bot-glint { fill: #FFFFFF; }
+  .login-bot .bot-mouth { stroke: #111; }
+  .login-bot .bot-pupil-wrap {
+    transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 손 — 최초 핑크 (봇 얼굴과 같은 톤) */
+  .login-bot .bot-hand > * {
+    fill: #FBBABE;
+    stroke: none;
+  }
+  .login-bot .bot-hands {
+    transform-origin: 60px 60px;
+    transform-box: fill-box;
+    transform: translateY(28px) scale(0.6);
+    opacity: 0;
+    transition: transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 220ms ease;
+    filter: drop-shadow(0 3px 6px rgba(178, 50, 80, 0.4))
+            drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+  }
+
+  /* 아이디 focus → 눈 아래로 살짝 (input 보는 느낌) */
+  .login-bot[data-bot-state="username"] .bot-pupil-wrap {
+    transform: translate(0, 3px);
+  }
+
+  /* 비밀번호 focus → 손 올라와 눈 가림 + 눈 감김 */
+  .login-bot[data-bot-state="password"] .bot-hands {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .login-bot[data-bot-state="password"] .bot-eye {
+    transform-origin: center;
+    transform-box: fill-box;
+    transform: scaleY(0.08);
+    transition: transform 200ms ease-out;
+  }
+  .login-bot[data-bot-state="password"] .bot-mouth {
+    d: path("M 52 84 Q 60 80 68 84");  /* 살짝 미소 */
+  }
+
+  /* 로그인 버튼 hover → 반짝 */
+  .login-bot[data-bot-state="excited"] .bot-pupil-wrap {
+    animation: bot-excited 600ms ease-in-out;
+  }
+  @keyframes bot-excited {
+    0%, 100% { transform: translate(0, 0); }
+    25%      { transform: translate(-2px, -1px); }
+    75%      { transform: translate(2px, -1px); }
+  }
+  .login-bot[data-bot-state="excited"] .bot-mouth {
+    d: path("M 50 80 Q 60 90 70 80");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .login-bot { animation: none; }
+    .login-bot .bot-pupil-wrap, .login-bot .bot-hand, .login-bot .bot-eye { transition: none; }
+  }
+
+
   /* ========== Header ========== */
   .login-header-bar {
     position: fixed;
@@ -314,5 +430,101 @@
   </div>
 </div>
 
+<!-- 우하단 봇 + 말풍선 (챗봇과 동일 위치) -->
+<div class="login-bot-wrap">
+  <div class="login-bot-speech" data-bot-speech>안녕하세요 👋</div>
+  <svg class="login-bot" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" data-bot-state="idle">
+    <circle class="bot-bubble-bg" cx="60" cy="60" r="46"/>
+    <g class="bot-eye bot-eye-l">
+      <circle class="bot-eye-white" cx="45" cy="60" r="12"/>
+      <g class="bot-pupil-wrap" data-pupil-wrap>
+        <circle class="bot-pupil" cx="45" cy="60" r="6.5"/>
+        <circle class="bot-glint" cx="42.8" cy="56.8" r="2.3"/>
+      </g>
+    </g>
+    <g class="bot-eye bot-eye-r">
+      <circle class="bot-eye-white" cx="75" cy="60" r="12"/>
+      <g class="bot-pupil-wrap" data-pupil-wrap>
+        <circle class="bot-pupil" cx="75" cy="60" r="6.5"/>
+        <circle class="bot-glint" cx="72.8" cy="56.8" r="2.3"/>
+      </g>
+    </g>
+    <path class="bot-mouth" d="M 52 82 Q 60 88 68 82" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+    <g class="bot-hands">
+      <!-- 왼손: 손바닥 + 손가락 4개 -->
+      <g class="bot-hand">
+        <circle cx="35" cy="52" r="4"/>
+        <circle cx="42" cy="49" r="4.5"/>
+        <circle cx="49" cy="49" r="4.5"/>
+        <circle cx="56" cy="52" r="4"/>
+        <ellipse cx="45.5" cy="61" rx="14" ry="11"/>
+      </g>
+      <!-- 오른손 -->
+      <g class="bot-hand">
+        <circle cx="65" cy="52" r="4"/>
+        <circle cx="72" cy="49" r="4.5"/>
+        <circle cx="79" cy="49" r="4.5"/>
+        <circle cx="86" cy="52" r="4"/>
+        <ellipse cx="75.5" cy="61" rx="14" ry="11"/>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<script>
+(function() {
+  const bot = document.querySelector('.login-bot');
+  const speech = document.querySelector('[data-bot-speech]');
+  const username = document.getElementById('username');
+  const password = document.getElementById('password');
+  const loginBtn = document.querySelector('.login-button');
+  if (!bot || !speech) return;
+
+  function setState(state, message) {
+    bot.dataset.botState = state;
+    if (message !== undefined) {
+      speech.textContent = message;
+      speech.classList.add('is-visible');
+    }
+  }
+
+  // 진입 시 환영 인사 (0.3초 딜레이)
+  setTimeout(() => {
+    speech.classList.add('is-visible');
+  }, 300);
+  // 3.5초 후 말풍선 숨김
+  setTimeout(() => {
+    if (bot.dataset.botState === 'idle') speech.classList.remove('is-visible');
+  }, 3500);
+
+  username?.addEventListener('focus', () => setState('username', '아이디를 입력해주세요'));
+  password?.addEventListener('focus', () => setState('password', '안 볼게요 🙈'));
+
+  function onBlur() {
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active === username) return;
+      if (active === password) return;
+      if (active === loginBtn) return;
+      setState('idle', '안녕하세요 👋');
+      setTimeout(() => {
+        if (bot.dataset.botState === 'idle') speech.classList.remove('is-visible');
+      }, 1800);
+    }, 50);
+  }
+  username?.addEventListener('blur', onBlur);
+  password?.addEventListener('blur', onBlur);
+
+  loginBtn?.addEventListener('mouseenter', () => {
+    if (bot.dataset.botState === 'password') return;
+    setState('excited', '들어오세요! ✨');
+  });
+  loginBtn?.addEventListener('mouseleave', () => {
+    if (document.activeElement === password) { setState('password', '안 볼게요 🙈'); return; }
+    if (document.activeElement === username) { setState('username', '아이디를 입력해주세요'); return; }
+    setState('idle', '안녕하세요 👋');
+  });
+})();
+</script>
 </body>
 </html>

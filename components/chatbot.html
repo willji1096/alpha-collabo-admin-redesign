@@ -14,6 +14,8 @@
           <circle class="pupil" cx="35" cy="50" r="6.5"/>
           <circle class="glint" cx="32.8" cy="46.8" r="2.3"/>
         </g>
+        <!-- sleep 전용 감은 눈 아치 -->
+        <path class="eye-closed" d="M 23 50 Q 35 58 47 50" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
       </g>
       <g class="eye eye-r">
         <circle class="eye-white" cx="65" cy="50" r="12"/>
@@ -21,6 +23,7 @@
           <circle class="pupil" cx="65" cy="50" r="6.5"/>
           <circle class="glint" cx="62.8" cy="46.8" r="2.3"/>
         </g>
+        <path class="eye-closed" d="M 53 50 Q 65 58 77 50" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
       </g>
 
       <!-- 입 -->
@@ -66,25 +69,37 @@
       </div>
 
       <div class="chatbot-faq">
-        <button class="chatbot-faq-item" type="button" data-topic="campaign-register">
-          <span class="chatbot-faq-icon">📋</span>
-          <span class="chatbot-faq-text">캠페인 등록은 어떻게 하나요?</span>
+        <button class="chatbot-faq-item" type="button" data-topic="no-visit">
+          <span class="chatbot-faq-icon">🚫</span>
+          <span class="chatbot-faq-text">인플루언서가 방문하지 않았어요</span>
         </button>
-        <button class="chatbot-faq-item" type="button" data-topic="influencer-select">
-          <span class="chatbot-faq-icon">👥</span>
-          <span class="chatbot-faq-text">인플루언서 선정 기준이 궁금해요</span>
+        <button class="chatbot-faq-item" type="button" data-topic="draft-delay">
+          <span class="chatbot-faq-icon">⏰</span>
+          <span class="chatbot-faq-text">초안 제출이 딜레이 되고 있어요</span>
         </button>
-        <button class="chatbot-faq-item" type="button" data-topic="pricing">
-          <span class="chatbot-faq-icon">💰</span>
-          <span class="chatbot-faq-text">요금/결제 방식이 어떻게 되나요?</span>
+        <button class="chatbot-faq-item" type="button" data-topic="publish-period">
+          <span class="chatbot-faq-icon">📅</span>
+          <span class="chatbot-faq-text">방문 후 평균 게시 기간은 어떻게 되나요?</span>
         </button>
-        <button class="chatbot-faq-item" type="button" data-topic="review">
-          <span class="chatbot-faq-icon">✅</span>
-          <span class="chatbot-faq-text">검수/리뷰 절차를 알려주세요</span>
+        <button class="chatbot-faq-item" type="button" data-topic="no-publish">
+          <span class="chatbot-faq-icon">💸</span>
+          <span class="chatbot-faq-text">인플루언서 방문 후 최종 미게시는 어떻게 되나요?</span>
         </button>
-        <button class="chatbot-faq-item" type="button" data-topic="cancel">
+        <button class="chatbot-faq-item" type="button" data-topic="cancel-selection">
           <span class="chatbot-faq-icon">↩️</span>
-          <span class="chatbot-faq-text">캠페인 취소/환불 규정</span>
+          <span class="chatbot-faq-text">선정한 인플루언서를 취소하고 싶어요</span>
+        </button>
+        <button class="chatbot-faq-item" type="button" data-topic="change-recruit">
+          <span class="chatbot-faq-icon">⚙️</span>
+          <span class="chatbot-faq-text">모집 국가/등급을 변경하고 싶어요</span>
+        </button>
+        <button class="chatbot-faq-item" type="button" data-topic="popular-post">
+          <span class="chatbot-faq-icon">📈</span>
+          <span class="chatbot-faq-text">인기게시물이 뭔가요?</span>
+        </button>
+        <button class="chatbot-faq-item" type="button" data-topic="superpass">
+          <span class="chatbot-faq-icon">✈️</span>
+          <span class="chatbot-faq-text">슈퍼패스가 뭔가요?</span>
         </button>
       </div>
 

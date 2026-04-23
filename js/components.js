@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireInfluencerDrawer();
   wireMessageModal();
   wireImageLightbox();
+  wireViewToggle();
 
   // Confirm 모달 자동 주입
   if (!document.querySelector('.js-confirm-backdrop')) {
@@ -72,6 +73,35 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   wireChatbot();
 });
+
+/** View Toggle — 리스트/카드 뷰 전환 */
+function wireViewToggle() {
+  const toggle = document.querySelector('.view-toggle');
+  if (!toggle) return;
+  const listEl = document.getElementById('view-list');
+  const cardEl = document.getElementById('view-card');
+  if (!listEl || !cardEl) return;
+
+  toggle.addEventListener('click', (e) => {
+    const btn = e.target.closest('.view-toggle-btn');
+    if (!btn) return;
+    const view = btn.dataset.view;
+
+    toggle.querySelectorAll('.view-toggle-btn').forEach(b => {
+      const active = b === btn;
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+
+    if (view === 'list') {
+      listEl.hidden = false;
+      cardEl.hidden = true;
+    } else {
+      listEl.hidden = true;
+      cardEl.hidden = false;
+    }
+  });
+}
 
 /** Confirm 모달 — window.showConfirm({title, desc, variant, okText, cancelText}) Promise<boolean> */
 function wireConfirmModal() {
@@ -295,11 +325,38 @@ function wireChatbot() {
   });
 
   const ANSWERS = {
-    'campaign-register': { title: '캠페인 등록 방법', body: '<p>좌측 메뉴 <strong>캠페인 일정 → 캠페인일정관리목록</strong>에서 새 캠페인을 등록할 수 있어요.</p><ul><li>캠페인명, 모집 인원, 채널, 기간 입력</li><li>방문형 / 배송형 / 리뷰형 중 선택</li><li>등록 후 인플루언서 신청을 받습니다</li></ul>' },
-    'influencer-select': { title: '인플루언서 선정 기준', body: '<p>각 캠페인에 신청한 인플루언서를 <strong>신청목록</strong>에서 검토 후 선정합니다.</p><ul><li>채널, 팔로워, 진행 이력 확인</li><li>“인플루언서 보기”로 상세 프로필 열람</li><li>“리뷰어 선정” 버튼으로 확정</li></ul>' },
-    'pricing': { title: '요금/결제 방식', body: '<p>요금은 카테고리별로 분리되어 있어요.</p><ul><li>제품형/방문형 — 등급별 단가</li><li>슈퍼패스 — 국가별 지원 금액</li><li>통역 — 시간 단위 (서울 한정)</li><li>계정/댓글 관리 — 월정액</li></ul><p>좌측 <strong>요금표</strong> 메뉴에서 확인하실 수 있어요.</p>' },
-    'review': { title: '검수/리뷰 절차', body: '<p>인플루언서가 리뷰 URL을 등록하면 <strong>검수요청목록</strong>에 자동 표시돼요.</p><ul><li>“리뷰 감수”로 콘텐츠 확인</li><li>수정이 필요하면 “초안 수정 요청”</li><li>승인 후 <strong>등록완료목록</strong>으로 이동</li></ul>' },
-    'cancel': { title: '캠페인 취소/환불 규정', body: '<p>캠페인 진행 단계에 따라 처리 방법이 달라요.</p><ul><li>모집 단계 — 자유 취소</li><li>선정 후 — 사유 검토 후 부분 환불</li><li>리뷰 등록 후 — 환불 불가</li></ul><p>자세한 환불 사유는 카카오 채널로 문의 주세요.</p>' },
+    'no-visit': {
+      title: '인플루언서가 방문하지 않았어요',
+      body: '<p>업체에서 <strong>미방문 처리</strong> 후 실제 방문이 이루어지지 않은 경우, 해당 인플루언서 차감금은 복구됩니다.</p>',
+    },
+    'draft-delay': {
+      title: '초안 제출이 딜레이 되고 있어요',
+      body: '<p>초안 제출의 경우 약 <strong>7~14일</strong> 정도 소요됩니다.</p><ul><li>14일 이후 — 인플루언서 경고 및 패널티</li><li>30일 이상 장기 딜레이 — 제품(시술) 비용 반환 청구 진행</li></ul>',
+    },
+    'publish-period': {
+      title: '방문 후 평균 게시 기간',
+      body: '<p>한국 방문의 경우 평균 <strong>약 2~3주</strong> 정도 소요됩니다.</p>',
+    },
+    'no-publish': {
+      title: '방문 후 최종 미게시의 경우',
+      body: '<p><strong>30일 이상 장기 미제출</strong>의 경우 제품(시술) 비용 반환 청구가 진행됩니다.</p><p>반환에 필요한 절차를 위해 <strong>채널톡</strong>으로 문의 주세요.</p>',
+    },
+    'cancel-selection': {
+      title: '선정한 인플루언서를 취소하고 싶어요',
+      body: '<p>선정한 인플루언서는 취소 처리 시 <strong>차감금은 복구되지 않습니다</strong>.</p>',
+    },
+    'change-recruit': {
+      title: '모집 국가/등급을 변경하고 싶어요',
+      body: '<p>모집 국가/등급 변경은 <strong>수동 등록</strong>으로 진행됩니다. <strong>채널톡</strong>으로 연락 주시면 빠르게 도와드릴게요.</p>',
+    },
+    'popular-post': {
+      title: '인기게시물이 뭔가요?',
+      body: '<p>인플루언서 게시물에 대한 <strong>바이럴 작업</strong>이에요. 순간적으로 많은 사람들이 시청하는 게시물로 인식하게 하여, 더 많은 피드의 알고리즘에 노출될 수 있도록 하는 서비스입니다.</p><p>노출은 100% 보장은 아니며, 평균적으로 <strong>10건 중 3~4건</strong>은 상단 노출됩니다.</p>',
+    },
+    'superpass': {
+      title: '슈퍼패스가 뭔가요?',
+      body: '<p>인플루언서에게 제공되는 <strong>항공권 구매비 지원 제도</strong>입니다.</p><p>국가별 지원 금액은 좌측 <strong>요금표 → 슈퍼패스</strong> 메뉴에서 확인하실 수 있어요.</p>',
+    },
   };
   faqItems.forEach(item => {
     item.addEventListener('click', () => {
@@ -788,7 +845,7 @@ function wireToastAutoTriggers() {
     if (!btn) return;
     // 모달/드로어/필터 토글/복사버튼 등 기능성 버튼은 제외
     if (btn.closest('.modal, .drawer, .cmdk, .toast') ||
-        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-toast-save, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
+        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
     // href가 있는 a 태그면 네비게이션이므로 제외
     if (btn.tagName === 'A' && btn.getAttribute('href') && btn.getAttribute('href') !== '#') return;
 

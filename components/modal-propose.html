@@ -47,6 +47,13 @@
         </div>
       </div>
 
+      <!-- Empty state (JS로 .hidden 토글, 캠페인 0건일 때 표시) -->
+      <div class="mp-camp-empty" hidden data-propose-empty>
+        <div class="mp-camp-empty-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        해당 인플루언서에게 제안할 수 있는 캠페인이 없습니다.
+      </div>
       <ul class="mp-camp-list" role="listbox" aria-label="캠페인 목록">
         <li class="mp-camp" data-type="방문형">
           <label class="mp-camp-label">
@@ -167,7 +174,7 @@
       선택 <strong data-propose-selected>0</strong>건
     </div>
     <div class="mp-footer-actions">
-      <button type="button" class="btn btn-ghost btn-md js-close-propose">취소</button>
+      <button type="button" class="btn btn-secondary btn-md js-close-propose">취소</button>
       <button type="button" class="btn btn-primary btn-md js-send-propose" disabled>제안 보내기</button>
     </div>
   </div>

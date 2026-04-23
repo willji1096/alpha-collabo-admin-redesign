@@ -36,6 +36,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireMessageModal();
   wireImageLightbox();
 
+  // Confirm 모달 자동 주입
+  if (!document.querySelector('.js-confirm-backdrop')) {
+    const res = await fetch('components/modal-confirm.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      const el = wrap.firstElementChild;
+      if (el) document.body.appendChild(el);
+    }
+  }
+  wireConfirmModal();
+
+  // Propose 모달 자동 주입
+  if (!document.querySelector('.js-propose-backdrop')) {
+    const res = await fetch('components/modal-propose.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      const el = wrap.firstElementChild;
+      if (el) document.body.appendChild(el);
+    }
+  }
+  wireProposeModal();
+
   // 챗봇 자동 주입 + 활성화
   if (!document.getElementById('chatbot')) {
     const res = await fetch('components/chatbot.html' + bust, { cache: 'no-store' });
@@ -48,6 +72,107 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   wireChatbot();
 });
+
+/** Confirm 모달 — window.showConfirm({title, desc, variant, okText, cancelText}) Promise<boolean> */
+function wireConfirmModal() {
+  const backdrop = document.querySelector('.js-confirm-backdrop');
+  if (!backdrop) return;
+  const modal = backdrop.querySelector('.modal-confirm');
+  const titleEl = backdrop.querySelector('[data-confirm-title]');
+  const descEl = backdrop.querySelector('[data-confirm-desc]');
+  const okBtn = backdrop.querySelector('[data-confirm-ok]');
+  const cancelBtn = backdrop.querySelector('[data-confirm-cancel]');
+
+  let resolver = null;
+  function close(result) {
+    backdrop.hidden = true;
+    if (resolver) { resolver(result); resolver = null; }
+  }
+
+  window.showConfirm = function(opts = {}) {
+    // 이미 열려 있으면 중복 호출 차단 (이전 Promise overwrite 방지)
+    if (!backdrop.hidden) return Promise.resolve(false);
+    return new Promise(resolve => {
+      resolver = resolve;
+      titleEl.textContent = opts.title || '작업을 진행하시겠습니까?';
+      descEl.textContent = opts.desc || '';
+      okBtn.textContent = opts.okText || '확인';
+      cancelBtn.textContent = opts.cancelText || '취소';
+      modal.dataset.variant = opts.variant || 'warning';  // warning | danger | info | success
+      backdrop.hidden = false;
+      requestAnimationFrame(() => okBtn.focus());
+    });
+  };
+
+  okBtn.addEventListener('click', () => close(true));
+  cancelBtn.addEventListener('click', () => close(false));
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !backdrop.hidden) close(false);
+  });
+}
+
+/** Propose 모달 — 제안하기 버튼 클릭 시 열기 */
+function wireProposeModal() {
+  const backdrop = document.querySelector('.js-propose-backdrop');
+  if (!backdrop) return;
+
+  function open(recipient) {
+    if (recipient) {
+      const nameEl = backdrop.querySelector('[data-propose-recipient-name]');
+      const countryEl = backdrop.querySelector('[data-propose-recipient-country]');
+      const subEl = backdrop.querySelector('[data-propose-recipient-sub]');
+      if (nameEl && recipient.name) nameEl.textContent = recipient.name;
+      if (countryEl && recipient.country) countryEl.textContent = recipient.country;
+      if (subEl && recipient.sub) subEl.textContent = recipient.sub;
+    }
+    backdrop.hidden = false;
+    setTimeout(() => backdrop.querySelector('.modal-close')?.focus(), 50);
+  }
+  function close() { backdrop.hidden = true; }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.js-open-propose');
+    if (trigger) {
+      e.preventDefault();
+      const row = trigger.closest('tr');
+      const recipient = row ? {
+        name: row.dataset.name || row.querySelector('[data-name]')?.textContent?.trim(),
+        country: row.dataset.country || row.querySelector('.c-country-code')?.textContent?.trim(),
+        sub: row.dataset.sub,
+      } : null;
+      open(recipient);
+      return;
+    }
+    if (e.target.closest('.js-close-propose')) close();
+    if (e.target === backdrop) close();
+  });
+
+  // 체크박스 개수 실시간 카운트 + 버튼 활성화
+  backdrop.addEventListener('change', () => {
+    const checked = backdrop.querySelectorAll('.mp-camp-chk:checked').length;
+    const countEl = backdrop.querySelector('[data-propose-selected]');
+    const sendBtn = backdrop.querySelector('.js-send-propose');
+    if (countEl) countEl.textContent = checked;
+    if (sendBtn) sendBtn.disabled = checked === 0;
+  });
+  // 메시지 글자수
+  backdrop.addEventListener('input', (e) => {
+    if (e.target.matches('.mp-textarea')) {
+      const counter = backdrop.querySelector('[data-propose-count]');
+      if (counter) counter.textContent = e.target.value.length;
+    }
+  });
+  // 제안 보내기
+  backdrop.querySelector('.js-send-propose')?.addEventListener('click', () => {
+    close();
+    if (typeof window.showToast === 'function') window.showToast('success', '제안 전송 완료');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !backdrop.hidden) close();
+  });
+}
 
 /** Chatbot Widget — 상태 머신 + 마우스 추적 + 패널 */
 function wireChatbot() {
@@ -663,9 +788,16 @@ function wireToastAutoTriggers() {
     if (!btn) return;
     // 모달/드로어/필터 토글/복사버튼 등 기능성 버튼은 제외
     if (btn.closest('.modal, .drawer, .cmdk, .toast') ||
-        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
+        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-toast-save, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
     // href가 있는 a 태그면 네비게이션이므로 제외
     if (btn.tagName === 'A' && btn.getAttribute('href') && btn.getAttribute('href') !== '#') return;
+
+    // 저장 버튼 (influencer-search 저장하기) — 찜 목록 toast
+    if (btn.matches('.js-toast-save')) {
+      e.preventDefault();
+      showToast('success', '찜 목록에 저장되었습니다');
+      return;
+    }
 
     const text = (btn.textContent || '').replace(/\s+/g, ' ').trim();
     const map = {
@@ -682,22 +814,26 @@ function wireToastAutoTriggers() {
       '상세보기':     ['info',    '상세 정보',         '상세 페이지로 이동합니다'],
       '정보보기':     ['info',    '정보 조회'],
       '리뷰어선정':   ['warning', '리뷰어 선정',       '선정 화면으로 이동합니다'],
-      '리뷰어 선정':  ['warning', '리뷰어 선정',       '선정 화면으로 이동합니다'],
+      '리뷰어 선정':  ['confirm:warning', '인플루언서 선정 후에는 취소할 수 없습니다', '선정하시겠습니까?', 'success', '리뷰어 선정 완료'],
       '리뷰 감수':    ['info',    '리뷰 감수 페이지'],
       '초안수정요청': ['warning', '초안 수정 요청',    '요청 사유를 입력해 주세요'],
       '리뷰어 미선정':['warning', '리뷰어 미선정 처리'],
       '알림 발송':    ['success', '알림 발송 완료'],
       '일괄 채택':    ['success', '일괄 채택 완료'],
       '일괄 저장':    ['success', '일괄 저장 완료'],
-      '제안 보내기':  ['info',    '제안 전송 완료'],
-      '제안하기':     ['info',    '제안 전송 완료'],
-      '거절':         ['error',   '거절 처리됨'],
+      '거절':         ['confirm:danger', '정말 거절하시겠습니까?', '거절한 내역은 복구되지 않습니다', 'error', '거절 처리됨'],
       '채택':         ['success', '채택 완료'],
       '로그아웃':     ['info',    '로그아웃 처리', '세션이 종료됩니다']
     };
     const entry = map[text];
-    if (entry) {
-      e.preventDefault();
+    if (!entry) return;
+    e.preventDefault();
+    // confirm:variant 형식 → Confirm 모달 → OK 시 Toast
+    if (typeof entry[0] === 'string' && entry[0].startsWith('confirm:')) {
+      const variant = entry[0].split(':')[1];
+      window.showConfirm({ title: entry[1], desc: entry[2], variant })
+        .then(ok => { if (ok) showToast(entry[3] || 'success', entry[4] || '처리되었습니다', entry[5]); });
+    } else {
       showToast(entry[0], entry[1], entry[2]);
     }
   });

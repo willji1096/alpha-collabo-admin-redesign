@@ -3823,6 +3823,21 @@ body { background: var(--bg-page); }
   gap: var(--space-4);
   flex: 1;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.15) transparent;
+}
+.drawer-revision .drawer-body::-webkit-scrollbar {
+  width: 6px;
+}
+.drawer-revision .drawer-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.drawer-revision .drawer-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+.drawer-revision .drawer-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
 }
 
 /* Policy banner — 헤더 아래 full-width 회색 띠 */

@@ -582,7 +582,6 @@ function wireRevisionModal() {
       <div class="dv-msg-content">
         <div class="dv-msg-meta">
           <span class="dv-msg-author">milla_company</span>
-          <span class="dv-msg-role">클라이언트</span>
         </div>
         <div class="dv-msg-bubble"></div>
         <div class="dv-msg-time">${hhmm}</div>

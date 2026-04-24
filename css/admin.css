@@ -3823,40 +3823,30 @@ body { background: var(--bg-page); }
   overflow-y: auto;
 }
 
-/* Policy alert */
+/* Policy line — 미니멀 한 줄 */
 .dv-policy {
+  margin: 0;
+  padding: 8px 2px 14px;
+  border-bottom: 1px solid var(--border-light);
   display: flex;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  background: var(--status-info-bg);
-  border-left: 3px solid var(--status-info);
-  border-radius: var(--radius-md);
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  letter-spacing: 0;
 }
-.dv-policy-icon {
-  flex: 0 0 22px;
-  width: 22px;
-  height: 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--status-info);
-  color: #FFFFFF;
+.dv-policy-dot {
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  margin-top: 1px;
+  background: var(--accent);
+  margin-top: 7px;
 }
-.dv-policy-body { flex: 1; min-width: 0; }
-.dv-policy-title {
-  font-size: var(--fs-sm);
+.dv-policy strong {
   font-weight: var(--fw-semibold);
   color: var(--text-primary);
-  margin-bottom: 2px;
-}
-.dv-policy-title strong { color: var(--accent-emphasis); }
-.dv-policy-body p {
-  margin: 0;
-  font-size: var(--fs-xs);
-  line-height: 1.55;
-  color: var(--status-info-strong);
 }
 
 /* Thread — iMessage 톤: client 오른쪽 / staff 왼쪽 정렬 + 날짜 구분선 */

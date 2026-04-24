@@ -10,21 +10,6 @@
 <link rel="stylesheet" href="css/admin.css">
 <style>
   /* ===== 차감 현황 페이지 ===== */
-  .bh-account {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 18px;
-    font-weight: var(--fw-semibold);
-    color: var(--text-primary);
-  }
-  .bh-account-icon {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--bg-subtle);
-    color: var(--text-secondary);
-    display: inline-flex; align-items: center; justify-content: center;
-  }
 
   /* 우측 총합 바 */
   .bh-totals {
@@ -207,12 +192,12 @@
     border-radius: 999px;
     font-size: 11px;
     font-weight: var(--fw-medium);
-    background: #FEF2F2;
-    color: #B91C1C;
+    background: var(--status-error-bg);
+    color: var(--status-error-strong);
   }
   .bh-state.is-up {
-    background: #ECFDF5;
-    color: #047857;
+    background: var(--status-success-bg);
+    color: var(--status-success-strong);
   }
   .bh-method {
     display: inline-flex;
@@ -223,8 +208,8 @@
     color: var(--text-secondary);
   }
   .bh-method.is-manual {
-    background: #FEF3C7;
-    color: #92400E;
+    background: var(--status-warning-bg);
+    color: var(--status-warning-strong);
   }
 </style>
 </head>

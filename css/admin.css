@@ -2607,6 +2607,10 @@ body { background: var(--bg-page); }
   .tbl-wrap { overflow-x: auto; }
   .tbl { min-width: 720px; }
 
+  /* ===== 모바일 body 세로 스크롤바 숨김 — 에뮬레이션에서 배경과 대비로 쉐도우처럼 보이는 현상 제거 ===== */
+  body::-webkit-scrollbar { display: none; }
+  body { scrollbar-width: none; }
+
   /* ===== Header tabs — 모바일에서 헤더 아래로 2단 분리 ===== */
   .header-tabs {
     position: absolute;

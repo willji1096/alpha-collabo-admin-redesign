@@ -97,6 +97,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   wireReviewModal();
 
+  // Revision Drawer 자동 주입 (backdrop + drawer 2개 요소)
+  if (!document.querySelector('.js-revision-backdrop')) {
+    const res = await fetch('components/modal-revision.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      Array.from(wrap.children).forEach(el => document.body.appendChild(el));
+    }
+  }
+  wireRevisionModal();
+
   // 챗봇 자동 주입 + 활성화
   if (!document.getElementById('chatbot')) {
     const res = await fetch('components/chatbot.html' + bust, { cache: 'no-store' });
@@ -492,6 +503,109 @@ function wireReviewModal() {
   });
 
   window.showReview = (opts = {}) => open(opts);
+}
+
+/** Revision Drawer — 초안 수정 요청 (클라이언트 ↔ 스태프 메시지). .js-open-revision 자동 연결 */
+function wireRevisionModal() {
+  const backdrop = document.querySelector('.js-revision-backdrop');
+  const drawer = document.querySelector('.js-revision-drawer');
+  if (!backdrop || !drawer) return;
+
+  const slots = {
+    campaign: drawer.querySelector('[data-revision-campaign]'),
+    recipient: drawer.querySelector('[data-revision-recipient]'),
+    country: drawer.querySelector('[data-revision-country]'),
+    thread: drawer.querySelector('[data-revision-thread]'),
+    input: drawer.querySelector('.dv-input'),
+  };
+
+  function open(data) {
+    if (data) {
+      if (slots.campaign && data.campaign) slots.campaign.textContent = data.campaign;
+      if (slots.recipient && data.recipient) slots.recipient.textContent = data.recipient;
+      if (slots.country && data.country) slots.country.textContent = data.country;
+    }
+    if (slots.input) slots.input.value = '';
+    backdrop.hidden = false;
+    drawer.hidden = false;
+    // 다음 프레임에 open 클래스 부여해서 슬라이드 애니메이션 작동
+    requestAnimationFrame(() => {
+      backdrop.classList.add('open');
+      drawer.classList.add('open');
+    });
+    setTimeout(() => {
+      if (slots.thread) slots.thread.scrollTop = slots.thread.scrollHeight;
+      slots.input?.focus();
+    }, 250);
+  }
+  function close() {
+    backdrop.classList.remove('open');
+    drawer.classList.remove('open');
+    setTimeout(() => {
+      backdrop.hidden = true;
+      drawer.hidden = true;
+    }, 220);
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.js-open-revision');
+    if (trigger) {
+      e.preventDefault();
+      const row = trigger.closest('tr');
+      const data = row ? {
+        campaign: row.querySelector('.c-camp-name')?.textContent?.trim(),
+        recipient: row.dataset.name || row.cells?.[4]?.textContent?.trim(),
+        country: row.dataset.country || row.querySelector('.c-country-code')?.textContent?.trim(),
+      } : null;
+      open(data);
+      return;
+    }
+    if (e.target.closest('.js-close-revision')) close();
+    if (e.target === backdrop) close();
+  });
+
+  // 보내기 — 스레드에 클라이언트 메시지 append + 입력창 초기화 + 토스트
+  drawer.querySelector('.js-send-revision')?.addEventListener('click', () => {
+    const text = slots.input?.value?.trim();
+    if (!text) {
+      if (typeof window.showToast === 'function') window.showToast('warning', '메시지를 입력해주세요');
+      slots.input?.focus();
+      return;
+    }
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const msg = document.createElement('div');
+    msg.className = 'dv-msg dv-msg--client';
+    msg.innerHTML = `
+      <span class="dv-msg-avatar" aria-hidden="true">M</span>
+      <div class="dv-msg-content">
+        <div class="dv-msg-head">
+          <span class="dv-msg-author">milla_company</span>
+          <span class="dv-msg-role">클라이언트</span>
+          <span class="dv-msg-time">${ts}</span>
+        </div>
+        <div class="dv-msg-bubble"></div>
+      </div>`;
+    msg.querySelector('.dv-msg-bubble').textContent = text;
+    slots.thread?.appendChild(msg);
+    slots.thread.scrollTop = slots.thread.scrollHeight;
+    slots.input.value = '';
+    if (typeof window.showToast === 'function') window.showToast('success', '수정 요청이 전달되었습니다');
+  });
+
+  slots.input?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      drawer.querySelector('.js-send-revision')?.click();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) close();
+  });
+
+  window.showRevision = (opts = {}) => open(opts);
 }
 
 /** Chatbot Widget — 상태 머신 + 마우스 추적 + 패널 */
@@ -1135,7 +1249,7 @@ function wireToastAutoTriggers() {
     if (!btn) return;
     // 모달/드로어/필터 토글/복사버튼 등 기능성 버튼은 제외
     if (btn.closest('.modal, .drawer, .cmdk, .toast') ||
-        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-open-shipping, .js-close-shipping, .js-save-shipping, .js-open-address, .js-close-address, .js-save-address-memo, .js-open-review, .js-close-review, .js-review-confirm, .js-review-ack, .js-open-lightbox, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
+        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-open-shipping, .js-close-shipping, .js-save-shipping, .js-open-address, .js-close-address, .js-save-address-memo, .js-open-review, .js-close-review, .js-review-confirm, .js-review-ack, .js-open-lightbox, .js-open-revision, .js-close-revision, .js-send-revision, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
     // href가 있는 a 태그면 네비게이션이므로 제외
     if (btn.tagName === 'A' && btn.getAttribute('href') && btn.getAttribute('href') !== '#') return;
 
@@ -1162,7 +1276,6 @@ function wireToastAutoTriggers() {
       '정보보기':     ['info',    '정보 조회'],
       '리뷰어선정':   ['confirm:warning', '인플루언서를 선정하시겠습니까?', '선정 후에는 취소할 수 없어요.', 'success', '리뷰어 선정 완료'],
       '리뷰어 선정':  ['confirm:warning', '인플루언서를 선정하시겠습니까?', '선정 후에는 취소할 수 없어요.', 'success', '리뷰어 선정 완료'],
-      '초안수정요청': ['confirm:warning', '초안 수정을 요청하시겠습니까?', '인플루언서에게 수정 사유를 전달합니다', 'warning', '초안 수정 요청됨'],
       '인플루언서미방문': ['confirm:danger', '미방문 처리하시겠습니까?', '차감금은 복구됩니다', 'error', '미방문 처리됨'],
       '리뷰어 미선정':['warning', '리뷰어 미선정 처리'],
       '알림 발송':    ['success', '알림 발송 완료'],

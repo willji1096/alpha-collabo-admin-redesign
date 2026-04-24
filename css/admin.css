@@ -2623,12 +2623,17 @@ body { background: var(--bg-page); }
     min-width: 100%;
     max-width: 100%;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    opacity: 0;
     transform: translateY(100%);
-    transition: transform var(--transition-fast);
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
     z-index: var(--z-modal);
     border-bottom: none;
+    will-change: transform;
   }
-  .h-popover.open { transform: translateY(0); }
+  .h-popover.open {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .h-popover-body { max-height: 60vh; }
 
   /* ===== Balance drawer → 모바일 bottom-sheet ===== */
@@ -2643,6 +2648,8 @@ body { background: var(--bg-page); }
     left: 0;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     transform: translateY(100%);
+    transition: transform var(--transition-fast);
+    will-change: transform;
   }
   .drawer.drawer-balance.open { transform: translateY(0); }
   .drawer-balance .db-footer-link { min-height: 44px; }

@@ -538,10 +538,27 @@ body { background: var(--bg-page); }
 
 /* 잔액 표시 */
 .h-balance {
+  display: inline-flex;
+  align-items: center;
   font-size: 13px;
   color: var(--text-secondary);
-  padding: 0 4px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
   white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+.h-balance:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+.h-btn.ghost {
+  border-color: transparent;
+  color: var(--text-secondary);
+}
+.h-btn.ghost:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
 }
 
 /* 헤더 팝오버 공용 (알림 / 유저 메뉴 등) */

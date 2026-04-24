@@ -10,13 +10,13 @@
     </button>
   </div>
 
-  <div class="modal-body">
+  <div class="tabs mm-tabs" role="tablist" aria-label="메시지 모드">
+    <button class="tab is-active" role="tab" data-msg="compose" aria-selected="true">메시지 작성</button>
+    <button class="tab" role="tab" data-msg="inbox" aria-selected="false">받은 메시지 <span class="tab-count" data-message-inbox-count>2</span></button>
+    <button class="tab" role="tab" data-msg="sent" aria-selected="false">보낸 메시지 <span class="tab-count" data-message-sent-count>2</span></button>
+  </div>
 
-    <div class="tabs mm-tabs" role="tablist" aria-label="메시지 모드">
-      <button class="tab is-active" role="tab" data-msg="compose" aria-selected="true">메시지 작성</button>
-      <button class="tab" role="tab" data-msg="inbox" aria-selected="false">받은 메시지 <span class="tab-count" data-message-inbox-count>2</span></button>
-      <button class="tab" role="tab" data-msg="sent" aria-selected="false">보낸 메시지 <span class="tab-count" data-message-sent-count>2</span></button>
-    </div>
+  <div class="modal-body">
 
     <!-- 메시지 작성 -->
     <div data-msg-panel="compose">

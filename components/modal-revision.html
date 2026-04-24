@@ -1,4 +1,4 @@
-<!-- Revision Drawer — 초안 수정 요청 (클라이언트 ↔ 알파콜라보 스태프 스레드) -->
+<!-- Revision Drawer — 초안 수정 요청 (클라이언트 ↔ 알파콜라보 스태프) -->
 <div class="drawer-backdrop js-revision-backdrop" hidden></div>
 <aside class="drawer drawer-revision js-revision-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-revision-title" hidden>
 
@@ -34,59 +34,65 @@
 
     <!-- Message thread -->
     <div class="dv-thread" role="log" aria-live="polite" data-revision-thread>
+
+      <div class="dv-date-sep"><span>2026년 4월 10일 (금)</span></div>
+
       <div class="dv-msg dv-msg--client">
-        <span class="dv-msg-avatar" aria-hidden="true">M</span>
         <div class="dv-msg-content">
-          <div class="dv-msg-head">
+          <div class="dv-msg-meta">
             <span class="dv-msg-author">milla_company</span>
             <span class="dv-msg-role">클라이언트</span>
-            <span class="dv-msg-time">2026-04-10 14:30</span>
           </div>
           <div class="dv-msg-bubble">제품 설명 부분이 캠페인 가이드보다 짧습니다. 성분·효능 관련 1-2문장 추가 부탁드립니다.</div>
+          <div class="dv-msg-time">14:30</div>
         </div>
+        <span class="dv-msg-avatar" aria-hidden="true">M</span>
       </div>
 
       <div class="dv-msg dv-msg--staff">
         <span class="dv-msg-avatar" aria-hidden="true">김</span>
         <div class="dv-msg-content">
-          <div class="dv-msg-head">
+          <div class="dv-msg-meta">
             <span class="dv-msg-author">김지은</span>
             <span class="dv-msg-role dv-msg-role--staff">알파콜라보</span>
-            <span class="dv-msg-time">2026-04-10 15:12</span>
           </div>
           <div class="dv-msg-bubble">요청 확인했습니다. 인플루언서에게 전달드렸으며 반영 후 회신 드리겠습니다.</div>
+          <div class="dv-msg-time">15:12</div>
         </div>
       </div>
+
+      <div class="dv-date-sep"><span>2026년 4월 11일 (토)</span></div>
 
       <div class="dv-msg dv-msg--staff">
         <span class="dv-msg-avatar" aria-hidden="true">김</span>
         <div class="dv-msg-content">
-          <div class="dv-msg-head">
+          <div class="dv-msg-meta">
             <span class="dv-msg-author">김지은</span>
             <span class="dv-msg-role dv-msg-role--staff">알파콜라보</span>
-            <span class="dv-msg-time">2026-04-11 10:20</span>
           </div>
           <div class="dv-msg-bubble">인플루언서에게 수정 요청 보냈습니다. 48시간 이내 반영 예정입니다.</div>
+          <div class="dv-msg-time">10:20</div>
         </div>
       </div>
 
       <div class="dv-msg dv-msg--client">
-        <span class="dv-msg-avatar" aria-hidden="true">M</span>
         <div class="dv-msg-content">
-          <div class="dv-msg-head">
+          <div class="dv-msg-meta">
             <span class="dv-msg-author">milla_company</span>
             <span class="dv-msg-role">클라이언트</span>
-            <span class="dv-msg-time">2026-04-11 16:05</span>
           </div>
           <div class="dv-msg-bubble">확인했습니다. 반영 완료되면 알림 부탁드립니다.</div>
+          <div class="dv-msg-time">16:05</div>
         </div>
+        <span class="dv-msg-avatar" aria-hidden="true">M</span>
       </div>
+
     </div>
 
   </div>
 
   <div class="drawer-footer dv-footer">
-    <textarea class="dv-input" placeholder="메시지를 입력하세요 (Enter: 전송 / Shift+Enter: 줄바꿈)" rows="2"></textarea>
+    <textarea class="dv-input" placeholder="메시지를 입력하세요  ·  Enter 전송 / Shift+Enter 줄바꿈" rows="2"></textarea>
     <button type="button" class="btn btn-primary btn-md js-send-revision">보내기</button>
   </div>
 

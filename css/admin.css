@@ -1428,8 +1428,7 @@ body { background: var(--bg-page); }
 /* drawer-wide의 960px를 override — 이 드로어는 580px면 충분 */
 .drawer.drawer-influencer { width: 580px; max-width: calc(100vw - 48px); }
 
-/* 행 전체를 클릭 가능하게 — 드로어 트리거 버튼이 있는 행만 */
-.tbl tbody tr:has(.js-open-influencer) { cursor: pointer; }
+/* (행 빈 공간 클릭 트리거는 UX 혼란 이유로 제거됨 — 명시적 버튼 클릭만 허용) */
 .drawer-influencer .drawer-header { padding: var(--space-4) var(--space-6); }
 .drawer-influencer .drawer-body { padding: var(--space-5) var(--space-6); }
 .drawer-influencer .drawer-footer { padding: var(--space-3) var(--space-6); gap: var(--space-2); }
@@ -2681,7 +2680,7 @@ body { background: var(--bg-page); }
    Chatbot Widget — 우하단 고정 AI 봇 + 챗 패널
    통합 컨셉: 토끼 귀 + 둥근 사각형 얼굴 + 안테나 + 알파콜라보 레드
    ============================================================ */
-.chatbot { position: fixed; right: 24px; bottom: 24px; z-index: var(--z-toast); font-family: inherit; }
+.chatbot { position: fixed; right: 24px; bottom: 24px; z-index: calc(var(--z-drawer) - 10); font-family: inherit; }
 .chatbot-bubble {
   position: relative; width: 64px; height: 64px; padding: 0;
   background: transparent; border: 0; cursor: pointer;
@@ -3860,99 +3859,144 @@ body { background: var(--bg-page); }
   color: var(--status-info-strong);
 }
 
-/* Thread — 말풍선 + avatar */
+/* Thread — iMessage 톤: client 오른쪽 / staff 왼쪽 정렬 + 날짜 구분선 */
 .dv-thread {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 14px;
   flex: 1;
 }
+
+/* 날짜 구분선 */
+.dv-date-sep {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px 0 2px;
+}
+.dv-date-sep::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--border-light);
+}
+.dv-date-sep > span {
+  position: relative;
+  padding: 2px 10px;
+  background: var(--bg-surface);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  letter-spacing: 0.01em;
+}
+
+/* Message row */
 .dv-msg {
   display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
+  gap: 8px;
+  align-items: flex-end;
+  max-width: 100%;
 }
+.dv-msg--client { flex-direction: row-reverse; }
+
 .dv-msg-avatar {
-  flex: 0 0 32px;
-  width: 32px;
-  height: 32px;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: var(--fw-semibold);
   color: #FFFFFF;
   letter-spacing: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  margin-bottom: 18px; /* bubble 아래 time 만큼 올리기 */
 }
 .dv-msg--client .dv-msg-avatar {
   background: linear-gradient(135deg, #F26A73 0%, #EE2128 100%);
 }
 .dv-msg--staff .dv-msg-avatar {
-  background: linear-gradient(135deg, #475569 0%, #1E293B 100%);
+  background: linear-gradient(135deg, #64748B 0%, #334155 100%);
 }
+
 .dv-msg-content {
-  flex: 1;
-  min-width: 0;
+  max-width: 78%;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
-.dv-msg-head {
+.dv-msg--client .dv-msg-content { align-items: flex-end; }
+.dv-msg--staff .dv-msg-content  { align-items: flex-start; }
+
+.dv-msg-meta {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 6px;
+  padding: 0 2px;
   flex-wrap: wrap;
 }
+.dv-msg--client .dv-msg-meta { flex-direction: row-reverse; }
+
 .dv-msg-author {
-  font-size: var(--fs-sm);
+  font-size: 12px;
   font-weight: var(--fw-semibold);
-  color: var(--text-primary);
+  color: var(--text-secondary);
+  letter-spacing: 0;
 }
 .dv-msg-role {
   display: inline-flex;
   align-items: center;
-  padding: 1px 6px;
+  padding: 1px 7px;
   font-size: 10px;
   font-weight: var(--fw-medium);
+  border-radius: 999px;
   background: #FFE4E6;
   color: var(--accent-emphasis);
-  border-radius: 4px;
   letter-spacing: 0;
 }
 .dv-msg-role--staff {
   background: #E2E8F0;
   color: #475569;
 }
-.dv-msg-time {
-  font-size: var(--fs-xs);
-  color: var(--text-tertiary);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  margin-left: auto;
-}
+
 .dv-msg-bubble {
   display: inline-block;
-  padding: 10px var(--space-3);
-  font-size: var(--fs-sm);
+  padding: 10px 14px;
+  font-size: 14px;
   line-height: 1.55;
   color: var(--text-primary);
-  border-radius: 14px;
-  border-top-left-radius: 4px;
   white-space: pre-wrap;
   word-break: break-word;
   max-width: 100%;
   box-sizing: border-box;
 }
 .dv-msg--client .dv-msg-bubble {
-  background: #FFF1F2;
-  border: 1px solid #FFDADD;
+  background: linear-gradient(140deg, #FFF1F3 0%, #FFE1E5 100%);
+  border: 1px solid #FFD3D7;
+  color: #7A1216;
+  border-radius: 16px 16px 4px 16px;
+  box-shadow: 0 1px 2px rgba(238, 33, 40, 0.06);
 }
 .dv-msg--staff .dv-msg-bubble {
   background: #FFFFFF;
   border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  border-radius: 16px 16px 16px 4px;
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.dv-msg-time {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  padding: 0 2px;
+  letter-spacing: 0;
 }
 
 /* Footer input */

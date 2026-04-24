@@ -575,18 +575,19 @@ function wireRevisionModal() {
     const now = new Date();
     const pad = (n) => String(n).padStart(2, '0');
     const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const hhmm = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
     const msg = document.createElement('div');
     msg.className = 'dv-msg dv-msg--client';
     msg.innerHTML = `
-      <span class="dv-msg-avatar" aria-hidden="true">M</span>
       <div class="dv-msg-content">
-        <div class="dv-msg-head">
+        <div class="dv-msg-meta">
           <span class="dv-msg-author">milla_company</span>
           <span class="dv-msg-role">클라이언트</span>
-          <span class="dv-msg-time">${ts}</span>
         </div>
         <div class="dv-msg-bubble"></div>
-      </div>`;
+        <div class="dv-msg-time">${hhmm}</div>
+      </div>
+      <span class="dv-msg-avatar" aria-hidden="true">M</span>`;
     msg.querySelector('.dv-msg-bubble').textContent = text;
     slots.thread?.appendChild(msg);
     slots.thread.scrollTop = slots.thread.scrollHeight;
@@ -1107,22 +1108,11 @@ async function wireInfluencerDrawer() {
     document.body.style.overflow = '';
   }
 
-  // 트리거 버튼 클릭 시 드로어 오픈
+  // 트리거 버튼 클릭 시만 드로어 오픈 (행 빈 공간 클릭은 무시)
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.js-open-influencer');
     if (!trigger) return;
     e.preventDefault();
-    open(trigger);
-  });
-
-  // 행 어디를 눌러도 드로어 열기 (단, interactive element 클릭은 각자 처리)
-  document.addEventListener('click', (e) => {
-    // 이미 직접 트리거 버튼 클릭했거나 interactive 요소인 경우 skip
-    if (e.target.closest('button, a, input, label, select, textarea')) return;
-    const row = e.target.closest('tbody tr');
-    if (!row) return;
-    const trigger = row.querySelector('.js-open-influencer');
-    if (!trigger) return;
     open(trigger);
   });
 }

@@ -61,6 +61,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   wireProposeModal();
 
+  // Shipping 모달 자동 주입
+  if (!document.querySelector('.js-shipping-backdrop')) {
+    const res = await fetch('components/modal-shipping.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      const el = wrap.firstElementChild;
+      if (el) document.body.appendChild(el);
+    }
+  }
+  wireShippingModal();
+
+  // Address 모달 자동 주입
+  if (!document.querySelector('.js-address-backdrop')) {
+    const res = await fetch('components/modal-address.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      const el = wrap.firstElementChild;
+      if (el) document.body.appendChild(el);
+    }
+  }
+  wireAddressModal();
+
+  // Review 모달 자동 주입
+  if (!document.querySelector('.js-review-backdrop')) {
+    const res = await fetch('components/modal-review.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      const el = wrap.firstElementChild;
+      if (el) document.body.appendChild(el);
+    }
+  }
+  wireReviewModal();
+
   // 챗봇 자동 주입 + 활성화
   if (!document.getElementById('chatbot')) {
     const res = await fetch('components/chatbot.html' + bust, { cache: 'no-store' });
@@ -202,6 +238,260 @@ function wireProposeModal() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !backdrop.hidden) close();
   });
+}
+
+/** Shipping Modal — 배송정보 입력. 버튼 .js-open-shipping 자동 연결 + window.showShipping(opts) */
+function wireShippingModal() {
+  const backdrop = document.querySelector('.js-shipping-backdrop');
+  if (!backdrop) return;
+
+  const form = {
+    carrier: backdrop.querySelector('#ms-carrier'),
+    carrierOther: backdrop.querySelector('#ms-carrier-other'),
+    carrierOtherField: backdrop.querySelector('.ms-field-other'),
+    tracking: backdrop.querySelector('#ms-tracking'),
+    nameEl: backdrop.querySelector('[data-shipping-recipient-name]'),
+    countryEl: backdrop.querySelector('[data-shipping-recipient-country]'),
+    subEl: backdrop.querySelector('[data-shipping-recipient-sub]'),
+    titleEl: backdrop.querySelector('#modal-shipping-title'),
+    saveBtn: backdrop.querySelector('.js-save-shipping'),
+  };
+
+  function resetForm() {
+    if (form.carrier) form.carrier.selectedIndex = 0;
+    if (form.carrierOther) form.carrierOther.value = '';
+    if (form.carrierOtherField) form.carrierOtherField.hidden = true;
+    if (form.tracking) form.tracking.value = '';
+  }
+
+  function open(recipient, prefill) {
+    resetForm();
+    if (recipient) {
+      if (form.nameEl && recipient.name) form.nameEl.textContent = recipient.name;
+      if (form.countryEl && recipient.country) form.countryEl.textContent = recipient.country;
+      if (form.subEl && recipient.sub) form.subEl.textContent = recipient.sub;
+    }
+    const isEdit = !!(prefill && (prefill.carrier || prefill.tracking));
+    if (isEdit) {
+      if (prefill.carrier && form.carrier) {
+        const hasOption = Array.from(form.carrier.options).some(o => o.value === prefill.carrier);
+        form.carrier.value = hasOption ? prefill.carrier : 'other';
+        if (form.carrier.value === 'other' && form.carrierOtherField) {
+          form.carrierOtherField.hidden = false;
+          if (form.carrierOther && prefill.carrierOther) form.carrierOther.value = prefill.carrierOther;
+        }
+      }
+      if (prefill.tracking && form.tracking) form.tracking.value = prefill.tracking;
+    }
+    if (form.titleEl) form.titleEl.textContent = isEdit ? '배송정보 수정' : '배송정보 입력';
+    if (form.saveBtn) form.saveBtn.textContent = isEdit ? '수정 저장' : '저장';
+    backdrop.hidden = false;
+    setTimeout(() => form.carrier?.focus(), 50);
+  }
+  function close() { backdrop.hidden = true; }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.js-open-shipping');
+    if (trigger) {
+      e.preventDefault();
+      const row = trigger.closest('tr');
+      const recipient = row ? {
+        name: row.dataset.name,
+        country: row.dataset.country,
+        sub: row.dataset.sub,
+      } : null;
+      const prefill = (trigger.dataset.prefillCarrier || trigger.dataset.prefillTracking) ? {
+        carrier: trigger.dataset.prefillCarrier,
+        carrierOther: trigger.dataset.prefillCarrierOther,
+        tracking: trigger.dataset.prefillTracking,
+      } : null;
+      open(recipient, prefill);
+      return;
+    }
+    if (e.target.closest('.js-close-shipping')) close();
+    if (e.target === backdrop) close();
+  });
+
+  // 택배사 "기타" 선택 시 직접입력 필드 표시
+  form.carrier?.addEventListener('change', () => {
+    if (!form.carrierOtherField) return;
+    const isOther = form.carrier.value === 'other';
+    form.carrierOtherField.hidden = !isOther;
+    if (isOther) setTimeout(() => form.carrierOther?.focus(), 30);
+  });
+
+  // 저장
+  backdrop.querySelector('.js-save-shipping')?.addEventListener('click', () => {
+    const carrierVal = form.carrier?.value;
+    const trackingVal = form.tracking?.value?.trim();
+    const otherVal = form.carrierOther?.value?.trim();
+
+    if (!carrierVal) {
+      if (typeof window.showToast === 'function') window.showToast('warning', '택배사를 선택해주세요');
+      form.carrier?.focus();
+      return;
+    }
+    if (carrierVal === 'other' && !otherVal) {
+      if (typeof window.showToast === 'function') window.showToast('warning', '택배사명을 입력해주세요');
+      form.carrierOther?.focus();
+      return;
+    }
+    if (!trackingVal) {
+      if (typeof window.showToast === 'function') window.showToast('warning', '송장번호를 입력해주세요');
+      form.tracking?.focus();
+      return;
+    }
+
+    close();
+    if (typeof window.showToast === 'function') window.showToast('success', '배송정보 저장 완료');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !backdrop.hidden) close();
+  });
+
+  // 외부 API
+  window.showShipping = (opts = {}) => open(opts);
+}
+
+/** Address Modal — 배송지 정보 조회 + 메모. .js-open-address 버튼 자동 연결 */
+function wireAddressModal() {
+  const backdrop = document.querySelector('.js-address-backdrop');
+  if (!backdrop) return;
+
+  const slots = {
+    name: backdrop.querySelector('[data-address-recipient-name]'),
+    country: backdrop.querySelector('[data-address-recipient-country]'),
+    sub: backdrop.querySelector('[data-address-recipient-sub]'),
+    addrName: backdrop.querySelector('[data-address-name]'),
+    addrPhone: backdrop.querySelector('[data-address-phone]'),
+    addrEmail: backdrop.querySelector('[data-address-email]'),
+    addrZip: backdrop.querySelector('[data-address-zip]'),
+    addrAddr: backdrop.querySelector('[data-address-addr]'),
+    memo: backdrop.querySelector('#ma-memo-input'),
+  };
+
+  function open(data) {
+    if (data) {
+      if (slots.name && data.name) slots.name.textContent = data.name;
+      if (slots.country && data.country) slots.country.textContent = data.country;
+      if (slots.sub && data.sub) slots.sub.textContent = data.sub;
+      if (slots.addrName && data.recipientName) slots.addrName.textContent = data.recipientName;
+      if (slots.addrPhone && data.phone) slots.addrPhone.textContent = data.phone;
+      if (slots.addrEmail && data.email) slots.addrEmail.textContent = data.email;
+      if (slots.addrZip && data.zip) slots.addrZip.textContent = data.zip;
+      if (slots.addrAddr && data.addr) slots.addrAddr.textContent = data.addr;
+    }
+    backdrop.hidden = false;
+    setTimeout(() => backdrop.querySelector('.modal-close')?.focus(), 50);
+  }
+  function close() { backdrop.hidden = true; }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.js-open-address');
+    if (trigger) {
+      e.preventDefault();
+      const row = trigger.closest('tr');
+      const data = row ? {
+        name: row.dataset.name,
+        country: row.dataset.country,
+        sub: row.dataset.sub,
+      } : null;
+      open(data);
+      return;
+    }
+    if (e.target.closest('.js-close-address')) close();
+    if (e.target === backdrop) close();
+  });
+
+  backdrop.querySelector('.js-save-address-memo')?.addEventListener('click', () => {
+    close();
+    if (typeof window.showToast === 'function') window.showToast('success', '배송 메모 저장됨');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !backdrop.hidden) close();
+  });
+
+  window.showAddress = (opts = {}) => open(opts);
+}
+
+/** Review Modal — 리뷰 검수. .js-open-review 버튼 자동 연결 */
+function wireReviewModal() {
+  const backdrop = document.querySelector('.js-review-backdrop');
+  if (!backdrop) return;
+
+  const slots = {
+    campaign: backdrop.querySelector('[data-review-campaign]'),
+    recipient: backdrop.querySelector('[data-review-recipient]'),
+    country: backdrop.querySelector('[data-review-country]'),
+    date: backdrop.querySelector('[data-review-date]'),
+    ack: backdrop.querySelector('.js-review-ack'),
+    confirmBtn: backdrop.querySelector('.js-review-confirm'),
+  };
+
+  function resetForm() {
+    if (slots.ack) slots.ack.checked = false;
+    if (slots.confirmBtn) slots.confirmBtn.disabled = true;
+  }
+
+  function open(data) {
+    resetForm();
+    if (data) {
+      if (slots.campaign && data.campaign) slots.campaign.textContent = data.campaign;
+      if (slots.recipient && data.recipient) slots.recipient.textContent = data.recipient;
+      if (slots.country && data.country) slots.country.textContent = data.country;
+      if (slots.date && data.date) slots.date.textContent = data.date;
+    }
+    backdrop.hidden = false;
+    setTimeout(() => backdrop.querySelector('.modal-close')?.focus(), 50);
+  }
+  function close() { backdrop.hidden = true; }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.js-open-review');
+    if (trigger) {
+      e.preventDefault();
+      const row = trigger.closest('tr');
+      let campaign, recipient, country, date;
+      if (row) {
+        campaign = row.dataset.campaign || row.querySelector('.c-camp-name')?.textContent?.trim();
+        recipient = row.dataset.recipient || row.dataset.name;
+        country = row.dataset.country || row.querySelector('.c-country-code')?.textContent?.trim();
+        date = row.dataset.date;
+      }
+      open({ campaign, recipient, country, date });
+      return;
+    }
+    if (e.target.closest('.js-close-review')) close();
+    if (e.target === backdrop) close();
+  });
+
+  // 체크박스 → 버튼 활성
+  slots.ack?.addEventListener('change', () => {
+    if (slots.confirmBtn) slots.confirmBtn.disabled = !slots.ack.checked;
+  });
+
+  // 컨펌 완료 → 확인 다이얼로그 → 성공 토스트
+  slots.confirmBtn?.addEventListener('click', async () => {
+    if (!slots.ack?.checked) return;
+    const ok = typeof window.showConfirm === 'function'
+      ? await window.showConfirm({
+          title: '컨펌 완료 처리하시겠습니까?',
+          desc: '처리 후에는 재수정이 불가능합니다.',
+          variant: 'warning',
+        })
+      : true;
+    if (!ok) return;
+    close();
+    if (typeof window.showToast === 'function') window.showToast('success', '리뷰 컨펌 완료');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !backdrop.hidden) close();
+  });
+
+  window.showReview = (opts = {}) => open(opts);
 }
 
 /** Chatbot Widget — 상태 머신 + 마우스 추적 + 패널 */
@@ -845,7 +1135,7 @@ function wireToastAutoTriggers() {
     if (!btn) return;
     // 모달/드로어/필터 토글/복사버튼 등 기능성 버튼은 제외
     if (btn.closest('.modal, .drawer, .cmdk, .toast') ||
-        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
+        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-open-shipping, .js-close-shipping, .js-save-shipping, .js-open-address, .js-close-address, .js-save-address-memo, .js-open-review, .js-close-review, .js-review-confirm, .js-review-ack, .js-open-lightbox, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
     // href가 있는 a 태그면 네비게이션이므로 제외
     if (btn.tagName === 'A' && btn.getAttribute('href') && btn.getAttribute('href') !== '#') return;
 
@@ -870,10 +1160,10 @@ function wireToastAutoTriggers() {
       '새 캠페인':    ['info',    '새 캠페인 등록'],
       '상세보기':     ['info',    '상세 정보',         '상세 페이지로 이동합니다'],
       '정보보기':     ['info',    '정보 조회'],
-      '리뷰어선정':   ['warning', '리뷰어 선정',       '선정 화면으로 이동합니다'],
-      '리뷰어 선정':  ['confirm:warning', '인플루언서 선정 후에는 취소할 수 없습니다', '선정하시겠습니까?', 'success', '리뷰어 선정 완료'],
-      '리뷰 감수':    ['info',    '리뷰 감수 페이지'],
-      '초안수정요청': ['warning', '초안 수정 요청',    '요청 사유를 입력해 주세요'],
+      '리뷰어선정':   ['confirm:warning', '인플루언서를 선정하시겠습니까?', '선정 후에는 취소할 수 없어요.', 'success', '리뷰어 선정 완료'],
+      '리뷰어 선정':  ['confirm:warning', '인플루언서를 선정하시겠습니까?', '선정 후에는 취소할 수 없어요.', 'success', '리뷰어 선정 완료'],
+      '초안수정요청': ['confirm:warning', '초안 수정을 요청하시겠습니까?', '인플루언서에게 수정 사유를 전달합니다', 'warning', '초안 수정 요청됨'],
+      '인플루언서미방문': ['confirm:danger', '미방문 처리하시겠습니까?', '차감금은 복구됩니다', 'error', '미방문 처리됨'],
       '리뷰어 미선정':['warning', '리뷰어 미선정 처리'],
       '알림 발송':    ['success', '알림 발송 완료'],
       '일괄 채택':    ['success', '일괄 채택 완료'],

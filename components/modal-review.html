@@ -1,0 +1,125 @@
+<!-- Review Modal — 리뷰 검수. .js-open-review 버튼 자동 연결 -->
+<div class="modal-backdrop js-review-backdrop" hidden>
+<div class="modal modal-review" role="dialog" aria-modal="true" aria-labelledby="modal-review-title">
+
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-review-title">리뷰 검수</h2>
+    <button class="modal-close js-close-review" aria-label="닫기" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6L18 18M18 6L6 18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <!-- Context summary -->
+    <dl class="mr-summary">
+      <div class="mr-summary-row">
+        <dt class="mr-summary-key">캠페인</dt>
+        <dd class="mr-summary-val" data-review-campaign>인기게시물 진행 테스트</dd>
+      </div>
+      <div class="mr-summary-row">
+        <dt class="mr-summary-key">인플루언서</dt>
+        <dd class="mr-summary-val">
+          <span data-review-recipient>mika_seoul</span>
+          <span class="c-country-code" data-review-country>CN</span>
+        </dd>
+      </div>
+      <div class="mr-summary-row">
+        <dt class="mr-summary-key">제출일</dt>
+        <dd class="mr-summary-val is-mono" data-review-date>2026-04-10</dd>
+      </div>
+      <div class="mr-summary-row">
+        <dt class="mr-summary-key">리뷰 URL</dt>
+        <dd class="mr-summary-val">
+          <a class="mr-summary-link" href="https://instagram.com/p/CxA7p9qN" target="_blank" rel="noopener" data-review-url>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>instagram.com/p/CxA7p9qN</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <!-- Review files grid -->
+    <div class="mr-section">
+      <div class="mr-section-head">
+        <h3 class="mr-section-title">리뷰 파일</h3>
+        <span class="mr-section-hint"><span data-review-count>4</span>건 · 썸네일 클릭 시 확대</span>
+      </div>
+      <ul class="mr-files" data-review-files>
+        <li class="mr-file">
+          <a class="mr-file-thumb js-open-lightbox" href="https://picsum.photos/seed/mika-review-1/1200" target="_blank" rel="noopener">
+            <img src="https://picsum.photos/seed/mika-review-1/240" alt="리뷰 이미지 1" loading="lazy">
+          </a>
+          <div class="mr-file-meta">
+            <div class="mr-file-name">리뷰 이미지 1</div>
+            <div class="mr-file-time">2026-04-10 13:55 업로드</div>
+          </div>
+        </li>
+        <li class="mr-file">
+          <a class="mr-file-thumb js-open-lightbox" href="https://picsum.photos/seed/mika-review-2/1200" target="_blank" rel="noopener">
+            <img src="https://picsum.photos/seed/mika-review-2/240" alt="리뷰 이미지 2" loading="lazy">
+          </a>
+          <div class="mr-file-meta">
+            <div class="mr-file-name">리뷰 이미지 2</div>
+            <div class="mr-file-time">2026-04-10 13:56 업로드</div>
+          </div>
+        </li>
+        <li class="mr-file">
+          <a class="mr-file-thumb js-open-lightbox" href="https://picsum.photos/seed/mika-review-3/1200" target="_blank" rel="noopener">
+            <img src="https://picsum.photos/seed/mika-review-3/240" alt="리뷰 이미지 3" loading="lazy">
+          </a>
+          <div class="mr-file-meta">
+            <div class="mr-file-name">리뷰 이미지 3</div>
+            <div class="mr-file-time">2026-04-10 16:37 업로드</div>
+          </div>
+        </li>
+        <li class="mr-file">
+          <a class="mr-file-thumb js-open-lightbox" href="https://picsum.photos/seed/mika-review-4/1200" target="_blank" rel="noopener">
+            <img src="https://picsum.photos/seed/mika-review-4/240" alt="리뷰 이미지 4" loading="lazy">
+          </a>
+          <div class="mr-file-meta">
+            <div class="mr-file-name">리뷰 이미지 4</div>
+            <div class="mr-file-time">2026-04-10 16:40 업로드</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Review caption -->
+    <div class="mr-section">
+      <div class="mr-section-head">
+        <h3 class="mr-section-title">리뷰 본문</h3>
+        <span class="mr-section-hint"><span data-review-caption-chars>186</span>자</span>
+      </div>
+      <div class="mr-caption" data-review-caption>겨울 뷰티 루틴 공유 💄
+@milla_company 에서 보내주신 프리미엄 앰플을 직접 써본 솔직 후기예요. 건조한 계절에 딱 맞는 수분 폭탄 💧 바르자마자 피부결이 정돈되는 느낌이 들고, 한 달 정도 꾸준히 쓰니까 화장 잘 먹는 게 눈에 보일 정도로 달라졌어요.
+
+요즘 스킨케어 루틴 고민 있는 분들 참고해보세요 👀</div>
+      <div class="mr-hashtags" data-review-hashtags>
+        <span class="mr-tag">#겨울뷰티</span>
+        <span class="mr-tag">#앰플추천</span>
+        <span class="mr-tag">#스킨케어루틴</span>
+        <span class="mr-tag">#알파콜라보</span>
+        <span class="mr-tag">#인플루언서협업</span>
+      </div>
+    </div>
+
+    <!-- Ack checkbox -->
+    <label class="mr-ack">
+      <input type="checkbox" class="mr-ack-chk js-review-ack">
+      <span class="mr-ack-text">
+        <strong>컨펌 완료 시 재수정이 불가능</strong>합니다. 내용을 확인하였습니다.
+      </span>
+    </label>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-md js-close-review">취소</button>
+    <button type="button" class="btn btn-primary btn-md js-review-confirm" disabled>컨펌 완료</button>
+  </div>
+
+</div>
+</div>

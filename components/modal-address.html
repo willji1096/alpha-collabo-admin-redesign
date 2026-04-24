@@ -1,0 +1,67 @@
+<!-- Address Modal — 배송지 정보 조회 + 배송 메모. .js-open-address 버튼 자동 연결 -->
+<div class="modal-backdrop js-address-backdrop" hidden>
+<div class="modal modal-address" role="dialog" aria-modal="true" aria-labelledby="modal-address-title">
+
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-address-title">배송지 정보</h2>
+    <button class="modal-close js-close-address" aria-label="닫기" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6L18 18M18 6L6 18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <!-- Recipient summary -->
+    <div class="ma-recipient">
+      <div class="ma-recipient-label">수령 인플루언서</div>
+      <div class="ma-recipient-name">
+        <span data-address-recipient-name>mika_seoul</span>
+        <span class="c-country-code" data-address-recipient-country>CN</span>
+      </div>
+      <div class="ma-recipient-sub" data-address-recipient-sub>겨울 뷰티 리뷰 캠페인 · 1771914476</div>
+    </div>
+
+    <!-- Info list -->
+    <dl class="ma-info">
+      <div class="ma-row">
+        <dt class="ma-key">이름</dt>
+        <dd class="ma-val" data-address-name>Mika Chen</dd>
+      </div>
+      <div class="ma-row">
+        <dt class="ma-key">연락처</dt>
+        <dd class="ma-val is-mono" data-address-phone>+86 138-5523-3436</dd>
+      </div>
+      <div class="ma-row">
+        <dt class="ma-key">이메일</dt>
+        <dd class="ma-val is-mono" data-address-email>mika.chen.kr@gmail.com</dd>
+      </div>
+      <div class="ma-row">
+        <dt class="ma-key">우편번호</dt>
+        <dd class="ma-val is-mono" data-address-zip>100022</dd>
+      </div>
+      <div class="ma-row">
+        <dt class="ma-key">배송 주소</dt>
+        <dd class="ma-val" data-address-addr>100 Wangfujing Street, Dongcheng District, Beijing, China</dd>
+      </div>
+    </dl>
+
+    <!-- Memo -->
+    <div class="ma-memo">
+      <div class="ma-memo-head">
+        <label class="ma-memo-label" for="ma-memo-input">배송 메모 <span class="ma-optional">(선택)</span></label>
+        <span class="ma-memo-hint">배송 담당자가 참고합니다</span>
+      </div>
+      <textarea class="ma-textarea" id="ma-memo-input" rows="3" placeholder="예: 부재 시 경비실에 맡겨주세요. 파손주의 상품입니다."></textarea>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-md js-close-address">닫기</button>
+    <button type="button" class="btn btn-primary btn-md js-save-address-memo">메모 저장</button>
+  </div>
+
+</div>
+</div>

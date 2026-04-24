@@ -1,0 +1,153 @@
+<!-- Balance Drawer — 차감 현황 요약 (헤더 "차감 내역" 링크 트리거) -->
+<div class="drawer-backdrop js-balance-backdrop" hidden></div>
+<aside class="drawer drawer-balance js-balance-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-balance-title" hidden>
+
+  <div class="drawer-header">
+    <div class="db-head-title">
+      <h2 class="drawer-title" id="drawer-balance-title">차감 현황</h2>
+      <div class="db-head-sub">계정 잔액 요약</div>
+    </div>
+    <button class="modal-close js-close-balance" aria-label="닫기" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6L18 18M18 6L6 18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- 총합 & 액션 카드 -->
+    <div class="db-hero">
+      <div class="db-hero-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        현재 잔액
+      </div>
+      <div class="db-hero-value">1,284,500<span class="db-hero-unit">원</span></div>
+      <div class="db-hero-actions">
+        <button type="button" class="btn btn-sm btn-primary">충전하기</button>
+        <button type="button" class="btn btn-sm btn-secondary">세금계산서</button>
+      </div>
+    </div>
+
+    <!-- 총 합계 요약 -->
+    <div class="db-totals">
+      <div class="db-totals-item">
+        <div class="db-totals-key">총 충전금액</div>
+        <div class="db-totals-val">9,390,352<span class="db-totals-unit">원</span></div>
+      </div>
+      <div class="db-totals-item">
+        <div class="db-totals-key">총 슈퍼패스</div>
+        <div class="db-totals-val">0</div>
+      </div>
+    </div>
+
+    <!-- 국가별 잔여금액 요약 -->
+    <div class="db-section">
+      <div class="db-section-head">
+        <h3 class="db-section-title">국가별 잔여금액</h3>
+      </div>
+      <ul class="db-country-list">
+        <li>
+          <span class="db-country-name">한국</span>
+          <span class="db-country-val">3,000,000 원</span>
+        </li>
+        <li>
+          <span class="db-country-name">러시아</span>
+          <span class="db-country-val">4,655,505 원</span>
+        </li>
+        <li>
+          <span class="db-country-name">홍콩</span>
+          <span class="db-country-val">0 원</span>
+        </li>
+        <li>
+          <span class="db-country-name">미국</span>
+          <span class="db-country-val">10 원</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 최근 차감 내역 -->
+    <div class="db-section">
+      <div class="db-section-head">
+        <h3 class="db-section-title">최근 차감 내역</h3>
+        <span class="db-section-meta">최근 5건</span>
+      </div>
+      <ul class="db-txn-list">
+        <li class="db-txn">
+          <div class="db-txn-main">
+            <div class="db-txn-row">
+              <span class="db-txn-name">mei_xian</span>
+              <span class="db-txn-plat">xiaohongshu</span>
+            </div>
+            <div class="db-txn-row">
+              <span class="db-txn-camp">#1769756657</span>
+              <span class="db-txn-date">2026-04-23 16:43</span>
+            </div>
+          </div>
+          <span class="db-txn-amt">−120,000 원</span>
+        </li>
+        <li class="db-txn">
+          <div class="db-txn-main">
+            <div class="db-txn-row">
+              <span class="db-txn-name">natasha_mood</span>
+              <span class="db-txn-plat">twitter</span>
+            </div>
+            <div class="db-txn-row">
+              <span class="db-txn-camp">#1766993536</span>
+              <span class="db-txn-date">2026-04-14 10:47</span>
+            </div>
+          </div>
+          <span class="db-txn-amt is-up">+4 원</span>
+        </li>
+        <li class="db-txn">
+          <div class="db-txn-main">
+            <div class="db-txn-row">
+              <span class="db-txn-name">natasha_mood</span>
+              <span class="db-txn-plat">twitter</span>
+            </div>
+            <div class="db-txn-row">
+              <span class="db-txn-camp">#1766993536</span>
+              <span class="db-txn-date">2026-03-24 14:53</span>
+            </div>
+          </div>
+          <span class="db-txn-amt">−4 원</span>
+        </li>
+        <li class="db-txn">
+          <div class="db-txn-main">
+            <div class="db-txn-row">
+              <span class="db-txn-name">yuki_tokyo</span>
+              <span class="db-txn-plat">instagram</span>
+            </div>
+            <div class="db-txn-row">
+              <span class="db-txn-camp">#1769756657</span>
+              <span class="db-txn-date">2026-02-02 17:47</span>
+            </div>
+          </div>
+          <span class="db-txn-amt">−250,000 원</span>
+        </li>
+        <li class="db-txn">
+          <div class="db-txn-main">
+            <div class="db-txn-row">
+              <span class="db-txn-name">tao_hk</span>
+              <span class="db-txn-plat">douyin</span>
+            </div>
+            <div class="db-txn-row">
+              <span class="db-txn-camp">#1769756657</span>
+              <span class="db-txn-date">2026-01-30 17:03</span>
+            </div>
+          </div>
+          <span class="db-txn-amt">−120,000 원</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="drawer-footer db-footer">
+    <a href="balance-history.html" class="btn btn-secondary btn-md db-footer-link">
+      <span>전체 차감 내역 보기</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+
+</aside>

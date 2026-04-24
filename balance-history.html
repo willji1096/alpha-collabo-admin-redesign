@@ -9,85 +9,226 @@
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/admin.css">
 <style>
-  .bh-summary {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 20px;
+  /* ===== 차감 현황 페이지 ===== */
+  .bh-account {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
   }
-  .bh-card {
+  .bh-account-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  /* 우측 총합 바 */
+  .bh-totals {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+  }
+  .bh-totals strong {
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    margin: 0 2px;
+  }
+  .bh-totals .bh-totals-sep {
+    color: var(--border-default);
+  }
+
+  /* 국가별 섹션 카드 */
+  .bh-region {
     background: var(--bg-surface);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
-    padding: 18px 20px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .bh-region-head {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .bh-card.is-primary {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFF1F3 100%);
-    border-color: #FFD3D7;
-  }
-  .bh-card-label {
-    font-size: 12px;
-    color: var(--text-tertiary);
-    font-weight: var(--fw-medium);
-    display: inline-flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-light);
   }
-  .bh-card-value {
-    font-size: 26px;
+  .bh-region-title {
+    margin: 0;
+    font-size: 15px;
     font-weight: var(--fw-bold);
     color: var(--text-primary);
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-    font-variant-numeric: tabular-nums;
+    position: relative;
+    padding-left: 10px;
   }
-  .bh-card.is-primary .bh-card-value { color: var(--accent-emphasis); }
-  .bh-card-sub {
-    font-size: 11px;
-    color: var(--text-tertiary);
+  .bh-region-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 2px;
   }
-  .bh-card-sub.is-up   { color: var(--status-success); }
-  .bh-card-sub.is-down { color: var(--status-error); }
-  .bh-actions { display: inline-flex; gap: 8px; margin-top: 4px; }
-  .tbl-scroll .tbl { min-width: 960px; }
-  .c-amount {
-    font-variant-numeric: tabular-nums;
-    font-weight: var(--fw-semibold);
-    text-align: right;
+  .bh-region-body { padding: 16px 20px; }
+
+  /* 단순 잔여금액 (라벨 위 / 값 아래 중앙) */
+  .bh-balance {
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
   }
-  .c-amount.is-up   { color: var(--status-success); }
-  .c-amount.is-down { color: var(--status-error); }
-  .c-balance {
+  .bh-balance-key {
+    padding: 10px 16px;
+    background: var(--bg-subtle);
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .bh-balance-val {
+    padding: 22px 16px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
     font-variant-numeric: tabular-nums;
-    text-align: right;
+    background: var(--bg-surface);
+  }
+
+  /* 회차 컨트롤 */
+  .bh-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
     color: var(--text-secondary);
   }
-  .c-type {
-    display: inline-flex;
+  .bh-controls .f-sel { width: 120px; }
+
+  /* 합계 박스 (선택된 회차 / 전체 차감금액 / 계산된 잔여금액) */
+  .bh-stat {
+    display: flex;
     align-items: center;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    color: var(--text-secondary);
     font-weight: var(--fw-medium);
   }
-  .c-type.charge {
-    background: #ECFDF5;
-    color: #047857;
+  .bh-stat strong {
+    font-size: 14px;
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
   }
-  .c-type.deduct {
+  .bh-stat.is-emphasis strong {
+    color: var(--accent-emphasis);
+  }
+  .bh-stat + .bh-stat { margin-top: 8px; }
+  .bh-stat--top { margin-bottom: 12px; }
+
+  /* 표 wrapper */
+  .bh-tbl-wrap {
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .bh-tbl-wrap .tbl-scroll {
+    overflow-x: auto;
+  }
+  .bh-tbl-wrap .tbl {
+    min-width: 1320px;
+    margin: 0;
+  }
+  .bh-tbl-wrap .tbl thead th {
+    background: var(--bg-subtle);
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .bh-tbl-wrap .tbl td {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    vertical-align: middle;
+  }
+  .bh-tbl-wrap .tbl tbody tr:hover { background: var(--bg-subtle); }
+  .bh-tbl-wrap .tbl-empty {
+    padding: 36px 0;
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 12.5px;
+  }
+
+  /* 표 셀 디테일 */
+  .bh-camp-id {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+  .bh-amount {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--text-primary);
+    font-weight: var(--fw-medium);
+  }
+  .bh-num {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .bh-link {
+    color: var(--text-link);
+    text-decoration: none;
+  }
+  .bh-link:hover { text-decoration: underline; }
+  .bh-dash { color: var(--text-tertiary); }
+
+  /* 상태/유형 배지 */
+  .bh-state {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: var(--fw-medium);
     background: #FEF2F2;
     color: #B91C1C;
   }
-  .c-type.refund {
-    background: #EFF6FF;
-    color: #1D4ED8;
+  .bh-state.is-up {
+    background: #ECFDF5;
+    color: #047857;
+  }
+  .bh-method {
+    display: inline-flex;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    background: var(--bg-subtle);
+    color: var(--text-secondary);
+  }
+  .bh-method.is-manual {
+    background: #FEF3C7;
+    color: #92400E;
   }
 </style>
 </head>
-<body data-active-tab="사이트관리">
+<body data-active-tab="계정">
 <div class="layout">
 
 <div id="sidebar-slot"></div>
@@ -101,190 +242,531 @@
       <div class="pg-crumb">계정 / <b>차감 현황</b></div>
     </div>
 
-    <!-- Summary cards -->
-    <div class="bh-summary">
-      <div class="bh-card is-primary">
-        <div class="bh-card-label">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          현재 잔액
-        </div>
-        <div class="bh-card-value">1,284,500<span style="font-size:14px; font-weight:500; margin-left:4px;">원</span></div>
-        <div class="bh-actions">
-          <button type="button" class="btn btn-sm btn-primary">충전하기</button>
-          <button type="button" class="btn btn-sm btn-secondary">세금계산서</button>
-        </div>
-      </div>
-
-      <div class="bh-card">
-        <div class="bh-card-label">이번 달 차감</div>
-        <div class="bh-card-value">−872,000<span style="font-size:14px; font-weight:500; margin-left:4px;">원</span></div>
-        <div class="bh-card-sub is-down">전월 대비 +18.4%</div>
-      </div>
-
-      <div class="bh-card">
-        <div class="bh-card-label">이번 달 충전</div>
-        <div class="bh-card-value">+1,500,000<span style="font-size:14px; font-weight:500; margin-left:4px;">원</span></div>
-        <div class="bh-card-sub is-up">2회 충전</div>
-      </div>
-
-      <div class="bh-card">
-        <div class="bh-card-label">진행 중 캠페인 예약 차감</div>
-        <div class="bh-card-value">312,000<span style="font-size:14px; font-weight:500; margin-left:4px;">원</span></div>
-        <div class="bh-card-sub">캠페인 4건 · 정산 시 자동 차감</div>
-      </div>
+    <div class="bh-totals">
+      <span>총 충전금액 <strong>9,390,352</strong> 원</span>
+      <span class="bh-totals-sep">/</span>
+      <span>총 슈퍼패스 <strong>0</strong></span>
     </div>
 
-    <!-- Filter chip bar -->
-    <div class="chip-bar">
-      <div class="chip-bar-summary">
-        <span class="f-summary-label">현재 조건</span>
-        기간 <strong>최근 30일</strong><span class="f-summary-sep">·</span>구분 <strong>전체</strong>
+    <!-- 러시아 잔여현황 -->
+    <section class="bh-region">
+      <div class="bh-region-head">
+        <h2 class="bh-region-title">러시아 잔여현황</h2>
       </div>
-      <div class="chip-bar-right">
-        <button class="btn btn-sm btn-secondary btn-icon" onclick="document.getElementById('page-filters').classList.toggle('expanded')" aria-label="필터" title="전체 필터">
-          <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-        </button>
+      <div class="bh-region-body">
+        <div class="bh-balance">
+          <div class="bh-balance-key">잔여금액</div>
+          <div class="bh-balance-val">1,265,171 원</div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="filters collapsible" id="page-filters">
-      <div class="f-row">
-        <span class="f-label">기간</span>
-        <div class="f-body">
-          <select class="f-sel" style="width:140px"><option>거래일자</option></select>
-          <input class="f-input" style="width:120px" placeholder="2026-03-25">
-          <span class="f-sep">~</span>
-          <input class="f-input" style="width:120px" placeholder="2026-04-24">
-          <div class="f-presets">
-            <button class="f-pre">오늘</button>
-            <button class="f-pre">7일</button>
-            <button class="f-pre on">30일</button>
-            <button class="f-pre">3개월</button>
-            <button class="f-pre">6개월</button>
+    <!-- 미국 잔여현황 -->
+    <section class="bh-region">
+      <div class="bh-region-head">
+        <h2 class="bh-region-title">미국 잔여현황</h2>
+      </div>
+      <div class="bh-region-body">
+        <div class="bh-balance">
+          <div class="bh-balance-key">잔여금액</div>
+          <div class="bh-balance-val">10 원</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 홍콩 -->
+    <section class="bh-region">
+      <div class="bh-region-head">
+        <h2 class="bh-region-title">홍콩</h2>
+      </div>
+      <div class="bh-region-body">
+        <div class="bh-controls">
+          <span>충전회차:</span>
+          <select class="f-sel"><option>회차</option></select>
+        </div>
+        <div class="bh-stat bh-stat--top">
+          <span>충전금액 (선택된 회차)</span>
+          <strong>0 원</strong>
+        </div>
+        <div class="bh-tbl-wrap">
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>캠페인명/코드</th>
+                  <th>플랫폼</th>
+                  <th>아이디</th>
+                  <th>계정 URL</th>
+                  <th>리뷰 URL</th>
+                  <th>리뷰 URL등록일</th>
+                  <th>예약확정일자</th>
+                  <th>인기게시물</th>
+                  <th>요금제</th>
+                  <th>차감금액</th>
+                  <th>차감유형</th>
+                  <th>비고</th>
+                  <th>차감일</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="bh-camp-id">1767342166</td>
+                  <td>instagram</td>
+                  <td>mika_seoul</td>
+                  <td><a class="bh-link" href="#">https://instagram.com/mika_seoul</a></td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">0</td>
+                  <td class="bh-amount">0 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-02 17:36:31</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
-      <div class="f-row">
-        <span class="f-label">구분</span>
-        <div class="f-body">
-          <label class="f-radio"><input type="radio" name="ty" checked> 전체</label>
-          <label class="f-radio"><input type="radio" name="ty"> 차감</label>
-          <label class="f-radio"><input type="radio" name="ty"> 충전</label>
-          <label class="f-radio"><input type="radio" name="ty"> 환불</label>
+        <div class="bh-stat">
+          <span>전체 차감금액 합계</span>
+          <strong>0 원</strong>
+        </div>
+        <div class="bh-stat is-emphasis">
+          <span>계산된 잔여금액</span>
+          <strong>0 원</strong>
         </div>
       </div>
-      <div class="f-actions">
-        <button class="btn btn-primary btn-sm">검색하기</button>
-        <button class="btn btn-ghost btn-sm">엑셀다운</button>
-      </div>
-    </div>
+    </section>
 
-    <div class="t-toolbar">
-      <div class="t-count">전체 <strong>14</strong>건 / 검색 <strong>14</strong>건</div>
-      <div class="t-right">
-        <select class="t-sel"><option>거래일자 내림차순정렬</option></select>
-        <select class="t-sel"><option>페이지당 20개 표시</option></select>
+    <!-- 한국 -->
+    <section class="bh-region">
+      <div class="bh-region-head">
+        <h2 class="bh-region-title">한국</h2>
       </div>
-    </div>
-
-    <div class="tbl-wrap">
-      <div class="tbl-scroll">
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th class="sortable">거래일자</th>
-              <th>구분</th>
-              <th>사유 / 캠페인</th>
-              <th>처리자</th>
-              <th>금액</th>
-              <th>잔액</th>
-              <th>비고</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>2026-04-23 17:42</td>
-              <td><span class="c-type deduct">차감</span></td>
-              <td><div class="c-camp-name">겨울 뷰티 리뷰 캠페인</div><div class="c-camp-sub">1771914476 · 인플루언서 정산</div></td>
-              <td>system</td>
-              <td class="c-amount is-down">−180,000원</td>
-              <td class="c-balance">1,284,500원</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>2026-04-22 11:09</td>
-              <td><span class="c-type charge">충전</span></td>
-              <td>관리자 충전</td>
-              <td>milla_admin</td>
-              <td class="c-amount is-up">+500,000원</td>
-              <td class="c-balance">1,464,500원</td>
-              <td>세금계산서 발행 완료</td>
-            </tr>
-            <tr>
-              <td>2026-04-21 09:30</td>
-              <td><span class="c-type deduct">차감</span></td>
-              <td><div class="c-camp-name">방문형 테스트2</div><div class="c-camp-sub">1766993536 · 슈퍼패스 항공권 지원</div></td>
-              <td>system</td>
-              <td class="c-amount is-down">−420,000원</td>
-              <td class="c-balance">964,500원</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>2026-04-19 14:15</td>
-              <td><span class="c-type refund">환불</span></td>
-              <td><div class="c-camp-name">test_캠페인 여러명</div><div class="c-camp-sub">1768538532 · 미방문 처리</div></td>
-              <td>system</td>
-              <td class="c-amount is-up">+95,000원</td>
-              <td class="c-balance">1,384,500원</td>
-              <td>차감금 자동 복구</td>
-            </tr>
-            <tr>
-              <td>2026-04-18 16:05</td>
-              <td><span class="c-type deduct">차감</span></td>
-              <td><div class="c-camp-name">배송형 테스트 2</div><div class="c-camp-sub">1766993260 · 인플루언서 정산</div></td>
-              <td>system</td>
-              <td class="c-amount is-down">−120,000원</td>
-              <td class="c-balance">1,289,500원</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>2026-04-15 10:42</td>
-              <td><span class="c-type charge">충전</span></td>
-              <td>관리자 충전</td>
-              <td>milla_admin</td>
-              <td class="c-amount is-up">+1,000,000원</td>
-              <td class="c-balance">1,409,500원</td>
-              <td>세금계산서 발행 완료</td>
-            </tr>
-            <tr>
-              <td>2026-04-12 13:20</td>
-              <td><span class="c-type deduct">차감</span></td>
-              <td><div class="c-camp-name">인기게시물 진행 테스트</div><div class="c-camp-sub">1769756657 · 인기게시물 추가 비용</div></td>
-              <td>system</td>
-              <td class="c-amount is-down">−85,000원</td>
-              <td class="c-balance">409,500원</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>2026-04-09 11:55</td>
-              <td><span class="c-type deduct">차감</span></td>
-              <td><div class="c-camp-name">봄 신메뉴 체험단</div><div class="c-camp-sub">1767340856 · 인플루언서 정산</div></td>
-              <td>system</td>
-              <td class="c-amount is-down">−180,000원</td>
-              <td class="c-balance">494,500원</td>
-              <td>—</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="bh-region-body">
+        <div class="bh-controls">
+          <span>충전회차:</span>
+          <select class="f-sel"><option>8 회차</option></select>
+        </div>
+        <div class="bh-stat bh-stat--top">
+          <span>충전금액 (선택된 회차)</span>
+          <strong>3,000,000 원</strong>
+        </div>
+        <div class="bh-tbl-wrap">
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>캠페인명/코드</th>
+                  <th>플랫폼</th>
+                  <th>아이디</th>
+                  <th>계정 URL</th>
+                  <th>리뷰 URL</th>
+                  <th>리뷰 URL등록일</th>
+                  <th>예약확정일자</th>
+                  <th>인기게시물</th>
+                  <th>요금제</th>
+                  <th>차감금액</th>
+                  <th>차감유형</th>
+                  <th>비고</th>
+                  <th>차감일</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="tbl-empty" colspan="14">표시할 차감 내역이 없습니다.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="bh-stat">
+          <span>전체 차감금액 합계</span>
+          <strong>0 원</strong>
+        </div>
+        <div class="bh-stat is-emphasis">
+          <span>계산된 잔여금액</span>
+          <strong>3,000,000 원</strong>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="pagination">
-      <button class="pg-btn nav" disabled>이전</button>
-      <button class="pg-btn active">1</button>
-      <button class="pg-btn">2</button>
-      <button class="pg-btn nav">다음</button>
-    </div>
+    <!-- 러시아 -->
+    <section class="bh-region">
+      <div class="bh-region-head">
+        <h2 class="bh-region-title">러시아</h2>
+      </div>
+      <div class="bh-region-body">
+        <div class="bh-controls">
+          <span>충전회차:</span>
+          <select class="f-sel"><option>전체보기</option></select>
+        </div>
+        <div class="bh-stat bh-stat--top">
+          <span>충전금액 (선택된 회차)</span>
+          <strong>6,390,342 원</strong>
+        </div>
+        <div class="bh-tbl-wrap">
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>캠페인명/코드</th>
+                  <th>플랫폼</th>
+                  <th>아이디</th>
+                  <th>계정 URL</th>
+                  <th>리뷰 URL</th>
+                  <th>리뷰 URL등록일</th>
+                  <th>예약확정일자</th>
+                  <th>인기게시물</th>
+                  <th>요금제</th>
+                  <th>차감금액</th>
+                  <th>차감유형</th>
+                  <th>비고</th>
+                  <th>차감일</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="bh-camp-id">1769756657</td>
+                  <td>xiaohongshu</td>
+                  <td>mei_xian</td>
+                  <td><a class="bh-link" href="#">https://xiaohongshu.com/mei_xian</a></td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">50,000 원</td>
+                  <td class="bh-num">120,000</td>
+                  <td class="bh-amount">120,000 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-04-23 16:43:33</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993536</td>
+                  <td>twitter</td>
+                  <td>natasha_mood</td>
+                  <td><a class="bh-link" href="#">https://twitter.com/natasha_mood</a></td>
+                  <td><a class="bh-link" href="#">http://review.co/r-001</a></td>
+                  <td>2026-01-14 17:35:27</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">4</td>
+                  <td class="bh-amount">4 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td>선정 → 선정후 취소</td>
+                  <td>2026-04-14 10:47:00</td>
+                  <td><span class="bh-state is-up">증감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993536</td>
+                  <td>twitter</td>
+                  <td>natasha_mood</td>
+                  <td><a class="bh-link" href="#">https://twitter.com/natasha_mood</a></td>
+                  <td><a class="bh-link" href="#">http://review.co/r-001</a></td>
+                  <td>2026-01-14 17:35:27</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">4</td>
+                  <td class="bh-amount">4 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-03-24 14:53:31</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1769756657</td>
+                  <td>instagram</td>
+                  <td>yuki_tokyo</td>
+                  <td><a class="bh-link" href="#">https://instagram.com/yuki_tokyo</a></td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">50,000 원</td>
+                  <td class="bh-num">250,000</td>
+                  <td class="bh-amount">250,000 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-02-02 17:47:37</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1769756657</td>
+                  <td>douyin</td>
+                  <td>tao_hk</td>
+                  <td><a class="bh-link" href="#">https://douyin.com/tao_hk</a></td>
+                  <td><a class="bh-link" href="#">http://review.co/r-002</a></td>
+                  <td>2026-01-30 17:24:13</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">50,000 원</td>
+                  <td class="bh-num">120,000</td>
+                  <td class="bh-amount">120,000 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-30 17:03:58</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993536</td>
+                  <td>youtube</td>
+                  <td>관리자</td>
+                  <td><a class="bh-link" href="#">https://youtube.com/@hina_jp</a></td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-28</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">0</td>
+                  <td class="bh-amount">0 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-19 11:56:41</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1768538532</td>
+                  <td>instagram</td>
+                  <td>kumi_osaka</td>
+                  <td><a class="bh-link" href="#">https://instagram.com/kumi_osaka</a></td>
+                  <td><a class="bh-link" href="#">http://review.co/r-003</a></td>
+                  <td>2026-01-19 11:42:31</td>
+                  <td>2026-03-18</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">250,000</td>
+                  <td class="bh-amount">250,000 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-16 17:13:02</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993536</td>
+                  <td>youtube</td>
+                  <td>lina_k</td>
+                  <td><a class="bh-link" href="#">https://youtube.com/@lina_k</a></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-07 13:04:31</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">2</td>
+                  <td class="bh-amount">2 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-07 13:04:31</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993536</td>
+                  <td>twitter</td>
+                  <td>natasha_mood</td>
+                  <td><a class="bh-link" href="#">https://twitter.com/natasha_mood</a></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-07 12:56:29</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">4</td>
+                  <td class="bh-amount">4 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-07 12:56:29</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993260</td>
+                  <td>instagram</td>
+                  <td>sora_jpn</td>
+                  <td><a class="bh-link" href="#">https://instagram.com/sora_jpn</a></td>
+                  <td><a class="bh-link" href="#">http://review.co/r-004</a></td>
+                  <td>2026-01-19 11:42:31</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">250,000</td>
+                  <td class="bh-amount">250,000 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-07 11:53:36</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993644</td>
+                  <td>twitter</td>
+                  <td>mei_xian</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-07 11:48:24</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">10,100</td>
+                  <td class="bh-amount">10,100 원</td>
+                  <td><span class="bh-method is-manual">수동</span></td>
+                  <td>사전협의 변경</td>
+                  <td>2026-01-07 11:48:24</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993536</td>
+                  <td>youtube</td>
+                  <td>lina_k</td>
+                  <td><a class="bh-link" href="#">https://youtube.com/@lina_k</a></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 19:55:36</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">2</td>
+                  <td class="bh-amount">2 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 19:55:36</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1767340856</td>
+                  <td>twitter</td>
+                  <td>riku_anime</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 17:21:53</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">1,000</td>
+                  <td class="bh-amount">1,000 원</td>
+                  <td><span class="bh-method is-manual">수동</span></td>
+                  <td>사전협의 변경</td>
+                  <td>2026-01-05 17:21:53</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993260</td>
+                  <td>instagram</td>
+                  <td>hina_jp</td>
+                  <td><a class="bh-link" href="#">https://instagram.com/hina_jp</a></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 17:12:38</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">300,000</td>
+                  <td class="bh-amount">300,000 원</td>
+                  <td><span class="bh-method is-manual">수동</span></td>
+                  <td>[수동변경]</td>
+                  <td>2026-01-05 17:12:38</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993260</td>
+                  <td>youtube</td>
+                  <td>yuki_tokyo</td>
+                  <td><a class="bh-link" href="#">https://youtube.com/@yuki_tokyo</a></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 16:45:24</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">50,000</td>
+                  <td class="bh-amount">50,000 원</td>
+                  <td><span class="bh-method is-manual">수동</span></td>
+                  <td>[수동변경]</td>
+                  <td>2026-01-05 16:45:24</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993260</td>
+                  <td>twitter</td>
+                  <td>natasha_mood</td>
+                  <td><a class="bh-link" href="#">https://twitter.com/natasha_mood</a></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 16:31:50</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">8</td>
+                  <td class="bh-amount">8 원</td>
+                  <td><span class="bh-method">자동</span></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 16:31:50</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+                <tr>
+                  <td class="bh-camp-id">1766993644</td>
+                  <td>review</td>
+                  <td>tao_hk</td>
+                  <td><a class="bh-link" href="#">https://review.co/r-100</a></td>
+                  <td class="bh-dash">−</td>
+                  <td>2026-01-05 15:47:01</td>
+                  <td class="bh-dash">−</td>
+                  <td class="bh-num">0 원</td>
+                  <td class="bh-num">700</td>
+                  <td class="bh-amount">700 원</td>
+                  <td><span class="bh-method is-manual">수동</span></td>
+                  <td>사전협의 변경</td>
+                  <td>2026-01-05 15:47:01</td>
+                  <td><span class="bh-state">차감</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="bh-stat">
+          <span>전체 차감금액 합계</span>
+          <strong>1,734,837 원</strong>
+        </div>
+        <div class="bh-stat is-emphasis">
+          <span>계산된 잔여금액</span>
+          <strong>4,655,505 원</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 미국 -->
+    <section class="bh-region">
+      <div class="bh-region-head">
+        <h2 class="bh-region-title">미국</h2>
+      </div>
+      <div class="bh-region-body">
+        <div class="bh-controls">
+          <span>충전회차:</span>
+          <select class="f-sel"><option>1 회차</option></select>
+        </div>
+        <div class="bh-stat bh-stat--top">
+          <span>충전금액 (선택된 회차)</span>
+          <strong>10 원</strong>
+        </div>
+        <div class="bh-tbl-wrap">
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>캠페인명/코드</th>
+                  <th>플랫폼</th>
+                  <th>아이디</th>
+                  <th>계정 URL</th>
+                  <th>리뷰 URL</th>
+                  <th>리뷰 URL등록일</th>
+                  <th>예약확정일자</th>
+                  <th>인기게시물</th>
+                  <th>요금제</th>
+                  <th>차감금액</th>
+                  <th>차감유형</th>
+                  <th>비고</th>
+                  <th>차감일</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="tbl-empty" colspan="14">표시할 차감 내역이 없습니다.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="bh-stat">
+          <span>전체 차감금액 합계</span>
+          <strong>0 원</strong>
+        </div>
+        <div class="bh-stat is-emphasis">
+          <span>계산된 잔여금액</span>
+          <strong>10 원</strong>
+        </div>
+      </div>
+    </section>
 
   </div>
 </main>

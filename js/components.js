@@ -118,6 +118,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   wireRevisionModal();
 
+  // Balance Drawer 자동 주입 (backdrop + drawer 2개 요소)
+  if (!document.querySelector('.js-balance-backdrop')) {
+    const res = await fetch('components/drawer-balance.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      Array.from(wrap.children).forEach(el => document.body.appendChild(el));
+    }
+  }
+  wireBalanceDrawer();
+
   // 챗봇 자동 주입 + 활성화
   if (!document.getElementById('chatbot')) {
     const res = await fetch('components/chatbot.html' + bust, { cache: 'no-store' });
@@ -642,6 +653,51 @@ function wireRevisionModal() {
   });
 
   window.showRevision = (opts = {}) => open(opts);
+}
+
+/** Balance Drawer — 헤더 ".h-balance" 클릭 → 차감 현황 요약 드로어 */
+function wireBalanceDrawer() {
+  const backdrop = document.querySelector('.js-balance-backdrop');
+  const drawer = document.querySelector('.js-balance-drawer');
+  if (!backdrop || !drawer) return;
+
+  function open() {
+    backdrop.hidden = false;
+    drawer.hidden = false;
+    requestAnimationFrame(() => {
+      backdrop.classList.add('open');
+      drawer.classList.add('open');
+    });
+  }
+  function close() {
+    backdrop.classList.remove('open');
+    drawer.classList.remove('open');
+    setTimeout(() => {
+      backdrop.hidden = true;
+      drawer.hidden = true;
+    }, 220);
+  }
+
+  document.addEventListener('click', (e) => {
+    // 헤더 잔액 pill 전체 또는 js-open-balance 클래스 요소
+    const trigger = e.target.closest('.h-balance, .js-open-balance');
+    if (trigger) {
+      // 드로어가 이미 열린 balance-history.html 내부 링크는 그대로 동작
+      const isFullPageLink = trigger.classList.contains('db-footer-link');
+      if (isFullPageLink) return;
+      e.preventDefault();
+      open();
+      return;
+    }
+    if (e.target.closest('.js-close-balance')) close();
+    if (e.target === backdrop) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) close();
+  });
+
+  window.showBalance = () => open();
 }
 
 /** Chatbot Widget — 상태 머신 + 마우스 추적 + 패널 */
@@ -1342,9 +1398,10 @@ function activateSidebarNav() {
   });
 }
 
-/** data-active-tab 속성 기준으로 헤더 탭 활성화 */
+/** data-active-tab 속성 기준으로 헤더 탭 활성화 ("계정"은 탭 외 영역 — 강조 생략) */
 function activateHeaderTab() {
   const activeTab = document.body.dataset.activeTab || '신청서관리';
+  if (activeTab === '계정') return;
   document.querySelectorAll('.htab').forEach(tab => {
     if (tab.dataset.tab === activeTab) {
       tab.classList.add('active');

@@ -6,7 +6,7 @@
 // ===== Auth Guard — login.html 외 모든 페이지에서 세션 체크 =====
 (function authGuard() {
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  const PUBLIC = ['login.html', 'index.html', ''];
+  const PUBLIC = ['login.html', 'index.html', 'design-system.html', ''];
   if (PUBLIC.includes(file)) return;
   let ok = false;
   try { ok = sessionStorage.getItem('alpha-auth') === '1'; } catch(_) {}

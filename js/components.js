@@ -1402,17 +1402,11 @@ function activateSidebarNav() {
 function activateHeaderTab() {
   const activeTab = document.body.dataset.activeTab || '신청서관리';
   if (activeTab === '계정') return;
-  let activeEl = null;
   document.querySelectorAll('.htab').forEach(tab => {
     if (tab.dataset.tab === activeTab) {
       tab.classList.add('active');
-      activeEl = tab;
     }
   });
-  // 모바일(<768px): 가로 스크롤 탭 바에서 활성 탭이 화면 밖이면 중앙으로 이동
-  if (activeEl && window.matchMedia('(max-width: 768px)').matches) {
-    try { activeEl.scrollIntoView({ block: 'nearest', inline: 'center' }); } catch(_) {}
-  }
 }
 
 /* ============================================================

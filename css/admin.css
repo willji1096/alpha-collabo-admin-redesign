@@ -778,23 +778,6 @@ body { background: var(--bg-page); }
   max-width: 100%;
 }
 
-/* 본문 중심 페이지는 readable width 제한 (공지 상세, 설정, 폼 단일) */
-.page-narrow {
-  max-width: 880px;
-  margin: 0 auto;
-}
-
-/* 레거시 max-width 제한이 필요한 경우 */
-.page-constrained {
-  max-width: var(--content-max-width);
-}
-
-/* 넓은 데이터 페이지용 — 1440 제한 (카드 그리드/테이블 혼용 페이지) */
-.page-wide {
-  max-width: 1440px;
-  margin: 0 auto;
-}
-
 /* Page Header */
 .pg-header {
   display: flex;
@@ -1165,35 +1148,6 @@ body { background: var(--bg-page); }
 }
 .tbl.has-sticky tbody tr:hover td.sticky-col { background: var(--bg-hover); }
 .tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-col { background: var(--accent-light); }
-
-/* Right-sticky action columns — 테이블이 가로로 넓을 때 액션 버튼 고정 노출
-   .sticky-right-1 ~ .sticky-right-3 : 마지막 컬럼부터 역순 */
-.tbl.has-sticky th.sticky-right-1,
-.tbl.has-sticky td.sticky-right-1,
-.tbl.has-sticky th.sticky-right-2,
-.tbl.has-sticky td.sticky-right-2,
-.tbl.has-sticky th.sticky-right-3,
-.tbl.has-sticky td.sticky-right-3 {
-  position: sticky;
-  z-index: 2;
-  background: var(--bg-surface);
-  box-shadow: -2px 0 4px -2px rgba(17,17,17,0.08);
-}
-.tbl.has-sticky th.sticky-right-1, .tbl.has-sticky td.sticky-right-1 { right: 0; }
-.tbl.has-sticky th.sticky-right-2, .tbl.has-sticky td.sticky-right-2 { right: 96px;  box-shadow: none; }
-.tbl.has-sticky th.sticky-right-3, .tbl.has-sticky td.sticky-right-3 { right: 192px; box-shadow: none; }
-.tbl.has-sticky thead th.sticky-right-1,
-.tbl.has-sticky thead th.sticky-right-2,
-.tbl.has-sticky thead th.sticky-right-3 {
-  background: var(--bg-elevated);
-  z-index: 3;
-}
-.tbl.has-sticky tbody tr:hover td.sticky-right-1,
-.tbl.has-sticky tbody tr:hover td.sticky-right-2,
-.tbl.has-sticky tbody tr:hover td.sticky-right-3 { background: var(--bg-hover); }
-.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-right-1,
-.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-right-2,
-.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-right-3 { background: var(--accent-light); }
 
 /* 가로 스크롤 가시성 — 넓은 테이블은 스크롤바 항상 표시 */
 .tbl-scroll {
@@ -1724,7 +1678,6 @@ body { background: var(--bg-page); }
 /* Posts grid */
 .drawer-influencer .di-grid { display: grid; gap: 4px; }
 .drawer-influencer .di-grid-3 { grid-template-columns: repeat(3, 1fr); }
-.drawer-influencer .di-grid-2 { grid-template-columns: repeat(2, 1fr); }
 
 .drawer-influencer .di-post {
   position: relative;
@@ -1743,19 +1696,6 @@ body { background: var(--bg-page); }
   transition: transform var(--duration) var(--ease);
 }
 .drawer-influencer .di-post:hover img { transform: scale(1.03); }
-.drawer-influencer .di-post-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-}
-.drawer-influencer .di-post-excerpt {
-  font-size: var(--fs-base);
-  color: var(--text-secondary);
-  font-weight: var(--fw-medium);
-  padding: var(--space-3);
-}
 .drawer-influencer .di-post-video { aspect-ratio: 9 / 14; }
 .drawer-influencer .di-post-play {
   position: absolute;
@@ -1832,26 +1772,9 @@ body { background: var(--bg-page); }
 
 .c-followers { font-size: 10px; color: var(--text-disabled); margin-left: 4px; }
 
-/* Cell: action */
-.c-link {
-  font-size: 14px;
-  color: var(--status-info);
-  cursor: pointer;
-  background: none;
-  border: none;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  padding: 0;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.c-link:hover { text-decoration: underline; }
-
 /* 날짜/ID/액션 셀 줄바꿈 방지 */
 .tbl td.c-num,
 .tbl .c-date-multi,
-.tbl .c-link,
-.tbl .c-btn,
 .tbl .c-badge-warn {
   white-space: nowrap;
 }
@@ -1860,21 +1783,6 @@ body { background: var(--bg-page); }
 /* 전각 콘텐츠가 있는 셀은 긴 글에 한해 overflow-wrap */
 .tbl .c-camp-name,
 .tbl .c-camp-sub { overflow-wrap: break-word; }
-
-.c-btn {
-  padding: 6px 12px;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 1px solid var(--border-default);
-  background: var(--bg-surface);
-  color: var(--text-secondary);
-  transition: all 150ms;
-  white-space: nowrap;
-}
-.c-btn:hover { background: var(--bg-elevated); }
 
 /* Cell: highlight badge */
 .c-badge-warn {
@@ -1946,8 +1854,9 @@ body { background: var(--bg-page); }
 .c-textarea:hover { border-color: var(--border-strong); }
 .c-textarea:focus { border-color: var(--accent); }
 
-/* Cell: status badge (승인/노출 등) */
-.c-status {
+/* Cell: status badge — 승인/노출 상태 칩 */
+.c-approve,
+.c-expose {
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
@@ -1955,18 +1864,9 @@ body { background: var(--bg-page); }
   font-size: 11px;
   font-weight: 500;
 }
-.c-status-success { background: var(--status-success-bg); color: var(--status-success); }
-.c-status-warning { background: var(--status-warning-bg); color: var(--status-warning); }
-.c-status-error { background: var(--status-error-bg); color: var(--status-error); }
-.c-status-info { background: var(--status-info-bg); color: var(--status-info); }
-
-/* Legacy aliases */
-.c-approve { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
 .c-approve-pending { background: var(--status-warning-bg); color: var(--status-warning); }
-.c-approve-done { background: var(--status-success-bg); color: var(--status-success); }
-.c-expose { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
-.c-expose-no { background: var(--status-error-bg); color: var(--status-error); }
-.c-expose-yes { background: var(--status-success-bg); color: var(--status-success); }
+.c-approve-done    { background: var(--status-success-bg); color: var(--status-success); }
+.c-expose-no       { background: var(--status-error-bg);   color: var(--status-error); }
 
 /* Pagination */
 .pagination {
@@ -2313,18 +2213,6 @@ body { background: var(--bg-page); }
 .cal-event-success { background: var(--status-success-bg); color: var(--status-success-strong); border-color: var(--status-success-border); }
 .cal-event-success .cal-event-dot { background: var(--status-success); }
 
-.cal-more {
-  font-size: 11px;
-  color: var(--text-tertiary);
-  padding: 2px 6px;
-  cursor: pointer;
-  text-align: left;
-  background: transparent;
-  border: none;
-  font-family: inherit;
-}
-.cal-more:hover { color: var(--accent); }
-
 /* Selected day cell — 날짜 클릭 시 강조 */
 .cal-cell.is-selected {
   box-shadow: inset 0 0 0 2px var(--accent);
@@ -2348,12 +2236,6 @@ body { background: var(--bg-page); }
   font-variant-numeric: tabular-nums;
 }
 .drawer-header-body { flex: 1; min-width: 0; }
-
-.day-event-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
 
 /* ========== Day detail TABLE (drawer 안의 캠페인 테이블) ========== */
 .day-tbl-wrap {
@@ -2582,7 +2464,6 @@ body { background: var(--bg-page); }
   .cal-cell { min-height: 80px; padding: 4px; }
   .cal-event { font-size: 10px; padding: 2px 4px; }
   .cal-dow { padding: 8px 6px; font-size: 11px; }
-  .cal-legend { display: none; }
 }
 
 /* Filter: platform checkbox group — SNS 컬러 칩 스타일 */

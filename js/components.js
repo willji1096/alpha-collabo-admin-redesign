@@ -3,6 +3,16 @@
  * 사이드바/헤더를 외부 파일에서 불러와 삽입하고, 현재 페이지에 맞춰 활성 상태를 설정
  */
 
+// ===== Auth Guard — login.html 외 모든 페이지에서 세션 체크 =====
+(function authGuard() {
+  const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const PUBLIC = ['login.html', 'index.html', ''];
+  if (PUBLIC.includes(file)) return;
+  let ok = false;
+  try { ok = sessionStorage.getItem('alpha-auth') === '1'; } catch(_) {}
+  if (!ok) location.replace('login.html');
+})();
+
 document.addEventListener('DOMContentLoaded', async () => {
   // 캐시 버스팅: 개발 중 sidebar/header 변경이 즉시 반영되도록
   const bust = `?v=${Date.now()}`;
@@ -119,7 +129,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
   wireChatbot();
+  wireLogout();
 });
+
+/** 로그아웃 — 헤더의 로그아웃 버튼 클릭 시 세션 제거 + login.html 이동 */
+function wireLogout() {
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button, a');
+    if (!btn) return;
+    const text = (btn.textContent || '').trim();
+    if (text !== '로그아웃') return;
+    e.preventDefault();
+    if (typeof window.showConfirm === 'function') {
+      window.showConfirm({
+        title: '로그아웃 하시겠습니까?',
+        desc: '세션이 종료되며 로그인 화면으로 이동합니다.',
+        variant: 'warning',
+      }).then(ok => {
+        if (!ok) return;
+        try { sessionStorage.removeItem('alpha-auth'); } catch(_) {}
+        location.href = 'login.html';
+      });
+    } else {
+      try { sessionStorage.removeItem('alpha-auth'); } catch(_) {}
+      location.href = 'login.html';
+    }
+  });
+}
 
 /** View Toggle — 리스트/카드 뷰 전환 */
 function wireViewToggle() {
@@ -1272,7 +1308,6 @@ function wireToastAutoTriggers() {
       '일괄 저장':    ['success', '일괄 저장 완료'],
       '거절':         ['confirm:danger', '정말 거절하시겠습니까?', '거절한 내역은 복구되지 않습니다', 'error', '거절 처리됨'],
       '채택':         ['success', '채택 완료'],
-      '로그아웃':     ['info',    '로그아웃 처리', '세션이 종료됩니다']
     };
     const entry = map[text];
     if (!entry) return;

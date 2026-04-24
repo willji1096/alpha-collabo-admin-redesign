@@ -2610,8 +2610,62 @@ body { background: var(--bg-page); }
   .header-tabs::-webkit-scrollbar { display: none; }
   .h-btn { display: none; }
   .h-btn.danger { display: inline-flex; }
-  .h-icon-btn { display: none; }
+  /* 알림 아이콘은 모바일에서도 유지 — 팝오버는 아래에서 bottom-sheet로 변환 */
   .modal { max-height: 95vh; margin: 0; border-radius: var(--radius-lg); }
+
+  /* ===== Header popover → 모바일 bottom-sheet ===== */
+  .h-popover {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    min-width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    transform: translateY(100%);
+    transition: transform var(--transition-fast);
+    z-index: var(--z-modal);
+    border-bottom: none;
+  }
+  .h-popover.open { transform: translateY(0); }
+  .h-popover-body { max-height: 60vh; }
+
+  /* ===== Balance drawer → 모바일 bottom-sheet ===== */
+  .drawer.drawer-balance {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 85vh;
+    top: auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    transform: translateY(100%);
+  }
+  .drawer.drawer-balance.open { transform: translateY(0); }
+  .drawer-balance .db-footer-link { min-height: 44px; }
+
+  /* ===== Notice — 모바일에서 체크박스/조회수 컬럼 숨김 (thead 유지) ===== */
+  body[data-active-tab="사이트관리"] .tbl th:first-child,
+  body[data-active-tab="사이트관리"] .tbl td:first-child,
+  body[data-active-tab="사이트관리"] .tbl th:nth-child(5),
+  body[data-active-tab="사이트관리"] .tbl td:nth-child(5) {
+    display: none;
+  }
+  body[data-active-tab="사이트관리"] .tbl { min-width: auto; }
+
+  /* ===== Modal 공통 — 모바일 sticky footer + tap target ===== */
+  .modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-light);
+    z-index: 1;
+  }
+  .modal .btn-md,
+  .modal .btn-sm { min-height: 40px; }
 }
 
 /* ============================================================

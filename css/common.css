@@ -1094,6 +1094,14 @@ a { color: inherit; text-decoration: none; }
   gap: var(--space-2);
   z-index: var(--z-toast);
   pointer-events: none;
+  transition: right 0.2s ease;
+}
+/* 드로어 열림 시 토스트를 드로어 왼쪽 바깥으로 이동해서 가리지 않게 */
+body:has(.drawer.open) .toast-region {
+  right: calc(480px + var(--space-6));
+}
+body:has(.drawer.drawer-influencer.open) .toast-region {
+  right: calc(580px + var(--space-6));
 }
 
 .toast {

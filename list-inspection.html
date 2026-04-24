@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/admin.css">
 <style>
-  .tbl-scroll .tbl { min-width: 1600px; }
+  /* min-width 제거: 테이블이 페이지 너비에 맞게 auto 축소. 그래도 모자라면 tbl-scroll이 가로 스크롤 */
   .c-thumb {
     width: 36px;
     height: 36px;
@@ -20,7 +20,7 @@
   }
 </style>
 </head>
-<body data-active-tab="신청서관리">
+<body data-active-tab="신청서관리" data-density="compact">
 <div class="layout">
 
 <div id="sidebar-slot"></div>
@@ -44,10 +44,10 @@
           <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
         </button>
         <div class="density-group" role="group" aria-label="테이블 밀도">
-          <button class="density-btn" data-density="compact" aria-pressed="false" aria-label="Compact">
+          <button class="density-btn" data-density="compact" aria-pressed="true" aria-label="Compact">
             <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
-          <button class="density-btn" data-density="default" aria-pressed="true" aria-label="Default">
+          <button class="density-btn" data-density="default" aria-pressed="false" aria-label="Default">
             <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
           </button>
           <button class="density-btn" data-density="comfortable" aria-pressed="false" aria-label="Comfortable">

@@ -2673,6 +2673,21 @@ body { background: var(--bg-page); }
   }
   .modal .btn-md,
   .modal .btn-sm { min-height: 40px; }
+
+  /* ===== Pricing 테이블 — 모바일 가로 스크롤 wrapper ===== */
+  .price-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .price-tbl { min-width: 640px; }
+}
+
+/* ===== 접근성: 모션 감쇠 사용자용 가드 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .h-popover,
+  .drawer.drawer-balance,
+  .drawer.drawer-revision,
+  .drawer-influencer,
+  .sidebar {
+    transition: none !important;
+  }
 }
 
 /* ============================================================

@@ -2606,8 +2606,27 @@ body { background: var(--bg-page); }
   }
   .tbl-wrap { overflow-x: auto; }
   .tbl { min-width: 720px; }
-  .header-tabs { overflow-x: auto; scrollbar-width: none; }
+
+  /* ===== Header tabs — 모바일에서 헤더 아래로 2단 분리 ===== */
+  .header-tabs {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    height: 44px;
+    padding: 0 16px;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-default);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
   .header-tabs::-webkit-scrollbar { display: none; }
+  .htab { font-size: 13px; padding: 0 14px; white-space: nowrap; }
+  /* 2단 헤더 만큼 본문 상단 여백 증가 */
+  .main { padding-top: calc(var(--header-height) + 44px); }
+
   .h-btn { display: none; }
   .h-btn.danger { display: inline-flex; }
   /* 알림 아이콘은 모바일에서도 유지 — 팝오버는 아래에서 bottom-sheet로 변환 */

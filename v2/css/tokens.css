@@ -18,18 +18,23 @@
   --neutral-800: #363636;
   --neutral-900: #262626;   /* IG text-primary */
 
-  /* ---------- IG Blue (primary accent — CTA, links) ---------- */
+  /* ---------- Brand Red (V1 로고 색 · 좋아요 · 주의 한정 — CTA 아님) ---------- */
+  --red-50:  #FDEDEE;
+  --red-100: #FBD2D5;
+  --red-300: #ED727A;
+  --red-500: #EE2128;   /* V1 logo 밝은 빨강 */
+  --red-600: #C81C22;
+  --red-700: #9F141A;
+  --red-900: #800B1C;   /* V1 logo 와인 딥 */
+
+  /* ---------- IG Blue (primary accent — CTA, 매칭, 메시지) ---------- */
   --blue-50:  #E7F3FF;
   --blue-100: #B2DFFC;
   --blue-300: #5AB4F0;
-  --blue-500: #0095F6;   /* IG CTA blue */
-  --blue-600: #1877F2;   /* hover */
+  --blue-500: #0095F6;   /* IG CTA */
+  --blue-600: #1877F2;
   --blue-700: #0064D1;
   --blue-900: #00376B;
-
-  /* ---------- Like Red (하트 저장) ---------- */
-  --red-500: #ED4956;
-  --red-600: #D62D3F;
 
   /* ---------- IG Brand Gradient (스토리 링, 그라디언트 액센트) ---------- */
   --grad-stories: linear-gradient(45deg, #FFC371 0%, #F58529 25%, #DD2A7B 50%, #8134AF 75%, #515BD4 100%);
@@ -45,12 +50,12 @@
   --warning-700: #A37212;
 
   --danger-50:  #FCE8EA;
-  --danger-500: #ED4956;   /* like red 재사용 */
+  --danger-500: #ED4956;
   --danger-700: #B5202C;
 
-  --info-50:  #E7F3FF;
-  --info-500: #0095F6;
-  --info-700: #00376B;
+  --info-50:  var(--blue-50);
+  --info-500: var(--blue-500);
+  --info-700: var(--blue-700);
 
   /* ---------- Semantic ---------- */
   --bg-page:      var(--neutral-0);
@@ -72,12 +77,11 @@
   --border-strong:  var(--neutral-300);
   --border-emphasis: var(--neutral-400);
 
-  --accent:          var(--blue-500);
-  --accent-hover:    var(--blue-600);
-  --accent-active:   var(--blue-700);
-  --accent-light:    var(--blue-50);
-  --accent-emphasis: var(--blue-900);
-  --accent-grad:     var(--grad-stories);
+  --accent:          var(--red-500);   /* V1 brand red */
+  --accent-hover:    var(--red-600);
+  --accent-active:   var(--red-700);
+  --accent-light:    var(--red-50);
+  --accent-emphasis: var(--red-900);
   --on-accent:       var(--neutral-0);
 
   --like:            var(--red-500);
@@ -103,8 +107,8 @@
   --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.10), 0 4px 8px rgba(0, 0, 0, 0.04);
   --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.14), 0 8px 16px rgba(0, 0, 0, 0.05);
 
-  --focus-ring: 0 0 0 3px rgba(0, 149, 246, 0.2);
-  --focus-ring-tight: 0 0 0 2px rgba(0, 149, 246, 0.4);
+  --focus-ring: 0 0 0 3px rgba(238, 33, 40, 0.2);
+  --focus-ring-tight: 0 0 0 2px rgba(238, 33, 40, 0.4);
 
   /* ---------- Typography (Sans only, IG-style) ---------- */
   --font-sans:  'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;

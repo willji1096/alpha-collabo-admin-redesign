@@ -657,6 +657,35 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Trust line — 캠페인 진행 이력 + 완료율 (V2 차별 시그널) */
+.inf-card-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--status-success-bg);
+  color: var(--status-success-strong);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  align-self: flex-start;
+}
+.inf-card-trust.is-mid {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+}
+.inf-card-trust.is-low {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-strong);
+}
+.inf-card-trust.is-new {
+  background: var(--accent-light);
+  color: var(--accent-emphasis);
+}
+.inf-card-trust-icon { flex-shrink: 0; }
+.inf-card-trust-divider { opacity: 0.4; margin: 0 2px; }
+
 .inf-card-foot {
   display: flex;
   align-items: center;

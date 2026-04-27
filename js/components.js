@@ -639,7 +639,7 @@ function wireRevisionModal() {
     msg.innerHTML = `
       <div class="dv-msg-content">
         <div class="dv-msg-meta">
-          <span class="dv-msg-author">milla_company</span>
+          <span class="dv-msg-author">glowlab_kr</span>
         </div>
         <div class="dv-msg-bubble"></div>
         <div class="dv-msg-time">${hhmm}</div>

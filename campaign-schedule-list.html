@@ -10,6 +10,11 @@
 <link rel="stylesheet" href="css/admin.css">
 <style>
   .tbl-scroll .tbl { min-width: 1560px; }
+  .f-row-country { align-items: flex-start; }
+  .f-row-country .f-label { padding-top: 6px; }
+  .f-country-checks { display: contents; }
+  .f-country-checks[hidden] { display: none; }
+  .f-country-checks .c-country-code { margin-left: 2px; }
 </style>
 </head>
 <body data-active-tab="캠페인관리">
@@ -108,6 +113,26 @@
           <label class="f-radio"><input type="radio" name="camp-type"> 배송형</label>
           <label class="f-radio"><input type="radio" name="camp-type"> 방문형</label>
           <label class="f-radio"><input type="radio" name="camp-type"> 리뷰형</label>
+        </div>
+      </div>
+      <div class="f-row f-row-country">
+        <span class="f-label">국가 필터</span>
+        <div class="f-body">
+          <label class="checkbox-label"><input class="checkbox-input" type="checkbox" id="country-filter-toggle"> 국가별 필터 사용</label>
+          <div class="f-country-checks" id="country-filter-list" hidden>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">JP</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">CN</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">TW</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">US</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">VN</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">SG</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">HK</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">ID</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">MY</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">PH</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">RU</span></label>
+            <label class="checkbox-label"><input class="checkbox-input" type="checkbox"> <span class="c-country-code">TH</span></label>
+          </div>
         </div>
       </div>
       <div class="f-actions">
@@ -472,6 +497,19 @@
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { list.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+  });
+})();
+</script>
+
+<!-- 국가별 필터 토글 -->
+<script>
+(function(){
+  const toggle = document.getElementById('country-filter-toggle');
+  const list = document.getElementById('country-filter-list');
+  if (!toggle || !list) return;
+  toggle.addEventListener('change', () => {
+    list.hidden = !toggle.checked;
+    if (!toggle.checked) list.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
   });
 })();
 </script>

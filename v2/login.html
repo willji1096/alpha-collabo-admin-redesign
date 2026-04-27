@@ -107,9 +107,50 @@
     border-color: var(--v2-accent);
   }
   .btn-accent:hover { background: #d6b78a; border-color: #d6b78a; color: var(--v2-bg); }
+
+  /* Track Toggle */
+  .track-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    display: inline-flex;
+    align-items: center;
+    background: var(--v2-surface);
+    border: 1px solid var(--v2-border);
+    border-radius: 6px;
+    padding: 2px;
+    gap: 1px;
+    z-index: 10;
+  }
+  .track-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 22px;
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--v2-text-dim);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: color 150ms, background 150ms;
+  }
+  .track-btn:hover { color: var(--v2-text); }
+  .track-btn.is-active {
+    color: var(--v2-accent);
+    background: rgba(200, 168, 122, 0.08);
+  }
 </style>
 </head>
 <body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html" title="V1 시안으로 전환">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true" title="V2 시안 (현재)">V2</a>
+</div>
+
 <div class="card">
   <div class="mark">α</div>
   <h1>로그인 (V2)</h1>

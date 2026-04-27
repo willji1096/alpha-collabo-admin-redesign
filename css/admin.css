@@ -792,6 +792,42 @@ body { background: var(--bg-page); }
   gap: 10px;
 }
 
+/* ===== Track Toggle (V1/V2 시안 전환) ===== */
+.h-track-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 1px;
+}
+.h-track-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 8px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: color 150ms, background 150ms, box-shadow 150ms;
+  font-variant-numeric: tabular-nums;
+}
+.h-track-btn:hover { color: var(--text-primary); }
+.h-track-btn.is-active {
+  color: var(--accent);
+  background: var(--bg-surface);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+@media (max-width: 768px) {
+  .h-track-toggle { order: -1; }
+}
+
 /* 알림 등 아이콘 버튼 */
 .h-icon-btn {
   position: relative;

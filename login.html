@@ -331,9 +331,50 @@
     .login-title { font-size: 22px; line-height: 1.35; }
     .login-bot-wrap { display: none; }
   }
+
+  /* Track Toggle (V1/V2) */
+  .login-track-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    gap: 1px;
+    z-index: 20;
+  }
+  .login-track-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 22px;
+    padding: 0 10px;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: color 150ms, background 150ms;
+  }
+  .login-track-btn:hover { color: var(--text-primary); }
+  .login-track-btn.is-active {
+    color: var(--accent);
+    background: var(--bg-surface);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  }
 </style>
 </head>
 <body>
+
+<div class="login-track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="login-track-btn is-active" href="login.html" aria-current="true" title="V1 시안 (현재)">V1</a>
+  <a class="login-track-btn" href="v2/index.html" title="V2 시안으로 전환">V2</a>
+</div>
 
 <!-- Header -->
 <header class="login-header-bar">

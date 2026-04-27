@@ -1,0 +1,197 @@
+/* ==========================================================================
+   Alphacollabo V2 — Tokens (Curated Light)
+   단일 기준. 화면·컴포넌트는 raw hex/px 직접 사용 금지. 이 파일의 변수만.
+   ========================================================================== */
+
+:root {
+  /* ---------- Neutral (warm off-white scale) ---------- */
+  --neutral-0:   #FFFFFF;
+  --neutral-50:  #FBFBFA;   /* page bg */
+  --neutral-75:  #F6F5F2;   /* subtle elevated */
+  --neutral-100: #EFEEEA;   /* hover */
+  --neutral-150: #E9E7E1;   /* divider */
+  --neutral-200: #DDDAD2;   /* subtle border */
+  --neutral-300: #C9C6BE;   /* default input border */
+  --neutral-400: #97948C;
+  --neutral-500: #6E6B63;
+  --neutral-600: #51504A;
+  --neutral-700: #3A3935;
+  --neutral-800: #25241F;
+  --neutral-900: #131210;
+
+  /* ---------- Wine (signature accent) ---------- */
+  --wine-50:  #FAF1F2;
+  --wine-100: #F2DCE0;
+  --wine-200: #E5B5BD;
+  --wine-300: #D08490;
+  --wine-400: #B45565;
+  --wine-500: #7C2D3D;   /* primary */
+  --wine-600: #5F1F2C;
+  --wine-700: #4A1622;
+  --wine-800: #350F18;
+
+  /* ---------- Status (paper-friendly muted) ---------- */
+  --success-50:  #EEF7F0;
+  --success-300: #A0CCAE;
+  --success-500: #4D8B5F;
+  --success-700: #2F5A3D;
+
+  --warning-50:  #FBF4E5;
+  --warning-300: #E2C886;
+  --warning-500: #B07F2C;
+  --warning-700: #7A5519;
+
+  --danger-50:  #FAEEEB;
+  --danger-300: #D9A89A;
+  --danger-500: #B5523C;
+  --danger-700: #7A3424;
+
+  --info-50:  #EDF1F8;
+  --info-300: #9CB1CC;
+  --info-500: #527093;
+  --info-700: #34506E;
+
+  /* ---------- Semantic ---------- */
+  --bg-page:      var(--neutral-50);
+  --bg-surface:   var(--neutral-0);
+  --bg-elevated:  var(--neutral-75);
+  --bg-hover:     var(--neutral-100);
+  --bg-active:    var(--neutral-150);
+  --bg-inverse:   var(--neutral-900);
+
+  --text-primary:   var(--neutral-900);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary:  var(--neutral-500);
+  --text-disabled:  var(--neutral-400);
+  --text-inverse:   var(--neutral-0);
+  --text-link:      var(--wine-500);
+
+  --border-subtle:  var(--neutral-150);
+  --border-default: var(--neutral-200);
+  --border-strong:  var(--neutral-300);
+  --border-emphasis: var(--neutral-400);
+
+  --accent:          var(--wine-500);
+  --accent-hover:    var(--wine-600);
+  --accent-active:   var(--wine-700);
+  --accent-light:    var(--wine-50);
+  --accent-emphasis: var(--wine-700);
+  --on-accent:       var(--neutral-0);
+
+  --status-success: var(--success-500);
+  --status-success-bg: var(--success-50);
+  --status-success-strong: var(--success-700);
+  --status-warning: var(--warning-500);
+  --status-warning-bg: var(--warning-50);
+  --status-warning-strong: var(--warning-700);
+  --status-danger: var(--danger-500);
+  --status-danger-bg: var(--danger-50);
+  --status-danger-strong: var(--danger-700);
+  --status-info: var(--info-500);
+  --status-info-bg: var(--info-50);
+  --status-info-strong: var(--info-700);
+
+  /* ---------- Shadow (페이퍼 톤, 따뜻한 그늘) ---------- */
+  --shadow-xs: 0 1px 2px rgba(28, 24, 20, 0.04);
+  --shadow-sm: 0 2px 6px rgba(28, 24, 20, 0.06), 0 1px 2px rgba(28, 24, 20, 0.04);
+  --shadow-md: 0 6px 16px rgba(28, 24, 20, 0.08), 0 2px 4px rgba(28, 24, 20, 0.04);
+  --shadow-lg: 0 14px 32px rgba(28, 24, 20, 0.10), 0 4px 8px rgba(28, 24, 20, 0.05);
+  --shadow-xl: 0 24px 48px rgba(28, 24, 20, 0.14), 0 8px 16px rgba(28, 24, 20, 0.06);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  --focus-ring: 0 0 0 3px rgba(124, 45, 61, 0.18);
+  --focus-ring-tight: 0 0 0 2px rgba(124, 45, 61, 0.32);
+
+  /* ---------- Typography ---------- */
+  --font-sans:  'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Noto Serif KR', 'Source Serif Pro', 'Cormorant Garamond', Georgia, serif;
+  --font-mono:  ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, monospace;
+
+  --fs-2xs:     11px;
+  --fs-xs:      12px;
+  --fs-sm:      13px;
+  --fs-base:    14px;   /* 본문 기본 */
+  --fs-md:      15px;
+  --fs-lg:      17px;
+  --fs-xl:      20px;
+  --fs-2xl:     24px;
+  --fs-3xl:     30px;
+  --fs-display: 40px;
+
+  --lh-tight:   1.25;
+  --lh-snug:    1.4;
+  --lh-normal:  1.55;
+  --lh-relaxed: 1.7;
+
+  --ls-tight:   -0.022em;
+  --ls-snug:    -0.012em;
+  --ls-normal:  -0.005em;
+  --ls-wide:    0.04em;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* ---------- Spacing (8pt scale, 여유롭게) ---------- */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  32px;
+  --space-8:  40px;
+  --space-9:  56px;
+  --space-10: 72px;
+  --space-11: 96px;
+
+  /* ---------- Radius (V1보다 큼 — 둥글둥글 페이퍼 톤) ---------- */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-2xl:  28px;
+  --radius-full: 9999px;
+
+  /* ---------- Motion ---------- */
+  --duration-fast: 150ms;
+  --duration:      220ms;
+  --duration-slow: 320ms;
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:   cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* ---------- Z layers ---------- */
+  --z-base:     1;
+  --z-sticky:   100;
+  --z-overlay:  200;
+  --z-dropdown: 300;
+  --z-drawer:   400;
+  --z-modal:    500;
+  --z-toast:    600;
+
+  /* ---------- Layout ---------- */
+  --sidebar-w: 248px;
+  --header-h:  64px;
+  --container-max: 1280px;
+
+  /* Match-mask blur for influencer Explore */
+  --mask-blur: 14px;
+  --mask-blur-soft: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* V2 dark는 향후 정의 — 현재는 light only */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

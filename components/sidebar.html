@@ -97,10 +97,26 @@
       <svg class="tool-chev" width="12" height="12" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
     <div class="tool-body" id="tool-memo">
-      <textarea class="memo-area" placeholder="간단 메모를 남겨 두세요…"></textarea>
-      <div class="memo-foot">
-        <span>최종저장 2026-04-16 18:20</span>
-        <button>저장</button>
+      <div class="memo-tool">
+        <div class="memo-tool-head">
+          <div class="memo-search-wrap">
+            <svg class="memo-search-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input class="memo-search" type="search" placeholder="메모 검색…" data-memo-search aria-label="메모 검색">
+          </div>
+          <button class="memo-new-btn" type="button" data-memo-new aria-label="새 메모">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+        <ul class="memo-list" data-memo-list aria-label="저장된 메모"></ul>
+        <div class="memo-empty" data-memo-empty hidden>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          <p>저장된 메모가 없어요</p>
+          <button class="memo-empty-cta" type="button" data-memo-new>첫 메모 작성</button>
+        </div>
+        <div class="memo-foot" data-memo-foot hidden>
+          <span data-memo-count>0건</span>
+          <span data-memo-updated></span>
+        </div>
       </div>
     </div>
 

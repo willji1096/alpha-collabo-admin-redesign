@@ -129,6 +129,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   wireBalanceDrawer();
 
+  // Memo Drawer 자동 주입 (사이드바 [관리메모] 미니 + 풀 편집 Drawer)
+  if (!document.querySelector('.js-memo-backdrop')) {
+    const res = await fetch('components/drawer-memo.html' + bust, { cache: 'no-store' });
+    if (res.ok) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = await res.text();
+      Array.from(wrap.children).forEach(el => document.body.appendChild(el));
+    }
+  }
+  wireMemoTool();
+
   // 챗봇 자동 주입 + 활성화
   if (!document.getElementById('chatbot')) {
     const res = await fetch('components/chatbot.html' + bust, { cache: 'no-store' });
@@ -698,6 +709,333 @@ function wireBalanceDrawer() {
   });
 
   window.showBalance = () => open();
+}
+
+/** Memo Tool — 사이드바 [관리메모] 미니 리스트 + Drawer 풀 편집. localStorage 영속 */
+function wireMemoTool() {
+  const STORAGE_KEY = 'alpha-admin-memos';
+  const sidebar = document.querySelector('.sidebar-tools');
+  if (!sidebar) return;
+
+  const list = sidebar.querySelector('[data-memo-list]');
+  const empty = sidebar.querySelector('[data-memo-empty]');
+  const foot = sidebar.querySelector('[data-memo-foot]');
+  const countEl = sidebar.querySelector('[data-memo-count]');
+  const updatedEl = sidebar.querySelector('[data-memo-updated]');
+  const search = sidebar.querySelector('[data-memo-search]');
+  if (!list || !empty || !foot) return;
+
+  const drawerBackdrop = document.querySelector('.js-memo-backdrop');
+  const drawer = document.querySelector('.js-memo-drawer');
+  if (!drawerBackdrop || !drawer) return;
+
+  const titleInput = drawer.querySelector('[data-memo-title]');
+  const bodyInput = drawer.querySelector('[data-memo-body]');
+  const tagsWrap = drawer.querySelector('[data-memo-tags]');
+  const tagInput = drawer.querySelector('[data-memo-tag-input]');
+  const pinBtn = drawer.querySelector('[data-memo-pin]');
+  const saveBtn = drawer.querySelector('[data-memo-save]');
+  const deleteBtn = drawer.querySelector('[data-memo-delete]');
+  const metaEl = drawer.querySelector('[data-memo-meta]');
+  const titleEl = drawer.querySelector('#drawer-memo-title');
+
+  let memos = loadMemos();
+  let currentId = null;
+  let editingTags = [];
+
+  function loadMemos() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw !== null) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (_) {}
+    // 시연용 시드 — 실제 운영 데이터 톤. 처음 1회만 주입 후 저장 → 이후 사용자 편집 결과만 유지
+    const seed = [
+      {
+        id: 'memo_seed_1',
+        title: '#1769756657 배송 URL 재확인',
+        body: 'mei_xian 신청건에서 배송 URL 누락된 채 검수 요청됨. 클라이언트에 재확인 메시지 발송 (4월 24일 16:43).',
+        pinned: true,
+        tags: ['검수', '배송'],
+        createdAt: '2026-04-24T16:43:00.000Z',
+        updatedAt: '2026-04-24T16:43:00.000Z',
+      },
+      {
+        id: 'memo_seed_2',
+        title: 'natasha_mood — 제안서 회신 마감 4/30',
+        body: '추가 협의 회신 필요. 일정 재확정 / 단가 조율 / 콘텐츠 톤 가이드 첨부.',
+        pinned: false,
+        tags: ['제안', 'natasha_mood'],
+        createdAt: '2026-04-22T15:48:00.000Z',
+        updatedAt: '2026-04-23T09:20:00.000Z',
+      },
+      {
+        id: 'memo_seed_3',
+        title: '검수 가이드 — 영양정보 표기 의무화',
+        body: '식품 카테고리 캠페인부터 영양정보 표기 의무화. 인플루언서 안내문 4월 말 배포 예정.',
+        pinned: false,
+        tags: ['가이드'],
+        createdAt: '2026-04-18T11:02:00.000Z',
+        updatedAt: '2026-04-18T11:02:00.000Z',
+      },
+    ];
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(seed)); } catch (_) {}
+    return seed;
+  }
+
+  function saveMemos() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memos)); } catch (_) {}
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    })[c]);
+  }
+
+  function fmtRelative(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 60) return '방금';
+    if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+    if (diff < 86400 * 7) return `${Math.floor(diff / 86400)}일 전`;
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear().toString().slice(2)}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+  }
+
+  function fmtAbsolute(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function getQuery() { return (search?.value || '').trim().toLowerCase(); }
+
+  function filterMemos() {
+    const sorted = [...memos].sort((a, b) => {
+      if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+      return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
+    });
+    const q = getQuery();
+    if (!q) return sorted;
+    return sorted.filter(m =>
+      (m.title || '').toLowerCase().includes(q) ||
+      (m.body || '').toLowerCase().includes(q) ||
+      (m.tags || []).some(t => t.toLowerCase().includes(q))
+    );
+  }
+
+  function renderList() {
+    list.innerHTML = '';
+    if (memos.length === 0) {
+      empty.hidden = false;
+      foot.hidden = true;
+      list.hidden = true;
+      return;
+    }
+    empty.hidden = true;
+    list.hidden = false;
+    foot.hidden = false;
+
+    const filtered = filterMemos();
+    if (filtered.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'memo-empty-search';
+      li.textContent = '검색 결과 없음';
+      list.appendChild(li);
+    } else {
+      filtered.forEach(m => {
+        const li = document.createElement('li');
+        li.className = 'memo-item' + (m.pinned ? ' is-pinned' : '');
+        li.dataset.id = m.id;
+        li.tabIndex = 0;
+        li.setAttribute('role', 'button');
+        li.setAttribute('aria-label', `메모 편집: ${m.title || '제목 없음'}`);
+        const excerpt = (m.body || '').replace(/\s+/g, ' ').trim();
+        const tags = (m.tags || []).slice(0, 3);
+        li.innerHTML = `
+          <div class="memo-item-row">
+            ${m.pinned ? '<svg class="memo-item-pin" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76V6h6v4.76l3 3.24v3H6v-3z"/></svg>' : ''}
+            <span class="memo-item-title">${escapeHtml(m.title || '제목 없음')}</span>
+            <span class="memo-item-time">${fmtRelative(m.updatedAt)}</span>
+          </div>
+          ${excerpt ? `<div class="memo-item-excerpt">${escapeHtml(excerpt)}</div>` : ''}
+          ${tags.length ? `<div class="memo-item-tags">${tags.map(t => `<span class="memo-item-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+        `;
+        const open = () => openDrawer(m.id);
+        li.addEventListener('click', open);
+        li.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+        });
+        list.appendChild(li);
+      });
+    }
+
+    countEl.textContent = `${memos.length}건`;
+    const newest = memos.reduce((acc, m) =>
+      !acc || new Date(m.updatedAt || 0) > new Date(acc.updatedAt || 0) ? m : acc, null);
+    updatedEl.textContent = newest ? `최종 ${fmtRelative(newest.updatedAt)}` : '';
+  }
+
+  function renderTagChips() {
+    tagsWrap.querySelectorAll('.dm-tag-chip').forEach(c => c.remove());
+    editingTags.forEach((t, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'dm-tag-chip';
+      chip.innerHTML = `${escapeHtml(t)}<button class="dm-tag-chip-remove" type="button" aria-label="${escapeHtml(t)} 태그 제거"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18"/></svg></button>`;
+      chip.querySelector('.dm-tag-chip-remove').addEventListener('click', () => {
+        editingTags.splice(i, 1);
+        renderTagChips();
+      });
+      tagsWrap.insertBefore(chip, tagInput);
+    });
+  }
+
+  function openDrawer(id) {
+    const memo = id ? memos.find(m => m.id === id) : null;
+    currentId = memo ? memo.id : null;
+    titleInput.value = memo?.title || '';
+    bodyInput.value = memo?.body || '';
+    editingTags = memo ? [...(memo.tags || [])] : [];
+    pinBtn.setAttribute('aria-pressed', String(!!memo?.pinned));
+    titleEl.textContent = memo ? '메모 편집' : '새 메모';
+    metaEl.textContent = memo ? `최근 저장 ${fmtAbsolute(memo.updatedAt)}` : '저장 전';
+    deleteBtn.disabled = !memo;
+    renderTagChips();
+    drawerBackdrop.hidden = false;
+    drawer.hidden = false;
+    requestAnimationFrame(() => {
+      drawerBackdrop.classList.add('open');
+      drawer.classList.add('open');
+      setTimeout(() => titleInput.focus(), 80);
+    });
+  }
+
+  function closeDrawer() {
+    drawerBackdrop.classList.remove('open');
+    drawer.classList.remove('open');
+    setTimeout(() => {
+      drawerBackdrop.hidden = true;
+      drawer.hidden = true;
+    }, 250);
+  }
+
+  function saveMemo() {
+    const title = titleInput.value.trim();
+    const body = bodyInput.value.trim();
+    if (!title && !body) {
+      if (typeof window.showToast === 'function') window.showToast('warning', '내용을 입력해주세요');
+      return;
+    }
+    const now = new Date().toISOString();
+    const pinned = pinBtn.getAttribute('aria-pressed') === 'true';
+    if (currentId) {
+      const m = memos.find(x => x.id === currentId);
+      if (m) {
+        m.title = title || '제목 없음';
+        m.body = body;
+        m.tags = [...editingTags];
+        m.pinned = pinned;
+        m.updatedAt = now;
+      }
+    } else {
+      memos.push({
+        id: 'memo_' + Math.random().toString(36).slice(2, 10),
+        title: title || '제목 없음',
+        body,
+        tags: [...editingTags],
+        pinned,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+    saveMemos();
+    renderList();
+    if (typeof window.showToast === 'function') window.showToast('success', '메모 저장됨');
+    closeDrawer();
+  }
+
+  function deleteMemo() {
+    if (!currentId) return;
+    const proceed = () => {
+      memos = memos.filter(m => m.id !== currentId);
+      saveMemos();
+      renderList();
+      if (typeof window.showToast === 'function') window.showToast('success', '메모 삭제됨');
+      closeDrawer();
+    };
+    if (typeof window.showConfirm === 'function') {
+      window.showConfirm({
+        title: '이 메모를 삭제할까요?',
+        desc: '삭제한 메모는 복구되지 않아요.',
+        variant: 'danger',
+        okText: '삭제',
+      }).then(ok => { if (ok) proceed(); });
+    } else if (window.confirm('이 메모를 삭제할까요?')) {
+      proceed();
+    }
+  }
+
+  // Wire — 검색
+  search?.addEventListener('input', renderList);
+
+  // Wire — 신규 (사이드바 + 빈 상태 모두)
+  document.addEventListener('click', (e) => {
+    const newBtn = e.target.closest('[data-memo-new]');
+    if (newBtn) { e.preventDefault(); openDrawer(null); }
+  });
+
+  // Wire — Drawer 닫기
+  drawer.querySelectorAll('.js-close-memo').forEach(btn => btn.addEventListener('click', closeDrawer));
+  drawerBackdrop.addEventListener('click', e => { if (e.target === drawerBackdrop) closeDrawer(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+    // Cmd/Ctrl+S 저장 (Drawer 활성 시)
+    if ((e.metaKey || e.ctrlKey) && e.key === 's' && drawer.classList.contains('open')) {
+      e.preventDefault();
+      saveMemo();
+    }
+  });
+
+  // Wire — 핀 토글
+  pinBtn.addEventListener('click', () => {
+    const cur = pinBtn.getAttribute('aria-pressed') === 'true';
+    pinBtn.setAttribute('aria-pressed', String(!cur));
+  });
+
+  // Wire — 태그 입력
+  tagInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const v = tagInput.value.trim().replace(/^,+|,+$/g, '');
+      if (v && !editingTags.includes(v) && editingTags.length < 8) {
+        editingTags.push(v);
+        renderTagChips();
+      }
+      tagInput.value = '';
+    } else if (e.key === 'Backspace' && !tagInput.value && editingTags.length) {
+      editingTags.pop();
+      renderTagChips();
+    }
+  });
+  tagInput.addEventListener('blur', () => {
+    const v = tagInput.value.trim();
+    if (v && !editingTags.includes(v) && editingTags.length < 8) {
+      editingTags.push(v);
+      renderTagChips();
+      tagInput.value = '';
+    }
+  });
+
+  saveBtn.addEventListener('click', saveMemo);
+  deleteBtn.addEventListener('click', deleteMemo);
+
+  renderList();
 }
 
 /** Chatbot Widget — 상태 머신 + 마우스 추적 + 패널 */

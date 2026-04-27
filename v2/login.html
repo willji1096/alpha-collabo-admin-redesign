@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V2 Login — Coming Soon</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+  :root {
+    --v2-bg: #0c0d10;
+    --v2-surface: #15171c;
+    --v2-border: #25282f;
+    --v2-text: #e7e8ea;
+    --v2-text-sub: #a3a6ad;
+    --v2-text-dim: #6b6e76;
+    --v2-accent: #c8a87a;
+  }
+
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--v2-bg);
+    color: var(--v2-text);
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    min-height: 100vh;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--v2-surface);
+    border: 1px solid var(--v2-border);
+    border-radius: 16px;
+    padding: 40px 36px;
+    text-align: center;
+  }
+
+  .mark {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 24px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--v2-accent) 0%, #8b6f48 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--v2-bg);
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+  .sub {
+    font-size: 13px;
+    color: var(--v2-text-sub);
+    line-height: 1.6;
+    margin: 0 0 32px;
+  }
+
+  .placeholder {
+    padding: 32px 16px;
+    border: 1px dashed var(--v2-border);
+    border-radius: 10px;
+    color: var(--v2-text-dim);
+    font-size: 12px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  .placeholder strong {
+    color: var(--v2-accent);
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--v2-border);
+    background: transparent;
+    color: var(--v2-text-sub);
+    transition: all 180ms;
+  }
+  .btn:hover { color: var(--v2-text); border-color: var(--v2-text-dim); }
+  .btn-accent {
+    color: var(--v2-bg);
+    background: var(--v2-accent);
+    border-color: var(--v2-accent);
+  }
+  .btn-accent:hover { background: #d6b78a; border-color: #d6b78a; color: var(--v2-bg); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="mark">α</div>
+  <h1>로그인 (V2)</h1>
+  <p class="sub">신규 시안 로그인 화면은 컨셉 확정 후 구성됩니다.</p>
+
+  <div class="placeholder">
+    <strong>Coming Soon</strong><br>
+    DESIGN.md 컨셉이 확정되면 이 카드 안에 V2 톤의 로그인 폼이 들어옵니다.
+  </div>
+
+  <div class="actions">
+    <a class="btn" href="index.html">← V2 인덱스</a>
+    <a class="btn btn-accent" href="../index.html">시안 선택</a>
+  </div>
+</div>
+</body>
+</html>

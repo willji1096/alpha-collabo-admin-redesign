@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V2 시안 — Coming Soon</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+  :root {
+    --v2-bg: #0c0d10;
+    --v2-surface: #15171c;
+    --v2-border: #25282f;
+    --v2-text: #e7e8ea;
+    --v2-text-sub: #a3a6ad;
+    --v2-text-dim: #6b6e76;
+    --v2-accent: #c8a87a;
+  }
+
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--v2-bg);
+    color: var(--v2-text);
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    min-height: 100vh;
+  }
+
+  .stage {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(200, 168, 122, 0.08);
+    border: 1px solid rgba(200, 168, 122, 0.24);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--v2-accent);
+    margin-bottom: 32px;
+  }
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--v2-accent);
+    box-shadow: 0 0 10px rgba(200, 168, 122, 0.6);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  h1 {
+    font-size: 38px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin: 0 0 16px;
+    color: var(--v2-text);
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--v2-accent);
+  }
+
+  .lead {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--v2-text-sub);
+    margin: 0 0 40px;
+  }
+
+  .checklist {
+    text-align: left;
+    list-style: none;
+    padding: 24px;
+    margin: 0 0 40px;
+    background: var(--v2-surface);
+    border: 1px solid var(--v2-border);
+    border-radius: 12px;
+  }
+  .checklist li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    font-size: 13px;
+    color: var(--v2-text-sub);
+    line-height: 1.6;
+  }
+  .checklist li + li { border-top: 1px dashed var(--v2-border); }
+  .checklist .step {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--v2-border);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--v2-text-dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .checklist li.is-active { color: var(--v2-text); }
+  .checklist li.is-active .step {
+    border-color: var(--v2-accent);
+    color: var(--v2-accent);
+    background: rgba(200, 168, 122, 0.06);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: all 180ms;
+    cursor: pointer;
+  }
+  .btn-ghost {
+    color: var(--v2-text-sub);
+    border-color: var(--v2-border);
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    color: var(--v2-text);
+    border-color: var(--v2-text-dim);
+  }
+  .btn-accent {
+    color: var(--v2-bg);
+    background: var(--v2-accent);
+  }
+  .btn-accent:hover {
+    background: #d6b78a;
+  }
+
+  footer {
+    margin-top: 56px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--v2-text-dim);
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <span class="badge"><span class="badge-dot"></span>V2 · Drafting</span>
+
+  <h1>처음부터 다시 짜는<br><em>오리지널 시안</em></h1>
+  <p class="lead">기존 화면 제약을 떼어내고, 알파콜라보만의 톤·정보 구조·컴포넌트를 새로 정의합니다.</p>
+
+  <ol class="checklist">
+    <li class="is-active">
+      <span class="step">1</span>
+      <span><strong style="color:var(--v2-text)">디자인 컨설테이션</strong> — 무드·타이포·색·레이아웃 합의</span>
+    </li>
+    <li>
+      <span class="step">2</span>
+      <span>DESIGN.md · 토큰 시스템 정의</span>
+    </li>
+    <li>
+      <span class="step">3</span>
+      <span>디자인 시스템 (컴포넌트 라이브러리) 구축</span>
+    </li>
+    <li>
+      <span class="step">4</span>
+      <span>핵심 화면 적용 — 로그인 · 대시보드 · 리스트</span>
+    </li>
+  </ol>
+
+  <div class="actions">
+    <a class="btn btn-ghost" href="../index.html">← 시안 선택으로 돌아가기</a>
+    <a class="btn btn-accent" href="login.html">로그인 미리보기</a>
+  </div>
+
+  <footer>Alphacollabo · V2 · Coming Soon</footer>
+</div>
+</body>
+</html>

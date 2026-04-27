@@ -3,152 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alphacollabo Admin — Redesign Preview</title>
+<title>Alphacollabo Admin — Version Gate</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link rel="stylesheet" href="css/common.css">
 <style>
-  body { background: var(--bg-page); min-height: 100vh; }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 64px 32px 96px; }
+  body { background: var(--bg-page); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px 24px; }
 
-  .hero { margin-bottom: 48px; }
-  .eyebrow {
+  .gate { width: 100%; max-width: 960px; }
+
+  .gate-head {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .gate-eyebrow {
     display: inline-block;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
-  h1 {
+  .gate-title {
     font-size: 32px;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin: 0 0 10px;
   }
-  .hero p {
+  .gate-sub {
     font-size: 15px;
     color: var(--text-secondary);
     line-height: 1.6;
+    margin: 0;
   }
 
-  .group { margin-bottom: 40px; }
-  .group-title {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-tertiary);
-    margin-bottom: 12px;
-  }
-
-  .grid {
+  .gate-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
   }
-  .card {
-    display: block;
-    padding: 18px 20px;
+  @media (max-width: 720px) {
+    .gate-grid { grid-template-columns: 1fr; }
+  }
+
+  .gate-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 28px 24px;
     background: var(--bg-surface);
     border: 1px solid var(--border-default);
-    border-radius: 10px;
+    border-radius: 14px;
     text-decoration: none;
-    transition: all 0.15s ease;
+    color: inherit;
+    transition: border-color 180ms, transform 180ms, box-shadow 180ms;
+    min-height: 240px;
   }
-  .card:hover {
+  .gate-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+  }
+  .gate-card:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: var(--focus-ring);
+  }
+  .gate-card.is-soon {
+    border-style: dashed;
+  }
+  .gate-card.is-soon:hover {
+    transform: translateY(-2px);
     border-color: var(--border-strong);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-  }
-  .card-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-  }
-  .card-meta {
-    font-size: 12px;
-    color: var(--text-tertiary);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
-  footer {
-    margin-top: 64px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border-light);
+  .gate-card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    background: var(--accent-light);
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .gate-card.is-soon .gate-card-tag {
+    background: var(--bg-elevated);
+    color: var(--text-tertiary);
+  }
+  .gate-card-tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .gate-card-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin: 0 0 6px;
+  }
+  .gate-card-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 22px;
+  }
+
+  .gate-card-meta {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     font-size: 12px;
     color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+  .gate-card-meta-row { display: inline-flex; gap: 8px; align-items: center; }
+  .gate-card-meta-label { color: var(--text-disabled); min-width: 60px; }
+
+  .gate-card-arrow {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-tertiary);
+    transition: color 180ms, transform 180ms, background 180ms;
+  }
+  .gate-card:hover .gate-card-arrow {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  .gate-card.is-soon .gate-card-arrow { color: var(--text-disabled); }
+
+  .gate-aux {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+  .gate-aux a {
+    color: var(--text-tertiary);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--border-default);
+    padding-bottom: 1px;
+    transition: color 150ms, border-color 150ms;
+  }
+  .gate-aux a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .gate-aux .gate-aux-sep { color: var(--text-disabled); }
+
+  footer {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-disabled);
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="hero">
-    <span class="eyebrow">Alphacollabo · Admin Redesign</span>
-    <h1>디자인 개선안 프리뷰</h1>
-    <p>기존 알파 콜라보 어드민의 화면 디자인 개선 산출물입니다. 아래에서 화면별로 확인할 수 있습니다.</p>
+<div class="gate">
+
+  <header class="gate-head">
+    <span class="gate-eyebrow">Alphacollabo · Admin</span>
+    <h1 class="gate-title">디자인 시안을 선택해 주세요</h1>
+    <p class="gate-sub">두 가지 시안을 동시에 검토할 수 있도록 분리해 두었습니다. 각 시안은 독립된 디자인 시스템과 화면 흐름을 가집니다.</p>
   </header>
 
-  <section class="group">
-    <div class="group-title">Foundation</div>
-    <div class="grid">
-      <a class="card" href="design-system.html"><div class="card-title">디자인 시스템</div><div class="card-meta">design-system.html</div></a>
-    </div>
-  </section>
+  <div class="gate-grid">
 
-  <section class="group">
-    <div class="group-title">Auth & Entry</div>
-    <div class="grid">
-      <a class="card" href="login.html"><div class="card-title">로그인</div><div class="card-meta">login.html</div></a>
-      <a class="card" href="pricing.html"><div class="card-title">요금제</div><div class="card-meta">pricing.html</div></a>
-    </div>
-  </section>
+    <!-- V1 — 기존 화면 개선 시안 (운영 중) -->
+    <a class="gate-card" href="login.html" aria-label="V1 시안 진입 — 기존 어드민 화면 개선">
+      <span class="gate-card-tag"><span class="gate-card-tag-dot"></span>V1 · Active</span>
+      <h2 class="gate-card-title">기존 화면 개선 시안</h2>
+      <p class="gate-card-sub">현재 어드민 구조를 그대로 두고 시각·정보 밀도·컴포넌트를 다듬은 버전. 인수인계 우선.</p>
+      <div class="gate-card-meta">
+        <span class="gate-card-meta-row"><span class="gate-card-meta-label">컨셉</span>Linear-tone, Light Surface</span>
+        <span class="gate-card-meta-row"><span class="gate-card-meta-label">상태</span>30+ 화면 · 진행 중</span>
+      </div>
+      <span class="gate-card-arrow" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </span>
+    </a>
 
-  <section class="group">
-    <div class="group-title">Dashboard</div>
-    <div class="grid">
-      <a class="card" href="dashboard.html"><div class="card-title">대시보드</div><div class="card-meta">dashboard.html</div></a>
-      <a class="card" href="notice.html"><div class="card-title">공지사항</div><div class="card-meta">notice.html</div></a>
-    </div>
-  </section>
+    <!-- V2 — 신규 오리지널 시안 (작업 예정) -->
+    <a class="gate-card is-soon" href="v2/index.html" aria-label="V2 시안 진입 — 신규 오리지널 시안 (작업 예정)">
+      <span class="gate-card-tag"><span class="gate-card-tag-dot"></span>V2 · Drafting</span>
+      <h2 class="gate-card-title">신규 오리지널 시안</h2>
+      <p class="gate-card-sub">기존 화면 제약에서 벗어나 자체 디자인 시스템으로 처음부터 구성한 시안. 컨셉 정의부터 시작.</p>
+      <div class="gate-card-meta">
+        <span class="gate-card-meta-row"><span class="gate-card-meta-label">컨셉</span>미정 — 컨설테이션 대기</span>
+        <span class="gate-card-meta-row"><span class="gate-card-meta-label">상태</span>준비 중 · Coming Soon</span>
+      </div>
+      <span class="gate-card-arrow" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </span>
+    </a>
 
-  <section class="group">
-    <div class="group-title">Campaign</div>
-    <div class="grid">
-      <a class="card" href="campaign-calendar.html"><div class="card-title">캠페인 캘린더</div><div class="card-meta">campaign-calendar.html</div></a>
-      <a class="card" href="campaign-schedule-list.html"><div class="card-title">캠페인 일정 리스트</div><div class="card-meta">campaign-schedule-list.html</div></a>
-    </div>
-  </section>
+  </div>
 
-  <section class="group">
-    <div class="group-title">Influencer</div>
-    <div class="grid">
-      <a class="card" href="influencer-search.html"><div class="card-title">인플루언서 검색</div><div class="card-meta">influencer-search.html</div></a>
-      <a class="card" href="modal-applicant.html"><div class="card-title">지원자 모달</div><div class="card-meta">modal-applicant.html</div></a>
-      <a class="card" href="list.html#open-influencer-demo"><div class="card-title">인플루언서 상세 (Drawer)</div><div class="card-meta">list.html → 인플루언서 보기 클릭</div></a>
-    </div>
-  </section>
+  <div class="gate-aux">
+    <a href="index-v1.html">V1 화면 인덱스</a>
+    <span class="gate-aux-sep">·</span>
+    <a href="design-system.html">V1 디자인 시스템</a>
+    <span class="gate-aux-sep">·</span>
+    <a href="v2/index.html">V2 화면 인덱스</a>
+  </div>
 
-  <section class="group">
-    <div class="group-title">Lists</div>
-    <div class="grid">
-      <a class="card" href="list.html"><div class="card-title">리스트 (공통)</div><div class="card-meta">list.html</div></a>
-      <a class="card" href="list-selection.html"><div class="card-title">채택 대상</div><div class="card-meta">list-selection.html</div></a>
-      <a class="card" href="list-unselected.html"><div class="card-title">미채택</div><div class="card-meta">list-unselected.html</div></a>
-      <a class="card" href="list-cancel-selected.html"><div class="card-title">채택 취소</div><div class="card-meta">list-cancel-selected.html</div></a>
-      <a class="card" href="list-cancel-influencer.html"><div class="card-title">인플루언서 취소</div><div class="card-meta">list-cancel-influencer.html</div></a>
-      <a class="card" href="list-inspection.html"><div class="card-title">검수</div><div class="card-meta">list-inspection.html</div></a>
-      <a class="card" href="list-revision.html"><div class="card-title">수정 요청</div><div class="card-meta">list-revision.html</div></a>
-      <a class="card" href="list-completed.html"><div class="card-title">완료</div><div class="card-meta">list-completed.html</div></a>
-    </div>
-  </section>
-
-  <footer>
-    Alphacollabo Admin Redesign · 글로벌알파미디어
-  </footer>
+  <footer>Alphacollabo Admin Redesign · 글로벌알파미디어</footer>
 </div>
 </body>
 </html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — Redesign Preview</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<style>
+  body { background: var(--bg-page); min-height: 100vh; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 64px 32px 96px; }
+
+  .hero { margin-bottom: 48px; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .group { margin-bottom: 40px; }
+  .group-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .card {
+    display: block;
+    padding: 18px 20px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .card-meta {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-light);
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Alphacollabo · Admin Redesign</span>
+    <h1>디자인 개선안 프리뷰</h1>
+    <p>기존 알파 콜라보 어드민의 화면 디자인 개선 산출물입니다. 아래에서 화면별로 확인할 수 있습니다.</p>
+  </header>
+
+  <section class="group">
+    <div class="group-title">Foundation</div>
+    <div class="grid">
+      <a class="card" href="design-system.html"><div class="card-title">디자인 시스템</div><div class="card-meta">design-system.html</div></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-title">Auth & Entry</div>
+    <div class="grid">
+      <a class="card" href="login.html"><div class="card-title">로그인</div><div class="card-meta">login.html</div></a>
+      <a class="card" href="pricing.html"><div class="card-title">요금제</div><div class="card-meta">pricing.html</div></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-title">Dashboard</div>
+    <div class="grid">
+      <a class="card" href="dashboard.html"><div class="card-title">대시보드</div><div class="card-meta">dashboard.html</div></a>
+      <a class="card" href="notice.html"><div class="card-title">공지사항</div><div class="card-meta">notice.html</div></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-title">Campaign</div>
+    <div class="grid">
+      <a class="card" href="campaign-calendar.html"><div class="card-title">캠페인 캘린더</div><div class="card-meta">campaign-calendar.html</div></a>
+      <a class="card" href="campaign-schedule-list.html"><div class="card-title">캠페인 일정 리스트</div><div class="card-meta">campaign-schedule-list.html</div></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-title">Influencer</div>
+    <div class="grid">
+      <a class="card" href="influencer-search.html"><div class="card-title">인플루언서 검색</div><div class="card-meta">influencer-search.html</div></a>
+      <a class="card" href="modal-applicant.html"><div class="card-title">지원자 모달</div><div class="card-meta">modal-applicant.html</div></a>
+      <a class="card" href="list.html#open-influencer-demo"><div class="card-title">인플루언서 상세 (Drawer)</div><div class="card-meta">list.html → 인플루언서 보기 클릭</div></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-title">Lists</div>
+    <div class="grid">
+      <a class="card" href="list.html"><div class="card-title">리스트 (공통)</div><div class="card-meta">list.html</div></a>
+      <a class="card" href="list-selection.html"><div class="card-title">채택 대상</div><div class="card-meta">list-selection.html</div></a>
+      <a class="card" href="list-unselected.html"><div class="card-title">미채택</div><div class="card-meta">list-unselected.html</div></a>
+      <a class="card" href="list-cancel-selected.html"><div class="card-title">채택 취소</div><div class="card-meta">list-cancel-selected.html</div></a>
+      <a class="card" href="list-cancel-influencer.html"><div class="card-title">인플루언서 취소</div><div class="card-meta">list-cancel-influencer.html</div></a>
+      <a class="card" href="list-inspection.html"><div class="card-title">검수</div><div class="card-meta">list-inspection.html</div></a>
+      <a class="card" href="list-revision.html"><div class="card-title">수정 요청</div><div class="card-meta">list-revision.html</div></a>
+      <a class="card" href="list-completed.html"><div class="card-title">완료</div><div class="card-meta">list-completed.html</div></a>
+    </div>
+  </section>
+
+  <footer>
+    Alphacollabo Admin Redesign · 글로벌알파미디어
+  </footer>
+</div>
+</body>
+</html>

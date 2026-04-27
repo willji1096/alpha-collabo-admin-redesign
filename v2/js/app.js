@@ -6,6 +6,18 @@
 (function () {
   'use strict';
 
+  /* ---------- Lucide icon set — 모든 [data-lucide]를 SVG로 자동 변환 ---------- */
+  function paintIcons() {
+    if (typeof window.lucide !== 'undefined' && window.lucide.createIcons) {
+      window.lucide.createIcons({
+        attrs: { 'stroke-width': 1.8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' },
+      });
+    }
+  }
+  document.addEventListener('DOMContentLoaded', paintIcons);
+  // 동적 삽입 컨텐츠 대응 — 외부에서 호출
+  window.repaintIcons = paintIcons;
+
   /* ---------- Toast ---------- */
   function ensureRegion() {
     let region = document.querySelector('.toast-region');

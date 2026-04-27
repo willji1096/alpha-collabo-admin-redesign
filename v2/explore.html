@@ -129,18 +129,46 @@
     font-weight: var(--fw-bold);
   }
 
-  .sort-select {
-    height: 32px;
-    padding: 0 var(--space-3);
-    background: var(--bg-elevated);
-    border: 1px solid transparent;
-    border-radius: var(--radius-md);
+  .sort-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: 36px;
+    padding: 0 var(--space-3) 0 var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    transition: border-color var(--duration-fast);
+    cursor: pointer;
+  }
+  .sort-wrap:hover { border-color: var(--text-primary); }
+  .sort-wrap:focus-within { border-color: var(--text-primary); box-shadow: var(--focus-ring); }
+  .sort-wrap-icon { color: var(--text-secondary); flex-shrink: 0; }
+  .sort-wrap-label {
     font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    white-space: nowrap;
+  }
+  .sort-select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+    padding: 0 22px 0 0;
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
     color: var(--text-primary);
     cursor: pointer;
-    font-weight: var(--fw-semibold);
+    outline: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9' stroke='%23262626' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+    line-height: 34px;
   }
-  .sort-select:hover { background: var(--bg-hover); }
 
   /* Filter section labels */
   .filter-label {
@@ -493,12 +521,16 @@
       <!-- Results header -->
       <div class="results-head">
         <div class="results-count"><strong>184</strong>명 · <span class="accent-num">예산 영역 안 64명</span></div>
-        <select class="sort-select" aria-label="정렬">
-          <option>예산 적합도 순</option>
-          <option>팔로워 많은 순</option>
-          <option>참여율 높은 순</option>
+        <label class="sort-wrap">
+          <svg class="sort-wrap-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M11 18h2"/></svg>
+          <span class="sort-wrap-label">정렬</span>
+          <select class="sort-select" aria-label="정렬 기준">
+            <option>예산 적합도 순</option>
+            <option>팔로워 많은 순</option>
+            <option>참여율 높은 순</option>
           <option>최근 활동 순</option>
-        </select>
+          </select>
+        </label>
       </div>
 
       <!-- Influencer grid -->

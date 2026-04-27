@@ -719,11 +719,8 @@ function wireMemoTool() {
 
   const list = sidebar.querySelector('[data-memo-list]');
   const empty = sidebar.querySelector('[data-memo-empty]');
-  const foot = sidebar.querySelector('[data-memo-foot]');
-  const countEl = sidebar.querySelector('[data-memo-count]');
-  const updatedEl = sidebar.querySelector('[data-memo-updated]');
   const search = sidebar.querySelector('[data-memo-search]');
-  if (!list || !empty || !foot) return;
+  if (!list || !empty) return;
 
   const drawerBackdrop = document.querySelector('.js-memo-backdrop');
   const drawer = document.querySelector('.js-memo-drawer');
@@ -834,13 +831,11 @@ function wireMemoTool() {
     list.innerHTML = '';
     if (memos.length === 0) {
       empty.hidden = false;
-      foot.hidden = true;
       list.hidden = true;
       return;
     }
     empty.hidden = true;
     list.hidden = false;
-    foot.hidden = false;
 
     const filtered = filterMemos();
     if (filtered.length === 0) {
@@ -848,38 +843,27 @@ function wireMemoTool() {
       li.className = 'memo-empty-search';
       li.textContent = '검색 결과 없음';
       list.appendChild(li);
-    } else {
-      filtered.forEach(m => {
-        const li = document.createElement('li');
-        li.className = 'memo-item' + (m.pinned ? ' is-pinned' : '');
-        li.dataset.id = m.id;
-        li.tabIndex = 0;
-        li.setAttribute('role', 'button');
-        li.setAttribute('aria-label', `메모 편집: ${m.title || '제목 없음'}`);
-        const excerpt = (m.body || '').replace(/\s+/g, ' ').trim();
-        const tags = (m.tags || []).slice(0, 3);
-        li.innerHTML = `
-          <div class="memo-item-row">
-            ${m.pinned ? '<svg class="memo-item-pin" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76V6h6v4.76l3 3.24v3H6v-3z"/></svg>' : ''}
-            <span class="memo-item-title">${escapeHtml(m.title || '제목 없음')}</span>
-            <span class="memo-item-time">${fmtRelative(m.updatedAt)}</span>
-          </div>
-          ${excerpt ? `<div class="memo-item-excerpt">${escapeHtml(excerpt)}</div>` : ''}
-          ${tags.length ? `<div class="memo-item-tags">${tags.map(t => `<span class="memo-item-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-        `;
-        const open = () => openDrawer(m.id);
-        li.addEventListener('click', open);
-        li.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
-        });
-        list.appendChild(li);
-      });
+      return;
     }
-
-    countEl.textContent = `${memos.length}건`;
-    const newest = memos.reduce((acc, m) =>
-      !acc || new Date(m.updatedAt || 0) > new Date(acc.updatedAt || 0) ? m : acc, null);
-    updatedEl.textContent = newest ? `최종 ${fmtRelative(newest.updatedAt)}` : '';
+    filtered.forEach(m => {
+      const li = document.createElement('li');
+      li.className = 'memo-item' + (m.pinned ? ' is-pinned' : '');
+      li.dataset.id = m.id;
+      li.tabIndex = 0;
+      li.setAttribute('role', 'button');
+      li.setAttribute('aria-label', `메모 편집: ${m.title || '제목 없음'}`);
+      li.innerHTML = `
+        ${m.pinned ? '<svg class="memo-item-pin" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76V6h6v4.76l3 3.24v3H6v-3z"/></svg>' : ''}
+        <span class="memo-item-title">${escapeHtml(m.title || '제목 없음')}</span>
+        <span class="memo-item-time">${fmtRelative(m.updatedAt)}</span>
+      `;
+      const open = () => openDrawer(m.id);
+      li.addEventListener('click', open);
+      li.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+      });
+      list.appendChild(li);
+    });
   }
 
   function renderTagChips() {

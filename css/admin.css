@@ -388,67 +388,40 @@ body { background: var(--bg-page); }
 }
 .memo-item {
   position: relative;
-  padding: 8px 10px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 150ms, border-color 150ms;
-}
-.memo-item:hover { background: var(--bg-hover); border-color: var(--border-default, var(--border-light)); }
-.memo-item:focus-visible { outline: none; box-shadow: var(--focus-ring); border-color: var(--accent); }
-.memo-item.is-pinned { border-color: var(--accent-light); background: linear-gradient(0deg, var(--accent-light) 0%, var(--bg-surface) 36%); }
-
-.memo-item-row {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 7px 10px;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 150ms;
   min-width: 0;
 }
+.memo-item:hover { background: var(--bg-hover); }
+.memo-item:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 .memo-item-pin {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   flex-shrink: 0;
   color: var(--accent);
 }
 .memo-item-title {
   flex: 1;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: -0.2px;
 }
+.memo-item.is-pinned .memo-item-title { font-weight: 600; }
 .memo-item-time {
   font-size: 10px;
   color: var(--text-disabled);
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
-}
-.memo-item-excerpt {
-  margin-top: 2px;
-  font-size: 11px;
-  line-height: 1.4;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.memo-item-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  margin-top: 4px;
-}
-.memo-item-tag {
-  font-size: 10px;
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: var(--bg-page);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-light);
 }
 
 .memo-empty-search {
@@ -483,17 +456,6 @@ body { background: var(--bg-page); }
   transition: background 150ms;
 }
 .memo-empty-cta:hover { background: var(--accent-hover); }
-
-.memo-foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 10px;
-  color: var(--text-disabled);
-  padding-top: 4px;
-  border-top: 1px dashed var(--border-light);
-  font-variant-numeric: tabular-nums;
-}
 
 /* ===== Memo Drawer ===== */
 .drawer.drawer-memo { width: 480px; max-width: calc(100vw - 48px); }

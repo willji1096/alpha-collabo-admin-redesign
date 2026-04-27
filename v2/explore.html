@@ -6,128 +6,110 @@
 <title>Explore — Alphacollabo V2</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
 <style>
-  /* explore-specific */
   .explore-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(244px, 1fr));
     gap: var(--space-4);
   }
+
   .budget-bar {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: var(--space-5);
-    align-items: center;
-    padding: var(--space-5);
-    background: linear-gradient(135deg, var(--wine-50) 0%, var(--bg-surface) 100%);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6) var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
   }
-  .budget-input { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
-  .budget-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .budget-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
   .budget-key {
-    font-size: var(--fs-xs);
-    color: var(--accent-emphasis);
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-bold);
     letter-spacing: var(--ls-wide);
     text-transform: uppercase;
-    font-weight: var(--fw-semibold);
   }
   .budget-val {
-    font-family: var(--font-serif);
-    font-size: var(--fs-xl);
-    font-weight: var(--fw-semibold);
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-heavy);
     color: var(--text-primary);
     letter-spacing: var(--ls-tight);
     font-variant-numeric: tabular-nums;
+    line-height: 1;
   }
-  .budget-val em { font-style:normal; font-size: var(--fs-md); color: var(--text-tertiary); margin-left: 4px; }
-  .budget-cta { display: flex; gap: var(--space-2); }
-
-  /* card cover with portrait gradient */
-  .cover-1 { background: linear-gradient(135deg, #d4b8c1 0%, #7c2d3d 100%); }
-  .cover-2 { background: linear-gradient(135deg, #c8b69e 0%, #6b4f2e 100%); }
-  .cover-3 { background: linear-gradient(135deg, #aab4c4 0%, #2e3e5a 100%); }
-  .cover-4 { background: linear-gradient(135deg, #d8c4ad 0%, #8b5a3c 100%); }
-  .cover-5 { background: linear-gradient(135deg, #b9bcc4 0%, #4a4d56 100%); }
-  .cover-6 { background: linear-gradient(135deg, #d2a896 0%, #844c3a 100%); }
-  .cover-7 { background: linear-gradient(135deg, #c8c1d2 0%, #4d4565 100%); }
-  .cover-8 { background: linear-gradient(135deg, #b9c4b6 0%, #45554a 100%); }
-
-  .cover-icon {
-    position: absolute;
-    inset: 0;
+  .budget-val em {
+    font-style:normal;
+    font-size: var(--fs-base);
+    color: var(--text-secondary);
+    margin-left: 6px;
+    font-weight: var(--fw-semibold);
+  }
+  .budget-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+  }
+  .budget-foot {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.5);
-    font-family: var(--font-serif);
-    font-size: 64px;
-    font-weight: var(--fw-semibold);
-    letter-spacing: -0.04em;
-    filter: blur(var(--mask-blur-soft));
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
   }
-
-  .lock-pill {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+  .budget-feedback {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px 8px;
-    background: rgba(28, 24, 20, 0.55);
-    color: rgba(255,255,255,0.92);
-    font-size: var(--fs-2xs);
-    font-weight: var(--fw-semibold);
-    letter-spacing: var(--ls-wide);
-    text-transform: uppercase;
-    border-radius: var(--radius-full);
-    backdrop-filter: blur(8px);
-  }
-
-  .save-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.92);
+    gap: var(--space-2);
+    font-size: var(--fs-sm);
     color: var(--text-secondary);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(6px);
-    transition: color var(--duration-fast), transform var(--duration-fast);
+    font-weight: var(--fw-medium);
   }
-  .save-btn:hover { color: var(--accent); transform: scale(1.08); }
-  .save-btn.is-saved { color: var(--accent); }
+  .budget-feedback strong {
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .budget-feedback-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-light);
+  }
+  .budget-cta { display: flex; gap: var(--space-2); }
+  @media (max-width: 600px) {
+    .budget-foot { flex-direction: column; align-items: stretch; }
+    .budget-cta { justify-content: flex-end; }
+  }
 
-  .within-budget {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .inf-card.is-within {
-    box-shadow: 0 0 0 1px var(--accent-light), var(--shadow-sm);
-  }
-  .inf-card.is-within::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
-    opacity: 0.5;
-  }
+  /* IG-style cover gradients (photo placeholder) */
+  .cover-1 { background: linear-gradient(135deg, #FFC371 0%, #FF5F6D 100%); }
+  .cover-2 { background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%); }
+  .cover-3 { background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%); }
+  .cover-4 { background: linear-gradient(135deg, #FA709A 0%, #FEE140 100%); }
+  .cover-5 { background: linear-gradient(135deg, #A18CD1 0%, #FBC2EB 100%); }
+  .cover-6 { background: linear-gradient(135deg, #FF9A9E 0%, #FAD0C4 100%); }
+  .cover-7 { background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%); }
+  .cover-8 { background: linear-gradient(135deg, #F6D365 0%, #FDA085 100%); }
 
   .results-head {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     margin-bottom: var(--space-4);
     gap: var(--space-4);
@@ -135,11 +117,16 @@
   .results-count {
     font-size: var(--fs-sm);
     color: var(--text-secondary);
+    font-weight: var(--fw-medium);
   }
   .results-count strong {
     color: var(--text-primary);
-    font-weight: var(--fw-semibold);
+    font-weight: var(--fw-bold);
     font-variant-numeric: tabular-nums;
+  }
+  .results-count .accent-num {
+    color: var(--accent);
+    font-weight: var(--fw-bold);
   }
 
   .sort-select {
@@ -147,12 +134,24 @@
     padding: 0 var(--space-3);
     background: var(--bg-elevated);
     border: 1px solid transparent;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-xs);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-weight: var(--fw-semibold);
+  }
+  .sort-select:hover { background: var(--bg-hover); }
+
+  /* Filter section labels */
+  .filter-label {
     font-size: var(--fs-xs);
     color: var(--text-secondary);
-    cursor: pointer;
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    padding: 0 var(--space-2);
   }
-  .sort-select:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .filter-label + .filter-label { margin-left: var(--space-3); }
 </style>
 </head>
 <body>
@@ -178,37 +177,37 @@
       <div class="nav-group">
         <span class="nav-label">Workspace</span>
         <a class="nav-item" href="dashboard.html">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-          대시보드
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12 12 3l9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10"/></svg>
+          홈
         </a>
         <a class="nav-item is-active" href="explore.html">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          Explore
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor"/></svg>
+          탐색
           <span class="nav-item-meta">2,847</span>
         </a>
         <a class="nav-item" href="#">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-2 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M9 5V3a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
           캠페인
           <span class="nav-item-meta">3</span>
         </a>
         <a class="nav-item" href="#">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 1 1-3.5-6.6L21 4v6h-6"/></svg>
           메시지
         </a>
         <a class="nav-item" href="#">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          저장한 인플루언서
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          저장됨
         </a>
       </div>
 
       <div class="nav-group">
         <span class="nav-label">Account</span>
         <a class="nav-item" href="#">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/></svg>
           결제 · 구독
         </a>
         <a class="nav-item" href="#">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h0a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.5h0a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v0a1.6 1.6 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
           설정
         </a>
       </div>
@@ -220,14 +219,16 @@
         <span class="match-meter-num">7<em>/ 12</em></span>
       </div>
       <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
-      <span style="font-size: var(--fs-2xs); color: var(--text-tertiary);">Pro 플랜 · 5월 1일 갱신</span>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
     </div>
 
     <div class="sidebar-foot">
-      <div class="avatar avatar-md" style="background: var(--accent-light); color: var(--accent);">G</div>
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
       <div style="min-width:0;">
-        <div class="sidebar-foot-name">Glowlab Korea</div>
-        <div class="sidebar-foot-sub">contact@glowlab.kr</div>
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
       </div>
     </div>
   </aside>
@@ -237,18 +238,18 @@
 
     <header class="topbar">
       <div class="topbar-search">
-        <svg class="topbar-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input type="search" placeholder="국가, 카테고리, 핸들 검색…">
+        <svg class="topbar-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="검색…">
       </div>
       <div class="topbar-spacer"></div>
       <span class="topbar-pill">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M22 12 12 12 12 2" /></svg>
         매칭 <strong>7</strong>회
         <span class="pill-divider"></span>
         <a class="pill-link" href="#">충전</a>
       </span>
       <button class="btn-icon" aria-label="알림">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 14.5A10 10 0 1 0 3.6 14.5L2 19l4.5-1.5a10 10 0 0 0 13.9 0z"/></svg>
       </button>
     </header>
 
@@ -257,60 +258,241 @@
       <div class="page-head">
         <div>
           <div class="page-eyebrow">Explore</div>
-          <h1 class="page-title">인플루언서를 살펴보세요</h1>
+          <h1 class="page-title">인플루언서 살펴보기</h1>
           <p class="page-sub">정보는 가려진 상태로 노출됩니다. 매칭하면 연락처·상세 통계가 풀리고, 매칭 횟수 1회가 차감됩니다.</p>
         </div>
         <div class="page-head-actions">
           <button class="btn btn-secondary">저장한 목록 (4)</button>
           <button class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             새 캠페인
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- Budget bar -->
+      <!-- Budget bar — 시선 동선: 라벨 → 값 → 슬라이더 → 결과 → 액션 -->
       <div class="budget-bar">
-        <div class="budget-input">
-          <div class="budget-head">
-            <span class="budget-key">예산 영역 (₩)</span>
-            <span class="budget-val"><span id="budget-out">800만</span><em>원 이하</em></span>
-          </div>
-          <input class="range-track" type="range" min="100000" max="20000000" step="100000" value="8000000" data-target="budget-out" data-format="won">
-          <div style="display:flex; justify-content:space-between; font-size: var(--fs-2xs); color: var(--text-tertiary); letter-spacing: var(--ls-wide);">
-            <span>10만</span><span>2,000만</span>
-          </div>
+        <div class="budget-top">
+          <span class="budget-key">캠페인 예산 영역</span>
+          <span class="budget-val"><span id="budget-out">800만</span><em>원 이하</em></span>
         </div>
-        <div class="budget-cta">
-          <button class="btn btn-secondary btn-sm">초기화</button>
-          <button class="btn btn-primary btn-sm">예산 매칭 캠페인 생성</button>
+        <input class="range-track" type="range" min="100000" max="20000000" step="100000" value="8000000" data-target="budget-out" data-format="won" aria-label="예산 영역">
+        <div class="budget-ticks">
+          <span>10만원</span>
+          <span>2,000만원</span>
+        </div>
+        <div class="budget-foot">
+          <span class="budget-feedback">
+            <span class="budget-feedback-dot" aria-hidden="true"></span>
+            이 예산으로 매칭 가능한 인플루언서 <strong>64명</strong>
+          </span>
+          <div class="budget-cta">
+            <button class="btn btn-ghost btn-sm">초기화</button>
+            <button class="btn btn-primary btn-sm">
+              예산 매칭 캠페인 생성
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Filters -->
-      <div class="filter-bar" role="toolbar" aria-label="필터">
-        <span style="font-size: var(--fs-xs); color: var(--text-tertiary); letter-spacing: var(--ls-wide); padding: 0 var(--space-2);">국가</span>
-        <button class="filter-chip is-active" data-toggle>일본</button>
-        <button class="filter-chip" data-toggle>중국</button>
-        <button class="filter-chip" data-toggle>대만</button>
-        <button class="filter-chip" data-toggle>홍콩</button>
-        <button class="filter-chip" data-toggle>태국</button>
-        <span style="font-size: var(--fs-xs); color: var(--text-tertiary); letter-spacing: var(--ls-wide); padding: 0 var(--space-2); margin-left: var(--space-3);">플랫폼</span>
-        <button class="filter-chip is-active" data-toggle>Instagram</button>
-        <button class="filter-chip" data-toggle>YouTube</button>
-        <button class="filter-chip" data-toggle>TikTok</button>
-        <button class="filter-chip" data-toggle>Xiaohongshu</button>
-        <span style="font-size: var(--fs-xs); color: var(--text-tertiary); letter-spacing: var(--ls-wide); padding: 0 var(--space-2); margin-left: var(--space-3);">카테고리</span>
-        <button class="filter-chip" data-toggle>뷰티</button>
-        <button class="filter-chip is-active" data-toggle>라이프스타일</button>
-        <button class="filter-chip" data-toggle>식품</button>
-        <button class="filter-chip" data-toggle>여행</button>
-        <span style="margin-left: auto; font-size: var(--fs-xs); color: var(--text-tertiary);">필터 3개 적용 중</span>
+      <!-- Filter summary bar — 활성 칩 + 더 많은 필터 토글 -->
+      <div class="filter-bar" role="toolbar" aria-label="활성 필터">
+        <span class="filter-chip is-active" data-toggle>
+          일본
+          <span class="filter-chip-x" aria-label="제거"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg></span>
+        </span>
+        <span class="filter-chip is-active" data-toggle>
+          Instagram
+          <span class="filter-chip-x"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg></span>
+        </span>
+        <span class="filter-chip is-active" data-toggle>
+          라이프스타일
+          <span class="filter-chip-x"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg></span>
+        </span>
+        <button class="filter-clear" type="button">전체 해제</button>
+        <span class="filter-summary-spacer"></span>
+        <button class="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel" data-filter-toggle>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+          필터
+          <span class="count-badge">3</span>
+          <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+
+      <!-- Expandable filter panel -->
+      <div class="filter-panel" id="filter-panel" hidden>
+        <div class="filter-panel-inner">
+
+          <div class="filter-section is-open">
+            <button class="filter-section-head" type="button" aria-expanded="true" data-section-toggle>
+              <span class="filter-section-title">국가 <span class="filter-section-count">1</span></span>
+              <span class="filter-section-meta">선택된 1개 — 일본</span>
+              <svg class="filter-section-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="filter-section-body">
+              <div class="filter-options">
+                <button class="filter-chip is-active" data-toggle>일본</button>
+                <button class="filter-chip" data-toggle>중국</button>
+                <button class="filter-chip" data-toggle>대만</button>
+                <button class="filter-chip" data-toggle>홍콩</button>
+                <button class="filter-chip" data-toggle>태국</button>
+                <button class="filter-chip" data-toggle>러시아</button>
+                <button class="filter-chip" data-toggle>베트남</button>
+                <button class="filter-chip" data-toggle>싱가포르</button>
+                <button class="filter-chip" data-toggle>말레이시아</button>
+                <button class="filter-chip" data-toggle>인도네시아</button>
+                <button class="filter-chip" data-toggle>필리핀</button>
+                <button class="filter-chip" data-toggle>대한민국</button>
+                <button class="filter-chip" data-toggle>미국</button>
+                <button class="filter-chip" data-toggle>영국</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section is-open">
+            <button class="filter-section-head" type="button" aria-expanded="true" data-section-toggle>
+              <span class="filter-section-title">플랫폼 <span class="filter-section-count">1</span></span>
+              <span class="filter-section-meta">Instagram</span>
+              <svg class="filter-section-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="filter-section-body">
+              <div class="filter-subgroup">
+                <div class="filter-subgroup-label">메인 플랫폼</div>
+                <div class="filter-options">
+                  <button class="filter-chip is-active" data-toggle>Instagram</button>
+                  <button class="filter-chip" data-toggle>YouTube</button>
+                  <button class="filter-chip" data-toggle>TikTok</button>
+                  <button class="filter-chip" data-toggle>Xiaohongshu</button>
+                  <button class="filter-chip" data-toggle>Douyin</button>
+                  <button class="filter-chip" data-toggle>Twitter / X</button>
+                </div>
+              </div>
+              <div class="filter-subgroup">
+                <div class="filter-subgroup-label">Instagram 콘텐츠 유형</div>
+                <div class="filter-options">
+                  <button class="filter-chip" data-toggle>피드</button>
+                  <button class="filter-chip" data-toggle>릴스</button>
+                  <button class="filter-chip" data-toggle>스토리</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section is-open">
+            <button class="filter-section-head" type="button" aria-expanded="true" data-section-toggle>
+              <span class="filter-section-title">카테고리 <span class="filter-section-count">1</span></span>
+              <span class="filter-section-meta">라이프스타일</span>
+              <svg class="filter-section-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="filter-section-body">
+              <div class="filter-subgroup">
+                <div class="filter-subgroup-label">대분류</div>
+                <div class="filter-options">
+                  <button class="filter-chip" data-toggle>뷰티</button>
+                  <button class="filter-chip is-active" data-toggle>라이프스타일</button>
+                  <button class="filter-chip" data-toggle>식품</button>
+                  <button class="filter-chip" data-toggle>여행</button>
+                  <button class="filter-chip" data-toggle>패션</button>
+                  <button class="filter-chip" data-toggle>육아</button>
+                  <button class="filter-chip" data-toggle>피트니스</button>
+                  <button class="filter-chip" data-toggle>IT/테크</button>
+                </div>
+              </div>
+              <div class="filter-subgroup">
+                <div class="filter-subgroup-label">라이프스타일 세부</div>
+                <div class="filter-options">
+                  <button class="filter-chip" data-toggle>홈리빙</button>
+                  <button class="filter-chip" data-toggle>인테리어</button>
+                  <button class="filter-chip" data-toggle>일상 브이로그</button>
+                  <button class="filter-chip" data-toggle>웰니스</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <button class="filter-section-head" type="button" aria-expanded="false" data-section-toggle>
+              <span class="filter-section-title">팔로워 범위</span>
+              <span class="filter-section-meta">10K — 1M</span>
+              <svg class="filter-section-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="filter-section-body">
+              <div class="filter-options">
+                <button class="filter-chip" data-toggle>나노 (1K~10K)</button>
+                <button class="filter-chip is-active" data-toggle>마이크로 (10K~100K)</button>
+                <button class="filter-chip is-active" data-toggle>미드티어 (100K~500K)</button>
+                <button class="filter-chip is-active" data-toggle>매크로 (500K~1M)</button>
+                <button class="filter-chip" data-toggle>메가 (1M+)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <button class="filter-section-head" type="button" aria-expanded="false" data-section-toggle>
+              <span class="filter-section-title">참여율</span>
+              <span class="filter-section-meta">3% 이상</span>
+              <svg class="filter-section-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="filter-section-body">
+              <div class="filter-range">
+                <div class="filter-range-head">
+                  <span>최소 참여율</span>
+                  <span><strong id="er-out">3.0</strong>% 이상</span>
+                </div>
+                <input class="range-track" type="range" min="0" max="15" step="0.5" value="3" data-target="er-out" aria-label="참여율 범위">
+                <div class="budget-ticks">
+                  <span>0%</span>
+                  <span>15%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <button class="filter-section-head" type="button" aria-expanded="false" data-section-toggle>
+              <span class="filter-section-title">기타</span>
+              <span class="filter-section-meta">언어 · 매칭 · 인증</span>
+              <svg class="filter-section-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="filter-section-body">
+              <div class="filter-subgroup">
+                <div class="filter-subgroup-label">언어</div>
+                <div class="filter-options">
+                  <button class="filter-chip" data-toggle>일본어</button>
+                  <button class="filter-chip" data-toggle>중국어 간체</button>
+                  <button class="filter-chip" data-toggle>중국어 번체</button>
+                  <button class="filter-chip" data-toggle>영어</button>
+                  <button class="filter-chip" data-toggle>한국어</button>
+                  <button class="filter-chip" data-toggle>러시아어</button>
+                </div>
+              </div>
+              <div class="filter-subgroup">
+                <div class="filter-subgroup-label">옵션</div>
+                <div class="filter-options" style="flex-direction:column; align-items:flex-start; gap: 0;">
+                  <label class="filter-checkbox"><input type="checkbox" checked> 지금 매칭 가능한 인플루언서만</label>
+                  <label class="filter-checkbox"><input type="checkbox"> 인증 (Verified) 계정만</label>
+                  <label class="filter-checkbox"><input type="checkbox"> 광고 진행 경험 있음</label>
+                  <label class="filter-checkbox"><input type="checkbox"> 한국 방문 예정</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-panel-foot">
+            <span class="filter-panel-foot-info"><strong>184</strong>명 / <strong style="color: var(--accent);">예산 영역 안 64명</strong></span>
+            <div style="display:flex; gap: var(--space-2);">
+              <button class="btn btn-ghost btn-sm" type="button">초기화</button>
+              <button class="btn btn-primary btn-sm" type="button">필터 적용</button>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <!-- Results header -->
       <div class="results-head">
-        <div class="results-count"><strong>184</strong>명 · <span style="color:var(--accent); font-weight: var(--fw-semibold);">예산 영역 안 64명</span></div>
+        <div class="results-count"><strong>184</strong>명 · <span class="accent-num">예산 영역 안 64명</span></div>
         <select class="sort-select" aria-label="정렬">
           <option>예산 적합도 순</option>
           <option>팔로워 많은 순</option>
@@ -322,44 +504,41 @@
       <!-- Influencer grid -->
       <div class="explore-grid">
 
-        <!-- Card 1 — within budget, masked -->
+        <!-- Card 1 — within budget, masked, IG photo-first -->
         <article class="inf-card is-within">
           <div class="inf-card-cover">
             <div class="inf-card-cover-blur cover-1"></div>
-            <div class="cover-icon">M</div>
-            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>매칭 후 공개</span>
-            <a class="save-btn" href="#" aria-label="저장">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-            </a>
+            <span class="lock-pill is-grad">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              매칭 후 공개
+            </span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
+
+            <!-- IG-style action row: heart, comment, share, save -->
             <div>
               <div class="inf-card-name is-masked">●●●● ●●●●</div>
               <div class="inf-card-handle is-masked">@●●●●●●_tokyo</div>
             </div>
-            <span class="badge badge-accent">JP</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">Instagram</span>
-            <span class="badge">라이프스타일</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat">
-              <span class="inf-stat-key">팔로워</span>
-              <span class="inf-stat-val">280K</span>
+
+            <div class="inf-card-meta">
+              <span class="badge">Instagram</span>
+              <span class="badge">JP</span>
+              <span class="badge">라이프스타일</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">참여율</span>
-              <span class="inf-stat-val">4.2%</span>
+
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">280K</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">4.2%</strong> 참여율</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">월 활동</span>
-              <span class="inf-stat-val">22</span>
+
+            <div class="inf-card-foot">
+              <span class="inf-card-price">680만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-primary btn-sm">매칭하기</button>
             </div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">680만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-primary btn-sm">매칭하기</button>
+
           </div>
         </article>
 
@@ -367,41 +546,31 @@
         <article class="inf-card is-within">
           <div class="inf-card-cover">
             <div class="inf-card-cover-blur cover-2"></div>
-            <div class="cover-icon">N</div>
-            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>매칭 후 공개</span>
-            <a class="save-btn is-saved" href="#" aria-label="저장됨">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-            </a>
+            <span class="lock-pill is-grad">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              매칭 후 공개
+            </span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
             <div>
               <div class="inf-card-name is-masked">●●●●●●●● ●●●●</div>
               <div class="inf-card-handle is-masked">@●●●●●●●_mood</div>
             </div>
-            <span class="badge badge-accent">RU</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">Instagram</span>
-            <span class="badge">YouTube</span>
-            <span class="badge">뷰티</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat">
-              <span class="inf-stat-key">팔로워</span>
-              <span class="inf-stat-val">412K</span>
+            <div class="inf-card-meta">
+              <span class="badge">Instagram</span>
+              <span class="badge">RU</span>
+              <span class="badge">뷰티</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">참여율</span>
-              <span class="inf-stat-val">5.7%</span>
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">412K</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">5.7%</strong> 참여율</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">월 활동</span>
-              <span class="inf-stat-val">18</span>
+            <div class="inf-card-foot">
+              <span class="inf-card-price">740만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-primary btn-sm">매칭하기</button>
             </div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">740만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-primary btn-sm">매칭하기</button>
           </div>
         </article>
 
@@ -409,40 +578,31 @@
         <article class="inf-card is-matched">
           <div class="inf-card-cover is-unmasked">
             <div class="inf-card-cover-blur cover-3" style="filter:none;"></div>
-            <div class="cover-icon" style="filter:none; opacity: 0.85;">Y</div>
-            <span class="lock-pill" style="background: var(--accent); color: var(--on-accent);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>매칭됨</span>
-            <a class="save-btn" href="#" aria-label="저장">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-            </a>
+            <span class="lock-pill is-matched">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              매칭됨
+            </span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
             <div>
-              <div class="inf-card-name">유키 사토</div>
+              <div class="inf-card-name">유키 사토 <span class="verified" aria-label="인증됨"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></div>
               <div class="inf-card-handle">@yuki_tokyo</div>
             </div>
-            <span class="badge badge-accent">JP</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">Instagram</span>
-            <span class="badge">라이프스타일</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat">
-              <span class="inf-stat-key">팔로워</span>
-              <span class="inf-stat-val">156K</span>
+            <div class="inf-card-meta">
+              <span class="badge">Instagram</span>
+              <span class="badge">JP</span>
+              <span class="badge">라이프스타일</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">참여율</span>
-              <span class="inf-stat-val">6.8%</span>
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">156K</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">6.8%</strong> 참여율</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">월 활동</span>
-              <span class="inf-stat-val">28</span>
+            <div class="inf-card-foot">
+              <span class="inf-card-price">320만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-secondary btn-sm">메시지 보내기</button>
             </div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">320만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-secondary btn-sm">메시지 보내기</button>
           </div>
         </article>
 
@@ -450,79 +610,57 @@
         <article class="inf-card">
           <div class="inf-card-cover">
             <div class="inf-card-cover-blur cover-4"></div>
-            <div class="cover-icon">K</div>
-            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>매칭 후 공개</span>
-            <a class="save-btn" href="#" aria-label="저장">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-            </a>
+            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>매칭 후 공개</span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
             <div>
               <div class="inf-card-name is-masked">●●●● ●●●●</div>
               <div class="inf-card-handle is-masked">@●●●●●_osaka</div>
             </div>
-            <span class="badge badge-accent">JP</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">TikTok</span>
-            <span class="badge">식품</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat">
-              <span class="inf-stat-key">팔로워</span>
-              <span class="inf-stat-val">98K</span>
+            <div class="inf-card-meta">
+              <span class="badge">TikTok</span>
+              <span class="badge">JP</span>
+              <span class="badge">식품</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">참여율</span>
-              <span class="inf-stat-val">8.1%</span>
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">98K</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">8.1%</strong> 참여율</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">월 활동</span>
-              <span class="inf-stat-val">35</span>
+            <div class="inf-card-foot">
+              <span class="inf-card-price">220만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-primary btn-sm">매칭하기</button>
             </div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">220만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-primary btn-sm">매칭하기</button>
           </div>
         </article>
 
-        <!-- Card 5 — over budget (subtle) -->
-        <article class="inf-card" style="opacity: 0.66;">
+        <!-- Card 5 — over budget -->
+        <article class="inf-card" style="opacity: 0.62;">
           <div class="inf-card-cover">
             <div class="inf-card-cover-blur cover-5"></div>
-            <div class="cover-icon">L</div>
-            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>매칭 후 공개</span>
+            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>매칭 후 공개</span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
             <div>
               <div class="inf-card-name is-masked">●●●● ●●●●●</div>
               <div class="inf-card-handle is-masked">@●●●●_kr</div>
             </div>
-            <span class="badge">KR</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">YouTube</span>
-            <span class="badge">뷰티</span>
-            <span class="badge badge-warning">예산 초과</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat">
-              <span class="inf-stat-key">팔로워</span>
-              <span class="inf-stat-val">1.2M</span>
+            <div class="inf-card-meta">
+              <span class="badge">YouTube</span>
+              <span class="badge">KR</span>
+              <span class="badge badge-warning">예산 초과</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">참여율</span>
-              <span class="inf-stat-val">3.4%</span>
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">1.2M</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">3.4%</strong> 참여율</span>
             </div>
-            <div class="inf-stat">
-              <span class="inf-stat-key">월 활동</span>
-              <span class="inf-stat-val">12</span>
+            <div class="inf-card-foot">
+              <span class="inf-card-price">1,840만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-ghost btn-sm">예산 늘려 매칭</button>
             </div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">1,840만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-ghost btn-sm">예산 늘려 매칭</button>
           </div>
         </article>
 
@@ -530,29 +668,28 @@
         <article class="inf-card is-within">
           <div class="inf-card-cover">
             <div class="inf-card-cover-blur cover-6"></div>
-            <div class="cover-icon">T</div>
-            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>매칭 후 공개</span>
-            <a class="save-btn" href="#" aria-label="저장"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
+            <span class="lock-pill is-grad"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>매칭 후 공개</span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
             <div>
               <div class="inf-card-name is-masked">●●●●●● ●●●</div>
               <div class="inf-card-handle is-masked">@●●●●_hk</div>
             </div>
-            <span class="badge badge-accent">HK</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">Xiaohongshu</span>
-            <span class="badge">라이프스타일</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat"><span class="inf-stat-key">팔로워</span><span class="inf-stat-val">340K</span></div>
-            <div class="inf-stat"><span class="inf-stat-key">참여율</span><span class="inf-stat-val">5.1%</span></div>
-            <div class="inf-stat"><span class="inf-stat-key">월 활동</span><span class="inf-stat-val">19</span></div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">560만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-primary btn-sm">매칭하기</button>
+            <div class="inf-card-meta">
+              <span class="badge">Xiaohongshu</span>
+              <span class="badge">HK</span>
+              <span class="badge">라이프스타일</span>
+            </div>
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">340K</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">5.1%</strong> 참여율</span>
+            </div>
+            <div class="inf-card-foot">
+              <span class="inf-card-price">560만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-primary btn-sm">매칭하기</button>
+            </div>
           </div>
         </article>
 
@@ -560,29 +697,28 @@
         <article class="inf-card is-within">
           <div class="inf-card-cover">
             <div class="inf-card-cover-blur cover-7"></div>
-            <div class="cover-icon">A</div>
-            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>매칭 후 공개</span>
-            <a class="save-btn" href="#" aria-label="저장"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
+            <span class="lock-pill is-grad"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>매칭 후 공개</span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
             <div>
               <div class="inf-card-name is-masked">●●●●● ●●●●</div>
               <div class="inf-card-handle is-masked">@●●●●●_tw</div>
             </div>
-            <span class="badge badge-accent">TW</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">Instagram</span>
-            <span class="badge">여행</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat"><span class="inf-stat-key">팔로워</span><span class="inf-stat-val">192K</span></div>
-            <div class="inf-stat"><span class="inf-stat-key">참여율</span><span class="inf-stat-val">7.4%</span></div>
-            <div class="inf-stat"><span class="inf-stat-key">월 활동</span><span class="inf-stat-val">24</span></div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">390만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-primary btn-sm">매칭하기</button>
+            <div class="inf-card-meta">
+              <span class="badge">Instagram</span>
+              <span class="badge">TW</span>
+              <span class="badge">여행</span>
+            </div>
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">192K</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">7.4%</strong> 참여율</span>
+            </div>
+            <div class="inf-card-foot">
+              <span class="inf-card-price">390만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-primary btn-sm">매칭하기</button>
+            </div>
           </div>
         </article>
 
@@ -590,29 +726,28 @@
         <article class="inf-card is-within">
           <div class="inf-card-cover">
             <div class="inf-card-cover-blur cover-8"></div>
-            <div class="cover-icon">B</div>
-            <span class="lock-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>매칭 후 공개</span>
-            <a class="save-btn" href="#" aria-label="저장"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
+            <span class="lock-pill is-grad"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>매칭 후 공개</span>
+
+          <a class="inf-card-save" href="#" aria-label="저장"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></a>
           </div>
-          <div class="inf-card-top">
+          <div class="inf-card-body">
             <div>
               <div class="inf-card-name is-masked">●●●●● ●●●●</div>
               <div class="inf-card-handle is-masked">@●●●●●_th</div>
             </div>
-            <span class="badge badge-accent">TH</span>
-          </div>
-          <div class="inf-card-meta">
-            <span class="badge">TikTok</span>
-            <span class="badge">식품</span>
-          </div>
-          <div class="inf-card-stats">
-            <div class="inf-stat"><span class="inf-stat-key">팔로워</span><span class="inf-stat-val">228K</span></div>
-            <div class="inf-stat"><span class="inf-stat-key">참여율</span><span class="inf-stat-val">6.2%</span></div>
-            <div class="inf-stat"><span class="inf-stat-key">월 활동</span><span class="inf-stat-val">31</span></div>
-          </div>
-          <div class="inf-card-foot">
-            <span class="inf-card-price">450만<span class="inf-card-price-unit">원</span></span>
-            <button class="btn btn-primary btn-sm">매칭하기</button>
+            <div class="inf-card-meta">
+              <span class="badge">TikTok</span>
+              <span class="badge">TH</span>
+              <span class="badge">식품</span>
+            </div>
+            <div class="inf-card-stats">
+              <span><strong class="inf-stat-strong">228K</strong> 팔로워</span>
+              <span><strong class="inf-stat-strong">6.2%</strong> 참여율</span>
+            </div>
+            <div class="inf-card-foot">
+              <span class="inf-card-price">450만<span class="inf-card-price-unit">원</span></span>
+              <button class="btn btn-primary btn-sm">매칭하기</button>
+            </div>
           </div>
         </article>
 

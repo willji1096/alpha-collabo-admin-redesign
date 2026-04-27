@@ -26,25 +26,19 @@ body {
   letter-spacing: var(--ls-normal);
 }
 
-/* Headings — sans default, serif via .serif modifier */
+/* Headings — Sans only (IG tone, no serif) */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-snug);
   line-height: var(--lh-tight);
   color: var(--text-primary);
 }
-h1 { font-size: var(--fs-3xl); letter-spacing: var(--ls-tight); }
-h2 { font-size: var(--fs-2xl); letter-spacing: var(--ls-tight); }
+h1 { font-size: var(--fs-3xl); font-weight: var(--fw-heavy); letter-spacing: var(--ls-tight); }
+h2 { font-size: var(--fs-2xl); font-weight: var(--fw-bold); letter-spacing: var(--ls-tight); }
 h3 { font-size: var(--fs-xl); }
 h4 { font-size: var(--fs-lg); }
 h5 { font-size: var(--fs-md); }
 h6 { font-size: var(--fs-base); }
-
-.serif {
-  font-family: var(--font-serif);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--ls-tight);
-}
 
 /* Paragraphs */
 p { line-height: var(--lh-normal); color: var(--text-secondary); }

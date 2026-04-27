@@ -1,82 +1,87 @@
 /* ==========================================================================
-   Alphacollabo V2 — Tokens (Curated Light)
-   단일 기준. 화면·컴포넌트는 raw hex/px 직접 사용 금지. 이 파일의 변수만.
+   Alphacollabo V2 — Tokens (Instagram Light)
+   참고: instagram.com 라이트 톤. 순백 + 페이드 그레이 + 블루 액센트 + 브랜드 그라디언트.
    ========================================================================== */
 
 :root {
-  /* ---------- Neutral (warm off-white scale) ---------- */
+  /* ---------- Neutral (cool gray, IG style) ---------- */
   --neutral-0:   #FFFFFF;
-  --neutral-50:  #FBFBFA;   /* page bg */
-  --neutral-75:  #F6F5F2;   /* subtle elevated */
-  --neutral-100: #EFEEEA;   /* hover */
-  --neutral-150: #E9E7E1;   /* divider */
-  --neutral-200: #DDDAD2;   /* subtle border */
-  --neutral-300: #C9C6BE;   /* default input border */
-  --neutral-400: #97948C;
-  --neutral-500: #6E6B63;
-  --neutral-600: #51504A;
-  --neutral-700: #3A3935;
-  --neutral-800: #25241F;
-  --neutral-900: #131210;
+  --neutral-50:  #FAFAFA;   /* feed bg / 섹션 배경 */
+  --neutral-100: #F5F5F5;   /* hover */
+  --neutral-150: #EFEFEF;   /* subtle border */
+  --neutral-200: #DBDBDB;   /* IG default border (1px) */
+  --neutral-300: #C7C7C7;
+  --neutral-400: #A8A8A8;
+  --neutral-500: #8E8E8E;   /* IG text-secondary */
+  --neutral-600: #737373;
+  --neutral-700: #525252;
+  --neutral-800: #363636;
+  --neutral-900: #262626;   /* IG text-primary */
 
-  /* ---------- Wine (signature accent) ---------- */
-  --wine-50:  #FAF1F2;
-  --wine-100: #F2DCE0;
-  --wine-200: #E5B5BD;
-  --wine-300: #D08490;
-  --wine-400: #B45565;
-  --wine-500: #7C2D3D;   /* primary */
-  --wine-600: #5F1F2C;
-  --wine-700: #4A1622;
-  --wine-800: #350F18;
+  /* ---------- IG Blue (primary accent — CTA, links) ---------- */
+  --blue-50:  #E7F3FF;
+  --blue-100: #B2DFFC;
+  --blue-300: #5AB4F0;
+  --blue-500: #0095F6;   /* IG CTA blue */
+  --blue-600: #1877F2;   /* hover */
+  --blue-700: #0064D1;
+  --blue-900: #00376B;
 
-  /* ---------- Status (paper-friendly muted) ---------- */
-  --success-50:  #EEF7F0;
-  --success-300: #A0CCAE;
-  --success-500: #4D8B5F;
-  --success-700: #2F5A3D;
+  /* ---------- Like Red (하트 저장) ---------- */
+  --red-500: #ED4956;
+  --red-600: #D62D3F;
 
-  --warning-50:  #FBF4E5;
-  --warning-300: #E2C886;
-  --warning-500: #B07F2C;
-  --warning-700: #7A5519;
+  /* ---------- IG Brand Gradient (스토리 링, 그라디언트 액센트) ---------- */
+  --grad-stories: linear-gradient(45deg, #FFC371 0%, #F58529 25%, #DD2A7B 50%, #8134AF 75%, #515BD4 100%);
+  --grad-stories-soft: linear-gradient(45deg, rgba(245, 133, 41, 0.12) 0%, rgba(221, 42, 123, 0.12) 50%, rgba(129, 52, 175, 0.12) 100%);
 
-  --danger-50:  #FAEEEB;
-  --danger-300: #D9A89A;
-  --danger-500: #B5523C;
-  --danger-700: #7A3424;
+  /* ---------- Status (subdued) ---------- */
+  --success-50:  #E6F7EE;
+  --success-500: #2DBE60;
+  --success-700: #1F8A45;
 
-  --info-50:  #EDF1F8;
-  --info-300: #9CB1CC;
-  --info-500: #527093;
-  --info-700: #34506E;
+  --warning-50:  #FEF6E5;
+  --warning-500: #E6A019;
+  --warning-700: #A37212;
+
+  --danger-50:  #FCE8EA;
+  --danger-500: #ED4956;   /* like red 재사용 */
+  --danger-700: #B5202C;
+
+  --info-50:  #E7F3FF;
+  --info-500: #0095F6;
+  --info-700: #00376B;
 
   /* ---------- Semantic ---------- */
-  --bg-page:      var(--neutral-50);
+  --bg-page:      var(--neutral-0);
   --bg-surface:   var(--neutral-0);
-  --bg-elevated:  var(--neutral-75);
+  --bg-elevated:  var(--neutral-50);
   --bg-hover:     var(--neutral-100);
   --bg-active:    var(--neutral-150);
   --bg-inverse:   var(--neutral-900);
 
   --text-primary:   var(--neutral-900);
-  --text-secondary: var(--neutral-600);
-  --text-tertiary:  var(--neutral-500);
-  --text-disabled:  var(--neutral-400);
+  --text-secondary: var(--neutral-500);
+  --text-tertiary:  var(--neutral-400);
+  --text-disabled:  var(--neutral-300);
   --text-inverse:   var(--neutral-0);
-  --text-link:      var(--wine-500);
+  --text-link:      var(--blue-900);
 
   --border-subtle:  var(--neutral-150);
-  --border-default: var(--neutral-200);
+  --border-default: var(--neutral-200);   /* IG 기본 보더 */
   --border-strong:  var(--neutral-300);
   --border-emphasis: var(--neutral-400);
 
-  --accent:          var(--wine-500);
-  --accent-hover:    var(--wine-600);
-  --accent-active:   var(--wine-700);
-  --accent-light:    var(--wine-50);
-  --accent-emphasis: var(--wine-700);
+  --accent:          var(--blue-500);
+  --accent-hover:    var(--blue-600);
+  --accent-active:   var(--blue-700);
+  --accent-light:    var(--blue-50);
+  --accent-emphasis: var(--blue-900);
+  --accent-grad:     var(--grad-stories);
   --on-accent:       var(--neutral-0);
+
+  --like:            var(--red-500);
+  --like-hover:      var(--red-600);
 
   --status-success: var(--success-500);
   --status-success-bg: var(--success-50);
@@ -91,40 +96,39 @@
   --status-info-bg: var(--info-50);
   --status-info-strong: var(--info-700);
 
-  /* ---------- Shadow (페이퍼 톤, 따뜻한 그늘) ---------- */
-  --shadow-xs: 0 1px 2px rgba(28, 24, 20, 0.04);
-  --shadow-sm: 0 2px 6px rgba(28, 24, 20, 0.06), 0 1px 2px rgba(28, 24, 20, 0.04);
-  --shadow-md: 0 6px 16px rgba(28, 24, 20, 0.08), 0 2px 4px rgba(28, 24, 20, 0.04);
-  --shadow-lg: 0 14px 32px rgba(28, 24, 20, 0.10), 0 4px 8px rgba(28, 24, 20, 0.05);
-  --shadow-xl: 0 24px 48px rgba(28, 24, 20, 0.14), 0 8px 16px rgba(28, 24, 20, 0.06);
-  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  /* ---------- Shadow (light, 공중에 살짝 떠 있는 톤) ---------- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.10), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.14), 0 8px 16px rgba(0, 0, 0, 0.05);
 
-  --focus-ring: 0 0 0 3px rgba(124, 45, 61, 0.18);
-  --focus-ring-tight: 0 0 0 2px rgba(124, 45, 61, 0.32);
+  --focus-ring: 0 0 0 3px rgba(0, 149, 246, 0.2);
+  --focus-ring-tight: 0 0 0 2px rgba(0, 149, 246, 0.4);
 
-  /* ---------- Typography ---------- */
-  --font-sans:  'Pretendard Variable', Pretendard, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Noto Serif KR', 'Source Serif Pro', 'Cormorant Garamond', Georgia, serif;
+  /* ---------- Typography (Sans only, IG-style) ---------- */
+  --font-sans:  'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:  ui-monospace, SFMono-Regular, 'JetBrains Mono', Menlo, monospace;
 
-  --fs-2xs:     11px;
-  --fs-xs:      12px;
-  --fs-sm:      13px;
-  --fs-base:    14px;   /* 본문 기본 */
-  --fs-md:      15px;
-  --fs-lg:      17px;
-  --fs-xl:      20px;
-  --fs-2xl:     24px;
-  --fs-3xl:     30px;
-  --fs-display: 40px;
+  --fs-2xs:     12px;
+  --fs-xs:      13px;
+  --fs-sm:      14px;
+  --fs-base:    15px;
+  --fs-md:      16px;
+  --fs-lg:      18px;
+  --fs-xl:      22px;
+  --fs-2xl:     26px;
+  --fs-3xl:     32px;
+  --fs-display: 44px;
 
-  --lh-tight:   1.25;
+  --lh-tight:   1.22;
   --lh-snug:    1.4;
   --lh-normal:  1.55;
   --lh-relaxed: 1.7;
 
-  --ls-tight:   -0.022em;
-  --ls-snug:    -0.012em;
+  --ls-tight:   -0.024em;
+  --ls-snug:    -0.014em;
   --ls-normal:  -0.005em;
   --ls-wide:    0.04em;
 
@@ -132,8 +136,9 @@
   --fw-medium:   500;
   --fw-semibold: 600;
   --fw-bold:     700;
+  --fw-heavy:    800;
 
-  /* ---------- Spacing (8pt scale, 여유롭게) ---------- */
+  /* ---------- Spacing ---------- */
   --space-0:  0;
   --space-1:  4px;
   --space-2:  8px;
@@ -147,13 +152,13 @@
   --space-10: 72px;
   --space-11: 96px;
 
-  /* ---------- Radius (V1보다 큼 — 둥글둥글 페이퍼 톤) ---------- */
+  /* ---------- Radius (IG: 사진은 sharp, UI는 rounded) ---------- */
   --radius-xs:   4px;
   --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   14px;
-  --radius-xl:   20px;
-  --radius-2xl:  28px;
+  --radius-md:   8px;     /* IG 기본 (사진/카드/버튼) */
+  --radius-lg:   12px;
+  --radius-xl:   18px;
+  --radius-2xl:  24px;
   --radius-full: 9999px;
 
   /* ---------- Motion ---------- */
@@ -174,17 +179,13 @@
   --z-toast:    600;
 
   /* ---------- Layout ---------- */
-  --sidebar-w: 248px;
-  --header-h:  64px;
-  --container-max: 1280px;
+  --sidebar-w: 244px;
+  --header-h:  60px;
+  --container-max: 1180px;
 
-  /* Match-mask blur for influencer Explore */
+  /* Match-mask blur */
   --mask-blur: 14px;
   --mask-blur-soft: 6px;
-}
-
-@media (prefers-color-scheme: dark) {
-  /* V2 dark는 향후 정의 — 현재는 light only */
 }
 
 @media (prefers-reduced-motion: reduce) {

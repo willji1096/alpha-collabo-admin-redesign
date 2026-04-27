@@ -6,7 +6,6 @@
 <title>로그인 — Alphacollabo</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
@@ -19,9 +18,9 @@
   @media (max-width: 880px) { body { grid-template-columns: 1fr; } }
 
   .login-visual {
-    background: linear-gradient(160deg, var(--wine-700) 0%, var(--wine-500) 60%, var(--wine-400) 100%);
+    background: var(--grad-stories);
     color: var(--on-accent);
-    padding: var(--space-9) var(--space-9);
+    padding: var(--space-9);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -44,7 +43,6 @@
     background: rgba(255,255,255,0.16);
     backdrop-filter: blur(6px);
     display: inline-flex; align-items: center; justify-content: center;
-    font-family: var(--font-serif);
     font-size: var(--fs-lg);
     font-weight: var(--fw-semibold);
     letter-spacing: -0.04em;
@@ -52,7 +50,6 @@
     z-index: 1;
   }
   .lv-quote {
-    font-family: var(--font-serif);
     font-size: var(--fs-2xl);
     font-weight: var(--fw-semibold);
     line-height: var(--lh-tight);
@@ -97,7 +94,6 @@
     margin-bottom: var(--space-3);
   }
   .form-title {
-    font-family: var(--font-serif);
     font-size: var(--fs-2xl);
     font-weight: var(--fw-semibold);
     letter-spacing: var(--ls-tight);

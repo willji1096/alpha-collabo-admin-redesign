@@ -6,13 +6,12 @@
 <title>디자인 시스템 — Alphacollabo V2</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
 <style>
   .ds-section { margin-bottom: var(--space-9); }
-  .ds-section h2 { font-family: var(--font-serif); font-size: var(--fs-2xl); margin-bottom: var(--space-5); letter-spacing: var(--ls-tight); }
+  .ds-section h2 { font-size: var(--fs-2xl); margin-bottom: var(--space-5); letter-spacing: var(--ls-tight); }
   .ds-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
   .ds-grid { display: grid; gap: var(--space-3); }
   .ds-grid-3 { grid-template-columns: repeat(3, 1fr); }
@@ -70,7 +69,7 @@
 
   <header style="margin-bottom: var(--space-9);">
     <span class="badge badge-accent" style="margin-bottom: var(--space-4);"><span class="badge-dot"></span>V2 Design System</span>
-    <h1 class="serif" style="font-size: var(--fs-display); margin-bottom: var(--space-3);">Curated Light</h1>
+    <h1 style="font-size: var(--fs-display); margin-bottom: var(--space-3);">Curated Light</h1>
     <p style="font-size: var(--fs-md); color: var(--text-secondary); max-width: 64ch; line-height: var(--lh-relaxed);">
       보더리스 + Surface Contrast. V1의 라인 강조와 정반대 — 카드·섹션·테이블에 outline border 사용 금지. 입력·구분선·강조에만 1px 사용. 깊이는 surface 톤 차이와 soft shadow로.
     </p>
@@ -81,27 +80,27 @@
     <h2>Color · Wine Accent</h2>
     <div class="ds-grid ds-grid-6">
       <div>
-        <div class="swatch swatch-dark" style="background: var(--wine-700);">700</div>
+        <div class="swatch swatch-dark" style="background: var(--accent-active);">700</div>
         <div class="ds-mono" style="margin-top: 6px;">#4A1622</div>
       </div>
       <div>
-        <div class="swatch swatch-dark" style="background: var(--wine-600);">600</div>
+        <div class="swatch swatch-dark" style="background: var(--accent-hover);">600</div>
         <div class="ds-mono" style="margin-top: 6px;">#5F1F2C</div>
       </div>
       <div>
-        <div class="swatch swatch-dark" style="background: var(--wine-500);">500 · accent</div>
+        <div class="swatch swatch-dark" style="background: var(--accent);">500 · accent</div>
         <div class="ds-mono" style="margin-top: 6px;">#7C2D3D</div>
       </div>
       <div>
-        <div class="swatch swatch-dark" style="background: var(--wine-400);">400</div>
+        <div class="swatch swatch-dark" style="background: var(--blue-300);">400</div>
         <div class="ds-mono" style="margin-top: 6px;">#B45565</div>
       </div>
       <div>
-        <div class="swatch" style="background: var(--wine-100);">100</div>
+        <div class="swatch" style="background: var(--blue-100);">100</div>
         <div class="ds-mono" style="margin-top: 6px;">#F2DCE0</div>
       </div>
       <div>
-        <div class="swatch" style="background: var(--wine-50);">50 · light</div>
+        <div class="swatch" style="background: var(--accent-light);">50 · light</div>
         <div class="ds-mono" style="margin-top: 6px;">#FAF1F2</div>
       </div>
     </div>
@@ -132,15 +131,15 @@
       <div class="ds-h-strip">
         <div class="ds-h-row">
           <span class="ds-h-name">display</span>
-          <span class="ds-h-text serif" style="font-size: var(--fs-display); font-weight: var(--fw-semibold); letter-spacing: var(--ls-tight);">Curated Light</span>
+          <span class="ds-h-text" style="font-size: var(--fs-display); font-weight: var(--fw-semibold); letter-spacing: var(--ls-tight);">Curated Light</span>
         </div>
         <div class="ds-h-row">
           <span class="ds-h-name">3xl</span>
-          <span class="ds-h-text serif" style="font-size: var(--fs-3xl); font-weight: var(--fw-semibold); letter-spacing: var(--ls-tight);">매칭은 자원이다</span>
+          <span class="ds-h-text" style="font-size: var(--fs-3xl); font-weight: var(--fw-semibold); letter-spacing: var(--ls-tight);">매칭은 자원이다</span>
         </div>
         <div class="ds-h-row">
           <span class="ds-h-name">2xl</span>
-          <span class="ds-h-text serif" style="font-size: var(--fs-2xl); font-weight: var(--fw-semibold); letter-spacing: var(--ls-tight);">인플루언서 Explore</span>
+          <span class="ds-h-text" style="font-size: var(--fs-2xl); font-weight: var(--fw-semibold); letter-spacing: var(--ls-tight);">인플루언서 Explore</span>
         </div>
         <div class="ds-h-row">
           <span class="ds-h-name">xl</span>

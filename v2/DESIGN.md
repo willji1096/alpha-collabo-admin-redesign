@@ -1,4 +1,4 @@
-# Alphacollabo V2 — Curated Light Design System
+# Alphacollabo V2 — Instagram Light Design System
 
 **단일 기준.** 모든 V2 화면은 이 문서를 따른다. raw hex/px 직접 사용 금지 — `css/tokens.css` 변수만.
 
@@ -6,17 +6,18 @@
 
 | 항목 | V1 (기존 화면 개선) | V2 (이 문서) |
 |---|---|---|
-| 톤 | 도구적 · Linear-tone | 큐레이션 · Stripe-light |
-| 액센트 | 빨강 #EE2128 | **와인 #7C2D3D** |
-| 보더 | 강조 (1px 회색) | 최소 (입력만) |
-| 깊이 표현 | 라인 분리 | **Surface 톤 + Soft shadow** |
+| 톤 | 도구적 · Linear-tone | **Instagram 라이트** |
+| 폰트 | Sans 단일 | **Sans 단일** (명조·세리프 금지) |
+| 액센트 | 빨강 #EE2128 | **IG 블루 #0095F6** + **브랜드 그라디언트** |
+| 보더 | 강조 (1px 회색) | IG 페이드 1px (#DBDBDB) — 카드/섹션/입력 모두 |
+| 배경 | 따뜻한 오프화이트 | **순백 #FFFFFF** + 페이드 #FAFAFA |
 | 데이터 밀도 | 높음 | 보통 (탐색 톤) |
-| 타이포 | Sans 단일 | Sans + Serif (헤딩) |
-| 정체성 | 인수인계 도구 | **셀프서비스 매칭 플랫폼** |
+| 카드 | 텍스트 우선 | **사진 우선 (1:1 정사각형 커버)** |
+| 정체성 | 인수인계 도구 | **셀프서비스 매칭 플랫폼** (IG 피드 톤) |
 
 V2는 V1의 어떤 자산도 참조하지 않는다 (`../css/`, `../components/` 금지). 완전 독립 트랙.
 
-## 1. 자원 모델
+## 1. 자원 모델 (제품 비전)
 
 가치 단위가 "사람의 손길" → "**매칭 횟수**"로 이동.
 
@@ -30,75 +31,101 @@ V2는 V1의 어떤 자산도 참조하지 않는다 (`../css/`, `../components/`
 핵심 파일: `v2/css/tokens.css`. 직접 참조하지 말고 시맨틱 변수 사용.
 
 ### Color
-- `--bg-page` (#FBFBFA), `--bg-surface` (#FFFFFF), `--bg-elevated` (#F6F5F2), `--bg-hover` (#EFEEEA)
-- `--text-primary` (#131210), `--text-secondary` (#51504A), `--text-tertiary` (#6E6B63), `--text-disabled` (#97948C)
-- `--accent` (#7C2D3D), `--accent-hover` (#5F1F2C), `--accent-light` (#FAF1F2)
+- `--bg-page` (#FFFFFF), `--bg-surface` (#FFFFFF), `--bg-elevated` (#FAFAFA), `--bg-hover` (#F5F5F5)
+- `--text-primary` (#262626 · IG 텍스트), `--text-secondary` (#8E8E8E · IG 보조), `--text-tertiary` (#A8A8A8)
+- `--accent` (#0095F6 · IG 블루 CTA), `--accent-hover` (#1877F2), `--accent-light` (#E7F3FF)
+- `--like` (#ED4956 · IG 하트 빨강)
+- `--grad-stories` — IG 브랜드 그라디언트 (FFC371 → F58529 → DD2A7B → 8134AF → 515BD4)
+- `--border-default` (#DBDBDB · IG 기본 보더)
 
 ### Typography
-- `--font-sans` Pretendard Variable (본문)
-- `--font-serif` Noto Serif KR (큐레이션 헤딩 한정 — 페이지 타이틀, 카드 타이틀, 인플루언서 이름·가격)
+- `--font-sans` Pretendard Variable (모든 영역) — IG는 system font 톤이지만 한글 가독성 위해 Pretendard
+- 명조·세리프 금지
+- weight: regular(400) · medium(500) · semibold(600) · bold(700) · **heavy(800)** — heavy는 페이지 타이틀·KPI 등 강조용
 - Scale: 11/12/13/14/15/17/20/24/30/40 (`--fs-2xs` … `--fs-display`)
 
-### Spacing (8pt scale, V1 대비 1.3~1.5배)
+### Spacing (8pt scale)
 - `--space-1` 4px … `--space-11` 96px
 
 ### Radius
-- `--radius-sm` 6 / `--radius-md` 10 / `--radius-lg` 14 / `--radius-xl` 20 / `--radius-full`
+- `--radius-md` 8px (IG 기본 — 사진/카드/버튼) / `--radius-lg` 12px / `--radius-full`
 
 ### Shadow
-- `--shadow-xs` (카드 default) / `--shadow-sm` (elevated) / `--shadow-md` (hover lift) / `--shadow-lg` (toast/modal)
+- 매우 가볍게 (IG는 그림자 거의 안 씀). `--shadow-xs/sm` 정도만.
 
 ## 3. 컴포넌트 규율
 
-### 보더 사용 영역
-- ✅ Input / Textarea / Select 의 1px border
-- ✅ Divider · 점선 분리선
-- ✅ Match-meter / Within-budget 표시 등 **의도적 강조**
-- ❌ Card · Section · Table — `box-shadow + bg 톤 차이`로만 분리
+### 보더 사용
+- IG는 모든 카드·인풋·섹션에 1px (#DBDBDB) 보더 사용 — 그림자 대체
+- ✅ Card · Influencer Card · Filter Bar · Input · Sidebar (우측 1px)
+- ❌ outline 버튼 폐기 (단, `.btn-outline`은 follow 버튼 톤 한정)
 
 ### Card
-- `.card` shadow-xs (기본)
-- `.card-elevated` shadow-sm (헤로/중요)
-- `.card-soft` elevated bg only (정보 그룹)
-- `.card-hoverable` hover lift (translateY(-1px) + shadow-sm)
+- `.card` border 1px (default — IG 톤)
+- `.card-elevated` shadow-sm + 약한 보더 (헤로 영역)
+- `.card-soft` elevated bg only (보더 없음 — 정보 그룹)
+- `.card-hoverable` hover lift
 
 ### Button
-- 4종만: `btn-primary` (filled wine) · `btn-secondary` (filled neutral) · `btn-subtle` (wine tint) · `btn-ghost`
-- Outline 버튼 사용 금지
-- 사이즈: `btn-sm` 32px / default 40px / `btn-lg` 48px
+- `btn-primary` (IG 블루 filled) · `btn-secondary` (gray filled) · `btn-ghost` · `btn-subtle` (blue tint) · `btn-outline` (follow 톤)
+- 사이즈: `btn-sm` 30px / default 36px / `btn-lg` 44px
+- font-weight: bold (IG는 두꺼운 weight)
 
-### Badge
-- filled chip만. outline-badge 폐기.
-- 색 변형: default / accent / success / warning / danger / info / solid
+### Avatar
+- `.avatar-ring` — IG 스토리스 그라디언트 보더 (매칭 가능·신규 표시용)
+- `.avatar-ring.is-seen` — 회색 보더 (이미 본 항목)
+- `.verified` — 파란 체크 배지 (인증 인플루언서)
 
-### Influencer Card (Explore 핵심)
-- `.inf-card` 기본 (보더 없음, shadow-xs)
-- `.inf-card.is-within` 예산 영역 안 — accent-light shadow ring
-- `.inf-card.is-matched` 이미 매칭됨 — accent shadow ring (1px)
-- 마스킹: `.is-masked` (이름 ●●●●), `.inf-card-cover-blur` (blur 14px filter)
+### Influencer Card (IG photo-first)
+- 1:1 정사각형 커버 (사진 dominant)
+- 커버 아래 액션 row: **하트 / 메시지 / 공유 / 저장** (IG 4종 액션 아이콘)
+- 이름 + 핸들 (sans only)
+- 메타 칩 (플랫폼 / 국가 / 카테고리)
+- 통계 inline (팔로워, 참여율 — 숫자 bold)
+- 가격 + 매칭 버튼 (footer)
+- 마스킹 시 `.is-masked` (이름 ●●●●), `.inf-card-cover-blur` (filter blur 14px)
+- 매칭됨: `is-matched` (파란 1px 보더 강조)
 
-## 4. 화면 라인업
+### Lock Pill (커버 좌상단)
+- default — black overlay
+- `.is-grad` — IG 브랜드 그라디언트 (예산 영역 안 카드)
+- `.is-matched` — 파란 단색 (매칭됨)
+
+### Match Meter
+- 사이드바 잔여 매칭 표시
+- bar fill = `var(--grad-stories)` (IG 그라디언트로 시각 강조)
+
+## 4. 아이콘 규율
+
+IG 스타일 라인 아이콘:
+- stroke-width: **1.8** (default), **2** (가는 영역), **2.4** (작은 잠금/체크)
+- stroke-linecap/linejoin: **round**
+- 크기: 18-22px (UI), 14-16px (인라인)
+- 4대 액션 아이콘 일관: **하트 (heart)** / **메시지 (paper plane chat)** / **공유 (paper plane outgoing)** / **저장 (bookmark)**
+- 활성 상태: outline → filled (예: 하트 좋아요 시 빨강 fill, 저장 시 검정 fill)
+
+## 5. 화면 라인업
 
 | 번호 | 파일 | 상태 | 역할 |
 |---|---|---|---|
-| 01 | `login.html` | ✅ Ready | 로그인 (data: contact@glowlab.kr / alpha2025) |
-| 02 | `dashboard.html` | ✅ Ready | KPI · 진행 캠페인 · 최근 활동 · 매칭 미터 |
-| 03 | `explore.html` | ⭐ Headline | 인플루언서 마스킹 그리드 + 예산 슬라이더 + 필터 |
-| 04 | `campaign-new.html` | Drafting | 예산 → 매칭 후보 자동 큐레이션 (캠페인 생성) |
-| 05 | `match-detail.html` | Drafting | 매칭 시점 정보 풀림 + 메시지 시작 게이트 |
-| 06 | `messages.html` | Drafting | 자동 번역 채팅 (해외 언어 대응) |
-| 07 | `billing.html` | Drafting | 플랜 변경 · 매칭 충전 · 캠페인 비용 영수증 |
+| 01 | `login.html` | ✅ Ready | 로그인 (data: contact@glowlab.kr / alpha2025) — IG 그라디언트 비주얼 사이드 |
+| 02 | `dashboard.html` | ✅ Ready | KPI · 진행 캠페인 · 활동 타임라인 · 매칭 미터 |
+| 03 | `explore.html` | ⭐ Headline | 인플루언서 IG 포토 카드 그리드 + 예산 슬라이더 + 필터 |
+| 04 | `campaign-new.html` | Drafting | 예산 → 매칭 후보 자동 큐레이션 |
+| 05 | `match-detail.html` | Drafting | 매칭 시점 정보 풀림 + 메시지 시작 |
+| 06 | `messages.html` | Drafting | 자동 번역 채팅 |
+| 07 | `billing.html` | Drafting | 플랜 변경 · 매칭 충전 · 캠페인 비용 |
 | DS | `design-system.html` | ✅ Ready | 컴포넌트 라이브러리 |
 
-## 5. 작업 규율
+## 6. 작업 규율
 
 - **V1 자산 참조 금지** — `../css/`, `../components/`, `../js/` import 금지
-- **컴포넌트 단위 작업** — 새 컴포넌트는 `v2/css/components.css`에 추가, inline `<style>`은 화면 specific만
-- **샘플 데이터** — `glowlab_kr` 클라이언트, 글로벌 인플루언서 핸들 (`yuki_tokyo`, `natasha_mood`, `mei_xian`, `mika_seoul` 등). 테스트 이름·국기 이모지 금지 (V1과 동일 규율)
-- **타이포 mix** — 헤딩만 serif, 본문/UI는 sans. serif 남용 금지.
+- **명조·세리프 금지** — `font-family: serif`, Noto Serif, Cormorant 등 일체 사용 금지. Sans only.
+- **컴포넌트 단위 작업** — 새 컴포넌트는 `v2/css/components.css`에 추가
+- **샘플 데이터** — `glowlab_kr` 클라이언트, 글로벌 인플루언서 핸들 (`yuki_tokyo`, `natasha_mood`, `mei_xian`, `mika_seoul` 등). 테스트 이름·국기 이모지 금지
 
-## 6. 라우팅
+## 7. 라우팅
 
-V2 페이지 간 이동은 모두 `v2/` 내부 상대경로. V1으로 돌아가려면 `../index-v1.html` 또는 `../login.html`. 게이트 = `../index.html` (parent root).
+V2 페이지 간 이동은 모두 `v2/` 내부 상대경로. V1으로 돌아가려면 `../index-v1.html` 또는 `../login.html`. 게이트 = `../index.html`.
 
-각 V2 페이지 우상단에 fixed track-toggle pill — 한 번 클릭으로 V1↔V2 round-trip.
+각 V2 페이지 우상단 fixed track-toggle pill — 한 번 클릭으로 V1↔V2.

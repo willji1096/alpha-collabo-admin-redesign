@@ -42,21 +42,71 @@
   /* ---------- Filter chip toggle (Explore) ---------- */
   document.addEventListener('click', (e) => {
     const chip = e.target.closest('.filter-chip[data-toggle]');
-    if (!chip) return;
-    chip.classList.toggle('is-active');
+    if (chip) {
+      // chip-x (제거) 클릭 시 칩 자체 제거
+      if (e.target.closest('.filter-chip-x')) {
+        e.stopPropagation();
+        chip.remove();
+        return;
+      }
+      chip.classList.toggle('is-active');
+    }
   });
 
-  /* ---------- Range slider live label ---------- */
-  document.addEventListener('input', (e) => {
-    const r = e.target;
-    if (!r.matches('.range-track')) return;
-    const id = r.dataset.target;
-    if (!id) return;
-    const out = document.getElementById(id);
-    if (!out) return;
-    const fmt = r.dataset.format;
+  /* ---------- Filter panel toggle (요약 바 → expandable 패널) ---------- */
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-filter-toggle]');
+    if (!btn) return;
+    const id = btn.getAttribute('aria-controls');
+    const panel = document.getElementById(id);
+    if (!panel) return;
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!expanded));
+    if (expanded) {
+      panel.classList.remove('is-open');
+      setTimeout(() => { panel.hidden = true; }, 320);
+    } else {
+      panel.hidden = false;
+      requestAnimationFrame(() => panel.classList.add('is-open'));
+    }
+  });
+
+  /* ---------- Filter section accordion ---------- */
+  document.addEventListener('click', (e) => {
+    const head = e.target.closest('[data-section-toggle]');
+    if (!head) return;
+    const section = head.closest('.filter-section');
+    if (!section) return;
+    const open = section.classList.toggle('is-open');
+    head.setAttribute('aria-expanded', String(open));
+  });
+
+  /* ---------- Save toggle (inf-card) ---------- */
+  document.addEventListener('click', (e) => {
+    const save = e.target.closest('.inf-card-save');
+    if (!save) return;
+    e.preventDefault();
+    save.classList.toggle('is-saved');
+  });
+
+  /* ---------- Range slider live label + fill ---------- */
+  function paintRange(r) {
+    const min = Number(r.min || 0);
+    const max = Number(r.max || 100);
     const v = Number(r.value);
-    out.textContent = fmt === 'won' ? formatWon(v) : v.toLocaleString();
+    const pct = ((v - min) / (max - min)) * 100;
+    r.style.setProperty('--fill', pct + '%');
+    const id = r.dataset.target;
+    if (id) {
+      const out = document.getElementById(id);
+      if (out) out.textContent = r.dataset.format === 'won' ? formatWon(v) : v.toLocaleString();
+    }
+  }
+  document.addEventListener('input', (e) => {
+    if (e.target.matches('.range-track')) paintRange(e.target);
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.range-track').forEach(paintRange);
   });
 
   function formatWon(n) {

@@ -582,10 +582,16 @@
 .inf-card-cover-blur {
   position: absolute;
   inset: 0;
-  filter: blur(var(--mask-blur)) saturate(70%) brightness(1.05);
-  background: var(--bg-elevated);
+  filter: blur(var(--mask-blur)) saturate(80%) brightness(1.04);
+  background-color: var(--bg-elevated);
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.08);  /* blur edge bleed 방지 */
 }
-.inf-card-cover.is-unmasked .inf-card-cover-blur { filter: none; }
+.inf-card-cover.is-unmasked .inf-card-cover-blur {
+  filter: none;
+  transform: none;
+}
 
 .inf-card-body {
   padding: var(--space-3) var(--space-4) var(--space-4);

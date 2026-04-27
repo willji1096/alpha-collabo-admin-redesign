@@ -713,7 +713,7 @@ function wireBalanceDrawer() {
 
 /** Memo Tool — 사이드바 [관리메모] 미니 리스트 + Drawer 풀 편집. localStorage 영속 */
 function wireMemoTool() {
-  const STORAGE_KEY = 'alpha-admin-memos';
+  const STORAGE_KEY = 'alpha-admin-memos-v2';
   const sidebar = document.querySelector('.sidebar-tools');
   if (!sidebar) return;
 

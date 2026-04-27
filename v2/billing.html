@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>결제 · 구독 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Top 3-card grid */
+  .billing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-7);
+  }
+  @media (max-width: 1100px) { .billing-grid { grid-template-columns: 1fr; } }
+
+  .plan-card .plan-name {
+    font-size: var(--fs-3xl);
+    font-weight: var(--fw-heavy);
+    letter-spacing: var(--ls-tight);
+    color: var(--text-primary);
+    line-height: 1;
+  }
+  .plan-card .plan-price {
+    font-size: var(--fs-md);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-top: var(--space-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .plan-card .plan-price strong {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+  }
+  .plan-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--border-subtle);
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+  .plan-detail-row:first-of-type { border-top: none; }
+  .plan-detail-row strong {
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+  }
+  .plan-card-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .plan-card-actions .link {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-secondary);
+  }
+  .plan-card-actions .link:hover { color: var(--text-primary); }
+  .plan-card-actions .link.is-danger:hover { color: var(--accent); }
+
+  .match-card-stat {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+  .match-card-stat .num-big {
+    font-size: var(--fs-display);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .match-card-stat .num-of {
+    font-size: var(--fs-xl);
+    color: var(--text-tertiary);
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+  }
+  .match-card-foot {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+  .match-card-foot strong {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .match-card-foot a { color: var(--accent); font-weight: var(--fw-bold); }
+
+  .balance-num {
+    font-size: var(--fs-display);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .balance-num em {
+    font-style: normal;
+    font-size: var(--fs-xl);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-left: 4px;
+  }
+  .balance-meta-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+  .balance-meta-row strong { color: var(--text-primary); font-weight: var(--fw-semibold); }
+  .balance-card-cta { margin-top: var(--space-4); }
+
+  /* Section */
+  .billing-section {
+    margin-bottom: var(--space-7);
+  }
+  .billing-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-4);
+    gap: var(--space-4);
+  }
+  .billing-section-title {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .billing-section-sub {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .billing-section-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .data-table thead th {
+    background: var(--bg-elevated);
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    border-bottom: 1px solid var(--border-default);
+    white-space: nowrap;
+  }
+  .data-table tbody td {
+    padding: var(--space-4);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    font-variant-numeric: tabular-nums;
+    vertical-align: middle;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover { background: var(--bg-elevated); }
+  .td-secondary { color: var(--text-secondary) !important; }
+  .td-num-strong { font-weight: var(--fw-bold); color: var(--text-primary) !important; }
+  .td-num-right { text-align: right; }
+
+  .inf-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .inf-cell-name {
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    font-size: var(--fs-sm);
+  }
+  .inf-cell-handle {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+  }
+
+  /* Pay method */
+  .pay-method-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-3);
+  }
+  .pay-method-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .pay-card-brand {
+    width: 56px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, #1A1F71 0%, #0058A7 100%);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--fw-heavy);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.05em;
+  }
+  .pay-card-meta-num {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .pay-card-meta-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .auto-charge-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-lg);
+  }
+  .auto-charge-text {
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+  }
+  .auto-charge-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Toggle */
+  .toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: var(--border-default);
+    border-radius: var(--radius-full);
+    transition: background var(--duration-fast);
+  }
+  .toggle .slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform var(--duration-fast);
+    box-shadow: var(--shadow-xs);
+  }
+  .toggle input:checked + .slider { background: var(--accent); }
+  .toggle input:checked + .slider::before { transform: translateX(16px); }
+
+  /* Plan compare */
+  .plan-compare {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+  @media (max-width: 1100px) { .plan-compare { grid-template-columns: 1fr; } }
+
+  .plan-tier {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .plan-tier.is-current {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .plan-tier-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .plan-tier-eyebrow .plan-tier-name {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .plan-tier-price {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--ls-tight);
+    line-height: 1;
+  }
+  .plan-tier-price em {
+    font-style: normal;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-left: 4px;
+  }
+  .plan-tier-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .plan-tier-features li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+  }
+  .plan-tier-features li.is-off {
+    color: var(--text-tertiary);
+    text-decoration: line-through;
+  }
+  .plan-tier-features .check-mark {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--status-success-bg);
+    color: var(--status-success-strong);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .plan-tier-features .check-mark.is-off {
+    background: var(--bg-elevated);
+    color: var(--text-tertiary);
+  }
+  .plan-tier-cta {
+    margin-top: auto;
+    padding-top: var(--space-4);
+  }
+
+  .meter-bar-large {
+    margin-top: var(--space-3);
+    height: 8px;
+    background: var(--bg-active);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  .meter-bar-large-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: var(--radius-full);
+  }
+
+  .filter-bar-flat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .filter-bar-flat .input-search {
+    flex: 0 0 280px;
+    height: 34px;
+    padding: 0 var(--space-3) 0 36px;
+    background: var(--bg-elevated);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    position: relative;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 0 0 280px;
+  }
+  .search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%;
+    height: 34px;
+    padding: 0 var(--space-3) 0 36px;
+    background: var(--bg-elevated);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+  }
+  .search-wrap input:focus {
+    outline: none;
+    border-color: var(--text-primary);
+    background: var(--bg-surface);
+  }
+
+  .receipt-link {
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-xs);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .receipt-link:hover { color: var(--accent-hover); }
+
+  .total-foot-row td {
+    background: var(--bg-elevated);
+    font-weight: var(--fw-bold);
+  }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="14" fill="#EE2128"/><path d="M11 22 L18 9 L25 22 Z" fill="#fff"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html"><i data-lucide="house" class="nav-icon"></i>홈</a>
+        <a class="nav-item" href="explore.html"><i data-lucide="compass" class="nav-icon"></i>탐색<span class="nav-item-meta">2,847</span></a>
+        <a class="nav-item" href="campaign-list.html"><i data-lucide="shopping-bag" class="nav-icon"></i>캠페인<span class="nav-item-meta">3</span></a>
+        <a class="nav-item" href="messages.html"><i data-lucide="message-circle" class="nav-icon"></i>메시지</a>
+        <a class="nav-item" href="saved.html"><i data-lucide="bookmark" class="nav-icon"></i>저장됨</a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item is-active" href="billing.html"><i data-lucide="credit-card" class="nav-icon"></i>결제 · 구독</a>
+        <a class="nav-item" href="settings.html"><i data-lucide="settings" class="nav-icon"></i>설정</a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="#">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="20" height="20"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Account</div>
+          <h1 class="page-title">결제 · 구독</h1>
+          <p class="page-sub">매칭 횟수와 캠페인 비용을 관리합니다.</p>
+        </div>
+        <div class="page-head-actions">
+          <button class="btn btn-secondary">
+            <i data-lucide="download" width="16" height="16"></i>
+            영수증 다운로드
+          </button>
+          <button class="btn btn-primary">
+            <i data-lucide="arrow-up-right" width="16" height="16"></i>
+            플랜 업그레이드
+          </button>
+        </div>
+      </div>
+
+      <!-- Top 3 cards -->
+      <div class="billing-grid">
+
+        <!-- 현재 플랜 -->
+        <div class="card-elevated plan-card">
+          <div class="card-head" style="margin-bottom: var(--space-4);">
+            <div>
+              <span class="badge badge-accent" style="margin-bottom: var(--space-2);"><span class="badge-dot"></span>현재 플랜</span>
+            </div>
+          </div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">₩<strong>290,000</strong> / 월</div>
+
+          <div style="margin-top: var(--space-5);">
+            <div class="plan-detail-row">
+              <span>매칭 횟수</span>
+              <strong>12회 / 월</strong>
+            </div>
+            <div class="plan-detail-row">
+              <span>다음 결제일</span>
+              <strong>2026-05-01</strong>
+            </div>
+            <div class="plan-detail-row">
+              <span>결제 주기</span>
+              <strong>월간</strong>
+            </div>
+          </div>
+
+          <div class="plan-card-actions">
+            <a class="link" href="#">플랜 변경</a>
+            <a class="link is-danger" href="#">구독 취소</a>
+          </div>
+        </div>
+
+        <!-- 매칭 사용 -->
+        <div class="card">
+          <div class="card-head" style="margin-bottom: var(--space-4);">
+            <div>
+              <h3 class="card-title">매칭 사용</h3>
+              <p class="card-sub">이번 달 4월 1일 ~ 4월 30일</p>
+            </div>
+            <span class="badge badge-success"><span class="badge-dot"></span>정상</span>
+          </div>
+
+          <div class="match-card-stat">
+            <span class="num-big">7</span>
+            <span class="num-of">/ 12</span>
+          </div>
+          <div style="font-size: var(--fs-xs); color: var(--text-secondary); margin-top: var(--space-2); font-weight: var(--fw-medium);">잔여 · 한도 12회 중 5회 사용</div>
+
+          <div class="meter-bar-large">
+            <div class="meter-bar-large-fill" style="width: 41.7%;"></div>
+          </div>
+
+          <div class="match-card-foot">
+            <span>이번 달 사용 <strong>5회</strong></span>
+            <a href="#">자세히 보기 →</a>
+          </div>
+        </div>
+
+        <!-- 캠페인 잔액 -->
+        <div class="card">
+          <div class="card-head" style="margin-bottom: var(--space-4);">
+            <div>
+              <h3 class="card-title">캠페인 잔액 · 한국</h3>
+              <p class="card-sub">인플루언서 비용 차감 잔액</p>
+            </div>
+          </div>
+
+          <div class="balance-num">2,847,320<em>원</em></div>
+
+          <div class="balance-meta-row">
+            <span>총 충전 <strong>9,390,352원</strong></span>
+            <span>사용 <strong>6,543,032원</strong></span>
+          </div>
+
+          <button class="btn btn-primary btn-block balance-card-cta">
+            <i data-lucide="plus" width="16" height="16"></i>
+            잔액 충전
+          </button>
+        </div>
+
+      </div>
+
+      <!-- 매칭 사용 내역 -->
+      <section class="billing-section">
+        <div class="billing-section-head">
+          <div>
+            <h2 class="billing-section-title">매칭 사용 내역</h2>
+            <p class="billing-section-sub">최근 30일 — 매칭 5회 차감</p>
+          </div>
+          <div class="billing-section-actions">
+            <button class="btn btn-ghost btn-sm">전체 기간</button>
+            <button class="btn btn-secondary btn-sm">CSV</button>
+          </div>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 180px;">일시</th>
+              <th>인플루언서</th>
+              <th>캠페인</th>
+              <th class="td-num-right" style="width: 120px;">매칭 카운트</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-secondary">2026-04-26 14:32</td>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">Y</div>
+                  <div>
+                    <div class="inf-cell-name">yuki_tokyo</div>
+                    <div class="inf-cell-handle">@yuki_tokyo · JP</div>
+                  </div>
+                </div>
+              </td>
+              <td>청담 라운지 4월 체험</td>
+              <td class="td-num-right td-num-strong">−1회</td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-23 11:08</td>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">N</div>
+                  <div>
+                    <div class="inf-cell-name">natasha_mood</div>
+                    <div class="inf-cell-handle">@natasha_mood · RU</div>
+                  </div>
+                </div>
+              </td>
+              <td>봄 멀티밤 인스타 리뷰</td>
+              <td class="td-num-right td-num-strong">−1회</td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-19 18:47</td>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">M</div>
+                  <div>
+                    <div class="inf-cell-name">mei_xian</div>
+                    <div class="inf-cell-handle">@mei_xian · HK</div>
+                  </div>
+                </div>
+              </td>
+              <td>비타C 세럼 4월 키트</td>
+              <td class="td-num-right td-num-strong">−1회</td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-15 09:22</td>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">K</div>
+                  <div>
+                    <div class="inf-cell-name">kumi_osaka</div>
+                    <div class="inf-cell-handle">@kumi_osaka · JP</div>
+                  </div>
+                </div>
+              </td>
+              <td>청담 라운지 4월 체험</td>
+              <td class="td-num-right td-num-strong">−1회</td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-09 16:51</td>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">L</div>
+                  <div>
+                    <div class="inf-cell-name">lina_k</div>
+                    <div class="inf-cell-handle">@lina_k · KR</div>
+                  </div>
+                </div>
+              </td>
+              <td>봄 멀티밤 인스타 리뷰</td>
+              <td class="td-num-right td-num-strong">−1회</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 캠페인 비용 영수증 -->
+      <section class="billing-section">
+        <div class="billing-section-head">
+          <div>
+            <h2 class="billing-section-title">캠페인 비용 영수증</h2>
+            <p class="billing-section-sub">인플루언서 정산 — 잔액에서 차감</p>
+          </div>
+        </div>
+
+        <div class="filter-bar-flat">
+          <div class="search-wrap">
+            <i data-lucide="search" width="14" height="14"></i>
+            <input type="search" placeholder="캠페인·인플루언서 검색">
+          </div>
+          <span class="filter-chip is-active">최근 90일</span>
+          <span class="filter-chip">올해</span>
+          <span class="filter-chip">전체</span>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 130px;">일시</th>
+              <th>캠페인</th>
+              <th>인플루언서</th>
+              <th class="td-num-right" style="width: 130px;">금액</th>
+              <th style="width: 110px;">상태</th>
+              <th style="width: 110px;">영수증</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-secondary">2026-04-26</td>
+              <td>청담 라운지 4월 체험</td>
+              <td>@yuki_tokyo</td>
+              <td class="td-num-right td-num-strong">820,000원</td>
+              <td><span class="badge badge-success"><span class="badge-dot"></span>완료</span></td>
+              <td><a class="receipt-link" href="#">PDF<i data-lucide="external-link" width="12" height="12"></i></a></td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-23</td>
+              <td>봄 멀티밤 인스타 리뷰</td>
+              <td>@natasha_mood</td>
+              <td class="td-num-right td-num-strong">540,000원</td>
+              <td><span class="badge badge-success"><span class="badge-dot"></span>완료</span></td>
+              <td><a class="receipt-link" href="#">PDF<i data-lucide="external-link" width="12" height="12"></i></a></td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-19</td>
+              <td>비타C 세럼 4월 키트</td>
+              <td>@mei_xian</td>
+              <td class="td-num-right td-num-strong">372,500원</td>
+              <td><span class="badge badge-warning"><span class="badge-dot"></span>검수중</span></td>
+              <td><span class="td-secondary" style="font-size: var(--fs-xs);">대기</span></td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-15</td>
+              <td>청담 라운지 4월 체험</td>
+              <td>@kumi_osaka</td>
+              <td class="td-num-right td-num-strong">680,000원</td>
+              <td><span class="badge badge-success"><span class="badge-dot"></span>완료</span></td>
+              <td><a class="receipt-link" href="#">PDF<i data-lucide="external-link" width="12" height="12"></i></a></td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-04-09</td>
+              <td>봄 멀티밤 인스타 리뷰</td>
+              <td>@lina_k</td>
+              <td class="td-num-right td-num-strong">418,000원</td>
+              <td><span class="badge badge-success"><span class="badge-dot"></span>완료</span></td>
+              <td><a class="receipt-link" href="#">PDF<i data-lucide="external-link" width="12" height="12"></i></a></td>
+            </tr>
+            <tr>
+              <td class="td-secondary">2026-03-28</td>
+              <td>겨울 뷰티 리뷰 캠페인</td>
+              <td>@mika_seoul</td>
+              <td class="td-num-right td-num-strong">735,200원</td>
+              <td><span class="badge badge-success"><span class="badge-dot"></span>완료</span></td>
+              <td><a class="receipt-link" href="#">PDF<i data-lucide="external-link" width="12" height="12"></i></a></td>
+            </tr>
+            <tr class="total-foot-row">
+              <td colspan="3" style="font-weight: var(--fw-bold); color: var(--text-primary);">합계 (6건)</td>
+              <td class="td-num-right" style="color: var(--text-primary);">3,565,700원</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 결제 수단 -->
+      <section class="billing-section">
+        <div class="billing-section-head">
+          <div>
+            <h2 class="billing-section-title">결제 수단</h2>
+            <p class="billing-section-sub">매칭 구독 결제 + 잔액 자동충전</p>
+          </div>
+          <div class="billing-section-actions">
+            <button class="btn btn-secondary btn-sm"><i data-lucide="plus" width="14" height="14"></i>카드 추가</button>
+          </div>
+        </div>
+
+        <div class="pay-method-card">
+          <div class="pay-method-left">
+            <div class="pay-card-brand">VISA</div>
+            <div>
+              <div class="pay-card-meta-num">신한카드 ●●●● 8421</div>
+              <div class="pay-card-meta-sub">유효기간 09/28 · 기본 결제 수단</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: var(--space-2);">
+            <button class="btn btn-ghost btn-sm">변경</button>
+            <button class="btn btn-ghost btn-sm">삭제</button>
+          </div>
+        </div>
+
+        <div class="auto-charge-row">
+          <div>
+            <div class="auto-charge-text">잔액 자동 충전</div>
+            <div class="auto-charge-sub">캠페인 잔액이 1,000,000원 미만이 되면 5,000,000원 자동 충전</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- 플랜 비교 -->
+      <section class="billing-section" style="margin-bottom: 0;">
+        <div class="billing-section-head">
+          <div>
+            <h2 class="billing-section-title">플랜 비교</h2>
+            <p class="billing-section-sub">규모에 맞는 플랜을 선택하세요</p>
+          </div>
+        </div>
+
+        <div class="plan-compare">
+
+          <!-- Free -->
+          <div class="plan-tier">
+            <div class="plan-tier-eyebrow">
+              <span class="plan-tier-name">Free</span>
+              <span class="badge">개인 · 체험</span>
+            </div>
+            <div class="plan-tier-price">₩0<em>/ 월</em></div>
+            <ul class="plan-tier-features">
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>매칭 2회 / 월</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>탐색 기본 필터</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>인플루언서 10명 저장</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>자동 번역 메시지</li>
+              <li class="is-off"><span class="check-mark is-off"><i data-lucide="x" width="12" height="12"></i></span>고급 분석 리포트</li>
+              <li class="is-off"><span class="check-mark is-off"><i data-lucide="x" width="12" height="12"></i></span>캠페인 자동 큐레이션</li>
+              <li class="is-off"><span class="check-mark is-off"><i data-lucide="x" width="12" height="12"></i></span>전담 매니저</li>
+              <li class="is-off"><span class="check-mark is-off"><i data-lucide="x" width="12" height="12"></i></span>API & 웹훅</li>
+            </ul>
+            <div class="plan-tier-cta">
+              <button class="btn btn-outline btn-block">현재 사용 안 함</button>
+            </div>
+          </div>
+
+          <!-- Pro (current) -->
+          <div class="plan-tier is-current">
+            <div class="plan-tier-eyebrow">
+              <span class="plan-tier-name">Pro</span>
+              <span class="badge badge-accent"><span class="badge-dot"></span>현재 플랜</span>
+            </div>
+            <div class="plan-tier-price">₩290,000<em>/ 월</em></div>
+            <ul class="plan-tier-features">
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>매칭 12회 / 월</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>탐색 전체 필터 + 저장 필터</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>인플루언서 무제한 저장</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>자동 번역 메시지 (17개 언어)</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>고급 분석 리포트</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>캠페인 자동 큐레이션</li>
+              <li class="is-off"><span class="check-mark is-off"><i data-lucide="x" width="12" height="12"></i></span>전담 매니저</li>
+              <li class="is-off"><span class="check-mark is-off"><i data-lucide="x" width="12" height="12"></i></span>API & 웹훅</li>
+            </ul>
+            <div class="plan-tier-cta">
+              <button class="btn btn-secondary btn-block">현재 사용 중</button>
+            </div>
+          </div>
+
+          <!-- Business -->
+          <div class="plan-tier">
+            <div class="plan-tier-eyebrow">
+              <span class="plan-tier-name">Business</span>
+              <span class="badge">팀 · 대규모</span>
+            </div>
+            <div class="plan-tier-price">₩890,000<em>/ 월</em></div>
+            <ul class="plan-tier-features">
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>매칭 50회 / 월</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>탐색 전체 필터 + 저장 필터</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>인플루언서 무제한 저장</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>자동 번역 메시지 (17개 언어)</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>고급 분석 리포트</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>캠페인 자동 큐레이션</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>전담 매니저</li>
+              <li><span class="check-mark"><i data-lucide="check" width="12" height="12"></i></span>API & 웹훅</li>
+            </ul>
+            <div class="plan-tier-cta">
+              <button class="btn btn-primary btn-block">Business로 업그레이드</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

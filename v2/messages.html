@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메시지 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Page level adjustments — full-height inbox */
+  .msg-page {
+    padding: var(--space-5) var(--space-6) var(--space-6);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .msg-head {
+    margin-bottom: var(--space-4);
+  }
+  .msg-head .page-title { font-size: var(--fs-2xl); }
+  .msg-head .page-sub { font-size: var(--fs-sm); margin-top: var(--space-1); }
+
+  /* 3-col layout */
+  .msg-shell {
+    display: grid;
+    grid-template-columns: 320px 1fr 300px;
+    gap: 0;
+    flex: 1;
+    min-height: 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (max-width: 1180px) { .msg-shell { grid-template-columns: 280px 1fr; } .msg-side-right { display: none; } }
+  @media (max-width: 900px) { .msg-shell { grid-template-columns: 1fr; } .msg-side-left { display: none; } }
+
+  /* Inbox list (left) */
+  .msg-side-left {
+    border-right: 1px solid var(--border-default);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .msg-search {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+    position: relative;
+  }
+  .msg-search input {
+    width: 100%;
+    height: 36px;
+    padding: 0 var(--space-3) 0 36px;
+    background: var(--bg-elevated);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    font-family: inherit;
+    transition: all var(--duration-fast);
+  }
+  .msg-search input:focus {
+    outline: none;
+    background: var(--bg-surface);
+    border-color: var(--border-default);
+  }
+  .msg-search-icon {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+
+  .msg-tabs {
+    display: flex;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .msg-tabs::-webkit-scrollbar { display: none; }
+  .msg-tab {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-secondary);
+    background: transparent;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--duration-fast);
+  }
+  .msg-tab:hover { background: var(--bg-elevated); color: var(--text-primary); }
+  .msg-tab.is-active { background: var(--text-primary); color: var(--text-inverse); }
+
+  .msg-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+  .msg-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background var(--duration-fast);
+    position: relative;
+  }
+  .msg-row:hover { background: var(--bg-elevated); }
+  .msg-row.is-active {
+    background: var(--accent-light);
+  }
+  .msg-row.is-active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+  .msg-row-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+  }
+  .msg-row-body { min-width: 0; }
+  .msg-row-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: 2px;
+  }
+  .msg-row-name {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .msg-row-time {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .msg-row-camp {
+    font-size: 11px;
+    color: var(--accent-emphasis);
+    font-weight: var(--fw-bold);
+    background: var(--accent-light);
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+    display: inline-block;
+    margin-bottom: 4px;
+    letter-spacing: 0;
+  }
+  .msg-row.is-active .msg-row-camp {
+    background: var(--bg-surface);
+  }
+  .msg-row-snippet {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+  }
+  .msg-row-end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+  .msg-row-unread {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    font-weight: var(--fw-bold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .msg-row-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--status-success);
+  }
+  .msg-row-status-dot.is-warn { background: var(--status-warning); }
+
+  /* Center conversation */
+  .msg-center {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+  .msg-conv-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+  }
+  .msg-conv-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+  }
+  .msg-conv-id { min-width: 0; flex: 1; }
+  .msg-conv-name-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .msg-conv-name {
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+  }
+  .msg-conv-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .msg-conv-meta strong {
+    color: var(--accent-emphasis);
+    font-weight: var(--fw-bold);
+    background: var(--accent-light);
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+  }
+
+  /* Mini stepper in conv head */
+  .msg-stepper-mini {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: var(--space-2);
+  }
+  .msg-stepper-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg-active);
+  }
+  .msg-stepper-dot.is-done { background: var(--status-success); }
+  .msg-stepper-dot.is-current {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+
+  .msg-conv-head-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .msg-translate-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--accent-light);
+    color: var(--accent-emphasis);
+    border-radius: var(--radius-full);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    border: none;
+    cursor: pointer;
+  }
+  .msg-translate-toggle .msg-translate-on {
+    color: var(--status-success-strong);
+    margin-left: 2px;
+  }
+
+  /* Thread */
+  .msg-thread {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-5) var(--space-5);
+    background: var(--bg-elevated);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .msg-day-divider {
+    text-align: center;
+    margin: var(--space-3) 0 var(--space-2);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
+  .msg-day-divider::before, .msg-day-divider::after {
+    content: "";
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: var(--border-default);
+    vertical-align: middle;
+    margin: 0 8px;
+  }
+
+  .msg-bubble-row {
+    display: flex;
+    gap: var(--space-2);
+    max-width: 70%;
+  }
+  .msg-bubble-row.is-me {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+  .msg-bubble-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    margin-top: auto;
+  }
+  .msg-bubble-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .msg-bubble {
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    line-height: var(--lh-normal);
+    word-wrap: break-word;
+  }
+  .is-me .msg-bubble {
+    background: var(--accent-light);
+    border-color: var(--accent-light);
+    color: var(--text-primary);
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 18px;
+  }
+  .msg-bubble-original {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    padding: 0 var(--space-3);
+    line-height: 1.45;
+  }
+  .msg-bubble-original em {
+    font-style: normal;
+    font-weight: var(--fw-bold);
+    color: var(--text-secondary);
+    margin-right: 2px;
+  }
+  .msg-bubble-time {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    padding: 0 var(--space-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .is-me .msg-bubble-time { text-align: right; }
+
+  /* System message */
+  .msg-system {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .msg-system i { color: var(--status-success-strong); }
+
+  /* Composer */
+  .msg-composer {
+    border-top: 1px solid var(--border-subtle);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface);
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-2);
+  }
+  .msg-composer-attach {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background var(--duration-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+  }
+  .msg-composer-attach:hover { background: var(--bg-elevated); color: var(--text-primary); }
+  .msg-composer textarea {
+    flex: 1;
+    min-height: 40px;
+    max-height: 120px;
+    resize: none;
+    padding: 10px 14px;
+    background: var(--bg-elevated);
+    border: 1px solid transparent;
+    border-radius: 20px;
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    line-height: 1.4;
+    color: var(--text-primary);
+    transition: all var(--duration-fast);
+  }
+  .msg-composer textarea:focus {
+    outline: none;
+    background: var(--bg-surface);
+    border-color: var(--border-default);
+  }
+
+  /* Right sticky panel */
+  .msg-side-right {
+    border-left: 1px solid var(--border-default);
+    background: var(--bg-surface);
+    overflow-y: auto;
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .msg-side-section-title {
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    margin-bottom: var(--space-3);
+  }
+
+  /* Vertical timeline stepper */
+  .msg-timeline { display: flex; flex-direction: column; }
+  .msg-timeline-item {
+    position: relative;
+    display: flex;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+  }
+  .msg-timeline-item:last-child { padding-bottom: 0; }
+  .msg-timeline-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-default);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .msg-timeline-icon.is-done {
+    background: var(--status-success);
+    color: var(--text-inverse);
+    border-color: var(--status-success);
+  }
+  .msg-timeline-icon.is-current {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-light);
+  }
+  .msg-timeline-item:not(:last-child) .msg-timeline-icon::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: calc(var(--space-4) + 4px);
+    background: var(--border-default);
+  }
+  .msg-timeline-item.is-done:not(:last-child) .msg-timeline-icon::after {
+    background: var(--status-success);
+  }
+  .msg-timeline-body { padding-top: 2px; min-width: 0; }
+  .msg-timeline-title {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+  }
+  .msg-timeline-item.is-current .msg-timeline-title { color: var(--accent); }
+  .msg-timeline-item.is-pending .msg-timeline-title { color: var(--text-secondary); }
+  .msg-timeline-meta {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Camp info card */
+  .msg-camp-card {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .msg-camp-card-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--fs-xs);
+  }
+  .msg-camp-card-row > span:first-child {
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .msg-camp-card-row > span:last-child {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .msg-quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html" title="V1 시안">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true" title="V2 시안 (현재)">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="47 46 177 205" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M52.2609 179.132C42.8134 155.153 48.7303 125.879 51.5331 119.028C54.3359 112.177 63.8981 105.776 97.5445 103.056C120.673 101.186 147.24 111.782 147.24 111.782C147.24 111.782 119.269 118.32 119.987 148.917C120.704 179.514 148.177 185.641 148.177 185.641C118.798 200.288 86.6413 199.077 52.2609 179.132Z" fill="#800B1C"/><path d="M120.517 50.6437C123.264 49.8334 128.444 48.6491 132.064 47.9634C136.495 47.2154 141.8 46.7791 148.416 46.7791C154.345 46.7168 160.587 47.0908 164.019 47.6517C167.202 48.1504 172.632 49.2724 176.065 50.145C179.498 51.0177 185.24 53.0123 188.86 54.5706C192.48 56.1289 195.975 57.5625 200.094 60.2428C204.33 62.9985 207.147 65.541 210.08 68.4706C214.262 72.6468 216.01 75.0155 218.256 79.441C219.879 82.5576 221.502 86.6092 222.001 88.4792C222.438 90.3491 222.813 94.1514 222.813 96.894C222.75 99.7612 222.313 103.439 221.689 105.62C221.065 107.677 219.879 110.607 218.943 112.165C218.069 113.724 216.01 116.404 214.387 118.087C212.764 119.832 209.706 122.138 207.521 123.26C205.337 124.382 201.53 125.691 199.158 126.19C196.786 126.689 192.667 127.125 190.108 127.125C187.549 127.125 183.055 126.689 180.122 126.128C177.189 125.567 172.82 124.445 170.448 123.572C168.076 122.699 163.957 120.954 161.398 119.707C158.839 118.461 153.908 115.905 150.476 114.098C147.043 112.228 141.551 109.921 138.305 108.924C135.06 107.927 129.567 106.555 126.135 105.87C122.702 105.184 116.086 104.374 111.468 104.062C106.162 103.688 100.608 103.688 96.4884 104.124C92.8684 104.436 87.813 105.184 85.254 105.683C82.6951 106.244 78.3262 107.366 75.58 108.238C72.8338 109.111 68.34 110.794 65.5939 112.041C62.8477 113.225 58.7284 115.282 56.3567 116.591C54.0474 117.962 51.5469 119.021 51.5469 119.021C51.5469 119.021 52.0502 116.716 52.8616 114.347C53.6106 111.978 55.4205 107.553 56.9184 104.561C58.4164 101.507 60.8505 97.2056 62.2236 94.8993C63.6591 92.5307 66.5925 88.4168 68.7145 85.6742C70.8366 82.9316 75.3927 78.0074 78.8255 74.7661C82.2582 71.5249 87.5633 67.0993 90.6215 65.0423C93.6798 62.9231 98.548 59.9311 101.481 58.3728C104.415 56.8145 108.784 54.7576 111.155 53.8226C113.527 52.95 117.771 51.5163 120.517 50.6437Z" fill="#EE2128"/><path d="M178.047 172.26C179.358 172.073 181.667 171.699 183.227 171.388C184.788 171.138 188.158 170.889 190.717 170.889C193.276 170.827 197.395 171.201 199.767 171.699C202.139 172.198 205.696 173.382 207.569 174.317C209.441 175.252 212.749 177.683 214.871 179.74C217.118 181.984 219.302 184.914 220.301 186.971C221.175 188.84 222.298 192.518 222.86 195.074C223.671 198.938 223.734 200.621 223.172 205.047C222.797 207.976 221.736 212.153 220.863 214.397C219.989 216.641 218.054 220.256 216.618 222.5C215.121 224.744 212.312 228.11 210.252 230.042C208.255 231.912 204.822 234.717 202.575 236.150C200.329 237.646 196.521 239.828 194.150 241.012C191.778 242.259 187.222 244.129 184.164 245.251C181.105 246.373 175.738 247.931 172.305 248.679C167.312 249.801 160.538 250.136 152.957 250.362C146.134 250.566 138.165 250.424 135.481 249.988C133.110 249.614 129.677 249.053 127.992 248.741C126.244 248.430 122.063 247.308 118.630 246.248C115.197 245.189 109.018 242.633 104.899 240.638C100.780 238.644 94.9753 235.340 91.9794 233.345C88.9836 231.288 84.2402 227.549 81.3692 224.931C78.4982 222.375 74.0668 217.700 71.5079 214.646C68.8866 211.592 65.2042 206.543 63.2694 203.488C61.3346 200.434 58.4636 195.198 56.9657 191.957C55.4677 188.716 53.7202 184.477 53.1585 182.607C52.5343 180.737 52.1558 178.820 52.1558 178.820C52.1558 178.820 56.0919 180.800 60.5856 183.044C65.0169 185.288 71.6327 188.092 75.2527 189.277C78.8727 190.461 85.1764 191.957 89.2957 192.643C93.9766 193.391 99.8435 193.827 104.899 193.827C109.393 193.827 115.509 193.515 118.630 193.141C121.688 192.767 126.619 191.895 129.552 191.271C132.486 190.586 136.854 189.464 139.226 188.778C141.598 188.030 145.405 186.534 147.652 185.475C149.899 184.353 154.393 181.984 157.638 180.239C160.884 178.493 166.313 176.062 169.621 174.816C172.992 173.631 176.799 172.447 178.047 172.260Z" fill="#EE2128"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house" class="nav-icon"></i>
+          홈
+        </a>
+        <a class="nav-item" href="explore.html">
+          <i data-lucide="compass" class="nav-icon"></i>
+          탐색
+          <span class="nav-item-meta">2,847</span>
+        </a>
+        <a class="nav-item" href="campaign-list.html">
+          <i data-lucide="shopping-bag" class="nav-icon"></i>
+          캠페인
+          <span class="nav-item-meta">3</span>
+        </a>
+        <a class="nav-item is-active" href="messages.html">
+          <i data-lucide="message-circle" class="nav-icon"></i>
+          메시지
+          <span class="nav-item-meta">2</span>
+        </a>
+        <a class="nav-item" href="saved.html">
+          <i data-lucide="bookmark" class="nav-icon"></i>
+          저장됨
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html">
+          <i data-lucide="credit-card" class="nav-icon"></i>
+          결제 · 구독
+        </a>
+        <a class="nav-item" href="settings.html">
+          <i data-lucide="settings" class="nav-icon"></i>
+          설정설정
+        </a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="#">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="22" height="22"></i>
+      </button>
+    </header>
+
+    <section class="page msg-page">
+
+      <div class="msg-head page-head">
+        <div>
+          <h1 class="page-title">메시지</h1>
+          <p class="page-sub">매칭된 인플루언서와의 협업 대화 — 자동번역 · 진행 단계 동기화</p>
+        </div>
+      </div>
+
+      <div class="msg-shell">
+
+        <!-- LEFT: inbox -->
+        <aside class="msg-side-left">
+          <div class="msg-search">
+            <i data-lucide="search" class="msg-search-icon" width="16" height="16"></i>
+            <input type="search" placeholder="이름·캠페인 검색…">
+          </div>
+
+          <div class="msg-tabs" role="tablist">
+            <button class="msg-tab is-active" role="tab" aria-selected="true">전체 <span style="opacity:0.7;">8</span></button>
+            <button class="msg-tab" role="tab">미응답 <span style="opacity:0.7;">2</span></button>
+            <button class="msg-tab" role="tab">진행중 <span style="opacity:0.7;">4</span></button>
+            <button class="msg-tab" role="tab">마감임박 <span style="opacity:0.7;">1</span></button>
+            <button class="msg-tab" role="tab">종료 <span style="opacity:0.7;">1</span></button>
+          </div>
+
+          <div class="msg-list">
+
+            <div class="msg-row is-active">
+              <div class="msg-row-avatar" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=120&h=120&q=80');"></div>
+              <div class="msg-row-body">
+                <div class="msg-row-top">
+                  <span class="msg-row-name">유키 사토</span>
+                  <span class="msg-row-time">방금</span>
+                </div>
+                <span class="msg-row-camp">2604-A · 청담 라운지</span>
+                <div class="msg-row-snippet">콘텐츠 가이드 잘 받았습니다. 4월 26일 게시 예정으로…</div>
+              </div>
+              <div class="msg-row-end">
+                <span class="msg-row-unread">2</span>
+                <span class="msg-row-status-dot is-warn" title="마감 임박"></span>
+              </div>
+            </div>
+
+            <div class="msg-row">
+              <div class="msg-row-avatar" style="background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=120&h=120&q=80');"></div>
+              <div class="msg-row-body">
+                <div class="msg-row-top">
+                  <span class="msg-row-name">Natasha Volkova</span>
+                  <span class="msg-row-time">12분</span>
+                </div>
+                <span class="msg-row-camp">2605-B · 봄 멀티밤</span>
+                <div class="msg-row-snippet">제품 박스 받았습니다. 다음 주 촬영 일정 잡고 다시…</div>
+              </div>
+              <div class="msg-row-end">
+                <span class="msg-row-unread">1</span>
+              </div>
+            </div>
+
+            <div class="msg-row">
+              <div class="msg-row-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=80');"></div>
+              <div class="msg-row-body">
+                <div class="msg-row-top">
+                  <span class="msg-row-name">Mei Xian</span>
+                  <span class="msg-row-time">1시간</span>
+                </div>
+                <span class="msg-row-camp">2605-B · 봄 멀티밤</span>
+                <div class="msg-row-snippet">샤오홍슈 게시 형식 가이드 추가로 보내주실 수 있나요?</div>
+              </div>
+              <div class="msg-row-end">
+                <span class="msg-row-status-dot"></span>
+              </div>
+            </div>
+
+            <div class="msg-row">
+              <div class="msg-row-avatar" style="background-image: url('https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&w=120&h=120&q=80');"></div>
+              <div class="msg-row-body">
+                <div class="msg-row-top">
+                  <span class="msg-row-name">쿠미 타나카</span>
+                  <span class="msg-row-time">3시간</span>
+                </div>
+                <span class="msg-row-camp">2604-A · 청담 라운지</span>
+                <div class="msg-row-snippet">방문 일정 4월 28일로 확정해도 괜찮으실까요?</div>
+              </div>
+              <div class="msg-row-end">
+                <span class="msg-row-status-dot"></span>
+              </div>
+            </div>
+
+            <div class="msg-row">
+              <div class="msg-row-avatar" style="background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&h=120&q=80');"></div>
+              <div class="msg-row-body">
+                <div class="msg-row-top">
+                  <span class="msg-row-name">Lina Cheung</span>
+                  <span class="msg-row-time">어제</span>
+                </div>
+                <span class="msg-row-camp">2604-C · 비타C 세럼</span>
+                <div class="msg-row-snippet">검수 의견 반영해서 수정 게시했습니다. 확인 부탁드립니다.</div>
+              </div>
+              <div class="msg-row-end">
+                <span class="msg-row-status-dot"></span>
+              </div>
+            </div>
+
+            <div class="msg-row">
+              <div class="msg-row-avatar" style="background-image: url('https://images.unsplash.com/photo-1496440737103-cd596325d314?auto=format&fit=crop&w=120&h=120&q=80');"></div>
+              <div class="msg-row-body">
+                <div class="msg-row-top">
+                  <span class="msg-row-name">Aki Lin</span>
+                  <span class="msg-row-time">2일 전</span>
+                </div>
+                <span class="msg-row-camp">2605-B · 봄 멀티밤</span>
+                <div class="msg-row-snippet">좋은 협업 감사합니다. 다음 캠페인도 기대하고 있어요!</div>
+              </div>
+              <div class="msg-row-end">
+                <span style="font-size: 10px; color: var(--text-tertiary); font-weight: var(--fw-bold);">완료</span>
+              </div>
+            </div>
+
+          </div>
+        </aside>
+
+        <!-- CENTER: active conversation -->
+        <section class="msg-center">
+
+          <header class="msg-conv-head">
+            <div class="msg-conv-avatar" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=120&h=120&q=80');"></div>
+            <div class="msg-conv-id">
+              <div class="msg-conv-name-row">
+                <span class="msg-conv-name">유키 사토</span>
+                <span class="verified" aria-label="인증됨">
+                  <i data-lucide="check" width="9" height="9" stroke-width="3.5"></i>
+                </span>
+                <span style="font-size: var(--fs-xs); color: var(--text-secondary); font-weight: var(--fw-medium); margin-left: 4px;">@yuki_tokyo</span>
+              </div>
+              <div class="msg-conv-meta">
+                <strong>2604-A</strong>
+                <span>청담 라운지 4월 체험</span>
+                <span style="color: var(--text-tertiary);">·</span>
+                <span class="msg-stepper-mini" aria-label="진행 단계">
+                  <span class="msg-stepper-dot is-done" title="매칭"></span>
+                  <span class="msg-stepper-dot is-done" title="가이드"></span>
+                  <span class="msg-stepper-dot is-done" title="제작"></span>
+                  <span class="msg-stepper-dot is-current" title="게시"></span>
+                  <span class="msg-stepper-dot" title="검수"></span>
+                </span>
+                <span style="color: var(--accent); font-weight: var(--fw-bold);">D-1</span>
+              </div>
+            </div>
+            <div class="msg-conv-head-actions">
+              <button class="msg-translate-toggle" type="button">
+                <i data-lucide="languages" width="13" height="13"></i>
+                자동번역: JP → KR
+                <span class="msg-translate-on">●</span>
+              </button>
+              <button class="btn-icon" aria-label="더보기">
+                <i data-lucide="more-horizontal" width="20" height="20"></i>
+              </button>
+            </div>
+          </header>
+
+          <div class="msg-thread">
+
+            <div class="msg-day-divider">4월 22일 (월)</div>
+
+            <!-- Influencer message 1 -->
+            <div class="msg-bubble-row">
+              <div class="msg-bubble-avatar" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=80&h=80&q=80');"></div>
+              <div class="msg-bubble-stack">
+                <div class="msg-bubble">청담 라운지 4월 체험 캠페인 매칭 감사드립니다. 꼭 참여하고 싶었던 협업이라 기쁩니다.</div>
+                <div class="msg-bubble-original"><em>원문 (JP)</em>清澄ラウンジ4月体験キャンペーンのマッチング、ありがとうございます。ぜひ参加したかったコラボなので嬉しいです。</div>
+                <div class="msg-bubble-time">14:08</div>
+              </div>
+            </div>
+
+            <!-- System -->
+            <div class="msg-system">
+              <i data-lucide="check-circle" width="13" height="13"></i>
+              yuki_tokyo님이 콘텐츠 가이드를 확인했습니다 · 4월 22일 14:31
+            </div>
+
+            <!-- Me -->
+            <div class="msg-bubble-row is-me">
+              <div class="msg-bubble-stack">
+                <div class="msg-bubble">반갑습니다 유키 님! 가이드 잘 받으셨네요. 방문 가능한 날짜 알려주시면 라운지 일정 미리 조율해두겠습니다.</div>
+                <div class="msg-bubble-time">15:02 · 읽음</div>
+              </div>
+            </div>
+
+            <!-- Influencer 2 -->
+            <div class="msg-bubble-row">
+              <div class="msg-bubble-avatar" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=80&h=80&q=80');"></div>
+              <div class="msg-bubble-stack">
+                <div class="msg-bubble">4월 25일 오후 또는 26일 오전이 가능합니다. 어느 쪽이 편하세요? 촬영 시간은 약 2시간 정도 잡으면 충분할 것 같습니다.</div>
+                <div class="msg-bubble-original"><em>원문 (JP)</em>4月25日の午後、もしくは26日の午前が空いています。どちらがご都合よろしいでしょうか？撮影は2時間ほど見ていただければ十分かと思います。</div>
+                <div class="msg-bubble-time">15:18</div>
+              </div>
+            </div>
+
+            <div class="msg-day-divider">4월 23일 (화)</div>
+
+            <!-- Me -->
+            <div class="msg-bubble-row is-me">
+              <div class="msg-bubble-stack">
+                <div class="msg-bubble">26일 오전 10시 어떠실까요? 라운지 매니저가 직접 안내드릴 예정입니다. 메뉴 시연도 함께 준비할게요.</div>
+                <div class="msg-bubble-time">10:24 · 읽음</div>
+              </div>
+            </div>
+
+            <!-- Influencer 3 -->
+            <div class="msg-bubble-row">
+              <div class="msg-bubble-avatar" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=80&h=80&q=80');"></div>
+              <div class="msg-bubble-stack">
+                <div class="msg-bubble">26일 오전 10시로 확정하겠습니다! 메뉴 시연 너무 좋네요. 인스타 릴스 + 피드 1세트로 가져갈 예정이에요.</div>
+                <div class="msg-bubble-original"><em>원문 (JP)</em>26日午前10時で確定します！メニュー実演、すごくいいですね。インスタはリール＋フィード1セットで進める予定です。</div>
+                <div class="msg-bubble-time">11:02</div>
+              </div>
+            </div>
+
+            <div class="msg-day-divider">방금 전</div>
+
+            <!-- Influencer 4 — most recent -->
+            <div class="msg-bubble-row">
+              <div class="msg-bubble-avatar" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=80&h=80&q=80');"></div>
+              <div class="msg-bubble-stack">
+                <div class="msg-bubble">콘텐츠 가이드 잘 받았습니다. 4월 26일 게시 예정으로 캡션 초안 함께 첨부드려요. 검토 부탁드립니다.</div>
+                <div class="msg-bubble-original"><em>원문 (JP)</em>コンテンツガイド、確認いたしました。4月26日投稿予定でキャプション初稿も一緒に送ります。ご確認お願いします。</div>
+                <div class="msg-bubble-time">방금</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="msg-composer">
+            <button class="msg-composer-attach" aria-label="첨부">
+              <i data-lucide="paperclip" width="18" height="18"></i>
+            </button>
+            <textarea placeholder="메시지를 입력하세요… (자동번역 KR → JP)"></textarea>
+            <button class="msg-composer-attach" aria-label="이모지">
+              <i data-lucide="smile" width="18" height="18"></i>
+            </button>
+            <button class="btn btn-primary" type="button">
+              <i data-lucide="send" width="14" height="14"></i>
+              보내기
+            </button>
+          </div>
+
+        </section>
+
+        <!-- RIGHT: campaign / progress -->
+        <aside class="msg-side-right">
+
+          <div>
+            <div class="msg-side-section-title">진행 단계</div>
+            <div class="msg-timeline">
+              <div class="msg-timeline-item is-done">
+                <div class="msg-timeline-icon is-done">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                </div>
+                <div class="msg-timeline-body">
+                  <div class="msg-timeline-title">매칭 완료</div>
+                  <div class="msg-timeline-meta">4월 15일 · 10:24</div>
+                </div>
+              </div>
+              <div class="msg-timeline-item is-done">
+                <div class="msg-timeline-icon is-done">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                </div>
+                <div class="msg-timeline-body">
+                  <div class="msg-timeline-title">가이드 공유</div>
+                  <div class="msg-timeline-meta">4월 16일 · 09:12</div>
+                </div>
+              </div>
+              <div class="msg-timeline-item is-done">
+                <div class="msg-timeline-icon is-done">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                </div>
+                <div class="msg-timeline-body">
+                  <div class="msg-timeline-title">콘텐츠 제작</div>
+                  <div class="msg-timeline-meta">4월 22일 · 17:40</div>
+                </div>
+              </div>
+              <div class="msg-timeline-item is-current">
+                <div class="msg-timeline-icon is-current">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: currentColor;"></span>
+                </div>
+                <div class="msg-timeline-body">
+                  <div class="msg-timeline-title">게시</div>
+                  <div class="msg-timeline-meta">예정 4월 26일 · D-1</div>
+                </div>
+              </div>
+              <div class="msg-timeline-item is-pending">
+                <div class="msg-timeline-icon">
+                  <i data-lucide="circle" width="11" height="11"></i>
+                </div>
+                <div class="msg-timeline-body">
+                  <div class="msg-timeline-title">검수</div>
+                  <div class="msg-timeline-meta">대기 중</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="msg-side-section-title">캠페인 정보</div>
+            <div class="msg-camp-card">
+              <div class="msg-camp-card-row">
+                <span>코드</span>
+                <span>2604-A</span>
+              </div>
+              <div class="msg-camp-card-row">
+                <span>국가 · 유형</span>
+                <span>JP · 방문형</span>
+              </div>
+              <div class="msg-camp-card-row">
+                <span>최종 마감</span>
+                <span>4월 30일</span>
+              </div>
+              <div class="msg-camp-card-row">
+                <span>게시 마감</span>
+                <span style="color: var(--accent);">4월 26일 · D-1</span>
+              </div>
+              <div class="msg-camp-card-row">
+                <span>검수 마감</span>
+                <span>4월 28일</span>
+              </div>
+              <div class="msg-camp-card-row">
+                <span>잔액</span>
+                <span>1,180,000원</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="msg-side-section-title">빠른 액션</div>
+            <div class="msg-quick-actions">
+              <button class="btn btn-secondary btn-sm btn-block" type="button">
+                <i data-lucide="file-text" width="14" height="14"></i>
+                가이드 다시 보내기
+              </button>
+              <button class="btn btn-secondary btn-sm btn-block" type="button">
+                <i data-lucide="credit-card" width="14" height="14"></i>
+                결제 확인
+              </button>
+              <a class="btn btn-primary btn-sm btn-block" href="inspect.html">
+                <i data-lucide="clipboard-check" width="14" height="14"></i>
+                검수로 이동
+              </a>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

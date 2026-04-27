@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>설정 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Settings layout */
+  .settings-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: var(--space-6);
+    align-items: flex-start;
+  }
+  @media (max-width: 1024px) {
+    .settings-layout { grid-template-columns: 1fr; }
+  }
+
+  .settings-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2);
+    position: sticky;
+    top: calc(var(--header-h, 56px) + var(--space-5));
+  }
+  .settings-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+    cursor: pointer;
+    transition: background var(--duration-fast);
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
+  .settings-tab:hover { background: var(--bg-elevated); }
+  .settings-tab.is-active {
+    background: var(--bg-active);
+    font-weight: var(--fw-bold);
+  }
+  .settings-tab-meta {
+    margin-left: auto;
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .settings-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-7);
+  }
+  .settings-panel[hidden] { display: none; }
+
+  .settings-panel-head {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .settings-panel-title {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .settings-panel-sub {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* Form */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5) var(--space-5);
+  }
+  .form-grid .field-full { grid-column: 1 / -1; }
+  @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+
+  .form-section {
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .form-section:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .form-section-head {
+    margin-bottom: var(--space-5);
+  }
+  .form-section-title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .form-section-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Logo upload */
+  .logo-upload {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+  .logo-current {
+    width: 84px;
+    height: 84px;
+    border-radius: var(--radius-lg);
+    background: var(--accent-light);
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: var(--fw-heavy);
+    letter-spacing: var(--ls-tight);
+    flex-shrink: 0;
+    border: 1px solid var(--border-default);
+  }
+  .logo-upload-meta {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: var(--space-2);
+  }
+
+  /* Sticky save bar */
+  .save-bar {
+    position: sticky;
+    bottom: 0;
+    margin: var(--space-7) calc(var(--space-7) * -1) calc(var(--space-7) * -1);
+    padding: var(--space-4) var(--space-7);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-default);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  }
+  .save-bar-info {
+    margin-right: auto;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    align-self: center;
+    font-weight: var(--fw-medium);
+  }
+
+  /* Members table */
+  .members-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+    gap: var(--space-3);
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .data-table thead th {
+    background: var(--bg-elevated);
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    border-bottom: 1px solid var(--border-default);
+    white-space: nowrap;
+  }
+  .data-table tbody td {
+    padding: var(--space-4);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover { background: var(--bg-elevated); }
+  .member-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .member-name {
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+  }
+  .member-email {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .role-select {
+    appearance: none;
+    background: var(--bg-elevated);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 6px var(--space-3);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%238E8E8E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 26px;
+  }
+
+  /* Notification rows */
+  .notify-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: var(--space-5);
+    align-items: center;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .notify-row:last-child { border-bottom: none; }
+  .notify-title {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+  }
+  .notify-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .notify-channel-head {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: var(--space-5);
+    padding: var(--space-3) 0;
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    border-bottom: 1px solid var(--border-default);
+  }
+  .notify-channel-head > span {
+    width: 60px;
+    text-align: center;
+  }
+
+  /* Toggle */
+  .toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: var(--border-default);
+    border-radius: var(--radius-full);
+    transition: background var(--duration-fast);
+  }
+  .toggle .slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform var(--duration-fast);
+    box-shadow: var(--shadow-xs);
+  }
+  .toggle input:checked + .slider { background: var(--accent); }
+  .toggle input:checked + .slider::before { transform: translateX(16px); }
+
+  /* Security */
+  .security-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-3);
+  }
+  .security-row-title {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+  }
+  .security-row-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 4px;
+    max-width: 56ch;
+  }
+  .activity-log {
+    margin-top: var(--space-3);
+  }
+  .activity-row {
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    align-items: center;
+  }
+  .activity-row:last-child { border-bottom: none; }
+  .activity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--status-success);
+  }
+  .activity-dot.is-warn { background: var(--status-warning); }
+  .activity-text {
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+  }
+  .activity-meta {
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="14" fill="#EE2128"/><path d="M11 22 L18 9 L25 22 Z" fill="#fff"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html"><i data-lucide="house" class="nav-icon"></i>홈</a>
+        <a class="nav-item" href="explore.html"><i data-lucide="compass" class="nav-icon"></i>탐색<span class="nav-item-meta">2,847</span></a>
+        <a class="nav-item" href="campaign-list.html"><i data-lucide="shopping-bag" class="nav-icon"></i>캠페인<span class="nav-item-meta">3</span></a>
+        <a class="nav-item" href="messages.html"><i data-lucide="message-circle" class="nav-icon"></i>메시지</a>
+        <a class="nav-item" href="saved.html"><i data-lucide="bookmark" class="nav-icon"></i>저장됨</a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html"><i data-lucide="credit-card" class="nav-icon"></i>결제 · 구독</a>
+        <a class="nav-item is-active" href="settings.html"><i data-lucide="settings" class="nav-icon"></i>설정</a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="#">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="20" height="20"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Account</div>
+          <h1 class="page-title">설정</h1>
+          <p class="page-sub">회사 정보, 멤버, 알림, 보안을 관리하세요.</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- Tabs -->
+        <aside class="settings-tabs" role="tablist">
+          <button class="settings-tab is-active" role="tab" aria-selected="true" data-tab="company">
+            <i data-lucide="building-2" width="18" height="18"></i>
+            회사 정보
+          </button>
+          <button class="settings-tab" role="tab" aria-selected="false" data-tab="members">
+            <i data-lucide="users" width="18" height="18"></i>
+            멤버
+            <span class="settings-tab-meta">4</span>
+          </button>
+          <button class="settings-tab" role="tab" aria-selected="false" data-tab="notify">
+            <i data-lucide="bell-ring" width="18" height="18"></i>
+            알림
+          </button>
+          <button class="settings-tab" role="tab" aria-selected="false" data-tab="security">
+            <i data-lucide="shield" width="18" height="18"></i>
+            보안
+          </button>
+          <button class="settings-tab" role="tab" aria-selected="false" data-tab="api">
+            <i data-lucide="webhook" width="18" height="18"></i>
+            API & 웹훅
+          </button>
+        </aside>
+
+        <!-- Right side panels -->
+        <div>
+
+          <!-- 회사 정보 -->
+          <section class="settings-panel" id="panel-company" role="tabpanel">
+            <div class="settings-panel-head">
+              <h2 class="settings-panel-title">회사 정보</h2>
+              <p class="settings-panel-sub">청구·계약·캠페인 발주 시 사용되는 회사 기본 정보</p>
+            </div>
+
+            <!-- 로고 -->
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">로고</div>
+                <div class="form-section-sub">정사각형 PNG · 최소 256×256 · 5MB 이하</div>
+              </div>
+              <div class="logo-upload">
+                <div class="logo-current">G</div>
+                <div>
+                  <div style="display: flex; gap: var(--space-2);">
+                    <button class="btn btn-secondary btn-sm">
+                      <i data-lucide="upload" width="14" height="14"></i>
+                      파일 선택
+                    </button>
+                    <button class="btn btn-ghost btn-sm">제거</button>
+                  </div>
+                  <div class="logo-upload-meta">현재 글로우랩 코리아 워드마크 사용 중</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 기본 정보 -->
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">기본 정보</div>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label class="field-label">회사명</label>
+                  <input class="input" type="text" value="Glowlab Korea">
+                </div>
+                <div class="field">
+                  <label class="field-label">사업자 등록번호</label>
+                  <input class="input" type="text" value="123-45-67890">
+                </div>
+                <div class="field">
+                  <label class="field-label">산업</label>
+                  <select class="select">
+                    <option>화장품</option>
+                    <option>패션</option>
+                    <option>식음료</option>
+                    <option>여행 · 호스피탈리티</option>
+                    <option>전자제품</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field-label">대표자명</label>
+                  <input class="input" type="text" value="김지선">
+                </div>
+                <div class="field field-full">
+                  <label class="field-label">본사 주소</label>
+                  <input class="input" type="text" value="서울특별시 강남구 청담동 89-12 글로우랩 빌딩 4F">
+                </div>
+              </div>
+            </div>
+
+            <!-- 담당자 -->
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">담당자 정보</div>
+                <div class="form-section-sub">캠페인 진행 · 매칭 알림이 전달되는 기본 연락처</div>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label class="field-label">담당자 이름</label>
+                  <input class="input" type="text" value="박서연">
+                </div>
+                <div class="field">
+                  <label class="field-label">직책</label>
+                  <input class="input" type="text" value="마케팅 매니저">
+                </div>
+                <div class="field">
+                  <label class="field-label">이메일</label>
+                  <input class="input" type="email" value="contact@glowlab.kr">
+                </div>
+                <div class="field">
+                  <label class="field-label">전화</label>
+                  <input class="input" type="tel" value="+82 2 6203 4827">
+                </div>
+              </div>
+            </div>
+
+            <!-- 청구 -->
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">청구 이메일</div>
+                <div class="form-section-sub">영수증 · 세금계산서 발송 주소 (담당자와 다를 경우)</div>
+              </div>
+              <div class="form-grid">
+                <div class="field field-full">
+                  <label class="field-label">청구 이메일</label>
+                  <input class="input" type="email" value="billing@glowlab.kr">
+                  <span class="field-hint">담당자 이메일과 다른 주소를 사용할 수 있습니다.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sticky save -->
+            <div class="save-bar">
+              <span class="save-bar-info">변경 사항 미저장 · 마지막 저장 4월 24일</span>
+              <button class="btn btn-ghost">초기화</button>
+              <button class="btn btn-primary">변경 사항 저장</button>
+            </div>
+          </section>
+
+          <!-- 멤버 -->
+          <section class="settings-panel" id="panel-members" role="tabpanel" hidden>
+            <div class="settings-panel-head">
+              <h2 class="settings-panel-title">멤버</h2>
+              <p class="settings-panel-sub">워크스페이스에 접근하는 동료를 관리합니다 · 4명</p>
+            </div>
+
+            <div class="members-bar">
+              <div class="search-wrap" style="position: relative; flex: 0 0 280px;">
+                <i data-lucide="search" width="14" height="14" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
+                <input type="search" placeholder="이름·이메일 검색" style="width: 100%; height: 36px; padding: 0 var(--space-3) 0 36px; background: var(--bg-elevated); border: 1px solid transparent; border-radius: var(--radius-md); font-size: var(--fs-sm);">
+              </div>
+              <button class="btn btn-primary btn-sm">
+                <i data-lucide="plus" width="14" height="14"></i>
+                멤버 초대
+              </button>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>멤버</th>
+                  <th style="width: 160px;">권한</th>
+                  <th style="width: 130px;">최근 접속</th>
+                  <th style="width: 100px;">상태</th>
+                  <th style="width: 60px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="member-cell">
+                      <div class="avatar avatar-md" style="background: var(--accent-light); color: var(--accent);">박</div>
+                      <div>
+                        <div class="member-name">박서연 <span class="badge" style="margin-left:6px;">소유자</span></div>
+                        <div class="member-email">contact@glowlab.kr</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><select class="role-select" disabled><option>소유자</option></select></td>
+                  <td style="font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: var(--fs-xs);">방금 전</td>
+                  <td><span class="badge badge-success"><span class="badge-dot"></span>활성</span></td>
+                  <td><button class="btn-icon" aria-label="더보기"><i data-lucide="more-horizontal" width="18" height="18"></i></button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="member-cell">
+                      <div class="avatar avatar-md">김</div>
+                      <div>
+                        <div class="member-name">김지선</div>
+                        <div class="member-email">jisun@glowlab.kr</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><select class="role-select"><option>관리자</option><option>편집자</option><option>뷰어</option></select></td>
+                  <td style="font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: var(--fs-xs);">2시간 전</td>
+                  <td><span class="badge badge-success"><span class="badge-dot"></span>활성</span></td>
+                  <td><button class="btn-icon" aria-label="더보기"><i data-lucide="more-horizontal" width="18" height="18"></i></button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="member-cell">
+                      <div class="avatar avatar-md">이</div>
+                      <div>
+                        <div class="member-name">이도현</div>
+                        <div class="member-email">dohyun@glowlab.kr</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><select class="role-select"><option>편집자</option><option selected>편집자</option><option>뷰어</option></select></td>
+                  <td style="font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: var(--fs-xs);">어제</td>
+                  <td><span class="badge badge-success"><span class="badge-dot"></span>활성</span></td>
+                  <td><button class="btn-icon" aria-label="더보기"><i data-lucide="more-horizontal" width="18" height="18"></i></button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="member-cell">
+                      <div class="avatar avatar-md">정</div>
+                      <div>
+                        <div class="member-name">정유진</div>
+                        <div class="member-email">yujin@glowlab.kr</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><select class="role-select"><option>뷰어</option><option>편집자</option><option>관리자</option></select></td>
+                  <td style="font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: var(--fs-xs);">초대 대기</td>
+                  <td><span class="badge badge-warning"><span class="badge-dot"></span>초대중</span></td>
+                  <td><button class="btn-icon" aria-label="더보기"><i data-lucide="more-horizontal" width="18" height="18"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- 알림 -->
+          <section class="settings-panel" id="panel-notify" role="tabpanel" hidden>
+            <div class="settings-panel-head">
+              <h2 class="settings-panel-title">알림</h2>
+              <p class="settings-panel-sub">매칭, 캠페인 진행, 결제 이벤트 알림 채널을 설정하세요.</p>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">알림 항목별 채널</div>
+                <div class="form-section-sub">이벤트별로 이메일 / Slack / 웹훅 ON·OFF</div>
+              </div>
+
+              <div class="notify-channel-head">
+                <span style="text-align: left;">이벤트</span>
+                <span>이메일</span>
+                <span>Slack</span>
+                <span>웹훅</span>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">새로운 매칭 완료</div>
+                  <div class="notify-sub">인플루언서 매칭이 확정되면 알림</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">캠페인 검수 제출</div>
+                  <div class="notify-sub">인플루언서가 콘텐츠를 제출했을 때</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">캠페인 마감 임박</div>
+                  <div class="notify-sub">마감 3일 전·1일 전 알림</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">매칭 잔여 부족</div>
+                  <div class="notify-sub">월 한도 80% 도달 시</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">캠페인 잔액 자동충전</div>
+                  <div class="notify-sub">잔액 충전이 발생했을 때</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">결제 영수증</div>
+                  <div class="notify-sub">월 정기결제 완료 시</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">신규 인플루언서 추천</div>
+                  <div class="notify-sub">캠페인 카테고리 기반 주간 추천</div>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+              </div>
+
+              <div class="notify-row">
+                <div>
+                  <div class="notify-title">제품 업데이트 · 공지</div>
+                  <div class="notify-sub">Alphacollabo 신기능 및 정책 변경</div>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+              </div>
+            </div>
+
+            <div class="save-bar">
+              <span class="save-bar-info">변경 사항 미저장</span>
+              <button class="btn btn-ghost">초기화</button>
+              <button class="btn btn-primary">변경 사항 저장</button>
+            </div>
+          </section>
+
+          <!-- 보안 -->
+          <section class="settings-panel" id="panel-security" role="tabpanel" hidden>
+            <div class="settings-panel-head">
+              <h2 class="settings-panel-title">보안</h2>
+              <p class="settings-panel-sub">2단계 인증, 활성 세션, 활동 로그를 확인하세요.</p>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">2단계 인증 (2FA)</div>
+              </div>
+
+              <div class="security-row">
+                <div>
+                  <div class="security-row-title">인증 앱 (TOTP)</div>
+                  <div class="security-row-sub">Google Authenticator, 1Password 등 OTP 앱으로 6자리 코드 생성</div>
+                </div>
+                <span class="badge badge-success" style="margin-right: var(--space-3);"><span class="badge-dot"></span>활성화</span>
+                <button class="btn btn-secondary btn-sm">재설정</button>
+              </div>
+
+              <div class="security-row">
+                <div>
+                  <div class="security-row-title">SMS 백업</div>
+                  <div class="security-row-sub">+82 010-●●●●-4827 · 인증앱 사용 불가 시 백업 코드 발송</div>
+                </div>
+                <span class="badge badge-success" style="margin-right: var(--space-3);"><span class="badge-dot"></span>활성화</span>
+                <button class="btn btn-ghost btn-sm">변경</button>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">활성 세션</div>
+                <div class="form-section-sub">현재 로그인된 디바이스 — 의심스러운 세션은 즉시 종료하세요</div>
+              </div>
+
+              <div class="security-row">
+                <div>
+                  <div class="security-row-title">MacBook Pro · Chrome 134 · 서울</div>
+                  <div class="security-row-sub">현재 세션 · IP 121.182.●●●.42 · 4월 27일 09:14</div>
+                </div>
+                <span class="badge badge-accent" style="margin-right: var(--space-3);"><span class="badge-dot"></span>현재</span>
+              </div>
+
+              <div class="security-row">
+                <div>
+                  <div class="security-row-title">iPhone 15 · Safari · 서울</div>
+                  <div class="security-row-sub">IP 121.182.●●●.42 · 4월 26일 22:38</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" style="color: var(--accent);">종료</button>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-head">
+                <div class="form-section-title">최근 활동 로그</div>
+                <div class="form-section-sub">계정 접근 · 권한 변경 이력</div>
+              </div>
+
+              <div class="activity-log">
+                <div class="activity-row">
+                  <span class="activity-dot"></span>
+                  <span class="activity-text">박서연 · 결제 수단 변경 (신한카드 ●●●● 8421)</span>
+                  <span class="activity-meta">10분 전 · 121.182.●●●.42</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-dot"></span>
+                  <span class="activity-text">박서연 · 로그인 (MacBook Pro Chrome)</span>
+                  <span class="activity-meta">오늘 09:14 · 서울</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-dot is-warn"></span>
+                  <span class="activity-text">정유진 · 멤버 초대 발송 (yujin@glowlab.kr)</span>
+                  <span class="activity-meta">어제 17:42</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-dot"></span>
+                  <span class="activity-text">박서연 · 캠페인 "비타C 세럼 4월 키트" 생성</span>
+                  <span class="activity-meta">2일 전 · 14:08</span>
+                </div>
+                <div class="activity-row">
+                  <span class="activity-dot"></span>
+                  <span class="activity-text">박서연 · 2FA 인증 앱 등록</span>
+                  <span class="activity-meta">3월 12일 · 11:27</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- API & 웹훅 -->
+          <section class="settings-panel" id="panel-api" role="tabpanel" hidden>
+            <div class="settings-panel-head">
+              <h2 class="settings-panel-title">API & 웹훅</h2>
+              <p class="settings-panel-sub">외부 시스템 연동 — Business 플랜에서 제공됩니다.</p>
+            </div>
+
+            <div style="text-align: center; padding: var(--space-9) var(--space-5);">
+              <div style="width: 64px; height: 64px; margin: 0 auto var(--space-4); border-radius: 50%; background: var(--bg-elevated); display: inline-flex; align-items: center; justify-content: center;">
+                <i data-lucide="webhook" width="28" height="28" style="color: var(--text-tertiary);"></i>
+              </div>
+              <div style="font-size: var(--fs-md); font-weight: var(--fw-bold); color: var(--text-primary); margin-bottom: var(--space-2);">현재 플랜에서는 사용 불가</div>
+              <div style="font-size: var(--fs-sm); color: var(--text-secondary); max-width: 42ch; margin: 0 auto var(--space-5);">API 키 발급과 웹훅 엔드포인트 등록은 Business 플랜에서만 제공됩니다.</div>
+              <button class="btn btn-primary">
+                <i data-lucide="arrow-up-right" width="16" height="16"></i>
+                Business로 업그레이드
+              </button>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  // Settings tab switcher (page-local)
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.settings-tab');
+    const panels = {
+      company: document.getElementById('panel-company'),
+      members: document.getElementById('panel-members'),
+      notify: document.getElementById('panel-notify'),
+      security: document.getElementById('panel-security'),
+      api: document.getElementById('panel-api'),
+    };
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        tabs.forEach(t => {
+          t.classList.toggle('is-active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        Object.entries(panels).forEach(([key, panel]) => {
+          if (!panel) return;
+          panel.hidden = key !== target;
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

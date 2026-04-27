@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청담 라운지 4월 체험 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Breadcrumbs */
+  .crumbs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-bottom: var(--space-3);
+  }
+  .crumbs a { color: var(--text-secondary); }
+  .crumbs a:hover { color: var(--text-primary); }
+  .crumbs .crumb-current { color: var(--text-primary); font-weight: var(--fw-bold); }
+  .crumbs i { color: var(--text-tertiary); }
+
+  /* Title row with status pill */
+  .detail-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .detail-title {
+    font-size: var(--fs-3xl);
+    font-weight: var(--fw-heavy);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+  }
+  .detail-meta-row {
+    margin-top: var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .detail-meta-row .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-tertiary); display:inline-block; }
+  .detail-meta-row strong { color: var(--text-primary); font-weight: var(--fw-bold); }
+  .detail-meta-code {
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+  }
+
+  /* KPI tile compact */
+  .detail-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  @media (max-width: 1024px) { .detail-kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .detail-kpi-grid { grid-template-columns: 1fr; } }
+  .detail-kpi {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .detail-kpi-label {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+  }
+  .detail-kpi-val {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .detail-kpi-val em {
+    font-style: normal;
+    font-size: var(--fs-md);
+    color: var(--text-tertiary);
+    margin-left: 4px;
+    font-weight: var(--fw-semibold);
+  }
+  .detail-kpi-meta {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .detail-kpi-meta.is-up { color: var(--status-success-strong); }
+
+  /* Progress timeline */
+  .progress-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+  .progress-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-5);
+  }
+  .progress-card-title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-snug);
+  }
+  .progress-card-pct {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .progress-card-pct strong {
+    color: var(--text-primary);
+    font-size: var(--fs-md);
+    font-weight: var(--fw-heavy);
+  }
+
+  .progress-rail {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+  }
+  .progress-rail::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--border-default);
+    z-index: 0;
+  }
+  .progress-rail::after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 10%;
+    width: 50%;
+    height: 2px;
+    background: var(--accent);
+    z-index: 0;
+    transition: width var(--duration-slow);
+  }
+  .progress-step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+  }
+  .progress-step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 2px solid var(--border-default);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+    transition: all var(--duration);
+  }
+  .progress-step.is-done .progress-step-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+  .progress-step.is-active .progress-step-dot {
+    background: var(--bg-surface);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-light);
+  }
+  .progress-step-label {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+  }
+  .progress-step.is-done .progress-step-label,
+  .progress-step.is-active .progress-step-label {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+  }
+  .progress-step-meta {
+    font-size: var(--fs-2xs);
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--fw-medium);
+  }
+
+  /* Tabs */
+  .tab-strip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    border-bottom: 1px solid var(--border-default);
+    margin-bottom: var(--space-5);
+    overflow-x: auto;
+  }
+  .tab-strip-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-snug);
+    cursor: pointer;
+    transition: color var(--duration-fast);
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+  }
+  .tab-strip-item:hover { color: var(--text-primary); }
+  .tab-strip-item.is-active { color: var(--text-primary); }
+  .tab-strip-item.is-active::after {
+    content: "";
+    position: absolute;
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: -1px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: var(--radius-full);
+  }
+  .tab-strip-item .count-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--radius-full);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .tab-strip-item.is-active .count-pill {
+    background: var(--text-primary);
+    color: var(--text-inverse);
+  }
+
+  /* Overview columns */
+  .overview {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--space-5);
+    align-items: flex-start;
+  }
+  @media (max-width: 1024px) { .overview { grid-template-columns: 1fr; } }
+
+  .guide-list { display: flex; flex-direction: column; gap: var(--space-3); margin: var(--space-3) 0 var(--space-4); }
+  .guide-item {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    line-height: var(--lh-normal);
+  }
+  .guide-item-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent-emphasis);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .guide-item strong { font-weight: var(--fw-bold); color: var(--text-primary); }
+  .guide-item span { font-weight: var(--fw-medium); color: var(--text-secondary); display: block; margin-top: 2px; font-size: var(--fs-xs); }
+
+  .attachments { display: flex; flex-direction: column; gap: var(--space-2); }
+  .attachment {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+    transition: background var(--duration-fast);
+    cursor: pointer;
+  }
+  .attachment:hover { background: var(--bg-hover); }
+  .attachment-thumb {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--accent-light);
+    color: var(--accent-emphasis);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .attachment-name { flex: 1; min-width: 0; }
+  .attachment-meta {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+    margin-top: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Activity timeline */
+  .activity-timeline { display: flex; flex-direction: column; }
+  .activity-item {
+    position: relative;
+    padding: var(--space-3) 0 var(--space-3) var(--space-5);
+    border-left: 1.5px solid var(--border-default);
+  }
+  .activity-item:first-child { padding-top: 0; }
+  .activity-item:last-child { padding-bottom: 0; border-left-color: transparent; }
+  .activity-item-dot {
+    position: absolute;
+    left: -5px;
+    top: var(--space-3);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg-surface);
+  }
+  .activity-item:first-child .activity-item-dot { top: 4px; }
+  .activity-item-dot.is-success { background: var(--status-success-strong); }
+  .activity-item-dot.is-info { background: var(--text-tertiary); }
+  .activity-item-title {
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-normal);
+  }
+  .activity-item-title strong { font-weight: var(--fw-bold); }
+  .activity-item-meta {
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--fw-medium);
+  }
+
+  /* Influencer grid (matched tab) */
+  .matched-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+    gap: var(--space-4);
+  }
+  .inf-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .inf-action-btn {
+    height: 32px;
+    background: var(--bg-elevated);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: background var(--duration-fast);
+  }
+  .inf-action-btn:hover { background: var(--bg-hover); }
+  .inf-action-btn.is-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .inf-action-btn.is-primary:hover { background: var(--accent-hover); }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html" title="V1 시안으로 전환">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true" title="V2 시안 (현재)">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="47 46 177 205" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M52.2609 179.132C42.8134 155.153 48.7303 125.879 51.5331 119.028C54.3359 112.177 63.8981 105.776 97.5445 103.056C120.673 101.186 147.24 111.782 147.24 111.782C147.24 111.782 119.269 118.32 119.987 148.917C120.704 179.514 148.177 185.641 148.177 185.641C118.798 200.288 86.6413 199.077 52.2609 179.132Z" fill="#800B1C"/><path d="M120.517 50.6437C123.264 49.8334 128.444 48.6491 132.064 47.9634C136.495 47.2154 141.8 46.7791 148.416 46.7791C154.345 46.7168 160.587 47.0908 164.019 47.6517C167.202 48.1504 172.632 49.2724 176.065 50.145C179.498 51.0177 185.24 53.0123 188.86 54.5706C192.48 56.1289 195.975 57.5625 200.094 60.2428C204.33 62.9985 207.147 65.541 210.08 68.4706C214.262 72.6468 216.01 75.0155 218.256 79.441C219.879 82.5576 221.502 86.6092 222.001 88.4792C222.438 90.3491 222.813 94.1514 222.813 96.894C222.75 99.7612 222.313 103.439 221.689 105.62C221.065 107.677 219.879 110.607 218.943 112.165C218.069 113.724 216.01 116.404 214.387 118.087C212.764 119.832 209.706 122.138 207.521 123.26C205.337 124.382 201.53 125.691 199.158 126.19C196.786 126.689 192.667 127.125 190.108 127.125C187.549 127.125 183.055 126.689 180.122 126.128C177.189 125.567 172.82 124.445 170.448 123.572C168.076 122.699 163.957 120.954 161.398 119.707C158.839 118.461 153.908 115.905 150.476 114.098C147.043 112.228 141.551 109.921 138.305 108.924C135.06 107.927 129.567 106.555 126.135 105.87C122.702 105.184 116.086 104.374 111.468 104.062C106.162 103.688 100.608 103.688 96.4884 104.124C92.8684 104.436 87.813 105.184 85.254 105.683C82.6951 106.244 78.3262 107.366 75.58 108.238C72.8338 109.111 68.34 110.794 65.5939 112.041C62.8477 113.225 58.7284 115.282 56.3567 116.591C54.0474 117.962 51.5469 119.021 51.5469 119.021C51.5469 119.021 52.0502 116.716 52.8616 114.347C53.6106 111.978 55.4205 107.553 56.9184 104.561C58.4164 101.507 60.8505 97.2056 62.2236 94.8993C63.6591 92.5307 66.5925 88.4168 68.7145 85.6742C70.8366 82.9316 75.3927 78.0074 78.8255 74.7661C82.2582 71.5249 87.5633 67.0993 90.6215 65.0423C93.6798 62.9231 98.548 59.9311 101.481 58.3728C104.415 56.8145 108.784 54.7576 111.155 53.8226C113.527 52.95 117.771 51.5163 120.517 50.6437Z" fill="#EE2128"/><path d="M178.047 172.26C179.358 172.073 181.667 171.699 183.227 171.388C184.788 171.138 188.158 170.889 190.717 170.889C193.276 170.827 197.395 171.201 199.767 171.699C202.139 172.198 205.696 173.382 207.569 174.317C209.441 175.252 212.749 177.683 214.871 179.74C217.118 181.984 219.302 184.914 220.301 186.971C221.175 188.84 222.298 192.518 222.86 195.074C223.671 198.938 223.734 200.621 223.172 205.047C222.797 207.976 221.736 212.153 220.863 214.397C219.989 216.641 218.054 220.256 216.618 222.5C215.121 224.744 212.312 228.11 210.252 230.042C208.255 231.912 204.822 234.717 202.575 236.15C200.329 237.646 196.521 239.828 194.15 241.012C191.778 242.259 187.222 244.129 184.164 245.251C181.105 246.373 175.738 247.931 172.305 248.679C167.312 249.801 160.538 250.136 152.957 250.362C146.134 250.566 138.165 250.424 135.481 249.988C133.11 249.614 129.677 249.053 127.992 248.741C126.244 248.430 122.063 247.308 118.630 246.248C115.197 245.189 109.018 242.633 104.899 240.638C100.780 238.644 94.9753 235.340 91.9794 233.345C88.9836 231.288 84.2402 227.549 81.3692 224.931C78.4982 222.375 74.0668 217.700 71.5079 214.646C68.8866 211.592 65.2042 206.543 63.2694 203.488C61.3346 200.434 58.4636 195.198 56.9657 191.957C55.4677 188.716 53.7202 184.477 53.1585 182.607C52.5343 180.737 52.1558 178.820 52.1558 178.820C52.1558 178.820 56.0919 180.800 60.5856 183.044C65.0169 185.288 71.6327 188.092 75.2527 189.277C78.8727 190.461 85.1764 191.957 89.2957 192.643C93.9766 193.391 99.8435 193.827 104.899 193.827C109.393 193.827 115.509 193.515 118.630 193.141C121.688 192.767 126.619 191.895 129.552 191.271C132.486 190.586 136.854 189.464 139.226 188.778C141.598 188.030 145.405 186.534 147.652 185.475C149.899 184.353 154.393 181.984 157.638 180.239C160.884 178.493 166.313 176.062 169.621 174.816C172.992 173.631 176.799 172.447 178.047 172.260Z" fill="#EE2128"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house" class="nav-icon"></i>
+          홈
+        </a>
+        <a class="nav-item" href="explore.html">
+          <i data-lucide="compass" class="nav-icon"></i>
+          탐색
+          <span class="nav-item-meta">2,847</span>
+        </a>
+        <a class="nav-item is-active" href="campaign-list.html">
+          <i data-lucide="shopping-bag" class="nav-icon"></i>
+          캠페인
+          <span class="nav-item-meta">3</span>
+        </a>
+        <a class="nav-item" href="messages.html">
+          <i data-lucide="message-circle" class="nav-icon"></i>
+          메시지
+        </a>
+        <a class="nav-item" href="saved.html">
+          <i data-lucide="bookmark" class="nav-icon"></i>
+          저장됨
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html">
+          <i data-lucide="credit-card" class="nav-icon"></i>
+          결제 · 구독
+        </a>
+        <a class="nav-item" href="settings.html">
+          <i data-lucide="settings" class="nav-icon"></i>
+          설정설정
+        </a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="billing.html">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="22" height="22"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <div class="page-head">
+        <div style="min-width:0;">
+          <nav class="crumbs" aria-label="경로">
+            <a href="campaign-list.html">캠페인</a>
+            <i data-lucide="chevron-right" width="13" height="13"></i>
+            <span class="crumb-current">청담 라운지 4월 체험</span>
+          </nav>
+          <div class="detail-title-row">
+            <h1 class="detail-title">청담 라운지 4월 체험</h1>
+            <span class="badge badge-accent" style="height: 26px; padding: 0 var(--space-3);"><span class="badge-dot"></span>진행중</span>
+          </div>
+          <div class="detail-meta-row">
+            <span class="badge">JP</span>
+            <span class="badge">방문형</span>
+            <span class="dot"></span>
+            <span>마감 <strong>D-2</strong> · 4월 30일</span>
+            <span class="dot"></span>
+            <span>매칭 <strong>8</strong>/8</span>
+            <span class="dot"></span>
+            <span class="detail-meta-code">CODE 2604-A</span>
+          </div>
+        </div>
+        <div class="page-head-actions">
+          <a class="btn btn-secondary" href="messages.html">
+            <i data-lucide="message-circle" width="15" height="15"></i>
+            메시지 모두
+          </a>
+          <a class="btn btn-secondary" href="inspect.html">
+            <i data-lucide="clipboard-check" width="15" height="15"></i>
+            검수로 이동
+          </a>
+          <button class="btn-icon" aria-label="더보기">
+            <i data-lucide="more-horizontal" width="20" height="20"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="detail-kpi-grid">
+        <div class="detail-kpi">
+          <span class="detail-kpi-label">모집 / 매칭</span>
+          <span class="detail-kpi-val">8<em>/ 8</em></span>
+          <span class="detail-kpi-meta is-up">100% 충원 완료</span>
+        </div>
+        <div class="detail-kpi">
+          <span class="detail-kpi-label">콘텐츠 게시</span>
+          <span class="detail-kpi-val">5<em>/ 8</em></span>
+          <span class="detail-kpi-meta">3건 작성 중</span>
+        </div>
+        <div class="detail-kpi">
+          <span class="detail-kpi-label">검수 통과</span>
+          <span class="detail-kpi-val">4<em>/ 5</em></span>
+          <span class="detail-kpi-meta">1건 수정 요청</span>
+        </div>
+        <div class="detail-kpi">
+          <span class="detail-kpi-label">전체 진행률</span>
+          <span class="detail-kpi-val">50<em>%</em></span>
+          <span class="detail-kpi-meta">예산 사용 1,810만원</span>
+        </div>
+      </div>
+
+      <!-- Progress timeline -->
+      <div class="progress-card">
+        <div class="progress-card-head">
+          <span class="progress-card-title">진행 단계</span>
+          <span class="progress-card-pct"><strong>4</strong> / 5 단계 · 게시 중</span>
+        </div>
+        <div class="progress-rail">
+          <div class="progress-step is-done">
+            <span class="progress-step-dot"><i data-lucide="check" width="14" height="14" stroke-width="3"></i></span>
+            <span class="progress-step-label">캠페인 시작</span>
+            <span class="progress-step-meta">4월 8일</span>
+          </div>
+          <div class="progress-step is-done">
+            <span class="progress-step-dot"><i data-lucide="check" width="14" height="14" stroke-width="3"></i></span>
+            <span class="progress-step-label">매칭 완료</span>
+            <span class="progress-step-meta">4월 12일</span>
+          </div>
+          <div class="progress-step is-done">
+            <span class="progress-step-dot"><i data-lucide="check" width="14" height="14" stroke-width="3"></i></span>
+            <span class="progress-step-label">콘텐츠 제작</span>
+            <span class="progress-step-meta">4월 16~22일</span>
+          </div>
+          <div class="progress-step is-active">
+            <span class="progress-step-dot">4</span>
+            <span class="progress-step-label">게시</span>
+            <span class="progress-step-meta">5/8 진행 중</span>
+          </div>
+          <div class="progress-step">
+            <span class="progress-step-dot">5</span>
+            <span class="progress-step-label">검수 · 정산</span>
+            <span class="progress-step-meta">4월 30일 예정</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-strip" role="tablist">
+        <button class="tab-strip-item is-active" role="tab" aria-selected="true">
+          개요
+        </button>
+        <button class="tab-strip-item" role="tab">
+          매칭된 인플루언서 <span class="count-pill">8</span>
+        </button>
+        <button class="tab-strip-item" role="tab">
+          콘텐츠 검수 <span class="count-pill">5</span>
+        </button>
+        <button class="tab-strip-item" role="tab">
+          리포트
+        </button>
+      </div>
+
+      <!-- Overview tab content -->
+      <div class="overview" id="tab-overview">
+
+        <!-- Left col: 캠페인 요약 -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3 class="card-title" style="font-size: var(--fs-lg);">캠페인 요약</h3>
+              <p class="card-sub">청담 라운지 4월 체험 — 일본인 인플루언서 8명 방문 후 인스타 피드 + 릴스 게시</p>
+            </div>
+            <button class="btn btn-ghost btn-sm">
+              <i data-lucide="pencil" width="13" height="13"></i>
+              수정
+            </button>
+          </div>
+
+          <div class="guide-list">
+            <div class="guide-item">
+              <span class="guide-item-icon"><i data-lucide="map-pin" width="13" height="13"></i></span>
+              <div>
+                <strong>방문 장소</strong> 서울 강남구 청담동 라운지 (사이니지 노출 가능)
+                <span>JP 인플루언서 1박 2일 체류 · 호텔·식사·교통 포함 패키지</span>
+              </div>
+            </div>
+            <div class="guide-item">
+              <span class="guide-item-icon"><i data-lucide="image" width="13" height="13"></i></span>
+              <div>
+                <strong>필수 게시물</strong> Instagram 피드 2장 + 릴스 1편 (총 3 슬롯)
+                <span>해시태그: #청담라운지 #ChengdamLounge · 멘션: @glowlab_kr</span>
+              </div>
+            </div>
+            <div class="guide-item">
+              <span class="guide-item-icon"><i data-lucide="languages" width="13" height="13"></i></span>
+              <div>
+                <strong>콘텐츠 언어</strong> 일본어 우선, 영어 캡션 병기 권장
+                <span>한국어 번역은 자동 번역 톨로 본문 우측 노출</span>
+              </div>
+            </div>
+            <div class="guide-item">
+              <span class="guide-item-icon"><i data-lucide="alert-triangle" width="13" height="13"></i></span>
+              <div>
+                <strong>제외 항목</strong> 직접적인 가격 노출, 경쟁 브랜드 동시 언급 금지
+                <span>음주 콘텐츠는 #PR 표기 필수 (일본 법적 기준 준수)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h4 class="card-title" style="font-size: var(--fs-md); margin-bottom: var(--space-3);">첨부 파일</h4>
+          <div class="attachments">
+            <a class="attachment" href="#">
+              <span class="attachment-thumb"><i data-lucide="file-text" width="18" height="18"></i></span>
+              <span class="attachment-name">
+                청담라운지_브랜드가이드_v3.pdf
+                <span class="attachment-meta">PDF · 2.4 MB · 4월 8일 업로드</span>
+              </span>
+              <i data-lucide="download" width="16" height="16" style="color: var(--text-secondary);"></i>
+            </a>
+            <a class="attachment" href="#">
+              <span class="attachment-thumb" style="background: var(--bg-elevated); color: var(--text-primary);"><i data-lucide="image" width="18" height="18"></i></span>
+              <span class="attachment-name">
+                인테리어_레퍼런스_12장.zip
+                <span class="attachment-meta">ZIP · 18.7 MB · 4월 8일 업로드</span>
+              </span>
+              <i data-lucide="download" width="16" height="16" style="color: var(--text-secondary);"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right col: 활동 타임라인 -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3 class="card-title" style="font-size: var(--fs-lg);">활동 타임라인</h3>
+              <p class="card-sub">최근 5건</p>
+            </div>
+            <a class="link" href="#" style="font-size: var(--fs-xs); color: var(--accent); font-weight: var(--fw-bold);">전체 →</a>
+          </div>
+
+          <div class="activity-timeline">
+            <div class="activity-item">
+              <span class="activity-item-dot"></span>
+              <div class="activity-item-title"><strong>@yuki_tokyo</strong> 게시 완료 — 릴스 1편 + 피드 2장</div>
+              <div class="activity-item-meta">2시간 전 · 1.4만 좋아요</div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-item-dot is-success"></span>
+              <div class="activity-item-title"><strong>@mei_xian</strong> 콘텐츠 검수 통과</div>
+              <div class="activity-item-meta">오늘 09:42 · 검수자 박지민</div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-item-dot"></span>
+              <div class="activity-item-title"><strong>@natasha_mood</strong> 피드 1장 추가 게시</div>
+              <div class="activity-item-meta">어제 18:20 · 8,200 좋아요</div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-item-dot is-info"></span>
+              <div class="activity-item-title"><strong>@kumi_osaka</strong> 가이드라인 확인</div>
+              <div class="activity-item-meta">어제 14:05 · 콘텐츠 작성 시작</div>
+            </div>
+            <div class="activity-item">
+              <span class="activity-item-dot is-info"></span>
+              <div class="activity-item-title"><strong>@aki_taipei</strong> 호텔 체크인 인증</div>
+              <div class="activity-item-meta">4월 22일 16:30</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Matched influencers tab — visible but not default -->
+      <div hidden id="tab-matched" style="margin-top: var(--space-5);">
+
+        <div class="matched-grid">
+
+          <!-- yuki_tokyo (unmasked) -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">유키 사토 <span class="verified" aria-label="인증됨"><i data-lucide="check" width="10" height="10" stroke-width="3.5"></i></span></div>
+                <div class="inf-card-handle">@yuki_tokyo</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">Instagram</span>
+                <span class="badge">JP</span>
+                <span class="badge">라이프스타일</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">156K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">6.8%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>게시 완료 · <strong>1.4만</strong> 좋아요</span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">320만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- natasha_mood -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">나타샤 무드 <span class="verified"><i data-lucide="check" width="10" height="10" stroke-width="3.5"></i></span></div>
+                <div class="inf-card-handle">@natasha_mood</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">Instagram</span>
+                <span class="badge">RU</span>
+                <span class="badge">뷰티</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">412K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">5.7%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>피드 1장 게시 · <strong>8,200</strong> 좋아요</span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">740만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- mei_xian -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">메이 시안</div>
+                <div class="inf-card-handle">@mei_xian</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">Xiaohongshu</span>
+                <span class="badge">CN</span>
+                <span class="badge">뷰티</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">290K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">4.8%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>검수 통과 · <strong>완료</strong></span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">580만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- kumi_osaka -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">쿠미 오사카</div>
+                <div class="inf-card-handle">@kumi_osaka</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">TikTok</span>
+                <span class="badge">JP</span>
+                <span class="badge">식품</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">98K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">8.1%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust is-mid"><i data-lucide="clock" class="inf-card-trust-icon" width="13" height="13"></i><span>콘텐츠 작성 중</span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">220만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- mika_seoul -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">미카 서울 <span class="verified"><i data-lucide="check" width="10" height="10" stroke-width="3.5"></i></span></div>
+                <div class="inf-card-handle">@mika_seoul</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">Instagram</span>
+                <span class="badge">KR</span>
+                <span class="badge">패션</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">220K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">5.3%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust is-low"><i data-lucide="alert-circle" class="inf-card-trust-icon" width="13" height="13"></i><span>1건 수정 요청 — 4월 25일까지</span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">1,840만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- lina_k -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">리나 K</div>
+                <div class="inf-card-handle">@lina_k</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">Xiaohongshu</span>
+                <span class="badge">HK</span>
+                <span class="badge">라이프스타일</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">340K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">5.1%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust is-mid"><i data-lucide="clock" class="inf-card-trust-icon" width="13" height="13"></i><span>호텔 체크인 완료 · 콘텐츠 대기</span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">560만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- tao_hk -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1496440737103-cd596325d314?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">타오 HK</div>
+                <div class="inf-card-handle">@tao_hk</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">Douyin</span>
+                <span class="badge">HK</span>
+                <span class="badge">식품</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">180K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">6.9%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>릴스 게시 · 검수 통과</span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">380만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- aki_taipei -->
+          <article class="inf-card is-matched">
+            <div class="inf-card-cover is-unmasked">
+              <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+              <span class="lock-pill is-matched"><i data-lucide="check" width="12" height="12"></i>매칭됨</span>
+              <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+            </div>
+            <div class="inf-card-body">
+              <div>
+                <div class="inf-card-name">아키 타이페이</div>
+                <div class="inf-card-handle">@aki_taipei</div>
+              </div>
+              <div class="inf-card-meta">
+                <span class="badge">Instagram</span>
+                <span class="badge">TW</span>
+                <span class="badge">여행</span>
+              </div>
+              <div class="inf-card-stats">
+                <span><strong class="inf-stat-strong">192K</strong> 팔로워</span>
+                <span><strong class="inf-stat-strong">7.4%</strong> 참여율</span>
+              </div>
+              <div class="inf-card-trust is-mid"><i data-lucide="clock" class="inf-card-trust-icon" width="13" height="13"></i><span>호텔 체크인 인증 완료</span></div>
+              <div class="inf-card-foot">
+                <span class="inf-card-price">390만<span class="inf-card-price-unit">원</span></span>
+              </div>
+              <div class="inf-card-actions">
+                <button class="inf-action-btn"><i data-lucide="message-circle" width="13" height="13"></i>메시지</button>
+                <button class="inf-action-btn is-primary"><i data-lucide="image" width="13" height="13"></i>콘텐츠</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

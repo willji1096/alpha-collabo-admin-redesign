@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>캠페인 리포트 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Breadcrumbs */
+  .crumbs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-bottom: var(--space-3);
+  }
+  .crumbs a { color: var(--text-secondary); transition: color var(--duration-fast); }
+  .crumbs a:hover { color: var(--text-primary); }
+  .crumbs .sep { color: var(--text-tertiary); }
+  .crumbs .current { color: var(--text-primary); }
+
+  /* KPI grid */
+  .kpi-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-7);
+  }
+  @media (max-width: 1280px) { .kpi-grid-5 { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 720px)  { .kpi-grid-5 { grid-template-columns: repeat(2, 1fr); } }
+
+  .kpi-tile {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .kpi-tile-label {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .kpi-tile-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kpi-tile-value {
+    font-size: var(--fs-3xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--lh-tight);
+  }
+  .kpi-tile-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--fw-semibold);
+  }
+  .kpi-tile-meta.is-up { color: var(--status-success-strong); }
+  .kpi-tile-meta.is-down { color: var(--status-danger-strong); }
+
+  /* Section */
+  .report-section { margin-bottom: var(--space-7); }
+  .report-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-4);
+    gap: var(--space-4);
+  }
+  .report-section-title {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .report-section-sub {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Performance table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .data-table thead th {
+    background: var(--bg-elevated);
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    border-bottom: 1px solid var(--border-default);
+    white-space: nowrap;
+  }
+  .data-table tbody td {
+    padding: var(--space-4);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    font-variant-numeric: tabular-nums;
+    vertical-align: middle;
+  }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+  .data-table tbody tr:hover { background: var(--bg-elevated); }
+  .td-num-right { text-align: right; }
+  .td-num-strong { font-weight: var(--fw-bold); }
+  .td-secondary { color: var(--text-secondary) !important; }
+
+  .inf-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .inf-cell-name {
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    font-size: var(--fs-sm);
+  }
+  .inf-cell-handle {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .platform-mini {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+  }
+  .post-link {
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-xs);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .post-link:hover { color: var(--accent-hover); }
+  .total-foot-row td {
+    background: var(--bg-elevated);
+    font-weight: var(--fw-bold);
+  }
+
+  /* Cost summary */
+  .cost-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+  @media (max-width: 1100px) { .cost-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .cost-grid { grid-template-columns: 1fr; } }
+
+  .cost-tile {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+  .cost-tile-label {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+  }
+  .cost-tile-num {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-top: var(--space-2);
+  }
+  .cost-tile-num em {
+    font-style: normal;
+    font-size: var(--fs-md);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-left: 4px;
+  }
+  .cost-tile-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: var(--space-2);
+    font-weight: var(--fw-medium);
+  }
+
+  /* Content gallery */
+  .content-gallery {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--space-3);
+  }
+  @media (max-width: 1280px) { .content-gallery { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 720px)  { .content-gallery { grid-template-columns: repeat(2, 1fr); } }
+
+  .gallery-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--duration), box-shadow var(--duration), transform var(--duration);
+  }
+  .gallery-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+  }
+  .gallery-cover {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: var(--neutral-100);
+    overflow: hidden;
+  }
+  .gallery-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .gallery-platform {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 26px;
+    height: 26px;
+    background: rgba(0, 0, 0, 0.62);
+    color: #fff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+  .gallery-meta {
+    padding: var(--space-3) var(--space-3) var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .gallery-handle {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+  }
+  .gallery-likes {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--fs-xs);
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .gallery-likes svg { color: var(--accent); }
+
+  /* Insights */
+  .insights-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-7);
+  }
+  .insights-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .insights-list li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+  .insights-list li .ins-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent-emphasis);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-heavy);
+    flex-shrink: 0;
+  }
+  .ins-title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--ls-tight);
+  }
+  .ins-sub {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    margin-top: 4px;
+    line-height: 1.6;
+  }
+  .ins-sub strong {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .insights-cta {
+    margin-top: var(--space-7);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+  .insights-cta-text {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .insights-cta-text strong {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+  }
+
+  /* Filter row top */
+  .report-period {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .report-period strong { color: var(--text-primary); font-weight: var(--fw-bold); }
+  .report-period .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-tertiary); }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="14" fill="#EE2128"/><path d="M11 22 L18 9 L25 22 Z" fill="#fff"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html"><i data-lucide="house" class="nav-icon"></i>홈</a>
+        <a class="nav-item" href="explore.html"><i data-lucide="compass" class="nav-icon"></i>탐색<span class="nav-item-meta">2,847</span></a>
+        <a class="nav-item is-active" href="campaign-list.html"><i data-lucide="shopping-bag" class="nav-icon"></i>캠페인<span class="nav-item-meta">3</span></a>
+        <a class="nav-item" href="messages.html"><i data-lucide="message-circle" class="nav-icon"></i>메시지</a>
+        <a class="nav-item" href="saved.html"><i data-lucide="bookmark" class="nav-icon"></i>저장됨</a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html"><i data-lucide="credit-card" class="nav-icon"></i>결제 · 구독</a>
+        <a class="nav-item" href="settings.html"><i data-lucide="settings" class="nav-icon"></i>설정</a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="#">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="20" height="20"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <!-- Breadcrumbs -->
+      <nav class="crumbs" aria-label="현재 경로">
+        <a href="campaign-list.html">캠페인</a>
+        <span class="sep">/</span>
+        <a href="campaign-detail.html">겨울 뷰티 리뷰 캠페인</a>
+        <span class="sep">/</span>
+        <span class="current">리포트</span>
+      </nav>
+
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Report</div>
+          <h1 class="page-title">캠페인 리포트</h1>
+          <p class="page-sub" style="margin-top: var(--space-3);">
+            <span class="report-period">
+              <strong>2026-01-04</strong>
+              <span>→</span>
+              <strong>2026-01-15</strong>
+              <span class="dot"></span>
+              <span>11일 진행</span>
+              <span class="dot"></span>
+              <strong>8명</strong>
+              <span>매칭 ·</span>
+              <strong>7명</strong>
+              <span>게시 완료</span>
+            </span>
+          </p>
+        </div>
+        <div class="page-head-actions">
+          <button class="btn btn-secondary">
+            <i data-lucide="link-2" width="16" height="16"></i>
+            공유 링크 복사
+          </button>
+          <button class="btn btn-secondary">
+            <i data-lucide="file-spreadsheet" width="16" height="16"></i>
+            엑셀
+          </button>
+          <button class="btn btn-primary">
+            <i data-lucide="download" width="16" height="16"></i>
+            PDF 다운로드
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid-5">
+
+        <div class="kpi-tile">
+          <span class="kpi-tile-label">
+            <span class="kpi-tile-icon"><i data-lucide="eye" width="13" height="13"></i></span>
+            총 도달
+          </span>
+          <span class="kpi-tile-value">1.4M</span>
+          <span class="kpi-tile-meta is-up">
+            <i data-lucide="trending-up" width="12" height="12"></i>
+            ▲ 28% vs 직전 캠페인
+          </span>
+        </div>
+
+        <div class="kpi-tile">
+          <span class="kpi-tile-label">
+            <span class="kpi-tile-icon"><i data-lucide="heart" width="13" height="13"></i></span>
+            좋아요
+          </span>
+          <span class="kpi-tile-value">87,234</span>
+          <span class="kpi-tile-meta is-up">
+            <i data-lucide="trending-up" width="12" height="12"></i>
+            ▲ 19.4% vs 평균
+          </span>
+        </div>
+
+        <div class="kpi-tile">
+          <span class="kpi-tile-label">
+            <span class="kpi-tile-icon"><i data-lucide="message-circle" width="13" height="13"></i></span>
+            댓글
+          </span>
+          <span class="kpi-tile-value">4,182</span>
+          <span class="kpi-tile-meta is-up">
+            <i data-lucide="trending-up" width="12" height="12"></i>
+            ▲ 12.8% vs 평균
+          </span>
+        </div>
+
+        <div class="kpi-tile">
+          <span class="kpi-tile-label">
+            <span class="kpi-tile-icon"><i data-lucide="bookmark" width="13" height="13"></i></span>
+            저장
+          </span>
+          <span class="kpi-tile-value">2,108</span>
+          <span class="kpi-tile-meta is-up">
+            <i data-lucide="trending-up" width="12" height="12"></i>
+            ▲ 31.2% vs 평균
+          </span>
+        </div>
+
+        <div class="kpi-tile">
+          <span class="kpi-tile-label">
+            <span class="kpi-tile-icon"><i data-lucide="activity" width="13" height="13"></i></span>
+            평균 참여율
+          </span>
+          <span class="kpi-tile-value">4.7<span style="font-size: var(--fs-xl); color: var(--text-secondary);">%</span></span>
+          <span class="kpi-tile-meta is-up">
+            <i data-lucide="trending-up" width="12" height="12"></i>
+            업계 평균 2.4% 대비 ▲ 96%
+          </span>
+        </div>
+
+      </div>
+
+      <!-- 인플루언서별 성과 -->
+      <section class="report-section">
+        <div class="report-section-head">
+          <div>
+            <h2 class="report-section-title">인플루언서별 성과</h2>
+            <p class="report-section-sub">매칭 8명 중 7명 게시 완료 · 1명 미게시 (계약 위반)</p>
+          </div>
+          <button class="btn btn-ghost btn-sm">
+            <i data-lucide="arrow-up-down" width="14" height="14"></i>
+            도달순
+          </button>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>인플루언서</th>
+              <th style="width: 110px;">플랫폼</th>
+              <th class="td-num-right" style="width: 110px;">도달</th>
+              <th class="td-num-right" style="width: 110px;">좋아요</th>
+              <th class="td-num-right" style="width: 100px;">참여율</th>
+              <th class="td-num-right" style="width: 130px;">매칭 비용</th>
+              <th style="width: 110px;">게시</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">M</div>
+                  <div>
+                    <div class="inf-cell-name">mika_seoul</div>
+                    <div class="inf-cell-handle">@mika_seoul · KR · 156K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-num-strong">347,820</td>
+              <td class="td-num-right">21,438</td>
+              <td class="td-num-right td-num-strong">6.2%</td>
+              <td class="td-num-right">735,200원</td>
+              <td><a class="post-link" href="#">보기<i data-lucide="external-link" width="11" height="11"></i></a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">Y</div>
+                  <div>
+                    <div class="inf-cell-name">yuki_tokyo</div>
+                    <div class="inf-cell-handle">@yuki_tokyo · JP · 89K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-num-strong">218,470</td>
+              <td class="td-num-right">14,287</td>
+              <td class="td-num-right td-num-strong">5.8%</td>
+              <td class="td-num-right">682,000원</td>
+              <td><a class="post-link" href="#">보기<i data-lucide="external-link" width="11" height="11"></i></a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">N</div>
+                  <div>
+                    <div class="inf-cell-name">natasha_mood</div>
+                    <div class="inf-cell-handle">@natasha_mood · RU · 124K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-num-strong">201,560</td>
+              <td class="td-num-right">12,902</td>
+              <td class="td-num-right td-num-strong">5.1%</td>
+              <td class="td-num-right">598,400원</td>
+              <td><a class="post-link" href="#">보기<i data-lucide="external-link" width="11" height="11"></i></a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">M</div>
+                  <div>
+                    <div class="inf-cell-name">mei_xian</div>
+                    <div class="inf-cell-handle">@mei_xian · HK · 73K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-num-strong">182,940</td>
+              <td class="td-num-right">11,028</td>
+              <td class="td-num-right td-num-strong">4.6%</td>
+              <td class="td-num-right">540,000원</td>
+              <td><a class="post-link" href="#">보기<i data-lucide="external-link" width="11" height="11"></i></a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">K</div>
+                  <div>
+                    <div class="inf-cell-name">kumi_osaka</div>
+                    <div class="inf-cell-handle">@kumi_osaka · JP · 64K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-num-strong">172,360</td>
+              <td class="td-num-right">10,124</td>
+              <td class="td-num-right td-num-strong">4.4%</td>
+              <td class="td-num-right">512,800원</td>
+              <td><a class="post-link" href="#">보기<i data-lucide="external-link" width="11" height="11"></i></a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">L</div>
+                  <div>
+                    <div class="inf-cell-name">lina_k</div>
+                    <div class="inf-cell-handle">@lina_k · KR · 47K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-num-strong">148,720</td>
+              <td class="td-num-right">8,892</td>
+              <td class="td-num-right td-num-strong">3.9%</td>
+              <td class="td-num-right">418,000원</td>
+              <td><a class="post-link" href="#">보기<i data-lucide="external-link" width="11" height="11"></i></a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm">A</div>
+                  <div>
+                    <div class="inf-cell-name">aria_paris</div>
+                    <div class="inf-cell-handle">@aria_paris · FR · 38K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-num-strong">128,540</td>
+              <td class="td-num-right">8,563</td>
+              <td class="td-num-right td-num-strong">4.3%</td>
+              <td class="td-num-right">372,000원</td>
+              <td><a class="post-link" href="#">보기<i data-lucide="external-link" width="11" height="11"></i></a></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="inf-cell">
+                  <div class="avatar avatar-sm" style="background: var(--bg-elevated); color: var(--text-tertiary);">S</div>
+                  <div>
+                    <div class="inf-cell-name" style="color: var(--text-tertiary);">sora_jeju</div>
+                    <div class="inf-cell-handle">@sora_jeju · KR · 52K</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="platform-mini"><i data-lucide="instagram" width="12" height="12"></i>Instagram</span></td>
+              <td class="td-num-right td-secondary">미게시</td>
+              <td class="td-num-right td-secondary">—</td>
+              <td class="td-num-right td-secondary">—</td>
+              <td class="td-num-right td-num-strong">941,600원</td>
+              <td><span class="badge badge-danger"><span class="badge-dot"></span>위반</span></td>
+            </tr>
+            <tr class="total-foot-row">
+              <td colspan="2" style="font-weight: var(--fw-bold);">합계 (게시 7명)</td>
+              <td class="td-num-right">1,400,410</td>
+              <td class="td-num-right">87,234</td>
+              <td class="td-num-right">4.7% 평균</td>
+              <td class="td-num-right">4,800,000원</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 비용 요약 -->
+      <section class="report-section">
+        <div class="report-section-head">
+          <div>
+            <h2 class="report-section-title">비용 요약</h2>
+            <p class="report-section-sub">캠페인 잔액에서 차감 + 매칭 8회 사용</p>
+          </div>
+        </div>
+
+        <div class="cost-grid">
+          <div class="cost-tile">
+            <span class="cost-tile-label">매칭 사용</span>
+            <div class="cost-tile-num">8<em>회</em></div>
+            <div class="cost-tile-sub">잔여 매칭에서 8회 차감</div>
+          </div>
+          <div class="cost-tile">
+            <span class="cost-tile-label">캠페인 비용 합</span>
+            <div class="cost-tile-num">4,800,000<em>원</em></div>
+            <div class="cost-tile-sub">잔액 차감 — 정산 완료 7건 / 보류 1건</div>
+          </div>
+          <div class="cost-tile">
+            <span class="cost-tile-label">평균 단가</span>
+            <div class="cost-tile-num">600,000<em>원/포스트</em></div>
+            <div class="cost-tile-sub">예산 평균 580,000원 대비 +3.4%</div>
+          </div>
+          <div class="cost-tile">
+            <span class="cost-tile-label">CPM (도달 1k당)</span>
+            <div class="cost-tile-num">3,427<em>원</em></div>
+            <div class="cost-tile-sub">업계 평균 5,200원 대비 −34.1%</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 콘텐츠 갤러리 -->
+      <section class="report-section">
+        <div class="report-section-head">
+          <div>
+            <h2 class="report-section-title">콘텐츠 갤러리</h2>
+            <p class="report-section-sub">게시된 7개 포스트 — 좋아요 순</p>
+          </div>
+          <a href="#" style="font-size: var(--fs-sm); color: var(--accent); font-weight: var(--fw-bold);">전체 보기 →</a>
+        </div>
+
+        <div class="content-gallery">
+
+          <div class="gallery-card">
+            <div class="gallery-cover">
+              <span class="gallery-platform"><i data-lucide="instagram" width="13" height="13"></i></span>
+              <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&h=500&fit=crop&q=80" alt="콘텐츠 1">
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-handle">@mika_seoul</span>
+              <span class="gallery-likes"><i data-lucide="heart" width="12" height="12" fill="currentColor"></i>21,438</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-cover">
+              <span class="gallery-platform"><i data-lucide="instagram" width="13" height="13"></i></span>
+              <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=500&h=500&fit=crop&q=80" alt="콘텐츠 2">
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-handle">@yuki_tokyo</span>
+              <span class="gallery-likes"><i data-lucide="heart" width="12" height="12" fill="currentColor"></i>14,287</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-cover">
+              <span class="gallery-platform"><i data-lucide="instagram" width="13" height="13"></i></span>
+              <img src="https://images.unsplash.com/photo-1522335789203-aaa2f6606770?w=500&h=500&fit=crop&q=80" alt="콘텐츠 3">
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-handle">@natasha_mood</span>
+              <span class="gallery-likes"><i data-lucide="heart" width="12" height="12" fill="currentColor"></i>12,902</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-cover">
+              <span class="gallery-platform"><i data-lucide="instagram" width="13" height="13"></i></span>
+              <img src="https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=500&h=500&fit=crop&q=80" alt="콘텐츠 4">
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-handle">@mei_xian</span>
+              <span class="gallery-likes"><i data-lucide="heart" width="12" height="12" fill="currentColor"></i>11,028</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-cover">
+              <span class="gallery-platform"><i data-lucide="instagram" width="13" height="13"></i></span>
+              <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=500&h=500&fit=crop&q=80" alt="콘텐츠 5">
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-handle">@kumi_osaka</span>
+              <span class="gallery-likes"><i data-lucide="heart" width="12" height="12" fill="currentColor"></i>10,124</span>
+            </div>
+          </div>
+
+          <div class="gallery-card">
+            <div class="gallery-cover">
+              <span class="gallery-platform"><i data-lucide="instagram" width="13" height="13"></i></span>
+              <img src="https://images.unsplash.com/photo-1583241800698-9c2e0a55ca8a?w=500&h=500&fit=crop&q=80" alt="콘텐츠 6">
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-handle">@lina_k</span>
+              <span class="gallery-likes"><i data-lucide="heart" width="12" height="12" fill="currentColor"></i>8,892</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 인사이트 -->
+      <section class="report-section" style="margin-bottom: 0;">
+        <div class="report-section-head">
+          <div>
+            <h2 class="report-section-title">인사이트 & 다음 단계</h2>
+            <p class="report-section-sub">참여 패턴 · 카테고리별 효율 · 차기 캠페인 제안</p>
+          </div>
+        </div>
+
+        <div class="insights-card">
+          <ul class="insights-list">
+
+            <li>
+              <span class="ins-num">1</span>
+              <div>
+                <div class="ins-title">가장 효과 좋은 카테고리는 라이프스타일</div>
+                <div class="ins-sub">라이프스타일 인플루언서 4명이 평균 참여율 <strong>5.4%</strong>를 기록 — 캠페인 평균 4.7% 대비 <strong>+14.9%</strong>. 패션·뷰티 단일 카테고리 캠페인보다 라이프스타일 결합형이 도달 1k당 비용도 <strong>−18%</strong> 우수했습니다.</div>
+              </div>
+            </li>
+
+            <li>
+              <span class="ins-num">2</span>
+              <div>
+                <div class="ins-title">게시 후 24시간이 핵심 — 도달 78% 집중</div>
+                <div class="ins-sub">7개 게시물 평균 <strong>78.3%</strong>의 좋아요가 게시 후 24시간 내 발생. <strong>저녁 7시~9시(KST)</strong> 게시가 다른 시간대 대비 좋아요 <strong>+22%</strong>. 차기 캠페인 게시 가이드라인에 시간대 명시 권장.</div>
+              </div>
+            </li>
+
+            <li>
+              <span class="ins-num">3</span>
+              <div>
+                <div class="ins-title">매크로 인플루언서 ROI 우위 검증</div>
+                <div class="ins-sub">100K+ 팔로워 인플루언서 3명이 전체 도달의 <strong>55.4%</strong> 차지. 단가는 평균 +18% 높지만 도달 효율(CPM)은 <strong>−27%</strong> 우수 — 다음 캠페인은 매크로 비중을 60% 이상으로 권장.</div>
+              </div>
+            </li>
+
+            <li>
+              <span class="ins-num">4</span>
+              <div>
+                <div class="ins-title">@sora_jeju 미게시 — 정산 보류 + 차기 매칭 차단 권장</div>
+                <div class="ins-sub">계약 게시일 <strong>1월 12일</strong> 약속 미이행. 매칭 비용 <strong>941,600원</strong>은 정산 보류 처리됨. 페널티 정책에 따라 차기 매칭 후보에서 30일간 자동 제외됩니다.</div>
+              </div>
+            </li>
+
+          </ul>
+
+          <div class="insights-cta">
+            <div class="insights-cta-text">
+              본 리포트의 패턴과 매칭하는 <strong>매크로 라이프스타일 인플루언서 5명</strong>이 추천 큐에 자동 등록되었습니다.
+            </div>
+            <button class="btn btn-primary">
+              <i data-lucide="users" width="16" height="16"></i>
+              차기 후보 5명 보기
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

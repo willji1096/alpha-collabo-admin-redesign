@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>콘텐츠 검수 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Breadcrumbs */
+  .crumbs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-bottom: var(--space-3);
+  }
+  .crumbs a { color: var(--text-secondary); transition: color var(--duration-fast); }
+  .crumbs a:hover { color: var(--text-primary); }
+  .crumbs .sep { color: var(--text-tertiary); }
+  .crumbs .current { color: var(--text-primary); }
+
+  /* Submission meta */
+  .submission-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .submission-meta .dot { width: 3px; height: 3px; background: var(--text-tertiary); border-radius: 50%; }
+  .submission-meta strong { color: var(--text-primary); font-weight: var(--fw-bold); }
+
+  /* Layout */
+  .inspect-layout {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: var(--space-6);
+    align-items: flex-start;
+  }
+  @media (max-width: 1100px) { .inspect-layout { grid-template-columns: 1fr; } }
+
+  /* Submission preview */
+  .preview-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .preview-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .preview-head-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .preview-head-name {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+  }
+  .preview-head-handle {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .platform-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-full);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+
+  /* Photo grid */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--bg-elevated);
+  }
+  .photo-grid figure {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: var(--neutral-100);
+    overflow: hidden;
+  }
+  .photo-grid figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-num {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.62);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Caption */
+  .caption-block {
+    padding: var(--space-5);
+  }
+  .caption-lang {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+  .lang-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
+  .lang-pill.is-primary {
+    background: var(--text-primary);
+    color: var(--text-inverse);
+  }
+  .caption-text {
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin-bottom: var(--space-5);
+    font-weight: var(--fw-regular);
+  }
+  .caption-text.is-translated {
+    color: var(--text-secondary);
+  }
+  .caption-text strong { color: var(--text-primary); font-weight: var(--fw-semibold); }
+
+  .hashtag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: var(--space-5);
+  }
+  .hashtag {
+    padding: 4px 10px;
+    background: var(--accent-light);
+    color: var(--accent-emphasis);
+    border-radius: var(--radius-full);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+  }
+
+  .submission-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .submission-foot strong {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .submission-foot .delay-tag {
+    color: var(--status-warning-strong);
+    font-weight: var(--fw-bold);
+  }
+
+  /* Right column — checklist */
+  .check-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+  .check-card-head {
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .check-card-title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .check-card-meta {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .check-card-meta strong {
+    color: var(--status-success-strong);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .check-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .check-row {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    align-items: flex-start;
+    transition: background var(--duration-fast);
+    cursor: pointer;
+  }
+  .check-row:hover { background: var(--bg-elevated); }
+  .check-mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--status-success-bg);
+    color: var(--status-success-strong);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .check-mark.is-warn {
+    background: var(--status-warning-bg);
+    color: var(--status-warning-strong);
+  }
+  .check-text {
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+    line-height: 1.5;
+  }
+  .check-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+    font-weight: var(--fw-regular);
+  }
+  .check-tag {
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    align-self: center;
+  }
+  .check-tag.is-warn { color: var(--status-warning-strong); }
+
+  .memo-block {
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .memo-block .field-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+    display: block;
+  }
+
+  .brief-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-4);
+  }
+  .brief-row-name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+  }
+  .brief-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    background: var(--accent-light);
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .pass-info {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: var(--accent-light);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-xs);
+    color: var(--accent-emphasis);
+    line-height: 1.6;
+    font-weight: var(--fw-medium);
+  }
+  .pass-info strong { font-weight: var(--fw-bold); }
+
+  /* Action buttons spacing */
+  .page-head-actions .btn-ghost { color: var(--status-danger-strong); }
+  .page-head-actions .btn-ghost:hover { background: var(--status-danger-bg); color: var(--status-danger-strong); }
+
+  /* Sub-stats grid */
+  .sub-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  .sub-stat {
+    padding: var(--space-3);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+  .sub-stat-num {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .sub-stat-num.is-warn { color: var(--status-warning-strong); }
+  .sub-stat-label {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-bold);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+  }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="14" fill="#EE2128"/><path d="M11 22 L18 9 L25 22 Z" fill="#fff"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html"><i data-lucide="house" class="nav-icon"></i>홈</a>
+        <a class="nav-item" href="explore.html"><i data-lucide="compass" class="nav-icon"></i>탐색<span class="nav-item-meta">2,847</span></a>
+        <a class="nav-item is-active" href="campaign-list.html"><i data-lucide="shopping-bag" class="nav-icon"></i>캠페인<span class="nav-item-meta">3</span></a>
+        <a class="nav-item" href="messages.html"><i data-lucide="message-circle" class="nav-icon"></i>메시지</a>
+        <a class="nav-item" href="saved.html"><i data-lucide="bookmark" class="nav-icon"></i>저장됨</a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html"><i data-lucide="credit-card" class="nav-icon"></i>결제 · 구독</a>
+        <a class="nav-item" href="settings.html"><i data-lucide="settings" class="nav-icon"></i>설정</a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="#">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="20" height="20"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <!-- Breadcrumbs -->
+      <nav class="crumbs" aria-label="현재 경로">
+        <a href="campaign-list.html">캠페인</a>
+        <span class="sep">/</span>
+        <a href="campaign-detail.html">청담 라운지 4월 체험</a>
+        <span class="sep">/</span>
+        <span class="current">검수</span>
+      </nav>
+
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Inspect</div>
+          <h1 class="page-title">콘텐츠 검수</h1>
+          <p class="page-sub" style="margin-top: var(--space-3);">
+            <span class="submission-meta">
+              <strong>@yuki_tokyo</strong>
+              <span class="dot"></span>
+              <span>1차 제출 · 4월 28일 14:32</span>
+              <span class="dot"></span>
+              <span>예정 게시 <strong>4월 30일</strong></span>
+            </span>
+          </p>
+        </div>
+        <div class="page-head-actions">
+          <button class="btn btn-ghost">
+            <i data-lucide="x" width="16" height="16"></i>
+            거절
+          </button>
+          <button class="btn btn-secondary">
+            <i data-lucide="rotate-ccw" width="16" height="16"></i>
+            수정 요청
+          </button>
+          <button class="btn btn-primary">
+            <i data-lucide="check" width="16" height="16"></i>
+            통과
+          </button>
+        </div>
+      </div>
+
+      <div class="inspect-layout">
+
+        <!-- Left: Submission preview -->
+        <div class="preview-card">
+
+          <div class="preview-head">
+            <div class="preview-head-left">
+              <div class="avatar-ring">
+                <div class="avatar avatar-md">Y</div>
+              </div>
+              <div>
+                <div class="preview-head-name">yuki_tokyo <span class="verified" title="인증"><i data-lucide="check" width="9" height="9"></i></span></div>
+                <div class="preview-head-handle">@yuki_tokyo · JP · 라이프스타일</div>
+              </div>
+            </div>
+            <span class="platform-pill">
+              <i data-lucide="instagram" width="14" height="14"></i>
+              Instagram · 피드
+            </span>
+          </div>
+
+          <!-- Photo grid (3 images) -->
+          <div class="photo-grid">
+            <figure>
+              <span class="photo-num">1</span>
+              <img src="https://images.unsplash.com/photo-1522335789203-aaa2f6606770?w=600&h=600&fit=crop&q=80" alt="제품 노출 이미지 1">
+            </figure>
+            <figure>
+              <span class="photo-num">2</span>
+              <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&h=600&fit=crop&q=80" alt="라운지 분위기 이미지 2">
+            </figure>
+            <figure>
+              <span class="photo-num">3</span>
+              <img src="https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=600&h=600&fit=crop&q=80" alt="제품 클로즈업 이미지 3">
+            </figure>
+          </div>
+
+          <div class="caption-block">
+
+            <!-- 원문 일본어 -->
+            <div class="caption-lang">
+              <span class="lang-pill is-primary">JP 원문</span>
+              <span style="font-size: var(--fs-2xs); color: var(--text-tertiary); font-weight: var(--fw-medium);">제출 그대로</span>
+            </div>
+            <p class="caption-text">
+              東京から韓国の青潭へ。4月の夜、グロウラボラウンジで春のリチュアル体験 ✨ ガラス越しの照明と落ち着いた空間がとても印象的でした。<strong>@glowlab_kr</strong> の新作セラム、香りも軽やかで、肌の調子がワントーン上がる感じ。フリージアの優しい香り、好きな人多いはず。<br><br>友達と訪れて、店員さんから丁寧に商品説明を受けたあと、その場でテクスチャー比較も体験。スキンケアが好きな方、絶対チェックしてほしい場所です。
+            </p>
+
+            <!-- 자동 번역 한국어 -->
+            <div class="caption-lang">
+              <span class="lang-pill">KR 자동 번역</span>
+              <span style="font-size: var(--fs-2xs); color: var(--text-tertiary); font-weight: var(--fw-medium);">DeepL · 검수 참고용</span>
+            </div>
+            <p class="caption-text is-translated">
+              도쿄에서 한국 청담으로. 4월의 밤, 글로우랩 라운지에서 봄의 리츄얼 체험. 유리 너머의 조명과 차분한 공간이 정말 인상 깊었어요. <strong>@glowlab_kr</strong>의 신상 세럼, 향도 가볍고 피부 톤이 한 단계 올라가는 느낌. 프리지아의 부드러운 향, 좋아하는 분 많으실 거예요.<br><br>친구와 방문해서 직원분께 정성스러운 제품 설명을 듣고, 그 자리에서 텍스처 비교도 체험. 스킨케어 좋아하는 분이라면 꼭 체크하셨으면 하는 곳이에요.
+            </p>
+
+            <!-- 해시태그 -->
+            <div class="hashtag-row">
+              <span class="hashtag">#글로우랩</span>
+              <span class="hashtag">#청담라운지</span>
+              <span class="hashtag">#봄리츄얼</span>
+              <span class="hashtag">#스킨케어</span>
+              <span class="hashtag">#PR</span>
+              <span class="hashtag">#グロウラボ</span>
+              <span class="hashtag">#韓国コスメ</span>
+            </div>
+
+            <!-- Foot meta -->
+            <div class="submission-foot">
+              <span>작성 <strong>2026-04-28 14:32</strong></span>
+              <span>예정 게시 <strong>2026-04-30 19:00 (KST)</strong> · <span class="delay-tag">1일 지연</span></span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Checklist -->
+        <div class="check-card">
+          <div class="check-card-head">
+            <h2 class="check-card-title">검수 가이드라인</h2>
+            <div class="check-card-meta">
+              <strong>8 / 9 통과</strong>
+              <span style="color: var(--text-tertiary);">·</span>
+              <span>1건 주의</span>
+            </div>
+            <div class="sub-stats">
+              <div class="sub-stat">
+                <div class="sub-stat-num">8</div>
+                <div class="sub-stat-label">통과</div>
+              </div>
+              <div class="sub-stat">
+                <div class="sub-stat-num is-warn">1</div>
+                <div class="sub-stat-label">주의</div>
+              </div>
+              <div class="sub-stat">
+                <div class="sub-stat-num">0</div>
+                <div class="sub-stat-label">실패</div>
+              </div>
+            </div>
+          </div>
+
+          <ul class="check-list">
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">브랜드 태그 @glowlab_kr 멘션</div>
+                <div class="check-sub">캡션 본문 내 1회 확인</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">필수 해시태그 #글로우랩 #PR</div>
+                <div class="check-sub">2개 모두 포함됨</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">가이드 텍스트 톤 (긍정 · 자연스러움)</div>
+                <div class="check-sub">광고성 과장 표현 없음</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">제품 노출 명확</div>
+                <div class="check-sub">3장 중 2장에 제품 식별 가능</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">부적절 콘텐츠 없음</div>
+                <div class="check-sub">금지어 · 민감 이미지 미발견</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">PR 명시 (#PR 또는 #광고)</div>
+                <div class="check-sub">표시광고법 준수 — #PR 1회</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">경쟁사 언급 없음</div>
+                <div class="check-sub">금지 브랜드 키워드 검사 통과</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark"><i data-lucide="check" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">가격 · 할인 표기 정확</div>
+                <div class="check-sub">금액 미언급 — 위반 없음</div>
+              </div>
+              <span class="check-tag">통과</span>
+            </li>
+
+            <li class="check-row">
+              <span class="check-mark is-warn"><i data-lucide="alert-triangle" width="13" height="13"></i></span>
+              <div>
+                <div class="check-text">게시 일정 약속 준수</div>
+                <div class="check-sub">계약 게시일 4월 29일 → 제출 게시 예정 4월 30일 (1일 지연)</div>
+              </div>
+              <span class="check-tag is-warn">주의</span>
+            </li>
+
+          </ul>
+
+          <!-- 메모 -->
+          <div class="memo-block">
+            <label class="field-label" for="memo">검수 메모 (인플루언서에게 미공개)</label>
+            <textarea id="memo" class="textarea" placeholder="다음 단계 (수정 요청·통과·거절) 결정 사유를 남겨주세요."></textarea>
+          </div>
+
+          <!-- Brief -->
+          <div class="brief-row">
+            <div class="brief-row-name">
+              <div class="brief-icon">
+                <i data-lucide="file-text" width="16" height="16"></i>
+              </div>
+              <div>
+                <div>brief-cheongdam-lounge-v3.pdf</div>
+                <div style="font-size: var(--fs-2xs); color: var(--text-tertiary); font-weight: var(--fw-medium); margin-top: 2px;">2.4 MB · 4월 12일 첨부</div>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm">
+              <i data-lucide="download" width="14" height="14"></i>
+              다운로드
+            </button>
+          </div>
+
+          <!-- Pass info -->
+          <div class="pass-info">
+            <strong>통과 시 자동 처리</strong> — 1차 통과로 분류되며 인플루언서에게 게시 승인 알림이 발송됩니다. 수정 요청은 1회 사용 가능 (2회째부터 비용 발생).
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

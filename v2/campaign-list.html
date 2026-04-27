@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>캠페인 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Tab strip — IG-style underline tabs */
+  .tab-strip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    border-bottom: 1px solid var(--border-default);
+    margin-bottom: var(--space-5);
+    overflow-x: auto;
+  }
+  .tab-strip-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-snug);
+    cursor: pointer;
+    transition: color var(--duration-fast);
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+  }
+  .tab-strip-item:hover { color: var(--text-primary); }
+  .tab-strip-item.is-active {
+    color: var(--text-primary);
+  }
+  .tab-strip-item.is-active::after {
+    content: "";
+    position: absolute;
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: -1px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: var(--radius-full);
+  }
+  .tab-strip-item .count-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--radius-full);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .tab-strip-item.is-active .count-pill {
+    background: var(--text-primary);
+    color: var(--text-inverse);
+  }
+
+  /* Filter row above list */
+  .list-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .list-search {
+    position: relative;
+    flex: 1;
+    min-width: 240px;
+    max-width: 380px;
+  }
+  .list-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+  .list-search input {
+    width: 100%;
+    height: 36px;
+    padding: 0 var(--space-3) 0 38px;
+    background: var(--bg-elevated);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    transition: all var(--duration-fast);
+    font-family: inherit;
+  }
+  .list-search input:focus {
+    outline: none;
+    background: var(--bg-surface);
+    border-color: var(--text-primary);
+  }
+
+  /* Campaign card list — vertical rows */
+  .camp-list { display: flex; flex-direction: column; gap: var(--space-3); }
+  .camp-card {
+    display: grid;
+    grid-template-columns: 56px 1fr 200px 140px 36px;
+    gap: var(--space-5);
+    align-items: center;
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: border-color var(--duration), box-shadow var(--duration), transform var(--duration);
+    text-decoration: none;
+    color: inherit;
+  }
+  .camp-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+  }
+  @media (max-width: 900px) {
+    .camp-card {
+      grid-template-columns: 56px 1fr;
+      grid-template-rows: auto auto auto;
+    }
+    .camp-card-progress, .camp-card-side, .camp-card-arrow {
+      grid-column: 2;
+    }
+  }
+
+  .camp-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .camp-thumb-jp { background: linear-gradient(135deg, #FFE2E0 0%, #FFD0CC 100%); color: #C92A2A; }
+  .camp-thumb-ru { background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); color: #1E40AF; }
+  .camp-thumb-hk { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); color: #B45309; }
+  .camp-thumb-tw { background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%); color: #166534; }
+  .camp-thumb-cn { background: linear-gradient(135deg, #FCE7F3 0%, #FBCFE8 100%); color: #9D174D; }
+  .camp-thumb-kr { background: linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%); color: #5B21B6; }
+  .camp-thumb i { width: 22px; height: 22px; }
+
+  .camp-card-main { min-width: 0; }
+  .camp-card-name {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-snug);
+    line-height: var(--lh-tight);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .camp-card-meta {
+    margin-top: 4px;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .camp-card-meta .dot {
+    width: 3px; height: 3px; border-radius: 50%; background: var(--text-tertiary);
+    display: inline-block;
+  }
+  .camp-card-code {
+    font-family: var(--font-sans);
+    font-size: var(--fs-2xs);
+    color: var(--text-tertiary);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+  }
+
+  .camp-card-progress { display: flex; flex-direction: column; gap: 6px; min-width: 160px; }
+  .camp-card-progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+  .camp-card-progress-head strong { color: var(--text-primary); font-weight: var(--fw-bold); }
+  .camp-card-progress-bar {
+    height: 6px;
+    background: var(--bg-active);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  .camp-card-progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: var(--radius-full);
+    transition: width var(--duration-slow) var(--ease-out);
+  }
+  .camp-card-progress-bar-fill.is-done {
+    background: var(--status-success-strong);
+  }
+  .camp-card-progress-bar-fill.is-warn {
+    background: var(--status-warning-strong);
+  }
+
+  .camp-card-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    min-width: 0;
+  }
+  .camp-card-budget {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    font-variant-numeric: tabular-nums;
+  }
+  .camp-card-budget-unit {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--text-secondary);
+    margin-left: 2px;
+  }
+
+  .camp-card-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--duration-fast);
+    flex-shrink: 0;
+  }
+  .camp-card:hover .camp-card-arrow {
+    background: var(--text-primary);
+    color: var(--text-inverse);
+    transform: translateX(2px);
+  }
+
+  .camp-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 22px;
+    padding: 0 var(--space-3);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-snug);
+    border-radius: var(--radius-full);
+  }
+
+  .pagination-foot {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-7);
+  }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html" title="V1 시안으로 전환">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true" title="V2 시안 (현재)">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="47 46 177 205" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M52.2609 179.132C42.8134 155.153 48.7303 125.879 51.5331 119.028C54.3359 112.177 63.8981 105.776 97.5445 103.056C120.673 101.186 147.24 111.782 147.24 111.782C147.24 111.782 119.269 118.32 119.987 148.917C120.704 179.514 148.177 185.641 148.177 185.641C118.798 200.288 86.6413 199.077 52.2609 179.132Z" fill="#800B1C"/><path d="M120.517 50.6437C123.264 49.8334 128.444 48.6491 132.064 47.9634C136.495 47.2154 141.8 46.7791 148.416 46.7791C154.345 46.7168 160.587 47.0908 164.019 47.6517C167.202 48.1504 172.632 49.2724 176.065 50.145C179.498 51.0177 185.24 53.0123 188.86 54.5706C192.48 56.1289 195.975 57.5625 200.094 60.2428C204.33 62.9985 207.147 65.541 210.08 68.4706C214.262 72.6468 216.01 75.0155 218.256 79.441C219.879 82.5576 221.502 86.6092 222.001 88.4792C222.438 90.3491 222.813 94.1514 222.813 96.894C222.75 99.7612 222.313 103.439 221.689 105.62C221.065 107.677 219.879 110.607 218.943 112.165C218.069 113.724 216.01 116.404 214.387 118.087C212.764 119.832 209.706 122.138 207.521 123.26C205.337 124.382 201.53 125.691 199.158 126.19C196.786 126.689 192.667 127.125 190.108 127.125C187.549 127.125 183.055 126.689 180.122 126.128C177.189 125.567 172.82 124.445 170.448 123.572C168.076 122.699 163.957 120.954 161.398 119.707C158.839 118.461 153.908 115.905 150.476 114.098C147.043 112.228 141.551 109.921 138.305 108.924C135.06 107.927 129.567 106.555 126.135 105.87C122.702 105.184 116.086 104.374 111.468 104.062C106.162 103.688 100.608 103.688 96.4884 104.124C92.8684 104.436 87.813 105.184 85.254 105.683C82.6951 106.244 78.3262 107.366 75.58 108.238C72.8338 109.111 68.34 110.794 65.5939 112.041C62.8477 113.225 58.7284 115.282 56.3567 116.591C54.0474 117.962 51.5469 119.021 51.5469 119.021C51.5469 119.021 52.0502 116.716 52.8616 114.347C53.6106 111.978 55.4205 107.553 56.9184 104.561C58.4164 101.507 60.8505 97.2056 62.2236 94.8993C63.6591 92.5307 66.5925 88.4168 68.7145 85.6742C70.8366 82.9316 75.3927 78.0074 78.8255 74.7661C82.2582 71.5249 87.5633 67.0993 90.6215 65.0423C93.6798 62.9231 98.548 59.9311 101.481 58.3728C104.415 56.8145 108.784 54.7576 111.155 53.8226C113.527 52.95 117.771 51.5163 120.517 50.6437Z" fill="#EE2128"/><path d="M178.047 172.26C179.358 172.073 181.667 171.699 183.227 171.388C184.788 171.138 188.158 170.889 190.717 170.889C193.276 170.827 197.395 171.201 199.767 171.699C202.139 172.198 205.696 173.382 207.569 174.317C209.441 175.252 212.749 177.683 214.871 179.74C217.118 181.984 219.302 184.914 220.301 186.971C221.175 188.84 222.298 192.518 222.86 195.074C223.671 198.938 223.734 200.621 223.172 205.047C222.797 207.976 221.736 212.153 220.863 214.397C219.989 216.641 218.054 220.256 216.618 222.5C215.121 224.744 212.312 228.11 210.252 230.042C208.255 231.912 204.822 234.717 202.575 236.15C200.329 237.646 196.521 239.828 194.15 241.012C191.778 242.259 187.222 244.129 184.164 245.251C181.105 246.373 175.738 247.931 172.305 248.679C167.312 249.801 160.538 250.136 152.957 250.362C146.134 250.566 138.165 250.424 135.481 249.988C133.11 249.614 129.677 249.053 127.992 248.741C126.244 248.43 122.063 247.308 118.630 246.248C115.197 245.189 109.018 242.633 104.899 240.638C100.780 238.644 94.9753 235.340 91.9794 233.345C88.9836 231.288 84.2402 227.549 81.3692 224.931C78.4982 222.375 74.0668 217.700 71.5079 214.646C68.8866 211.592 65.2042 206.543 63.2694 203.488C61.3346 200.434 58.4636 195.198 56.9657 191.957C55.4677 188.716 53.7202 184.477 53.1585 182.607C52.5343 180.737 52.1558 178.820 52.1558 178.820C52.1558 178.820 56.0919 180.800 60.5856 183.044C65.0169 185.288 71.6327 188.092 75.2527 189.277C78.8727 190.461 85.1764 191.957 89.2957 192.643C93.9766 193.391 99.8435 193.827 104.899 193.827C109.393 193.827 115.509 193.515 118.630 193.141C121.688 192.767 126.619 191.895 129.552 191.271C132.486 190.586 136.854 189.464 139.226 188.778C141.598 188.030 145.405 186.534 147.652 185.475C149.899 184.353 154.393 181.984 157.638 180.239C160.884 178.493 166.313 176.062 169.621 174.816C172.992 173.631 176.799 172.447 178.047 172.260Z" fill="#EE2128"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house" class="nav-icon"></i>
+          홈
+        </a>
+        <a class="nav-item" href="explore.html">
+          <i data-lucide="compass" class="nav-icon"></i>
+          탐색
+          <span class="nav-item-meta">2,847</span>
+        </a>
+        <a class="nav-item is-active" href="campaign-list.html">
+          <i data-lucide="shopping-bag" class="nav-icon"></i>
+          캠페인
+          <span class="nav-item-meta">3</span>
+        </a>
+        <a class="nav-item" href="messages.html">
+          <i data-lucide="message-circle" class="nav-icon"></i>
+          메시지
+        </a>
+        <a class="nav-item" href="saved.html">
+          <i data-lucide="bookmark" class="nav-icon"></i>
+          저장됨
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html">
+          <i data-lucide="credit-card" class="nav-icon"></i>
+          결제 · 구독
+        </a>
+        <a class="nav-item" href="settings.html">
+          <i data-lucide="settings" class="nav-icon"></i>
+          설정설정
+        </a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="billing.html">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="22" height="22"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Campaigns</div>
+          <h1 class="page-title">캠페인</h1>
+          <p class="page-sub">진행 중인 협업과 종료된 결과를 한 곳에서.</p>
+        </div>
+        <div class="page-head-actions">
+          <button class="btn btn-secondary">
+            <i data-lucide="download" width="15" height="15"></i>
+            보고서 다운로드
+          </button>
+          <a class="btn btn-primary" href="campaign-new.html">
+            <i data-lucide="plus" width="16" height="16"></i>
+            새 캠페인
+          </a>
+        </div>
+      </div>
+
+      <!-- Tab strip -->
+      <div class="tab-strip" role="tablist">
+        <button class="tab-strip-item is-active" role="tab" aria-selected="true">
+          전체 <span class="count-pill">10</span>
+        </button>
+        <button class="tab-strip-item" role="tab">
+          진행중 <span class="count-pill">3</span>
+        </button>
+        <button class="tab-strip-item" role="tab">
+          검수 <span class="count-pill">1</span>
+        </button>
+        <button class="tab-strip-item" role="tab">
+          완료 <span class="count-pill">5</span>
+        </button>
+        <button class="tab-strip-item" role="tab">
+          초안 <span class="count-pill">2</span>
+        </button>
+      </div>
+
+      <!-- Search + filters -->
+      <div class="list-toolbar">
+        <div class="list-search">
+          <i data-lucide="search" class="list-search-icon" width="16" height="16"></i>
+          <input type="search" placeholder="캠페인 이름, 코드로 검색">
+        </div>
+        <button class="filter-chip">
+          <i data-lucide="globe" width="14" height="14"></i>
+          국가
+          <i data-lucide="chevron-down" width="13" height="13"></i>
+        </button>
+        <button class="filter-chip">
+          <i data-lucide="layers" width="14" height="14"></i>
+          카테고리
+          <i data-lucide="chevron-down" width="13" height="13"></i>
+        </button>
+        <button class="filter-chip">
+          <i data-lucide="calendar" width="14" height="14"></i>
+          기간
+          <i data-lucide="chevron-down" width="13" height="13"></i>
+        </button>
+      </div>
+
+      <!-- Campaign rows -->
+      <div class="camp-list">
+
+        <!-- Active 1 -->
+        <a class="camp-card" href="campaign-detail.html">
+          <div class="camp-thumb camp-thumb-jp"><i data-lucide="store"></i></div>
+          <div class="camp-card-main">
+            <div class="camp-card-name">청담 라운지 4월 체험</div>
+            <div class="camp-card-meta">
+              <span class="badge">JP</span>
+              <span class="badge">방문형</span>
+              <span class="dot"></span>
+              <span class="camp-card-code">CODE 2604-A</span>
+              <span class="dot"></span>
+              <span>D-2 (4월 30일 마감)</span>
+            </div>
+          </div>
+          <div class="camp-card-progress">
+            <div class="camp-card-progress-head">
+              <span>매칭 <strong>8</strong>/8</span>
+              <span><strong>50</strong>% 게시</span>
+            </div>
+            <div class="camp-card-progress-bar"><div class="camp-card-progress-bar-fill" style="width: 50%;"></div></div>
+          </div>
+          <div class="camp-card-side">
+            <span class="camp-card-budget">2,560<span class="camp-card-budget-unit">만원</span></span>
+            <span class="camp-status-badge badge-accent"><span class="badge-dot"></span>진행중</span>
+          </div>
+          <div class="camp-card-arrow"><i data-lucide="arrow-right" width="16" height="16"></i></div>
+        </a>
+
+        <!-- Active 2 -->
+        <a class="camp-card" href="campaign-detail.html">
+          <div class="camp-thumb camp-thumb-ru"><i data-lucide="sparkles"></i></div>
+          <div class="camp-card-main">
+            <div class="camp-card-name">봄 멀티밤 인스타 리뷰</div>
+            <div class="camp-card-meta">
+              <span class="badge">RU</span>
+              <span class="badge">리뷰형</span>
+              <span class="dot"></span>
+              <span class="camp-card-code">CODE 2605-B</span>
+              <span class="dot"></span>
+              <span>D-14 (5월 12일 마감)</span>
+            </div>
+          </div>
+          <div class="camp-card-progress">
+            <div class="camp-card-progress-head">
+              <span>매칭 <strong>6</strong>/10</span>
+              <span><strong>60</strong>% 진행</span>
+            </div>
+            <div class="camp-card-progress-bar"><div class="camp-card-progress-bar-fill" style="width: 60%;"></div></div>
+          </div>
+          <div class="camp-card-side">
+            <span class="camp-card-budget">3,840<span class="camp-card-budget-unit">만원</span></span>
+            <span class="camp-status-badge badge-accent"><span class="badge-dot"></span>진행중</span>
+          </div>
+          <div class="camp-card-arrow"><i data-lucide="arrow-right" width="16" height="16"></i></div>
+        </a>
+
+        <!-- Active 3 → 검수 단계 (HK 비타C 키트) -->
+        <a class="camp-card" href="campaign-detail.html">
+          <div class="camp-thumb camp-thumb-hk"><i data-lucide="package"></i></div>
+          <div class="camp-card-main">
+            <div class="camp-card-name">비타C 세럼 4월 키트</div>
+            <div class="camp-card-meta">
+              <span class="badge">HK</span>
+              <span class="badge">배송형</span>
+              <span class="dot"></span>
+              <span class="camp-card-code">CODE 2604-C</span>
+              <span class="dot"></span>
+              <span>9건 검수 진행 중</span>
+            </div>
+          </div>
+          <div class="camp-card-progress">
+            <div class="camp-card-progress-head">
+              <span>매칭 <strong>9</strong>/9</span>
+              <span><strong>100</strong>%</span>
+            </div>
+            <div class="camp-card-progress-bar"><div class="camp-card-progress-bar-fill is-warn" style="width: 100%;"></div></div>
+          </div>
+          <div class="camp-card-side">
+            <span class="camp-card-budget">5,220<span class="camp-card-budget-unit">만원</span></span>
+            <span class="camp-status-badge badge-warning"><span class="badge-dot"></span>검수</span>
+          </div>
+          <div class="camp-card-arrow"><i data-lucide="arrow-right" width="16" height="16"></i></div>
+        </a>
+
+        <!-- Done 1 -->
+        <a class="camp-card" href="report.html">
+          <div class="camp-thumb camp-thumb-kr"><i data-lucide="snowflake"></i></div>
+          <div class="camp-card-main">
+            <div class="camp-card-name">겨울 뷰티 리뷰 캠페인</div>
+            <div class="camp-card-meta">
+              <span class="badge">KR</span>
+              <span class="badge">리뷰형</span>
+              <span class="dot"></span>
+              <span class="camp-card-code">CODE 2512-A</span>
+              <span class="dot"></span>
+              <span>2025년 12월 28일 종료</span>
+            </div>
+          </div>
+          <div class="camp-card-progress">
+            <div class="camp-card-progress-head">
+              <span>매칭 <strong>12</strong>/12</span>
+              <span><strong>100</strong>% 완료</span>
+            </div>
+            <div class="camp-card-progress-bar"><div class="camp-card-progress-bar-fill is-done" style="width: 100%;"></div></div>
+          </div>
+          <div class="camp-card-side">
+            <span class="camp-card-budget">7,140<span class="camp-card-budget-unit">만원</span></span>
+            <span class="camp-status-badge badge-success"><i data-lucide="check" width="11" height="11" stroke-width="3"></i>완료</span>
+          </div>
+          <div class="camp-card-arrow"><i data-lucide="arrow-right" width="16" height="16"></i></div>
+        </a>
+
+        <!-- Done 2 -->
+        <a class="camp-card" href="report.html">
+          <div class="camp-thumb camp-thumb-jp"><i data-lucide="droplets"></i></div>
+          <div class="camp-card-main">
+            <div class="camp-card-name">1월 신상 미스트 리뷰</div>
+            <div class="camp-card-meta">
+              <span class="badge">JP</span>
+              <span class="badge">배송형</span>
+              <span class="dot"></span>
+              <span class="camp-card-code">CODE 2601-A</span>
+              <span class="dot"></span>
+              <span>2026년 1월 31일 종료</span>
+            </div>
+          </div>
+          <div class="camp-card-progress">
+            <div class="camp-card-progress-head">
+              <span>매칭 <strong>8</strong>/8</span>
+              <span><strong>100</strong>% 완료</span>
+            </div>
+            <div class="camp-card-progress-bar"><div class="camp-card-progress-bar-fill is-done" style="width: 100%;"></div></div>
+          </div>
+          <div class="camp-card-side">
+            <span class="camp-card-budget">3,180<span class="camp-card-budget-unit">만원</span></span>
+            <span class="camp-status-badge badge-success"><i data-lucide="check" width="11" height="11" stroke-width="3"></i>완료</span>
+          </div>
+          <div class="camp-card-arrow"><i data-lucide="arrow-right" width="16" height="16"></i></div>
+        </a>
+
+        <!-- Done 3 -->
+        <a class="camp-card" href="report.html">
+          <div class="camp-thumb camp-thumb-cn"><i data-lucide="heart"></i></div>
+          <div class="camp-card-main">
+            <div class="camp-card-name">2월 발렌타인 한정 키트</div>
+            <div class="camp-card-meta">
+              <span class="badge">CN</span>
+              <span class="badge">배송형</span>
+              <span class="dot"></span>
+              <span class="camp-card-code">CODE 2602-A</span>
+              <span class="dot"></span>
+              <span>2026년 2월 18일 종료</span>
+            </div>
+          </div>
+          <div class="camp-card-progress">
+            <div class="camp-card-progress-head">
+              <span>매칭 <strong>10</strong>/10</span>
+              <span><strong>100</strong>% 완료</span>
+            </div>
+            <div class="camp-card-progress-bar"><div class="camp-card-progress-bar-fill is-done" style="width: 100%;"></div></div>
+          </div>
+          <div class="camp-card-side">
+            <span class="camp-card-budget">4,650<span class="camp-card-budget-unit">만원</span></span>
+            <span class="camp-status-badge badge-success"><i data-lucide="check" width="11" height="11" stroke-width="3"></i>완료</span>
+          </div>
+          <div class="camp-card-arrow"><i data-lucide="arrow-right" width="16" height="16"></i></div>
+        </a>
+
+        <!-- Draft 1 -->
+        <a class="camp-card" href="campaign-new.html">
+          <div class="camp-thumb"><i data-lucide="file-text"></i></div>
+          <div class="camp-card-main">
+            <div class="camp-card-name">5월 신상 미스트 리뷰
+              <span class="badge" style="background: var(--bg-elevated); color: var(--text-secondary);">초안</span>
+            </div>
+            <div class="camp-card-meta">
+              <span>플랫폼·국가 미선택</span>
+              <span class="dot"></span>
+              <span>4월 26일 작성</span>
+              <span class="dot"></span>
+              <span>3단계 / 5단계 진행</span>
+            </div>
+          </div>
+          <div class="camp-card-progress">
+            <div class="camp-card-progress-head">
+              <span>예산 미설정</span>
+              <span><strong>60</strong>% 작성</span>
+            </div>
+            <div class="camp-card-progress-bar"><div class="camp-card-progress-bar-fill" style="width: 60%; background: var(--text-tertiary);"></div></div>
+          </div>
+          <div class="camp-card-side">
+            <span class="camp-card-budget" style="color: var(--text-tertiary);">—</span>
+            <span class="camp-status-badge" style="background: var(--bg-elevated); color: var(--text-secondary);"><i data-lucide="pencil" width="11" height="11"></i>이어서 작성</span>
+          </div>
+          <div class="camp-card-arrow"><i data-lucide="arrow-right" width="16" height="16"></i></div>
+        </a>
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-foot">
+        <button class="btn btn-secondary">
+          <i data-lucide="chevron-down" width="15" height="15"></i>
+          종료된 캠페인 3건 더 보기
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

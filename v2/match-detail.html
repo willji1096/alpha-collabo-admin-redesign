@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>매칭 상세 — yuki_tokyo · Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Breadcrumb */
+  .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+    margin-bottom: var(--space-3);
+  }
+  .breadcrumb a { color: var(--text-secondary); transition: color var(--duration-fast); }
+  .breadcrumb a:hover { color: var(--text-primary); }
+  .breadcrumb-sep { color: var(--text-tertiary); }
+  .breadcrumb-current { color: var(--text-primary); font-weight: var(--fw-bold); }
+
+  /* Page head — title row with verified */
+  .md-title-row {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .md-title-row .verified {
+    width: 24px;
+    height: 24px;
+  }
+  .md-status-line {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+    margin-top: var(--space-2);
+  }
+  .md-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-light);
+  }
+  .md-status-line strong {
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+  }
+
+  /* Two-col layout */
+  .md-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  @media (max-width: 1100px) { .md-grid { grid-template-columns: 1fr; } }
+
+  /* Hero photo */
+  .md-hero {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-height: 480px;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=960&h=960&q=80');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--border-default);
+  }
+  .md-hero-badge {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: 32px;
+    padding: 0 var(--space-4);
+    background: var(--accent);
+    color: var(--on-accent);
+    border-radius: var(--radius-full);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Identity block */
+  .md-identity {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+  .md-name-row {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .md-name {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+  }
+  .md-handle {
+    font-size: var(--fs-md);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .md-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .md-bio {
+    font-size: var(--fs-base);
+    color: var(--text-primary);
+    line-height: var(--lh-normal);
+    max-width: 60ch;
+  }
+
+  /* Recent content grid */
+  .md-section {
+    margin-top: var(--space-7);
+  }
+  .md-section-title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-snug);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .md-section-title .md-section-meta {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .md-recent-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--space-2);
+  }
+  @media (max-width: 900px) { .md-recent-grid { grid-template-columns: repeat(3, 1fr); } }
+  .md-recent-item {
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--border-subtle);
+    position: relative;
+    transition: transform var(--duration-fast);
+    cursor: pointer;
+  }
+  .md-recent-item:hover { transform: scale(1.02); }
+  .md-recent-item-meta {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 7px;
+    background: rgba(0, 0, 0, 0.62);
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 10px;
+    font-weight: var(--fw-bold);
+    border-radius: var(--radius-full);
+    letter-spacing: 0;
+  }
+
+  /* Sidebar / right column */
+  .md-side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-4));
+  }
+
+  /* Trust panel */
+  .md-trust {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+  .md-trust-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+  }
+  .md-trust-label {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+  }
+  .md-trust-tag {
+    font-size: var(--fs-2xs);
+    color: var(--status-success-strong);
+    font-weight: var(--fw-bold);
+    background: var(--status-success-bg);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+  }
+  .md-trust-num {
+    font-size: var(--fs-display);
+    font-weight: var(--fw-heavy);
+    color: var(--status-success-strong);
+    letter-spacing: var(--ls-tight);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: var(--space-1);
+  }
+  .md-trust-num em {
+    font-style: normal;
+    font-size: var(--fs-lg);
+    color: var(--text-secondary);
+    margin-left: 4px;
+    font-weight: var(--fw-semibold);
+  }
+  .md-trust-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+    margin-bottom: var(--space-5);
+  }
+  .md-trust-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .md-trust-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: var(--fs-xs);
+  }
+  .md-trust-item-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .md-trust-item-label i { color: var(--text-tertiary); }
+  .md-trust-item-val {
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .md-trust-foot {
+    margin-top: var(--space-4);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: var(--fw-medium);
+    text-align: center;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  /* Stats card */
+  .md-stats {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .md-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .md-stat:last-child { border-bottom: none; }
+  .md-stat-label {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-medium);
+  }
+  .md-stat-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .md-stat-val {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    font-variant-numeric: tabular-nums;
+  }
+  .md-stat-val em {
+    font-style: normal;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-left: 4px;
+    font-weight: var(--fw-semibold);
+  }
+  .md-stat-delta {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--status-success-strong);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* CTA stack */
+  .md-cta-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  /* Lower section: charts */
+  .md-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--border-subtle);
+  }
+  @media (max-width: 900px) { .md-charts { grid-template-columns: 1fr; } }
+
+  .md-chart-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+  .md-chart-head {
+    margin-bottom: var(--space-5);
+  }
+  .md-chart-title {
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-snug);
+  }
+  .md-chart-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    margin-top: 2px;
+    font-weight: var(--fw-medium);
+  }
+
+  .md-bar-list { display: flex; flex-direction: column; gap: var(--space-4); }
+  .md-bar-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 44px;
+    gap: var(--space-3);
+    align-items: center;
+  }
+  .md-bar-label {
+    font-size: var(--fs-xs);
+    color: var(--text-primary);
+    font-weight: var(--fw-bold);
+  }
+  .md-bar-track {
+    height: 8px;
+    background: var(--bg-active);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  .md-bar-fill {
+    height: 100%;
+    background: var(--text-primary);
+    border-radius: var(--radius-full);
+  }
+  .md-bar-fill.is-grad { background: var(--grad-stories); }
+  .md-bar-fill.is-accent { background: var(--accent); }
+  .md-bar-val {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  /* Audience subgroups */
+  .md-audience-group { margin-bottom: var(--space-5); }
+  .md-audience-group:last-child { margin-bottom: 0; }
+  .md-audience-group-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+    margin-bottom: var(--space-3);
+  }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html" title="V1 시안">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true" title="V2 시안 (현재)">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="47 46 177 205" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M52.2609 179.132C42.8134 155.153 48.7303 125.879 51.5331 119.028C54.3359 112.177 63.8981 105.776 97.5445 103.056C120.673 101.186 147.24 111.782 147.24 111.782C147.24 111.782 119.269 118.32 119.987 148.917C120.704 179.514 148.177 185.641 148.177 185.641C118.798 200.288 86.6413 199.077 52.2609 179.132Z" fill="#800B1C"/><path d="M120.517 50.6437C123.264 49.8334 128.444 48.6491 132.064 47.9634C136.495 47.2154 141.8 46.7791 148.416 46.7791C154.345 46.7168 160.587 47.0908 164.019 47.6517C167.202 48.1504 172.632 49.2724 176.065 50.145C179.498 51.0177 185.24 53.0123 188.86 54.5706C192.48 56.1289 195.975 57.5625 200.094 60.2428C204.33 62.9985 207.147 65.541 210.08 68.4706C214.262 72.6468 216.01 75.0155 218.256 79.441C219.879 82.5576 221.502 86.6092 222.001 88.4792C222.438 90.3491 222.813 94.1514 222.813 96.894C222.75 99.7612 222.313 103.439 221.689 105.62C221.065 107.677 219.879 110.607 218.943 112.165C218.069 113.724 216.01 116.404 214.387 118.087C212.764 119.832 209.706 122.138 207.521 123.26C205.337 124.382 201.53 125.691 199.158 126.19C196.786 126.689 192.667 127.125 190.108 127.125C187.549 127.125 183.055 126.689 180.122 126.128C177.189 125.567 172.82 124.445 170.448 123.572C168.076 122.699 163.957 120.954 161.398 119.707C158.839 118.461 153.908 115.905 150.476 114.098C147.043 112.228 141.551 109.921 138.305 108.924C135.06 107.927 129.567 106.555 126.135 105.87C122.702 105.184 116.086 104.374 111.468 104.062C106.162 103.688 100.608 103.688 96.4884 104.124C92.8684 104.436 87.813 105.184 85.254 105.683C82.6951 106.244 78.3262 107.366 75.58 108.238C72.8338 109.111 68.34 110.794 65.5939 112.041C62.8477 113.225 58.7284 115.282 56.3567 116.591C54.0474 117.962 51.5469 119.021 51.5469 119.021C51.5469 119.021 52.0502 116.716 52.8616 114.347C53.6106 111.978 55.4205 107.553 56.9184 104.561C58.4164 101.507 60.8505 97.2056 62.2236 94.8993C63.6591 92.5307 66.5925 88.4168 68.7145 85.6742C70.8366 82.9316 75.3927 78.0074 78.8255 74.7661C82.2582 71.5249 87.5633 67.0993 90.6215 65.0423C93.6798 62.9231 98.548 59.9311 101.481 58.3728C104.415 56.8145 108.784 54.7576 111.155 53.8226C113.527 52.95 117.771 51.5163 120.517 50.6437Z" fill="#EE2128"/><path d="M178.047 172.26C179.358 172.073 181.667 171.699 183.227 171.388C184.788 171.138 188.158 170.889 190.717 170.889C193.276 170.827 197.395 171.201 199.767 171.699C202.139 172.198 205.696 173.382 207.569 174.317C209.441 175.252 212.749 177.683 214.871 179.74C217.118 181.984 219.302 184.914 220.301 186.971C221.175 188.84 222.298 192.518 222.86 195.074C223.671 198.938 223.734 200.621 223.172 205.047C222.797 207.976 221.736 212.153 220.863 214.397C219.989 216.641 218.054 220.256 216.618 222.5C215.121 224.744 212.312 228.11 210.252 230.042C208.255 231.912 204.822 234.717 202.575 236.15C200.329 237.646 196.521 239.828 194.150 241.012C191.778 242.259 187.222 244.129 184.164 245.251C181.105 246.373 175.738 247.931 172.305 248.679C167.312 249.801 160.538 250.136 152.957 250.362C146.134 250.566 138.165 250.424 135.481 249.988C133.110 249.614 129.677 249.053 127.992 248.741C126.244 248.430 122.063 247.308 118.630 246.248C115.197 245.189 109.018 242.633 104.899 240.638C100.780 238.644 94.9753 235.340 91.9794 233.345C88.9836 231.288 84.2402 227.549 81.3692 224.931C78.4982 222.375 74.0668 217.700 71.5079 214.646C68.8866 211.592 65.2042 206.543 63.2694 203.488C61.3346 200.434 58.4636 195.198 56.9657 191.957C55.4677 188.716 53.7202 184.477 53.1585 182.607C52.5343 180.737 52.1558 178.820 52.1558 178.820C52.1558 178.820 56.0919 180.800 60.5856 183.044C65.0169 185.288 71.6327 188.092 75.2527 189.277C78.8727 190.461 85.1764 191.957 89.2957 192.643C93.9766 193.391 99.8435 193.827 104.899 193.827C109.393 193.827 115.509 193.515 118.630 193.141C121.688 192.767 126.619 191.895 129.552 191.271C132.486 190.586 136.854 189.464 139.226 188.778C141.598 188.030 145.405 186.534 147.652 185.475C149.899 184.353 154.393 181.984 157.638 180.239C160.884 178.493 166.313 176.062 169.621 174.816C172.992 173.631 176.799 172.447 178.047 172.260Z" fill="#EE2128"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house" class="nav-icon"></i>
+          홈
+        </a>
+        <a class="nav-item is-active" href="explore.html">
+          <i data-lucide="compass" class="nav-icon"></i>
+          탐색
+          <span class="nav-item-meta">2,847</span>
+        </a>
+        <a class="nav-item" href="campaign-list.html">
+          <i data-lucide="shopping-bag" class="nav-icon"></i>
+          캠페인
+          <span class="nav-item-meta">3</span>
+        </a>
+        <a class="nav-item" href="messages.html">
+          <i data-lucide="message-circle" class="nav-icon"></i>
+          메시지
+          <span class="nav-item-meta">2</span>
+        </a>
+        <a class="nav-item" href="saved.html">
+          <i data-lucide="bookmark" class="nav-icon"></i>
+          저장됨
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html">
+          <i data-lucide="credit-card" class="nav-icon"></i>
+          결제 · 구독
+        </a>
+        <a class="nav-item" href="settings.html">
+          <i data-lucide="settings" class="nav-icon"></i>
+          설정설정
+        </a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="#">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="22" height="22"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <!-- Page head -->
+      <div class="page-head">
+        <div>
+          <nav class="breadcrumb" aria-label="경로">
+            <a href="explore.html">탐색</a>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-current">매칭 상세</span>
+          </nav>
+          <h1 class="page-title md-title-row">
+            유키 사토 (yuki_tokyo)
+            <span class="verified" style="width:24px; height:24px;" aria-label="인증됨">
+              <i data-lucide="check" width="14" height="14" stroke-width="3.5"></i>
+            </span>
+          </h1>
+          <div class="md-status-line">
+            <span class="md-status-dot" aria-hidden="true"></span>
+            <strong>매칭됨</strong>
+            <span style="color: var(--text-tertiary);">·</span>
+            <span>청담 라운지 4월 체험 (2604-A) 에 참여 중</span>
+          </div>
+        </div>
+        <div class="page-head-actions">
+          <button class="btn btn-secondary">
+            <i data-lucide="bookmark" width="16" height="16"></i>
+            저장
+          </button>
+          <a class="btn btn-primary" href="messages.html">
+            <i data-lucide="send" width="16" height="16"></i>
+            메시지 시작
+          </a>
+        </div>
+      </div>
+
+      <!-- Two column layout -->
+      <div class="md-grid">
+
+        <!-- Left main column -->
+        <div>
+
+          <!-- Hero -->
+          <div class="md-hero">
+            <span class="md-hero-badge">
+              <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+              Matched
+            </span>
+          </div>
+
+          <!-- Identity -->
+          <div class="md-identity">
+            <div>
+              <div class="md-name-row">
+                <span class="md-name">유키 사토</span>
+                <span class="verified" aria-label="인증됨">
+                  <i data-lucide="check" width="10" height="10" stroke-width="3.5"></i>
+                </span>
+              </div>
+              <div class="md-handle">@yuki_tokyo</div>
+            </div>
+            <div class="md-chips">
+              <span class="badge">JP · 도쿄</span>
+              <span class="badge">Instagram</span>
+              <span class="badge">라이프스타일</span>
+              <span class="badge">뷰티</span>
+              <span class="badge badge-accent"><i data-lucide="languages" width="11" height="11"></i> JP · KR · EN</span>
+            </div>
+            <p class="md-bio">도쿄 베이스 · 라이프스타일·뷰티 콘텐츠 · 한국 방문 정기. 식음 / 호텔 / 코스메틱 협업 다수. 분기당 2회 서울 방문, 청담·성수 중심 협업 선호.</p>
+          </div>
+
+          <!-- Recent content -->
+          <div class="md-section">
+            <h2 class="md-section-title">
+              최근 콘텐츠
+              <span class="md-section-meta">최근 30일 · 24개 게시</span>
+            </h2>
+            <div class="md-recent-grid">
+              <div class="md-recent-item" style="background-image: url('https://images.unsplash.com/photo-1522335789203-aaa2caa2dba6?auto=format&fit=crop&w=320&h=320&q=80');">
+                <span class="md-recent-item-meta"><i data-lucide="heart" width="9" height="9" fill="currentColor" stroke="none"></i>12.4K</span>
+              </div>
+              <div class="md-recent-item" style="background-image: url('https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=320&h=320&q=80');">
+                <span class="md-recent-item-meta"><i data-lucide="heart" width="9" height="9" fill="currentColor" stroke="none"></i>8.7K</span>
+              </div>
+              <div class="md-recent-item" style="background-image: url('https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?auto=format&fit=crop&w=320&h=320&q=80');">
+                <span class="md-recent-item-meta"><i data-lucide="play" width="9" height="9" fill="currentColor" stroke="none"></i>34.2K</span>
+              </div>
+              <div class="md-recent-item" style="background-image: url('https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=320&h=320&q=80');">
+                <span class="md-recent-item-meta"><i data-lucide="heart" width="9" height="9" fill="currentColor" stroke="none"></i>9.1K</span>
+              </div>
+              <div class="md-recent-item" style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=320&h=320&q=80');">
+                <span class="md-recent-item-meta"><i data-lucide="heart" width="9" height="9" fill="currentColor" stroke="none"></i>7.6K</span>
+              </div>
+              <div class="md-recent-item" style="background-image: url('https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=320&h=320&q=80');">
+                <span class="md-recent-item-meta"><i data-lucide="play" width="9" height="9" fill="currentColor" stroke="none"></i>21.8K</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right sticky column -->
+        <aside class="md-side">
+
+          <!-- Trust panel — V2 차별 시그널 -->
+          <div class="md-trust">
+            <div class="md-trust-head">
+              <span class="md-trust-label">매칭 완료율</span>
+              <span class="md-trust-tag">상위 5%</span>
+            </div>
+            <div class="md-trust-num">97<em>%</em></div>
+            <div class="md-trust-sub">38건 진행 중 37건 정상 완료</div>
+
+            <div class="md-trust-list">
+              <div class="md-trust-item">
+                <span class="md-trust-item-label">
+                  <i data-lucide="briefcase" width="14" height="14" stroke-width="2"></i>
+                  진행 캠페인
+                </span>
+                <span class="md-trust-item-val">38건</span>
+              </div>
+              <div class="md-trust-item">
+                <span class="md-trust-item-label">
+                  <i data-lucide="calendar-check" width="14" height="14" stroke-width="2"></i>
+                  정시 게시
+                </span>
+                <span class="md-trust-item-val">37건 (97%)</span>
+              </div>
+              <div class="md-trust-item">
+                <span class="md-trust-item-label">
+                  <i data-lucide="pen-line" width="14" height="14" stroke-width="2"></i>
+                  평균 수정 횟수
+                </span>
+                <span class="md-trust-item-val">0.8회</span>
+              </div>
+              <div class="md-trust-item">
+                <span class="md-trust-item-label">
+                  <i data-lucide="message-square" width="14" height="14" stroke-width="2"></i>
+                  평균 응답 시간
+                </span>
+                <span class="md-trust-item-val">4시간</span>
+              </div>
+              <div class="md-trust-item">
+                <span class="md-trust-item-label">
+                  <i data-lucide="clock" width="14" height="14" stroke-width="2"></i>
+                  마지막 캠페인
+                </span>
+                <span class="md-trust-item-val">2주 전</span>
+              </div>
+              <div class="md-trust-item">
+                <span class="md-trust-item-label">
+                  <i data-lucide="ghost" width="14" height="14" stroke-width="2"></i>
+                  매칭 후 무응답
+                </span>
+                <span class="md-trust-item-val" style="color: var(--status-success-strong);">0건</span>
+              </div>
+            </div>
+
+            <div class="md-trust-foot">최근 12개월 데이터 기준</div>
+          </div>
+
+          <!-- Stats card -->
+          <div class="md-stats">
+            <div class="md-stat">
+              <span class="md-stat-label">팔로워</span>
+              <div class="md-stat-row">
+                <span class="md-stat-val">156K</span>
+                <span class="md-stat-delta">▲ 1.2K vs 1개월 전</span>
+              </div>
+            </div>
+            <div class="md-stat">
+              <span class="md-stat-label">평균 참여율</span>
+              <div class="md-stat-row">
+                <span class="md-stat-val">6.8<em>%</em></span>
+                <span class="md-stat-delta">상위 12% IG · JP</span>
+              </div>
+            </div>
+            <div class="md-stat">
+              <span class="md-stat-label">콘텐츠 단가</span>
+              <div class="md-stat-row">
+                <span class="md-stat-val">320<em>만원 / 포스트</em></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA stack -->
+          <div class="md-cta-stack">
+            <a class="btn btn-primary btn-lg btn-block" href="messages.html">
+              <i data-lucide="send" width="16" height="16"></i>
+              메시지 시작하기
+            </a>
+            <button class="btn btn-secondary btn-block" type="button">
+              <i data-lucide="plus" width="16" height="16"></i>
+              이 캠페인에 추가 매칭
+            </button>
+          </div>
+
+        </aside>
+
+      </div>
+
+      <!-- Lower charts -->
+      <div class="md-charts">
+
+        <!-- Category breakdown -->
+        <div class="md-chart-card">
+          <div class="md-chart-head">
+            <h3 class="md-chart-title">카테고리 비중</h3>
+            <p class="md-chart-sub">최근 24개 게시 기준 콘텐츠 주제 분포</p>
+          </div>
+          <div class="md-bar-list">
+            <div class="md-bar-item">
+              <span class="md-bar-label">라이프스타일</span>
+              <div class="md-bar-track"><div class="md-bar-fill is-grad" style="width: 52%;"></div></div>
+              <span class="md-bar-val">52%</span>
+            </div>
+            <div class="md-bar-item">
+              <span class="md-bar-label">뷰티</span>
+              <div class="md-bar-track"><div class="md-bar-fill is-grad" style="width: 28%;"></div></div>
+              <span class="md-bar-val">28%</span>
+            </div>
+            <div class="md-bar-item">
+              <span class="md-bar-label">음식</span>
+              <div class="md-bar-track"><div class="md-bar-fill is-grad" style="width: 12%;"></div></div>
+              <span class="md-bar-val">12%</span>
+            </div>
+            <div class="md-bar-item">
+              <span class="md-bar-label">여행</span>
+              <div class="md-bar-track"><div class="md-bar-fill is-grad" style="width: 8%;"></div></div>
+              <span class="md-bar-val">8%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audience -->
+        <div class="md-chart-card">
+          <div class="md-chart-head">
+            <h3 class="md-chart-title">청중 인구통계</h3>
+            <p class="md-chart-sub">팔로워 기준 · IG 인사이트 연동</p>
+          </div>
+
+          <div class="md-audience-group">
+            <div class="md-audience-group-label">성별</div>
+            <div class="md-bar-list">
+              <div class="md-bar-item">
+                <span class="md-bar-label">여성</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 78%;"></div></div>
+                <span class="md-bar-val">78%</span>
+              </div>
+              <div class="md-bar-item">
+                <span class="md-bar-label">남성</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 22%;"></div></div>
+                <span class="md-bar-val">22%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="md-audience-group">
+            <div class="md-audience-group-label">연령</div>
+            <div class="md-bar-list">
+              <div class="md-bar-item">
+                <span class="md-bar-label">25–34</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 47%;"></div></div>
+                <span class="md-bar-val">47%</span>
+              </div>
+              <div class="md-bar-item">
+                <span class="md-bar-label">18–24</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 31%;"></div></div>
+                <span class="md-bar-val">31%</span>
+              </div>
+              <div class="md-bar-item">
+                <span class="md-bar-label">35–44</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 16%;"></div></div>
+                <span class="md-bar-val">16%</span>
+              </div>
+              <div class="md-bar-item">
+                <span class="md-bar-label">기타</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 6%;"></div></div>
+                <span class="md-bar-val">6%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="md-audience-group">
+            <div class="md-audience-group-label">지역 (상위)</div>
+            <div class="md-bar-list">
+              <div class="md-bar-item">
+                <span class="md-bar-label">도쿄</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 38%;"></div></div>
+                <span class="md-bar-val">38%</span>
+              </div>
+              <div class="md-bar-item">
+                <span class="md-bar-label">오사카</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 14%;"></div></div>
+                <span class="md-bar-val">14%</span>
+              </div>
+              <div class="md-bar-item">
+                <span class="md-bar-label">서울</span>
+                <div class="md-bar-track"><div class="md-bar-fill is-accent" style="width: 11%;"></div></div>
+                <span class="md-bar-val">11%</span>
+              </div>
+              <div class="md-bar-item">
+                <span class="md-bar-label">기타 일본</span>
+                <div class="md-bar-track"><div class="md-bar-fill" style="width: 24%;"></div></div>
+                <span class="md-bar-val">24%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

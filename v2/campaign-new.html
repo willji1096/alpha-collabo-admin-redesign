@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>새 캠페인 — Alphacollabo V2</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  /* Stepper — IG/Stripe-tone steps */
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-5);
+    overflow-x: auto;
+  }
+  .stepper-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
+    padding: 6px var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-tertiary);
+    letter-spacing: var(--ls-snug);
+  }
+  .stepper-item .stepper-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .stepper-item.is-done {
+    color: var(--text-secondary);
+  }
+  .stepper-item.is-done .stepper-num {
+    background: var(--text-primary);
+    color: var(--text-inverse);
+  }
+  .stepper-item.is-active {
+    background: var(--accent-light);
+    color: var(--accent-emphasis);
+  }
+  .stepper-item.is-active .stepper-num {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .stepper-divider {
+    width: 28px;
+    height: 1px;
+    background: var(--border-default);
+    flex-shrink: 0;
+  }
+
+  /* Two-column layout for new campaign */
+  .new-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: var(--space-5);
+    align-items: flex-start;
+  }
+  @media (max-width: 1180px) { .new-grid { grid-template-columns: 1fr; } }
+
+  /* Sticky summary card */
+  .summary-card {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-4));
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .summary-name-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-tight);
+    padding: 0;
+    outline: none;
+  }
+  .summary-name-input::placeholder { color: var(--text-tertiary); }
+  .summary-name-edit {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: 4px;
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
+
+  .summary-section { display: flex; flex-direction: column; gap: var(--space-2); }
+  .summary-section-label {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    font-weight: var(--fw-bold);
+  }
+  .summary-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .summary-budget-val {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .summary-budget-val em {
+    font-style: normal;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+  }
+  .summary-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--fs-2xs);
+    color: var(--text-tertiary);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+    margin-top: 4px;
+  }
+
+  .summary-deadline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    font-weight: var(--fw-semibold);
+  }
+  .summary-deadline i { color: var(--text-secondary); }
+
+  .summary-match-note {
+    padding: var(--space-3);
+    background: var(--accent-light);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-xs);
+    color: var(--accent-emphasis);
+    line-height: var(--lh-normal);
+    font-weight: var(--fw-semibold);
+  }
+  .summary-match-note strong { font-weight: var(--fw-heavy); }
+
+  /* Right column — candidates */
+  .candidates {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .candidates-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+  }
+  .candidates-head-title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-snug);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .candidates-head-sub {
+    margin-top: 4px;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    line-height: var(--lh-normal);
+  }
+  .candidates-head-sub strong { color: var(--text-primary); font-weight: var(--fw-bold); }
+  .candidates-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px var(--space-3);
+    background: var(--accent-light);
+    color: var(--accent-emphasis);
+    border-radius: var(--radius-full);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
+
+  .candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+    gap: var(--space-4);
+  }
+
+  /* Add-toggle button on each card */
+  .inf-card-toggle {
+    width: 100%;
+    height: 32px;
+    background: var(--bg-elevated);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all var(--duration-fast);
+  }
+  .inf-card-toggle:hover { background: var(--bg-hover); }
+  .inf-card-toggle.is-on {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .inf-card-toggle.is-on:hover { background: var(--accent-hover); }
+
+  /* Sticky bottom action bar */
+  .new-stickybar {
+    position: sticky;
+    bottom: 0;
+    z-index: var(--z-sticky);
+    margin: var(--space-6) calc(var(--space-7) * -1) calc(var(--space-9) * -1);
+    padding: var(--space-4) var(--space-7);
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-top: 1px solid var(--border-default);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+  }
+  @media (max-width: 768px) {
+    .new-stickybar { margin: var(--space-5) calc(var(--space-4) * -1) calc(var(--space-8) * -1); padding: var(--space-4); }
+  }
+  .stickybar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .stickybar-label {
+    font-size: var(--fs-2xs);
+    color: var(--text-secondary);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
+  .stickybar-val {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-heavy);
+    color: var(--text-primary);
+    letter-spacing: var(--ls-tight);
+    font-variant-numeric: tabular-nums;
+  }
+  .stickybar-val em {
+    font-style: normal;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: var(--fw-semibold);
+    margin-left: 6px;
+  }
+  .stickybar-actions { display: flex; gap: var(--space-2); }
+</style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+
+<div class="track-toggle" role="group" aria-label="시안 트랙 전환">
+  <a class="track-btn" href="../index-v1.html" title="V1 시안으로 전환">V1</a>
+  <a class="track-btn is-active" href="index.html" aria-current="true" title="V2 시안 (현재)">V2</a>
+</div>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="47 46 177 205" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M52.2609 179.132C42.8134 155.153 48.7303 125.879 51.5331 119.028C54.3359 112.177 63.8981 105.776 97.5445 103.056C120.673 101.186 147.24 111.782 147.24 111.782C147.24 111.782 119.269 118.32 119.987 148.917C120.704 179.514 148.177 185.641 148.177 185.641C118.798 200.288 86.6413 199.077 52.2609 179.132Z" fill="#800B1C"/><path d="M120.517 50.6437C123.264 49.8334 128.444 48.6491 132.064 47.9634C136.495 47.2154 141.8 46.7791 148.416 46.7791C154.345 46.7168 160.587 47.0908 164.019 47.6517C167.202 48.1504 172.632 49.2724 176.065 50.145C179.498 51.0177 185.24 53.0123 188.86 54.5706C192.48 56.1289 195.975 57.5625 200.094 60.2428C204.33 62.9985 207.147 65.541 210.08 68.4706C214.262 72.6468 216.01 75.0155 218.256 79.441C219.879 82.5576 221.502 86.6092 222.001 88.4792C222.438 90.3491 222.813 94.1514 222.813 96.894C222.75 99.7612 222.313 103.439 221.689 105.62C221.065 107.677 219.879 110.607 218.943 112.165C218.069 113.724 216.01 116.404 214.387 118.087C212.764 119.832 209.706 122.138 207.521 123.26C205.337 124.382 201.53 125.691 199.158 126.19C196.786 126.689 192.667 127.125 190.108 127.125C187.549 127.125 183.055 126.689 180.122 126.128C177.189 125.567 172.82 124.445 170.448 123.572C168.076 122.699 163.957 120.954 161.398 119.707C158.839 118.461 153.908 115.905 150.476 114.098C147.043 112.228 141.551 109.921 138.305 108.924C135.06 107.927 129.567 106.555 126.135 105.87C122.702 105.184 116.086 104.374 111.468 104.062C106.162 103.688 100.608 103.688 96.4884 104.124C92.8684 104.436 87.813 105.184 85.254 105.683C82.6951 106.244 78.3262 107.366 75.58 108.238C72.8338 109.111 68.34 110.794 65.5939 112.041C62.8477 113.225 58.7284 115.282 56.3567 116.591C54.0474 117.962 51.5469 119.021 51.5469 119.021C51.5469 119.021 52.0502 116.716 52.8616 114.347C53.6106 111.978 55.4205 107.553 56.9184 104.561C58.4164 101.507 60.8505 97.2056 62.2236 94.8993C63.6591 92.5307 66.5925 88.4168 68.7145 85.6742C70.8366 82.9316 75.3927 78.0074 78.8255 74.7661C82.2582 71.5249 87.5633 67.0993 90.6215 65.0423C93.6798 62.9231 98.548 59.9311 101.481 58.3728C104.415 56.8145 108.784 54.7576 111.155 53.8226C113.527 52.95 117.771 51.5163 120.517 50.6437Z" fill="#EE2128"/><path d="M178.047 172.26C179.358 172.073 181.667 171.699 183.227 171.388C184.788 171.138 188.158 170.889 190.717 170.889C193.276 170.827 197.395 171.201 199.767 171.699C202.139 172.198 205.696 173.382 207.569 174.317C209.441 175.252 212.749 177.683 214.871 179.74C217.118 181.984 219.302 184.914 220.301 186.971C221.175 188.84 222.298 192.518 222.86 195.074C223.671 198.938 223.734 200.621 223.172 205.047C222.797 207.976 221.736 212.153 220.863 214.397C219.989 216.641 218.054 220.256 216.618 222.5C215.121 224.744 212.312 228.11 210.252 230.042C208.255 231.912 204.822 234.717 202.575 236.15C200.329 237.646 196.521 239.828 194.15 241.012C191.778 242.259 187.222 244.129 184.164 245.251C181.105 246.373 175.738 247.931 172.305 248.679C167.312 249.801 160.538 250.136 152.957 250.362C146.134 250.566 138.165 250.424 135.481 249.988C133.11 249.614 129.677 249.053 127.992 248.741C126.244 248.43 122.063 247.308 118.630 246.248C115.197 245.189 109.018 242.633 104.899 240.638C100.780 238.644 94.9753 235.340 91.9794 233.345C88.9836 231.288 84.2402 227.549 81.3692 224.931C78.4982 222.375 74.0668 217.700 71.5079 214.646C68.8866 211.592 65.2042 206.543 63.2694 203.488C61.3346 200.434 58.4636 195.198 56.9657 191.957C55.4677 188.716 53.7202 184.477 53.1585 182.607C52.5343 180.737 52.1558 178.820 52.1558 178.820C52.1558 178.820 56.0919 180.800 60.5856 183.044C65.0169 185.288 71.6327 188.092 75.2527 189.277C78.8727 190.461 85.1764 191.957 89.2957 192.643C93.9766 193.391 99.8435 193.827 104.899 193.827C109.393 193.827 115.509 193.515 118.630 193.141C121.688 192.767 126.619 191.895 129.552 191.271C132.486 190.586 136.854 189.464 139.226 188.778C141.598 188.030 145.405 186.534 147.652 185.475C149.899 184.353 154.393 181.984 157.638 180.239C160.884 178.493 166.313 176.062 169.621 174.816C172.992 173.631 176.799 172.447 178.047 172.260Z" fill="#EE2128"/></svg></div>
+      <div>
+        <div class="brand-name">Alphacollabo</div>
+        <div class="brand-sub">Glowlab Korea</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="주 메뉴">
+      <div class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" href="dashboard.html">
+          <i data-lucide="house" class="nav-icon"></i>
+          홈
+        </a>
+        <a class="nav-item" href="explore.html">
+          <i data-lucide="compass" class="nav-icon"></i>
+          탐색
+          <span class="nav-item-meta">2,847</span>
+        </a>
+        <a class="nav-item is-active" href="campaign-list.html">
+          <i data-lucide="shopping-bag" class="nav-icon"></i>
+          캠페인
+          <span class="nav-item-meta">3</span>
+        </a>
+        <a class="nav-item" href="messages.html">
+          <i data-lucide="message-circle" class="nav-icon"></i>
+          메시지
+        </a>
+        <a class="nav-item" href="saved.html">
+          <i data-lucide="bookmark" class="nav-icon"></i>
+          저장됨
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-label">Account</span>
+        <a class="nav-item" href="billing.html">
+          <i data-lucide="credit-card" class="nav-icon"></i>
+          결제 · 구독
+        </a>
+        <a class="nav-item" href="settings.html">
+          <i data-lucide="settings" class="nav-icon"></i>
+          설정설정
+        </a>
+      </div>
+    </nav>
+
+    <div class="match-meter">
+      <div class="match-meter-head">
+        <span class="match-meter-label">매칭 잔여</span>
+        <span class="match-meter-num">7<em>/ 12</em></span>
+      </div>
+      <div class="match-meter-bar"><div class="match-meter-bar-fill" style="width: 58%;"></div></div>
+      <span style="font-size: var(--fs-2xs); color: var(--text-secondary); font-weight: var(--fw-medium);">Pro · 5월 1일 갱신</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar-ring">
+        <div class="avatar avatar-md">G</div>
+      </div>
+      <div style="min-width:0;">
+        <div class="sidebar-foot-name">glowlab_kr</div>
+        <div class="sidebar-foot-sub">Glowlab Korea</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="shell-main">
+
+    <header class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search" class="topbar-search-icon" width="16" height="16"></i>
+        <input type="search" placeholder="검색…">
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-pill">
+        <i data-lucide="clock" width="15" height="15"></i>
+        매칭 <strong>7</strong>회
+        <span class="pill-divider"></span>
+        <a class="pill-link" href="billing.html">충전</a>
+      </span>
+      <button class="btn-icon" aria-label="알림">
+        <i data-lucide="bell" width="22" height="22"></i>
+      </button>
+    </header>
+
+    <section class="page">
+
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">New Campaign</div>
+          <h1 class="page-title">새 캠페인</h1>
+          <p class="page-sub">예산을 알려주시면 그 안에 들어오는 인플루언서를 자동으로 큐레이션합니다.</p>
+        </div>
+        <div class="page-head-actions">
+          <button class="btn btn-secondary">임시 저장</button>
+          <button class="btn btn-primary">
+            다음 단계
+            <i data-lucide="arrow-right" width="15" height="15"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stepper -->
+      <nav class="stepper" aria-label="캠페인 작성 단계">
+        <span class="stepper-item is-done">
+          <span class="stepper-num"><i data-lucide="check" width="12" height="12" stroke-width="3"></i></span>
+          기본정보
+        </span>
+        <span class="stepper-divider"></span>
+        <span class="stepper-item is-done">
+          <span class="stepper-num"><i data-lucide="check" width="12" height="12" stroke-width="3"></i></span>
+          예산
+        </span>
+        <span class="stepper-divider"></span>
+        <span class="stepper-item is-done">
+          <span class="stepper-num"><i data-lucide="check" width="12" height="12" stroke-width="3"></i></span>
+          콘텐츠 가이드
+        </span>
+        <span class="stepper-divider"></span>
+        <span class="stepper-item is-active" aria-current="step">
+          <span class="stepper-num">4</span>
+          매칭 후보
+        </span>
+        <span class="stepper-divider"></span>
+        <span class="stepper-item">
+          <span class="stepper-num">5</span>
+          확정
+        </span>
+      </nav>
+
+      <div class="new-grid">
+
+        <!-- LEFT: sticky summary -->
+        <aside class="summary-card" aria-label="캠페인 요약">
+
+          <div>
+            <input class="summary-name-input" type="text" value="5월 봄 미스트 신상 리뷰" aria-label="캠페인 이름">
+            <div class="summary-name-edit">
+              <i data-lucide="pencil" width="11" height="11"></i>
+              캠페인명 수정
+            </div>
+          </div>
+
+          <div class="summary-section">
+            <span class="summary-section-label">국가 · 플랫폼 · 카테고리</span>
+            <div class="summary-chips">
+              <span class="filter-chip is-active">일본</span>
+              <span class="filter-chip is-active">홍콩</span>
+              <span class="filter-chip is-active">대만</span>
+            </div>
+            <div class="summary-chips" style="margin-top:6px;">
+              <span class="filter-chip is-active">Instagram</span>
+              <span class="filter-chip is-active">TikTok</span>
+            </div>
+            <div class="summary-chips" style="margin-top:6px;">
+              <span class="filter-chip is-active">뷰티</span>
+              <span class="filter-chip is-active">라이프스타일</span>
+            </div>
+          </div>
+
+          <div class="summary-section">
+            <span class="summary-section-label">캠페인 예산 영역</span>
+            <span class="summary-budget-val"><span id="budget-out">800만</span><em>원 이하</em></span>
+            <input class="range-track" type="range" min="100000" max="20000000" step="100000" value="8000000" data-target="budget-out" data-format="won" aria-label="예산 영역" style="margin-top: 6px;">
+            <div class="summary-ticks">
+              <span>10만원</span>
+              <span>2,000만원</span>
+            </div>
+          </div>
+
+          <div class="summary-section">
+            <span class="summary-section-label">마감일</span>
+            <span class="summary-deadline">
+              <i data-lucide="calendar" width="16" height="16"></i>
+              5월 25일 (D-28)
+            </span>
+          </div>
+
+          <div class="summary-match-note">
+            <strong>매칭 횟수 안내</strong> — 잔여 12회 중 이번 캠페인에 <strong>8회</strong> 사용 예정. 확정 후 즉시 차감되며, 미응답 인플루언서는 14일 내 자동 환불됩니다.
+          </div>
+
+        </aside>
+
+        <!-- RIGHT: candidate grid -->
+        <section class="candidates" aria-label="매칭 후보">
+
+          <div class="candidates-head">
+            <div>
+              <div class="candidates-head-title">
+                <i data-lucide="sparkles" width="18" height="18" style="color: var(--accent);"></i>
+                매칭 후보 8명
+                <span class="candidates-pill">예산 적합도 순</span>
+              </div>
+              <div class="candidates-head-sub">
+                추천 <strong>64명</strong> 중 예산 영역 안 적합도 상위 <strong>8명</strong>입니다. 모두 매칭하면 <strong>1매칭 = 1명</strong> 기준으로 매칭 횟수 <strong>8회</strong>가 차감됩니다.
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm">
+              <i data-lucide="refresh-cw" width="14" height="14"></i>
+              다시 추천
+            </button>
+          </div>
+
+          <div class="candidates-grid">
+
+            <!-- Card 1 — yuki_tokyo (selected) -->
+            <article class="inf-card is-within" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●●● ●●●●</div>
+                  <div class="inf-card-handle is-masked">@●●●●●●_tokyo</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">Instagram</span>
+                  <span class="badge">JP</span>
+                  <span class="badge">라이프스타일</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">156K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">6.8%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>적합도 <strong>98</strong> · 예산 합치</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">320만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle is-on">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                  후보 추가됨
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 2 — natasha_mood (selected) -->
+            <article class="inf-card is-within" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●●●●●●● ●●●●</div>
+                  <div class="inf-card-handle is-masked">@●●●●●●●_mood</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">Instagram</span>
+                  <span class="badge">RU</span>
+                  <span class="badge">뷰티</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">412K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">5.7%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>적합도 <strong>94</strong> · 예산 합치</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">740만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle is-on">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                  후보 추가됨
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 3 — mei_xian (selected) -->
+            <article class="inf-card is-within" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●● ●●●●</div>
+                  <div class="inf-card-handle is-masked">@●●●_xian</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">Xiaohongshu</span>
+                  <span class="badge">CN</span>
+                  <span class="badge">뷰티</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">290K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">4.8%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>적합도 <strong>91</strong> · 예산 합치</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">580만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle is-on">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                  후보 추가됨
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 4 — kumi_osaka (selected) -->
+            <article class="inf-card is-within" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●●● ●●●●</div>
+                  <div class="inf-card-handle is-masked">@●●●●_osaka</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">TikTok</span>
+                  <span class="badge">JP</span>
+                  <span class="badge">식품</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">98K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">8.1%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust is-new"><i data-lucide="star" class="inf-card-trust-icon" width="13" height="13" fill="currentColor" stroke="none"></i><span>신규 등록 · 첫 캠페인</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">220만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle is-on">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                  후보 추가됨
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 5 — lina_k (un-selected, suggested) -->
+            <article class="inf-card is-within">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●●● ●</div>
+                  <div class="inf-card-handle is-masked">@●●●●_k</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">Xiaohongshu</span>
+                  <span class="badge">HK</span>
+                  <span class="badge">라이프스타일</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">340K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">5.1%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>적합도 <strong>87</strong> · 예산 합치</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">560만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle">
+                  <i data-lucide="plus" width="13" height="13" stroke-width="2.6"></i>
+                  후보에 추가
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 6 — tao_hk -->
+            <article class="inf-card is-within">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1496440737103-cd596325d314?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●● ●●</div>
+                  <div class="inf-card-handle is-masked">@●●●_hk</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">Douyin</span>
+                  <span class="badge">HK</span>
+                  <span class="badge">식품</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">180K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">6.9%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>적합도 <strong>83</strong> · 예산 합치</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">380만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle">
+                  <i data-lucide="plus" width="13" height="13" stroke-width="2.6"></i>
+                  후보에 추가
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 7 — aki_taipei (selected) -->
+            <article class="inf-card is-within" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●● ●●●●●●</div>
+                  <div class="inf-card-handle is-masked">@●●●_taipei</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">Instagram</span>
+                  <span class="badge">TW</span>
+                  <span class="badge">여행</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">192K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">7.4%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>적합도 <strong>89</strong> · 예산 합치</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">390만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle is-on">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                  후보 추가됨
+                </button>
+              </div>
+            </article>
+
+            <!-- Card 8 — additional JP candidate (selected) -->
+            <article class="inf-card is-within" style="border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent);">
+              <div class="inf-card-cover">
+                <div class="inf-card-cover-blur" style="background-image: url('https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=520&h=520&q=80');"></div>
+                <span class="lock-pill is-grad"><i data-lucide="lock" width="11" height="11"></i>매칭 후 공개</span>
+                <a class="inf-card-save" href="#" aria-label="저장"><i data-lucide="bookmark" width="17" height="17"></i></a>
+              </div>
+              <div class="inf-card-body">
+                <div>
+                  <div class="inf-card-name is-masked">●●●● ●●●</div>
+                  <div class="inf-card-handle is-masked">@●●●●●_kobe</div>
+                </div>
+                <div class="inf-card-meta">
+                  <span class="badge">Instagram</span>
+                  <span class="badge">JP</span>
+                  <span class="badge">뷰티</span>
+                </div>
+                <div class="inf-card-stats">
+                  <span><strong class="inf-stat-strong">128K</strong> 팔로워</span>
+                  <span><strong class="inf-stat-strong">7.2%</strong> 참여율</span>
+                </div>
+                <div class="inf-card-trust"><i data-lucide="check" class="inf-card-trust-icon" width="13" height="13" stroke-width="2.6"></i><span>적합도 <strong>86</strong> · 예산 합치</span></div>
+                <div class="inf-card-foot">
+                  <span class="inf-card-price">280만<span class="inf-card-price-unit">원</span></span>
+                </div>
+                <button class="inf-card-toggle is-on">
+                  <i data-lucide="check" width="13" height="13" stroke-width="3"></i>
+                  후보 추가됨
+                </button>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Sticky bottom action bar -->
+          <div class="new-stickybar">
+            <div class="stickybar-info">
+              <span class="stickybar-label">선택 6 / 추천 8</span>
+              <span class="stickybar-val">2,530만<em>원 · 평균 422만원</em></span>
+            </div>
+            <div class="stickybar-actions">
+              <button class="btn btn-secondary">
+                <i data-lucide="arrow-left" width="14" height="14"></i>
+                이전
+              </button>
+              <button class="btn btn-primary btn-lg">
+                확정 (6명 매칭 · 매칭 6회 차감)
+                <i data-lucide="arrow-right" width="15" height="15"></i>
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

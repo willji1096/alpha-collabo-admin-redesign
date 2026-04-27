@@ -8,7 +8,7 @@
 |---|---|---|
 | 톤 | 도구적 · Linear-tone | **Instagram 라이트** |
 | 폰트 | Sans 단일 | **Sans 단일** (명조·세리프 금지) |
-| 액센트 | 빨강 #EE2128 | **IG 블루 #0095F6** + **브랜드 그라디언트** |
+| 액센트 | 빨강 #EE2128 (V1) | **V1 브랜드 레드 #EE2128 (sparingly)** — CTA·매칭 결정·강조에만 |
 | 보더 | 강조 (1px 회색) | IG 페이드 1px (#DBDBDB) — 카드/섹션/입력 모두 |
 | 배경 | 따뜻한 오프화이트 | **순백 #FFFFFF** + 페이드 #FAFAFA |
 | 데이터 밀도 | 높음 | 보통 (탐색 톤) |
@@ -33,7 +33,8 @@ V2는 V1의 어떤 자산도 참조하지 않는다 (`../css/`, `../components/`
 ### Color
 - `--bg-page` (#FFFFFF), `--bg-surface` (#FFFFFF), `--bg-elevated` (#FAFAFA), `--bg-hover` (#F5F5F5)
 - `--text-primary` (#262626 · IG 텍스트), `--text-secondary` (#8E8E8E · IG 보조), `--text-tertiary` (#A8A8A8)
-- `--accent` (#0095F6 · IG 블루 CTA), `--accent-hover` (#1877F2), `--accent-light` (#E7F3FF)
+- `--accent` (#EE2128 · V1 브랜드 레드, **sparingly** — CTA/매칭/강조), `--accent-hover` (#C81C22), `--accent-light` (#FDEDEE)
+- 정보·보조: `--blue-500` (#0095F6) — info 상태, 포커스 외 보조 액센트로만
 - `--like` (#ED4956 · IG 하트 빨강)
 - `--grad-stories` — IG 브랜드 그라디언트 (FFC371 → F58529 → DD2A7B → 8134AF → 515BD4)
 - `--border-default` (#DBDBDB · IG 기본 보더)
@@ -108,14 +109,21 @@ IG 스타일 라인 아이콘:
 
 | 번호 | 파일 | 상태 | 역할 |
 |---|---|---|---|
-| 01 | `login.html` | ✅ Ready | 로그인 (data: contact@glowlab.kr / alpha2025) — IG 그라디언트 비주얼 사이드 |
+| 01 | `login.html` | ✅ Ready | 로그인 (data: contact@glowlab.kr / alpha2025) |
 | 02 | `dashboard.html` | ✅ Ready | KPI · 진행 캠페인 · 활동 타임라인 · 매칭 미터 |
-| 03 | `explore.html` | ⭐ Headline | 인플루언서 IG 포토 카드 그리드 + 예산 슬라이더 + 필터 |
-| 04 | `campaign-new.html` | Drafting | 예산 → 매칭 후보 자동 큐레이션 |
-| 05 | `match-detail.html` | Drafting | 매칭 시점 정보 풀림 + 메시지 시작 |
-| 06 | `messages.html` | Drafting | 자동 번역 채팅 |
-| 07 | `billing.html` | Drafting | 플랜 변경 · 매칭 충전 · 캠페인 비용 |
-| DS | `design-system.html` | ✅ Ready | 컴포넌트 라이브러리 |
+| 03 | `explore.html` | ⭐ Headline | 인플루언서 마스킹 그리드 + 예산 슬라이더 + 필터 패널 |
+| 04 | `campaign-list.html` | ✅ Ready | 캠페인 전체 목록 (진행/검수/완료/초안) + 탭 + 필터 |
+| 05 | `campaign-new.html` | ⭐ Magic | 예산 → 매칭 후보 자동 큐레이션 (5단계 wizard) |
+| 06 | `campaign-detail.html` | ✅ Ready | 캠페인 1건 깊이 — KPI + 진행 타임라인 + 매칭 인플루언서 |
+| 07 | `match-detail.html` | ⭐ Trust | 매칭 직후 정보 풀림 + 신뢰 시그널 분해 |
+| 08 | `messages.html` | ✅ Ready | 자동번역 채팅 + 진행 단계 트래킹 |
+| 09 | `saved.html` | ✅ Ready | 저장한 인플루언서 컬렉션 — 모아 캠페인 만들기 |
+| 10 | `inspect.html` | ✅ Ready | 콘텐츠 검수 — 가이드라인 체크리스트 |
+| 11 | `report.html` | ✅ Ready | 종료 캠페인 리포트 — KPI + 인플루언서별 성과 |
+| 12 | `billing.html` | ✅ Ready | 플랜 · 매칭 사용 · 캠페인 잔액 · 영수증 · 플랜 비교 |
+| 13 | `settings.html` | ✅ Ready | 회사 정보 · 멤버 · 알림 · 보안 · API 5탭 |
+| DS | `design-system.html` | ✅ Ready | 컴포넌트 라이브러리 쇼케이스 |
+| 게이트 | `index.html` | ✅ Ready | V2 narrative + 14개 화면 인덱스 |
 
 ## 6. 작업 규율
 

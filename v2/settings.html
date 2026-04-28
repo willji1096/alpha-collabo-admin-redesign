@@ -442,7 +442,7 @@
         <div>
           <div class="page-eyebrow">Account</div>
           <h1 class="page-title">설정</h1>
-          <p class="page-sub">회사 정보, 멤버, 알림, 보안을 관리하세요.</p>
+          <p class="page-sub">회사·멤버·알림·보안.</p>
         </div>
       </div>
 
@@ -480,14 +480,14 @@
           <section class="settings-panel" id="panel-company" role="tabpanel">
             <div class="settings-panel-head">
               <h2 class="settings-panel-title">회사 정보</h2>
-              <p class="settings-panel-sub">청구·계약·캠페인 발주 시 사용되는 회사 기본 정보</p>
+              <p class="settings-panel-sub">청구·계약·발주 시 사용</p>
             </div>
 
             <!-- 로고 -->
             <div class="form-section">
               <div class="form-section-head">
                 <div class="form-section-title">로고</div>
-                <div class="form-section-sub">정사각형 PNG · 최소 256×256 · 5MB 이하</div>
+                <div class="form-section-sub">PNG · 256×256↑ · 5MB↓</div>
               </div>
               <div class="logo-upload">
                 <div class="logo-current">G</div>
@@ -543,7 +543,7 @@
             <div class="form-section">
               <div class="form-section-head">
                 <div class="form-section-title">담당자 정보</div>
-                <div class="form-section-sub">캠페인 진행 · 매칭 알림이 전달되는 기본 연락처</div>
+                <div class="form-section-sub">캠페인·매칭 알림 수신 연락처</div>
               </div>
               <div class="form-grid">
                 <div class="field">
@@ -569,13 +569,13 @@
             <div class="form-section">
               <div class="form-section-head">
                 <div class="form-section-title">청구 이메일</div>
-                <div class="form-section-sub">영수증 · 세금계산서 발송 주소 (담당자와 다를 경우)</div>
+                <div class="form-section-sub">영수증·세금계산서 발송 주소</div>
               </div>
               <div class="form-grid">
                 <div class="field field-full">
                   <label class="field-label">청구 이메일</label>
                   <input class="input" type="email" value="billing@glowlab.kr">
-                  <span class="field-hint">담당자 이메일과 다른 주소를 사용할 수 있습니다.</span>
+                  <span class="field-hint">담당자와 다른 주소 사용 가능.</span>
                 </div>
               </div>
             </div>
@@ -592,7 +592,7 @@
           <section class="settings-panel" id="panel-members" role="tabpanel" hidden>
             <div class="settings-panel-head">
               <h2 class="settings-panel-title">멤버</h2>
-              <p class="settings-panel-sub">워크스페이스에 접근하는 동료를 관리합니다 · 4명</p>
+              <p class="settings-panel-sub">접근 권한 4명.</p>
             </div>
 
             <div class="members-bar">
@@ -685,13 +685,13 @@
           <section class="settings-panel" id="panel-notify" role="tabpanel" hidden>
             <div class="settings-panel-head">
               <h2 class="settings-panel-title">알림</h2>
-              <p class="settings-panel-sub">매칭, 캠페인 진행, 결제 이벤트 알림 채널을 설정하세요.</p>
+              <p class="settings-panel-sub">매칭·캠페인·결제 알림 채널.</p>
             </div>
 
             <div class="form-section">
               <div class="form-section-head">
                 <div class="form-section-title">알림 항목별 채널</div>
-                <div class="form-section-sub">이벤트별로 이메일 / Slack / 웹훅 ON·OFF</div>
+                <div class="form-section-sub">이메일 · Slack · 웹훅</div>
               </div>
 
               <div class="notify-channel-head">
@@ -704,7 +704,7 @@
               <div class="notify-row">
                 <div>
                   <div class="notify-title">새로운 매칭 완료</div>
-                  <div class="notify-sub">인플루언서 매칭이 확정되면 알림</div>
+                  <div class="notify-sub">매칭 확정 시</div>
                 </div>
                 <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
                 <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
@@ -714,7 +714,7 @@
               <div class="notify-row">
                 <div>
                   <div class="notify-title">캠페인 검수 제출</div>
-                  <div class="notify-sub">인플루언서가 콘텐츠를 제출했을 때</div>
+                  <div class="notify-sub">콘텐츠 제출 시</div>
                 </div>
                 <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
                 <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
@@ -744,7 +744,7 @@
               <div class="notify-row">
                 <div>
                   <div class="notify-title">캠페인 잔액 자동충전</div>
-                  <div class="notify-sub">잔액 충전이 발생했을 때</div>
+                  <div class="notify-sub">자동충전 발생 시</div>
                 </div>
                 <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
                 <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
@@ -764,7 +764,7 @@
               <div class="notify-row">
                 <div>
                   <div class="notify-title">신규 인플루언서 추천</div>
-                  <div class="notify-sub">캠페인 카테고리 기반 주간 추천</div>
+                  <div class="notify-sub">카테고리 기반 주간 추천</div>
                 </div>
                 <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
                 <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
@@ -774,7 +774,7 @@
               <div class="notify-row">
                 <div>
                   <div class="notify-title">제품 업데이트 · 공지</div>
-                  <div class="notify-sub">Alphacollabo 신기능 및 정책 변경</div>
+                  <div class="notify-sub">신기능 및 정책 변경</div>
                 </div>
                 <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
                 <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
@@ -793,7 +793,7 @@
           <section class="settings-panel" id="panel-security" role="tabpanel" hidden>
             <div class="settings-panel-head">
               <h2 class="settings-panel-title">보안</h2>
-              <p class="settings-panel-sub">2단계 인증, 활성 세션, 활동 로그를 확인하세요.</p>
+              <p class="settings-panel-sub">2단계 인증·활성 세션·활동 로그.</p>
             </div>
 
             <div class="form-section">
@@ -804,7 +804,7 @@
               <div class="security-row">
                 <div>
                   <div class="security-row-title">인증 앱 (TOTP)</div>
-                  <div class="security-row-sub">Google Authenticator, 1Password 등 OTP 앱으로 6자리 코드 생성</div>
+                  <div class="security-row-sub">Google Authenticator·1Password OTP</div>
                 </div>
                 <span class="badge badge-success" style="margin-right: var(--space-3);"><span class="badge-dot"></span>활성화</span>
                 <button class="btn btn-secondary btn-sm">재설정</button>
@@ -813,7 +813,7 @@
               <div class="security-row">
                 <div>
                   <div class="security-row-title">SMS 백업</div>
-                  <div class="security-row-sub">+82 010-●●●●-4827 · 인증앱 사용 불가 시 백업 코드 발송</div>
+                  <div class="security-row-sub">+82 010-●●●●-4827 · 백업 코드</div>
                 </div>
                 <span class="badge badge-success" style="margin-right: var(--space-3);"><span class="badge-dot"></span>활성화</span>
                 <button class="btn btn-ghost btn-sm">변경</button>
@@ -823,7 +823,7 @@
             <div class="form-section">
               <div class="form-section-head">
                 <div class="form-section-title">활성 세션</div>
-                <div class="form-section-sub">현재 로그인된 디바이스 — 의심스러운 세션은 즉시 종료하세요</div>
+                <div class="form-section-sub">의심 세션은 즉시 종료</div>
               </div>
 
               <div class="security-row">
@@ -883,15 +883,15 @@
           <section class="settings-panel" id="panel-api" role="tabpanel" hidden>
             <div class="settings-panel-head">
               <h2 class="settings-panel-title">API & 웹훅</h2>
-              <p class="settings-panel-sub">외부 시스템 연동 — Business 플랜에서 제공됩니다.</p>
+              <p class="settings-panel-sub">외부 시스템 연동 (Business 플랜).</p>
             </div>
 
             <div style="text-align: center; padding: var(--space-9) var(--space-5);">
               <div style="width: 64px; height: 64px; margin: 0 auto var(--space-4); border-radius: 50%; background: var(--bg-elevated); display: inline-flex; align-items: center; justify-content: center;">
                 <i data-lucide="webhook" width="28" height="28" style="color: var(--text-tertiary);"></i>
               </div>
-              <div style="font-size: var(--fs-md); font-weight: var(--fw-bold); color: var(--text-primary); margin-bottom: var(--space-2);">현재 플랜에서는 사용 불가</div>
-              <div style="font-size: var(--fs-sm); color: var(--text-secondary); max-width: 42ch; margin: 0 auto var(--space-5);">API 키 발급과 웹훅 엔드포인트 등록은 Business 플랜에서만 제공됩니다.</div>
+              <div style="font-size: var(--fs-md); font-weight: var(--fw-bold); color: var(--text-primary); margin-bottom: var(--space-2);">현재 플랜에서 사용 불가</div>
+              <div style="font-size: var(--fs-sm); color: var(--text-secondary); max-width: 42ch; margin: 0 auto var(--space-5);">API 키·웹훅은 Business 플랜에서 제공.</div>
               <button class="btn btn-primary">
                 <i data-lucide="arrow-up-right" width="16" height="16"></i>
                 Business로 업그레이드

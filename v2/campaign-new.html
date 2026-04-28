@@ -485,7 +485,7 @@
         <div>
           <div class="page-eyebrow">New Campaign</div>
           <h1 class="page-title">새 캠페인</h1>
-          <p class="page-sub">예산을 알려주시면 그 안에 들어오는 인플루언서를 자동으로 큐레이션합니다.</p>
+          <p class="page-sub">예산 영역 안 인플루언서를 자동 큐레이션합니다.</p>
         </div>
         <div class="page-head-actions">
           <a class="btn btn-ghost" href="campaign-list.html">취소</a>
@@ -525,13 +525,13 @@
       <div class="step-panel is-open" data-step="1">
         <div class="step-form-card">
           <h2 class="step-form-title">캠페인 기본정보</h2>
-          <p class="step-form-sub">캠페인 이름과 운영 조건부터 정해주세요. 다음 단계에서 예산과 콘텐츠 가이드를 추가합니다.</p>
+          <p class="step-form-sub">이름과 조건을 먼저 정합니다.</p>
 
           <div class="step-form-grid">
             <div class="field" style="grid-column: 1 / -1;">
               <label class="field-label" for="camp-name">캠페인명</label>
               <input class="input" id="camp-name" type="text" value="5월 봄 미스트 신상 리뷰" placeholder="예) 5월 봄 미스트 신상 리뷰">
-              <span class="field-hint">캠페인 코드는 확정 시 자동 부여됩니다.</span>
+              <span class="field-hint">코드는 확정 시 자동 부여.</span>
             </div>
 
             <div class="field">
@@ -572,7 +572,7 @@
             <div class="field">
               <label class="field-label" for="camp-deadline">마감일</label>
               <input class="input" id="camp-deadline" type="date" value="2026-05-25">
-              <span class="field-hint">콘텐츠 게시까지의 최종 마감일.</span>
+              <span class="field-hint">게시 최종 마감일.</span>
             </div>
           </div>
         </div>
@@ -590,7 +590,7 @@
       <div class="step-panel" data-step="2" hidden>
         <div class="step-form-card">
           <h2 class="step-form-title">캠페인 예산</h2>
-          <p class="step-form-sub">설정한 예산 영역에 들어오는 인플루언서가 자동 큐레이션됩니다.</p>
+          <p class="step-form-sub">예산 영역 안 인플루언서가 자동 큐레이션됩니다.</p>
 
           <div class="budget-bar" style="margin: var(--space-5) 0;">
             <div class="budget-top">
@@ -618,14 +618,14 @@
                 <option>인당 고정 단가</option>
                 <option>매칭 1회당 협의</option>
               </select>
-              <span class="field-hint">8명 매칭 시 인당 약 <strong>100만원</strong> 평균 분배됩니다.</span>
+              <span class="field-hint">8명 매칭 시 인당 약 <strong>100만원</strong>.</span>
             </div>
             <div class="field">
               <label class="field-label">캠페인 잔액</label>
               <span style="font-size: var(--fs-lg); font-weight: var(--fw-bold); padding: 12px 0;">
                 2,847,320<span style="color: var(--text-secondary); font-weight: var(--fw-medium); font-size: var(--fs-sm); margin-left: 4px;">원 잔여 · 한국</span>
               </span>
-              <span class="field-hint" style="color: var(--accent);">충전이 필요할 수 있습니다 → 결제 페이지로 이동</span>
+              <span class="field-hint" style="color: var(--accent);">충전 필요 시 → 결제 페이지</span>
             </div>
           </div>
         </div>
@@ -643,7 +643,7 @@
       <div class="step-panel" data-step="3" hidden>
         <div class="step-form-card">
           <h2 class="step-form-title">콘텐츠 가이드</h2>
-          <p class="step-form-sub">인플루언서에게 전달할 톤, 키 메시지, 필수 표기를 정리하세요. 이 내용은 매칭 후 자동으로 공유됩니다.</p>
+          <p class="step-form-sub">전달할 톤·키 메시지·필수 표기. 매칭 후 자동 공유됩니다.</p>
 
           <div class="step-form-grid">
             <div class="field" style="grid-column: 1 / -1;">
@@ -741,7 +741,7 @@
           </div>
 
           <div class="summary-match-note">
-            <strong>매칭 횟수 안내</strong> — 잔여 12회 중 이번 캠페인에 <strong>8회</strong> 사용 예정. 확정 후 즉시 차감되며, 미응답 인플루언서는 14일 내 자동 환불됩니다.
+            <strong>매칭 차감</strong> — 잔여 12회 중 <strong>8회</strong> 사용. 확정 시 즉시 차감, 미응답은 14일 내 자동 환불.
           </div>
 
         </aside>
@@ -757,7 +757,7 @@
                 <span class="candidates-pill">예산 적합도 순</span>
               </div>
               <div class="candidates-head-sub">
-                추천 <strong>64명</strong> 중 예산 영역 안 적합도 상위 <strong>8명</strong>입니다. 모두 매칭하면 <strong>1매칭 = 1명</strong> 기준으로 매칭 횟수 <strong>8회</strong>가 차감됩니다.
+                추천 <strong>64명</strong> 중 예산 적합도 상위 <strong>8명</strong>. 전부 매칭 시 <strong>8회</strong> 차감.
               </div>
             </div>
             <button class="btn btn-secondary btn-sm">
@@ -1053,7 +1053,7 @@
       <div class="step-panel" data-step="5" hidden>
         <div class="step-form-card">
           <h2 class="step-form-title">캠페인 확정</h2>
-          <p class="step-form-sub">아래 내용으로 캠페인을 시작합니다. 확정 시 매칭 횟수 8회가 즉시 차감됩니다.</p>
+          <p class="step-form-sub">확정 시 매칭 8회가 즉시 차감됩니다.</p>
 
           <dl class="confirm-list">
             <div class="confirm-row"><dt>캠페인명</dt><dd>5월 봄 미스트 신상 리뷰</dd></div>

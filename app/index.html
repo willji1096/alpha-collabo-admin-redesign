@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Alphacollabo App — 디자인 미리보기</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="css/app-mobile.css">
+<style>
+  body { background: #E5E5E5; font-family: 'Pretendard Variable', system-ui, sans-serif; margin: 0; padding: 24px 24px 40px; }
+  .preview-head { max-width: 1700px; margin: 0 auto 16px; }
+  .preview-title { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; color: var(--text-primary); margin-bottom: 4px; }
+  .preview-sub { font-size: 13px; color: var(--text-secondary); }
+  .preview-cat-tabs { display: flex; gap: 6px; flex-wrap: wrap; max-width: 1700px; margin: 0 auto 12px; }
+  .preview-cat-tabs button {
+    border: 1px solid var(--border-default); background: var(--bg-surface); padding: 7px 14px;
+    font-size: 12.5px; font-weight: 500; color: var(--text-secondary);
+    border-radius: 999px; cursor: pointer;
+  }
+  .preview-cat-tabs button.is-active { background: var(--text-primary); color: var(--text-inverse); border-color: var(--text-primary); }
+  .preview-page-tabs { display: flex; gap: 4px; flex-wrap: wrap; max-width: 1700px; margin: 0 auto 24px; padding: 6px; background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-md); }
+  .preview-page-tabs button {
+    border: none; background: transparent; padding: 6px 11px; font-size: 12px; font-weight: 500;
+    color: var(--text-secondary); border-radius: 6px; cursor: pointer; white-space: nowrap;
+  }
+  .preview-page-tabs button.is-active { background: var(--text-primary); color: var(--text-inverse); }
+
+  .preview-wrap { max-width: 1700px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .preview-frame-label { font-size: 12.5px; color: var(--text-secondary); letter-spacing: 0.2px; font-weight: 500; }
+  .preview-frame-label b { color: var(--text-primary); font-weight: 600; }
+
+  .frame-phone {
+    width: 390px; height: 844px;
+    border-radius: 44px; border: 10px solid #1a1a1a;
+    background: var(--bg-page); overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+  }
+  .frame-phone iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  .preview-stats {
+    max-width: 1700px; margin: 32px auto 0;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .preview-stat {
+    background: var(--bg-surface); border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg); padding: 14px 16px;
+  }
+  .preview-stat-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600 }
+  .preview-stat-value { font-size: 22px; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; margin-top: 4px }
+</style>
+</head>
+<body>
+
+<div class="preview-head">
+  <div class="preview-title">알파콜라보 관리자 앱 — 디자인 시안</div>
+  <div class="preview-sub">기존 어드민(웹) 기반 모바일 앱 시안 · 폰 390 × 844 · 24개 화면</div>
+</div>
+
+<div class="preview-cat-tabs" id="cat-tabs">
+  <button class="is-active" data-cat="core">홈/기본 (2)</button>
+  <button data-cat="comm">소통·매니저 (3)</button>
+  <button data-cat="detail">상세 (3)</button>
+  <button data-cat="list">캠페인 리스트 (8)</button>
+  <button data-cat="campaign">캠페인 일정 (3)</button>
+  <button data-cat="influencer">인플루언서 (2)</button>
+  <button data-cat="basic">로그인/공지/잔액 (3)</button>
+  <button data-cat="pricing">요금 (6)</button>
+  <button data-cat="help">가이드 (1)</button>
+</div>
+
+<div class="preview-page-tabs" id="page-tabs"></div>
+
+<div class="preview-wrap">
+  <div class="preview-frame-label">Phone <b>390 × 844</b></div>
+  <div class="frame-phone"><iframe id="phone-frame" src="phone/dashboard.html?v=2"></iframe></div>
+</div>
+
+<div class="preview-stats">
+  <div class="preview-stat"><div class="preview-stat-label">총 화면</div><div class="preview-stat-value">31</div></div>
+  <div class="preview-stat"><div class="preview-stat-label">신규 추가</div><div class="preview-stat-value">7</div></div>
+  <div class="preview-stat"><div class="preview-stat-label">새 컴포넌트</div><div class="preview-stat-value">18</div></div>
+  <div class="preview-stat"><div class="preview-stat-label">디자인 토큰</div><div class="preview-stat-value">100%</div></div>
+</div>
+
+<script>
+  const CATS = {
+    core: [
+      ['dashboard', '대시보드'],
+      ['more', '더보기'],
+    ],
+    comm: [
+      ['notification-center', '알림 센터'],
+      ['manager-chat', '매니저 채팅'],
+      ['influencer-chat', '인플루언서 채팅 (자동번역)'],
+    ],
+    detail: [
+      ['campaign-detail', '캠페인 상세'],
+      ['influencer-detail', '인플루언서 상세'],
+      ['inspection-detail', '검수 상세'],
+    ],
+    help: [
+      ['guide', '사용 가이드 (백서)'],
+    ],
+    list: [
+      ['list', '신청목록'],
+      ['list-selection', '선정목록'],
+      ['list-inspection', '검수목록'],
+      ['list-revision', '수정요청'],
+      ['list-completed', '완료목록'],
+      ['list-unselected', '미선정'],
+      ['list-cancel-influencer', '취소(인플)'],
+      ['list-cancel-selected', '취소(선정 후)'],
+    ],
+    campaign: [
+      ['campaign-calendar', '캘린더'],
+      ['campaign-schedule-list', '일정 리스트'],
+      ['visit-planned', '방문 예정'],
+    ],
+    influencer: [
+      ['influencer-search', '검색'],
+      ['saved-influencer', '저장 목록'],
+    ],
+    basic: [
+      ['login', '로그인'],
+      ['notice', '공지사항'],
+      ['balance-history', '잔액 내역'],
+    ],
+    pricing: [
+      ['pricing', '제품/방문'],
+      ['pricing-korea', '한국방문'],
+      ['pricing-it', 'IT/식품'],
+      ['pricing-superpass', '슈퍼패스'],
+      ['pricing-translation', '통역'],
+      ['pricing-account', '계정/댓글'],
+    ],
+  };
+
+  const phone = document.getElementById('phone-frame');
+  const pageTabs = document.getElementById('page-tabs');
+  let currentCat = 'core';
+  let currentPage = 'dashboard';
+
+  function renderPageTabs(cat) {
+    pageTabs.innerHTML = '';
+    CATS[cat].forEach(([id, label]) => {
+      const btn = document.createElement('button');
+      btn.dataset.page = id;
+      btn.textContent = label;
+      if (id === currentPage) btn.classList.add('is-active');
+      btn.addEventListener('click', () => loadPage(id));
+      pageTabs.appendChild(btn);
+    });
+  }
+
+  function loadPage(id) {
+    currentPage = id;
+    phone.src = `phone/${id}.html?v=${Date.now()}`;
+    pageTabs.querySelectorAll('button').forEach(b => b.classList.toggle('is-active', b.dataset.page === id));
+  }
+
+  document.querySelectorAll('#cat-tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      document.querySelectorAll('#cat-tabs button').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      currentPage = CATS[currentCat][0][0];
+      renderPageTabs(currentCat);
+      loadPage(currentPage);
+    });
+  });
+
+  renderPageTabs('core');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Alphacollabo App — 시안 맵 & 가이드</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/common.css">
+<style>
+  body { background: var(--bg-page); font-family: 'Pretendard Variable', Pretendard, sans-serif; color: var(--text-primary); }
+  .gm-wrap { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; }
+  .gm-hero { margin-bottom: 32px; }
+  .gm-hero h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 6px; }
+  .gm-hero p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; max-width: 720px; }
+  .gm-toc { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .gm-toc a { font-size: 12.5px; padding: 6px 12px; background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: 999px; color: var(--text-secondary); text-decoration: none; }
+  .gm-toc a:hover { background: var(--bg-elevated); }
+
+  .gm-section { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: 14px; padding: 24px 28px 28px; margin-bottom: 24px; }
+  .gm-section-head { margin-bottom: 16px; }
+  .gm-section-head h2 { font-size: 18px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 4px; }
+  .gm-section-head p { font-size: 12.5px; color: var(--text-tertiary); }
+
+  /* ── 플로우 다이어그램 ── */
+  .gm-flow { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: start; }
+  .gm-flow-entry { background: var(--bg-elevated); border-radius: 10px; padding: 16px; text-align: center; }
+  .gm-flow-entry-label { font-size: 11px; color: var(--text-tertiary); font-weight: 500; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .gm-flow-entry-name { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .gm-flow-entry-desc { font-size: 11.5px; color: var(--text-secondary); line-height: 1.5; }
+  .gm-flow-arrow { display: flex; align-items: center; justify-content: center; color: var(--text-tertiary); font-size: 20px; padding: 0 4px; }
+  .gm-flow-tree { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .gm-flow-node { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: 10px; padding: 12px 14px; }
+  .gm-flow-node-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .gm-flow-node-num { width: 22px; height: 22px; border-radius: 50%; background: var(--text-primary); color: var(--text-inverse); font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .gm-flow-node-name { font-size: 13.5px; font-weight: 600; }
+  .gm-flow-node-children { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-light); }
+  .gm-flow-node-child { font-size: 11.5px; color: var(--text-secondary); line-height: 1.5; padding-left: 8px; position: relative; }
+  .gm-flow-node-child::before { content: ""; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; background: var(--text-tertiary); border-radius: 50%; opacity: 0.5; }
+
+  /* ── 카탈로그 ── */
+  .gm-cat-group { margin-bottom: 28px; }
+  .gm-cat-group:last-child { margin-bottom: 0; }
+  .gm-cat-group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-light); }
+  .gm-cat-group-name { font-size: 15px; font-weight: 700; letter-spacing: -0.1px; }
+  .gm-cat-group-count { font-size: 11.5px; color: var(--text-tertiary); }
+
+  .gm-cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+  .gm-cat-card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: inherit; transition: border-color 0.15s; }
+  .gm-cat-card:hover { border-color: var(--text-primary); }
+  .gm-cat-card-head { display: flex; align-items: center; gap: 8px; }
+  .gm-cat-card-name { font-size: 14px; font-weight: 600; flex: 1; min-width: 0; }
+  .gm-cat-card-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--bg-elevated); color: var(--text-tertiary); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .gm-cat-card-tag.is-core { background: #FEF3C7; color: #92400E; }
+  .gm-cat-card-tag.is-new { background: #DBEAFE; color: #1E40AF; }
+  .gm-cat-card-path { font-size: 10.5px; color: var(--text-tertiary); font-family: ui-monospace, monospace; word-break: break-all; }
+  .gm-cat-card-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+  .gm-cat-card-meta { display: flex; gap: 10px; font-size: 11px; color: var(--text-tertiary); margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--border-light); }
+  .gm-cat-card-meta b { font-weight: 600; color: var(--text-secondary); }
+
+  .gm-legend { display: flex; gap: 16px; font-size: 11.5px; color: var(--text-tertiary); margin-top: 8px; }
+  .gm-legend-item { display: inline-flex; align-items: center; gap: 4px; }
+  .gm-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="gm-wrap">
+
+  <div class="gm-hero">
+    <h1>알파콜라보 App — 시안 맵 & 가이드</h1>
+    <p>전체 화면 30개의 구조와 흐름. 페르소나 김민지(클라이언트 마케팅 매니저) 기준으로 각 화면의 역할·진입 경로·핵심 기능을 정리. 이 페이지를 기준으로 개발 핸드오프와 화면 누락 점검을 진행.</p>
+    <div class="gm-toc">
+      <a href="#flow">전체 플로우</a>
+      <a href="#home">홈</a>
+      <a href="#campaign">캠페인</a>
+      <a href="#influencer">인플루언서</a>
+      <a href="#schedule">일정</a>
+      <a href="#more">더보기</a>
+      <a href="#shared">공통/공유</a>
+    </div>
+  </div>
+
+  <!-- ───────── 전체 플로우 ───────── -->
+  <section id="flow" class="gm-section">
+    <div class="gm-section-head">
+      <h2>전체 플로우</h2>
+      <p>로그인 → 대시보드 → 5개 메인 탭으로 분기. 각 탭은 하위 화면을 갖는 트리 구조.</p>
+    </div>
+    <div class="gm-flow">
+      <div>
+        <div class="gm-flow-entry">
+          <div class="gm-flow-entry-label">Entry</div>
+          <div class="gm-flow-entry-name">로그인</div>
+          <div class="gm-flow-entry-desc">알파콜라보가 발급한 계정으로 진입. 회원가입 화면 없음.</div>
+        </div>
+        <div class="gm-flow-arrow">↓</div>
+        <div class="gm-flow-entry" style="border:1px solid var(--text-primary)">
+          <div class="gm-flow-entry-label">Hub</div>
+          <div class="gm-flow-entry-name">대시보드 (홈)</div>
+          <div class="gm-flow-entry-desc">KPI · 매니저 카드 · 오늘의 일정 · 최근 활동 · SNS 채널 — 한눈에 보는 진입점.</div>
+        </div>
+      </div>
+
+      <div class="gm-flow-tree">
+        <div class="gm-flow-node">
+          <div class="gm-flow-node-head"><span class="gm-flow-node-num">1</span><span class="gm-flow-node-name">홈</span></div>
+          <div class="gm-flow-node-children">
+            <span class="gm-flow-node-child">대시보드</span>
+          </div>
+        </div>
+        <div class="gm-flow-node">
+          <div class="gm-flow-node-head"><span class="gm-flow-node-num">2</span><span class="gm-flow-node-name">캠페인</span></div>
+          <div class="gm-flow-node-children">
+            <span class="gm-flow-node-child">신청/선정/검수/수정/완료 목록</span>
+            <span class="gm-flow-node-child">미선정·취소 목록</span>
+            <span class="gm-flow-node-child">캠페인 상세 · 검수 상세</span>
+          </div>
+        </div>
+        <div class="gm-flow-node">
+          <div class="gm-flow-node-head"><span class="gm-flow-node-num">3</span><span class="gm-flow-node-name">인플루언서</span></div>
+          <div class="gm-flow-node-children">
+            <span class="gm-flow-node-child">탐색 · 저장</span>
+            <span class="gm-flow-node-child">상세 프로필</span>
+            <span class="gm-flow-node-child">채택 후 1:1 채팅 (자동 번역)</span>
+          </div>
+        </div>
+        <div class="gm-flow-node">
+          <div class="gm-flow-node-head"><span class="gm-flow-node-num">4</span><span class="gm-flow-node-name">일정</span></div>
+          <div class="gm-flow-node-children">
+            <span class="gm-flow-node-child">캠페인 캘린더</span>
+            <span class="gm-flow-node-child">일정 리스트 · 방문 예정</span>
+          </div>
+        </div>
+        <div class="gm-flow-node">
+          <div class="gm-flow-node-head"><span class="gm-flow-node-num">5</span><span class="gm-flow-node-name">더보기</span></div>
+          <div class="gm-flow-node-children">
+            <span class="gm-flow-node-child">잔액 · 매니저 채팅 · 알림</span>
+            <span class="gm-flow-node-child">요금표 6종 · 공지 · 가이드</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="gm-legend">
+      <span class="gm-legend-item"><span class="gm-legend-dot" style="background:#FEF3C7"></span> 페르소나 핵심 화면</span>
+      <span class="gm-legend-item"><span class="gm-legend-dot" style="background:#DBEAFE"></span> 신규 추가</span>
+      <span class="gm-legend-item"><span class="gm-legend-dot" style="background:var(--bg-elevated)"></span> 일반</span>
+    </div>
+  </section>
+
+  <!-- ───────── 홈 ───────── -->
+  <section id="home" class="gm-section">
+    <div class="gm-section-head">
+      <h2>1. 홈</h2>
+      <p>전체 캠페인 상황을 한눈에 보는 진입 화면.</p>
+    </div>
+    <div class="gm-cat-grid">
+      <a class="gm-cat-card" href="phone/dashboard.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">대시보드</span><span class="gm-cat-card-tag is-core">핵심</span></div>
+        <div class="gm-cat-card-path">phone/dashboard.html</div>
+        <div class="gm-cat-card-desc">매니저 카드 · 빠른 액션 4개 · KPI 2x2 · 오늘의 일정 · 최근 활동 타임라인 · 활성 SNS 채널. 알림 진입점도 헤더.</div>
+        <div class="gm-cat-card-meta"><span><b>진입:</b> 로그인 직후</span><span><b>탭:</b> 1번</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ───────── 캠페인 ───────── -->
+  <section id="campaign" class="gm-section">
+    <div class="gm-section-head">
+      <h2>2. 캠페인 (상태별 진행 관리)</h2>
+      <p>신청 → 선정 → 검수 → 수정 → 완료의 라이프사이클을 상태 탭으로 분리. 페르소나가 매일 가장 많이 머무는 영역.</p>
+    </div>
+    <div class="gm-cat-group">
+      <div class="gm-cat-group-head"><div class="gm-cat-group-name">상태별 목록</div><div class="gm-cat-group-count">7개 화면 · 상단 pill 탭으로 전환</div></div>
+      <div class="gm-cat-grid">
+        <a class="gm-cat-card" href="phone/list.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">신청 목록</span><span class="gm-cat-card-tag">7</span></div>
+          <div class="gm-cat-card-path">phone/list.html</div>
+          <div class="gm-cat-card-desc">인플루언서가 캠페인에 지원한 명단. 썸네일 · 국가 · 핸들 · 채널 · 단가 · 신청 상태 칩.</div>
+          <div class="gm-cat-card-meta"><span><b>액션:</b> 선정/미선정 분류</span></div>
+        </a>
+        <a class="gm-cat-card" href="phone/list-selection.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">선정</span><span class="gm-cat-card-tag">5</span></div>
+          <div class="gm-cat-card-path">phone/list-selection.html</div>
+          <div class="gm-cat-card-desc">채택한 인플루언서 — 일정 잡기, 콘텐츠 가이드 전달 단계.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/list-inspection.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">검수 대기</span><span class="gm-cat-card-tag is-core">핵심</span></div>
+          <div class="gm-cat-card-path">phone/list-inspection.html</div>
+          <div class="gm-cat-card-desc">콘텐츠가 업로드되어 클라이언트 확인 대기 중. 페르소나가 매일 들어오는 화면.</div>
+          <div class="gm-cat-card-meta"><span><b>액션:</b> 합격/수정요청</span></div>
+        </a>
+        <a class="gm-cat-card" href="phone/list-revision.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">수정 요청</span><span class="gm-cat-card-tag">1</span></div>
+          <div class="gm-cat-card-path">phone/list-revision.html</div>
+          <div class="gm-cat-card-desc">검수 후 수정 요청한 콘텐츠 — 인플루언서 재업로드 대기.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/list-completed.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">완료</span><span class="gm-cat-card-tag">12</span></div>
+          <div class="gm-cat-card-path">phone/list-completed.html</div>
+          <div class="gm-cat-card-desc">합격 처리되어 정산 가능 단계.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/list-unselected.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">미선정</span></div>
+          <div class="gm-cat-card-path">phone/list-unselected.html</div>
+          <div class="gm-cat-card-desc">탈락 처리한 신청자. 통계용으로만 유지.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/list-cancel-influencer.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">인플루언서 취소</span></div>
+          <div class="gm-cat-card-path">phone/list-cancel-influencer.html</div>
+          <div class="gm-cat-card-desc">인플루언서가 자발적으로 취소한 건.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/list-cancel-selected.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">선정 후 취소</span></div>
+          <div class="gm-cat-card-path">phone/list-cancel-selected.html</div>
+          <div class="gm-cat-card-desc">선정 이후 클라이언트가 취소한 건.</div>
+        </a>
+      </div>
+    </div>
+    <div class="gm-cat-group">
+      <div class="gm-cat-group-head"><div class="gm-cat-group-name">상세 화면</div><div class="gm-cat-group-count">2개</div></div>
+      <div class="gm-cat-grid">
+        <a class="gm-cat-card" href="phone/campaign-detail.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">캠페인 상세</span></div>
+          <div class="gm-cat-card-path">phone/campaign-detail.html</div>
+          <div class="gm-cat-card-desc">제품 정보 · 모집 조건 · 진행 통계 · 콘텐츠 가이드. 캠페인 등록 후 진입.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/inspection-detail.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">콘텐츠 검수 상세</span><span class="gm-cat-card-tag is-core">핵심</span></div>
+          <div class="gm-cat-card-path">phone/inspection-detail.html</div>
+          <div class="gm-cat-card-desc">Instagram 포스트 미리보기 · 해시태그 색분 (정상=파랑, 누락=빨강 취소선) · 5-point 체크리스트 · 합격/수정요청 버튼.</div>
+          <div class="gm-cat-card-meta"><span><b>진입:</b> 검수 목록 → 카드 클릭</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 인플루언서 ───────── -->
+  <section id="influencer" class="gm-section">
+    <div class="gm-section-head">
+      <h2>3. 인플루언서</h2>
+      <p>탐색 → 저장 → 채택 → 실시간 1:1 채팅. 외국인 인플루언서가 다수이므로 채팅은 자동 번역 필수.</p>
+    </div>
+    <div class="gm-cat-grid">
+      <a class="gm-cat-card" href="phone/influencer-search.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">인플루언서 탐색</span></div>
+        <div class="gm-cat-card-path">phone/influencer-search.html</div>
+        <div class="gm-cat-card-desc">국가 · 채널 · 팔로워 범위 · 카테고리 필터로 검색. 카드 = 프로필 사진 + 핸들 + 평점 + 단가.</div>
+        <div class="gm-cat-card-meta"><span><b>탭:</b> 3번</span></div>
+      </a>
+      <a class="gm-cat-card" href="phone/saved-influencer.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">저장한 인플루언서</span></div>
+        <div class="gm-cat-card-path">phone/saved-influencer.html</div>
+        <div class="gm-cat-card-desc">찜한 명단. 다음 캠페인 대상 후보로 재활용.</div>
+      </a>
+      <a class="gm-cat-card" href="phone/influencer-detail.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">인플루언서 상세</span></div>
+        <div class="gm-cat-card-path">phone/influencer-detail.html</div>
+        <div class="gm-cat-card-desc">프로필 + 최근 콘텐츠 + 과거 캠페인 이력 + 평점. 채택 / 채팅 진입 버튼.</div>
+      </a>
+      <a class="gm-cat-card" href="phone/influencer-chat.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">인플루언서 채팅</span><span class="gm-cat-card-tag is-new">NEW</span></div>
+        <div class="gm-cat-card-path">phone/influencer-chat.html</div>
+        <div class="gm-cat-card-desc">채택 후 1:1 자동 번역 채팅. 한국어로 입력 → 일본어/중국어/러시아어로 자동 전송 + 응답도 양방향 번역.</div>
+        <div class="gm-cat-card-meta"><span><b>패턴:</b> 본문 = 번역, 작은 글 = 원문</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ───────── 일정 ───────── -->
+  <section id="schedule" class="gm-section">
+    <div class="gm-section-head">
+      <h2>4. 일정</h2>
+      <p>캠페인 마감·방문 일정을 캘린더와 리스트 두 방식으로 확인.</p>
+    </div>
+    <div class="gm-cat-grid">
+      <a class="gm-cat-card" href="phone/campaign-calendar.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">캠페인 캘린더</span></div>
+        <div class="gm-cat-card-path">phone/campaign-calendar.html</div>
+        <div class="gm-cat-card-desc">월/주 단위 캘린더 뷰. 신청 마감/방문/리뷰 마감을 점으로 표시.</div>
+        <div class="gm-cat-card-meta"><span><b>탭:</b> 4번</span></div>
+      </a>
+      <a class="gm-cat-card" href="phone/campaign-schedule-list.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">일정 리스트</span></div>
+        <div class="gm-cat-card-path">phone/campaign-schedule-list.html</div>
+        <div class="gm-cat-card-desc">D-1, D-7 등 임박한 일정을 시간순 리스트로.</div>
+      </a>
+      <a class="gm-cat-card" href="phone/visit-planned.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">방문 예정</span></div>
+        <div class="gm-cat-card-path">phone/visit-planned.html</div>
+        <div class="gm-cat-card-desc">방문형 캠페인에서 인플루언서가 매장 방문하기로 한 일정.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ───────── 더보기 ───────── -->
+  <section id="more" class="gm-section">
+    <div class="gm-section-head">
+      <h2>5. 더보기</h2>
+      <p>매니저 채팅·잔액·요금표·공지·가이드 등 운영성 메뉴.</p>
+    </div>
+    <div class="gm-cat-group">
+      <div class="gm-cat-group-head"><div class="gm-cat-group-name">메뉴 허브 · 운영</div><div class="gm-cat-group-count">4개</div></div>
+      <div class="gm-cat-grid">
+        <a class="gm-cat-card" href="phone/more.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">더보기 홈</span><span class="gm-cat-card-tag is-new">잔잔톤</span></div>
+          <div class="gm-cat-card-path">phone/more.html</div>
+          <div class="gm-cat-card-desc">잔액 카드 + 메뉴 그룹별 카드 통합 (요금/계정/지원/가이드). C안 잔잔한 톤 적용.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/manager-chat.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">매니저 채팅</span><span class="gm-cat-card-tag is-new">NEW</span></div>
+          <div class="gm-cat-card-path">phone/manager-chat.html</div>
+          <div class="gm-cat-card-desc">알파콜라보 전담 매니저 박지수와 1:1 채팅. 충전 권장·검수 임박 액션 카드 인라인 표시.</div>
+          <div class="gm-cat-card-meta"><span><b>액션:</b> 카드 안 CTA로 즉시 전환</span></div>
+        </a>
+        <a class="gm-cat-card" href="phone/balance-history.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">잔액 내역</span></div>
+          <div class="gm-cat-card-path">phone/balance-history.html</div>
+          <div class="gm-cat-card-desc">충전·정산 거래 내역. 매니저 채팅의 "충전하기" 버튼이 진입.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/notice.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">공지사항</span></div>
+          <div class="gm-cat-card-path">phone/notice.html</div>
+          <div class="gm-cat-card-desc">정책 변경·점검·이벤트 공지.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/guide.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">사용 가이드</span><span class="gm-cat-card-tag is-new">백서</span></div>
+          <div class="gm-cat-card-path">phone/guide.html</div>
+          <div class="gm-cat-card-desc">5섹션 (시작/선정/검수/정산/FAQ) 백서 형식. 신규 매니저 온보딩용.</div>
+        </a>
+      </div>
+    </div>
+    <div class="gm-cat-group">
+      <div class="gm-cat-group-head"><div class="gm-cat-group-name">요금표</div><div class="gm-cat-group-count">6개 · 상단 pill 탭으로 전환</div></div>
+      <div class="gm-cat-grid">
+        <a class="gm-cat-card" href="phone/pricing.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">제품/방문형</span></div>
+          <div class="gm-cat-card-path">phone/pricing.html</div>
+          <div class="gm-cat-card-desc">국가별 SNS 채널 단가표 (JP/CN/RU/TW/HK).</div>
+        </a>
+        <a class="gm-cat-card" href="phone/pricing-korea.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">한국 방문형</span></div>
+          <div class="gm-cat-card-path">phone/pricing-korea.html</div>
+          <div class="gm-cat-card-desc">외국인 인플루언서가 한국 방문 시 단가. 지방/숙박/인기게시물 옵션 추가.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/pricing-it.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">IT/식품</span></div>
+          <div class="gm-cat-card-path">phone/pricing-it.html</div>
+          <div class="gm-cat-card-desc">카테고리 특별 단가 (전자기기/앱/가공식품/신선식품).</div>
+        </a>
+        <a class="gm-cat-card" href="phone/pricing-superpass.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">슈퍼패스</span></div>
+          <div class="gm-cat-card-path">phone/pricing-superpass.html</div>
+          <div class="gm-cat-card-desc">우수 인플루언서 우선 매칭 + 인기게시물 보장 패키지.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/pricing-translation.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">통역/번역</span></div>
+          <div class="gm-cat-card-path">phone/pricing-translation.html</div>
+          <div class="gm-cat-card-desc">현장 통역 · 서면 번역 시간/매수 단가.</div>
+        </a>
+        <a class="gm-cat-card" href="phone/pricing-account.html">
+          <div class="gm-cat-card-head"><span class="gm-cat-card-name">계정/댓글</span></div>
+          <div class="gm-cat-card-path">phone/pricing-account.html</div>
+          <div class="gm-cat-card-desc">계정 관리·댓글 마케팅 부가 서비스.</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 공통/공유 ───────── -->
+  <section id="shared" class="gm-section">
+    <div class="gm-section-head">
+      <h2>공통 / 공유 화면</h2>
+      <p>탭에 종속되지 않고 어디서든 진입 가능한 화면.</p>
+    </div>
+    <div class="gm-cat-grid">
+      <a class="gm-cat-card" href="phone/login.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">로그인</span></div>
+        <div class="gm-cat-card-path">phone/login.html</div>
+        <div class="gm-cat-card-desc">알파콜라보가 발급한 계정으로 진입. 회원가입 화면 의도적으로 없음.</div>
+      </a>
+      <a class="gm-cat-card" href="phone/notification-center.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">알림 센터</span><span class="gm-cat-card-tag is-new">NEW</span></div>
+        <div class="gm-cat-card-path">phone/notification-center.html</div>
+        <div class="gm-cat-card-desc">3 카테고리 (매니저/시스템/인플루언서). 매니저 알림은 아바타+개인 톤+인라인 액션 버튼 강조. 헤더 종 아이콘에서 진입.</div>
+      </a>
+      <a class="gm-cat-card" href="flow.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">페르소나 플로우</span></div>
+        <div class="gm-cat-card-path">flow.html</div>
+        <div class="gm-cat-card-desc">김민지 페르소나의 5가지 시나리오 — 페인포인트/해결 다이어그램.</div>
+      </a>
+      <a class="gm-cat-card" href="index.html">
+        <div class="gm-cat-card-head"><span class="gm-cat-card-name">시안 인덱스</span></div>
+        <div class="gm-cat-card-path">index.html</div>
+        <div class="gm-cat-card-desc">폰 프레임 한 칸으로 화면 전환하며 클릭 가능한 데모.</div>
+      </a>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

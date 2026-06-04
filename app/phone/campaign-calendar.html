@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Alphacollabo App — 캠페인 캘린더 (Phone)</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/common.css">
+<link rel="stylesheet" href="../css/app-mobile.css">
+<style>
+  .cal-mini-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 12px }
+  .cal-mini-title { font-size:var(--fs-lg); font-weight: 600; letter-spacing: -0.2px }
+  .cal-mini-nav { display: flex; gap: 4px }
+  .cal-mini-nav button { width: 32px; height: 32px; border-radius: var(--radius-md); border: 1px solid var(--border-default); background: var(--bg-surface); color: var(--text-secondary); display: inline-flex; align-items: center; justify-content: center; cursor: pointer }
+  .cal-nav-today { width: auto !important; padding: 0 var(--space-3) !important; font-size: var(--fs-sm) !important; font-weight: var(--fw-medium) !important; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 16px }
+  .cal-dow { padding: 8px 0; text-align: center; font-size:var(--fs-sm); font-weight: 600; color: var(--text-tertiary); background: var(--bg-elevated); border-bottom: 1px solid var(--border-default); letter-spacing: 0.3px }
+  .cal-dow.sun { color: var(--status-error) }
+  .cal-dow.sat { color: var(--status-info) }
+  .cal-cell { aspect-ratio: 1; padding: 6px 4px; border-right: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.12s ease }
+  .cal-cell:active { background: var(--bg-elevated) }
+  .cal-cell:hover:not(.selected) { background: var(--bg-hover) }
+  .cal-cell:nth-child(7n) { border-right: none }
+  .cal-cell.other { color: var(--text-disabled) }
+  .cal-cell.today .day { background: var(--accent); color: var(--text-on-accent); border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center }
+  .cal-cell.selected { background: var(--accent-light); box-shadow: inset 0 0 0 1.5px var(--accent-subtle) }
+  .cal-cell .day { font-size:var(--fs-base); font-weight: 500; display: inline-block; min-width: 22px; text-align: center }
+  .cal-cell .dots { display: flex; gap: 2px; justify-content: center; margin-top: 6px }
+  .cal-cell .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent) }
+  .cal-cell .dot.info { background: var(--status-info) }
+  .cal-cell .dot.warn { background: var(--status-warning) }
+  .cal-cell .dot.succ { background: var(--status-success) }
+  .day-list-head { font-size:var(--fs-lg); font-weight: 600; padding: 8px 0 10px; display: flex; align-items: center; justify-content: space-between }
+  .day-list-head b { color: var(--accent) }
+  .day-event { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-md); margin-bottom: 8px; cursor: pointer }
+  .day-event .ev-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0 }
+  .day-event .ev-dot.info { background: var(--status-info) }
+  .day-event .ev-dot.warn { background: var(--status-warning) }
+  .day-event-body { flex: 1; min-width: 0 }
+  .day-event-title { font-size:var(--fs-base); font-weight: 500; margin-bottom: 2px }
+  .day-event-meta { font-size:var(--fs-sm); color: var(--text-tertiary) }
+  .day-event-time { font-size:var(--fs-sm); color: var(--text-secondary); font-variant-numeric: tabular-nums }
+</style>
+</head>
+<body class="app-body-phone">
+<div class="app-phone">
+  <header class="app-header">
+    <button class="app-header-icon" onclick="history.back()" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="app-header-title">캠페인 캘린더</div>
+    <div class="app-header-actions">
+      <button class="app-header-icon" aria-label="국가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></button>
+      <button class="app-header-icon" onclick="openSheet('sheet-filter')" aria-label="필터"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+    </div>
+  </header>
+  <main class="app-body">
+
+    <div class="app-pill-tabs">
+      <a class="app-pill-tab is-active" href="campaign-calendar.html">캘린더</a>
+      <a class="app-pill-tab" href="campaign-schedule-list.html">리스트</a>
+    </div>
+
+    <div class="cal-mini-head">
+      <div class="cal-mini-title">2026년 5월</div>
+      <div class="cal-mini-nav">
+        <button aria-label="이전 달"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button aria-label="오늘" class="cal-nav-today">오늘</button>
+        <button aria-label="다음 달"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+
+    <div class="cal-grid">
+      <div class="cal-dow sun">일</div><div class="cal-dow">월</div><div class="cal-dow">화</div><div class="cal-dow">수</div><div class="cal-dow">목</div><div class="cal-dow">금</div><div class="cal-dow sat">토</div>
+      <div class="cal-cell other"><span class="day">26</span></div>
+      <div class="cal-cell other"><span class="day">27</span></div>
+      <div class="cal-cell other"><span class="day">28</span></div>
+      <div class="cal-cell other"><span class="day">29</span></div>
+      <div class="cal-cell other"><span class="day">30</span></div>
+      <div class="cal-cell"><span class="day">1</span></div>
+      <div class="cal-cell"><span class="day">2</span><div class="dots"><span class="dot"></span></div></div>
+      <div class="cal-cell"><span class="day">3</span></div>
+      <div class="cal-cell"><span class="day">4</span><div class="dots"><span class="dot info"></span></div></div>
+      <div class="cal-cell"><span class="day">5</span></div>
+      <div class="cal-cell"><span class="day">6</span><div class="dots"><span class="dot"></span><span class="dot warn"></span></div></div>
+      <div class="cal-cell"><span class="day">7</span></div>
+      <div class="cal-cell"><span class="day">8</span><div class="dots"><span class="dot succ"></span></div></div>
+      <div class="cal-cell"><span class="day">9</span></div>
+      <div class="cal-cell"><span class="day">10</span><div class="dots"><span class="dot"></span></div></div>
+      <div class="cal-cell"><span class="day">11</span></div>
+      <div class="cal-cell"><span class="day">12</span></div>
+      <div class="cal-cell"><span class="day">13</span><div class="dots"><span class="dot info"></span></div></div>
+      <div class="cal-cell"><span class="day">14</span></div>
+      <div class="cal-cell"><span class="day">15</span><div class="dots"><span class="dot"></span></div></div>
+      <div class="cal-cell"><span class="day">16</span></div>
+      <div class="cal-cell"><span class="day">17</span></div>
+      <div class="cal-cell"><span class="day">18</span><div class="dots"><span class="dot warn"></span></div></div>
+      <div class="cal-cell"><span class="day">19</span></div>
+      <div class="cal-cell"><span class="day">20</span><div class="dots"><span class="dot succ"></span><span class="dot"></span></div></div>
+      <div class="cal-cell"><span class="day">21</span></div>
+      <div class="cal-cell selected"><span class="day">22</span><div class="dots"><span class="dot"></span><span class="dot info"></span><span class="dot warn"></span></div></div>
+      <div class="cal-cell today"><span class="day">23</span></div>
+      <div class="cal-cell"><span class="day">24</span><div class="dots"><span class="dot info"></span></div></div>
+      <div class="cal-cell"><span class="day">25</span></div>
+      <div class="cal-cell"><span class="day">26</span><div class="dots"><span class="dot"></span></div></div>
+      <div class="cal-cell"><span class="day">27</span></div>
+      <div class="cal-cell"><span class="day">28</span></div>
+      <div class="cal-cell"><span class="day">29</span><div class="dots"><span class="dot succ"></span></div></div>
+      <div class="cal-cell"><span class="day">30</span></div>
+      <div class="cal-cell"><span class="day">31</span><div class="dots"><span class="dot info"></span></div></div>
+    </div>
+
+    <div class="day-list-head">
+      <span>5월 22일 (금) — <b>3건</b></span>
+      <span class="app-card-id">신청 1 · 진행 1 · 마감 1</span>
+    </div>
+
+    <div class="day-event" data-camp="0">
+      <span class="ev-dot"></span>
+      <div class="day-event-body">
+        <div class="day-event-title">ロダムクリニック釜山 — 신청 마감</div>
+        <div class="day-event-meta">JP · 1739439117 · 7명 신청</div>
+      </div>
+      <span class="day-event-time">18:00</span>
+    </div>
+    <div class="day-event" data-camp="1">
+      <span class="ev-dot info"></span>
+      <div class="day-event-body">
+        <div class="day-event-title">봄 인기게시물 노출 캠페인 — 진행</div>
+        <div class="day-event-meta">RU · 1769756657 · 리뷰 작성중 3건</div>
+      </div>
+      <span class="day-event-time">종일</span>
+    </div>
+    <div class="day-event" data-camp="2">
+      <span class="ev-dot warn"></span>
+      <div class="day-event-body">
+        <div class="day-event-title">청담 라운지 — 검수 마감</div>
+        <div class="day-event-meta">KR · 1766993536 · 검수 대기 4건</div>
+      </div>
+      <span class="day-event-time">23:59</span>
+    </div>
+
+  </main>
+
+<script>
+(function(){
+  var cells = document.querySelectorAll('.cal-cell');
+  var listHead = document.querySelector('.day-list-head span:first-child');
+  var listMeta = document.querySelector('.day-list-head span:last-child');
+  var monthTitle = document.querySelector('.cal-mini-title');
+  var prevBtn = document.querySelector('[aria-label="이전 달"]');
+  var nextBtn = document.querySelector('[aria-label="다음 달"]');
+  var todayBtn = document.querySelector('[aria-label="오늘"]');
+  var dowMap = ['일','월','화','수','목','금','토'];
+  var year = 2026, month = 5;
+
+  cells.forEach(function(c, idx){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('.cal-cell.selected').forEach(function(s){ s.classList.remove('selected'); });
+      c.classList.add('selected');
+      var day = c.querySelector('.day').textContent.trim();
+      var dotCount = c.querySelectorAll('.dot').length;
+      var dow = dowMap[idx % 7];
+      if(c.classList.contains('other')){
+        listHead.innerHTML = (month) + '월 ' + day + '일 (' + dow + ') · <span style="color:var(--text-tertiary)">다른 달</span>';
+        listMeta.textContent = '';
+        return;
+      }
+      var label = month + '월 ' + day + '일 (' + dow + ')';
+      if(dotCount === 0){
+        listHead.innerHTML = label + ' — <span style="color:var(--text-tertiary);font-weight:500">일정 없음</span>';
+        listMeta.textContent = '';
+      } else {
+        listHead.innerHTML = label + ' — <b>' + dotCount + '건</b>';
+        var infoCount = c.querySelectorAll('.dot.info').length;
+        var warnCount = c.querySelectorAll('.dot.warn').length;
+        var succCount = c.querySelectorAll('.dot.succ').length;
+        var defCount = dotCount - infoCount - warnCount - succCount;
+        var parts = [];
+        if(defCount) parts.push('신청 ' + defCount);
+        if(infoCount) parts.push('진행 ' + infoCount);
+        if(warnCount) parts.push('마감 ' + warnCount);
+        if(succCount) parts.push('완료 ' + succCount);
+        listMeta.textContent = parts.join(' · ');
+      }
+    });
+  });
+
+  todayBtn.addEventListener('click', function(){
+    document.querySelectorAll('.cal-cell.selected').forEach(function(s){ s.classList.remove('selected'); });
+    var today = document.querySelector('.cal-cell.today');
+    if(today) today.click();
+    monthTitle.textContent = '2026년 5월';
+    year = 2026; month = 5;
+  });
+  prevBtn.addEventListener('click', function(){
+    month--; if(month < 1){ month = 12; year--; }
+    monthTitle.textContent = year + '년 ' + month + '월';
+  });
+  nextBtn.addEventListener('click', function(){
+    month++; if(month > 12){ month = 1; year++; }
+    monthTitle.textContent = year + '년 ' + month + '월';
+  });
+
+  // day-event 탭은 아래 day-detail 시트 스크립트에서 처리 (campaign-detail 직행 제거)
+})();
+</script>
+
+  <nav class="app-tabbar">
+    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>홈</a>
+    <a class="app-tab" href="list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>신청서관리</a>
+    <a class="app-tab" href="influencer-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>인플루언서</a>
+    <a class="app-tab is-active" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
+    <a class="app-tab" href="more.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18" r="1.4"/></svg>더보기</a>
+  </nav>
+</div>
+<div class="app-sheet-root" id="sheet-filter" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-filter')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-filter-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head"><div class="app-sheet-head-titles"><h2 class="app-sheet-title" id="sheet-filter-title">필터</h2></div><button class="app-sheet-close" onclick="closeSheet('sheet-filter')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="app-sheet-body">
+      <div class="app-filter-group"><div class="app-filter-label">캠페인 유형</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="radio" name="c-type" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="radio" name="c-type"><span>방문형</span></label>
+          <label class="app-filter-chip"><input type="radio" name="c-type"><span>배송형</span></label>
+          <label class="app-filter-chip"><input type="radio" name="c-type"><span>리뷰형</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">표시</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="radio" name="c-show" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="radio" name="c-show"><span>마감 임박</span></label>
+          <label class="app-filter-chip"><input type="radio" name="c-show"><span>오늘</span></label>
+        </div></div>
+    </div>
+    <div class="app-sheet-foot">
+      <button class="btn btn-ghost btn-md btn-reset" onclick="document.querySelectorAll('#sheet-filter input').forEach(function(c){c.checked=false})">초기화</button>
+      <button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-filter')">적용</button>
+    </div>
+  </div>
+</div>
+<!-- Day detail sheet — 캠페인 메타 + 5단계 타임라인 (어드민 day-drawer 이식) -->
+<div class="app-sheet-root" id="sheet-day" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-day')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-day-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head">
+      <div class="app-sheet-head-titles">
+        <h2 class="app-sheet-title" id="sheet-day-title">일정</h2>
+        <p class="app-sheet-sub" id="sheet-day-sub">—</p>
+      </div>
+      <button class="app-sheet-close" onclick="closeSheet('sheet-day')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="app-sheet-body">
+      <div class="app-day-typefilter" id="sheet-day-filter" role="tablist" aria-label="이벤트 유형 필터"></div>
+      <div id="sheet-day-events"></div>
+    </div>
+    <div class="app-sheet-foot">
+      <button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-day')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 캘린더 일자별 캠페인 데이터 (어드민 campaign-calendar.html JSON 실값 이식)
+     stage 5단계: 신청·선정·리뷰·마감·결과 / state: done·current·pending -->
+<script type="application/json" id="cal-day-data">
+{
+  "events": [
+    { "type":"warning","typeLabel":"신청 마감",
+      "campaign":{"name":"ロダムクリニック釜山","code":"1739439117","thumbInit":"ロ",
+        "statusLabel":"승인","statusCls":"badge-success","sns":["ig"],"recruit":"7/10","views":20,
+        "created":"2026-04-04","updated":"2026-04-22"},
+      "timeline":[
+        {"label":"신청","date":"04-07","count":"7/10","state":"done"},
+        {"label":"선정","date":"04-14","count":"2명","state":"current"},
+        {"label":"리뷰","date":"04-17","count":"—","state":"pending"},
+        {"label":"마감","date":"04-24","count":"—","state":"pending"},
+        {"label":"결과","date":"04-30","count":"—","state":"pending"}
+      ] },
+    { "type":"info","typeLabel":"진행",
+      "campaign":{"name":"봄 인기게시물 노출 캠페인","code":"1769756657","thumbInit":"봄",
+        "statusLabel":"승인","statusCls":"badge-success","sns":["ig","dy"],"recruit":"5/5","views":24,
+        "created":"2026-01-30","updated":"2026-04-10"},
+      "timeline":[
+        {"label":"신청","date":"01-30","count":"12/5","state":"done"},
+        {"label":"선정","date":"01-30","count":"5명","state":"done"},
+        {"label":"리뷰","date":"04-15","count":"3/5","state":"current"},
+        {"label":"마감","date":"05-30","count":"—","state":"pending"},
+        {"label":"결과","date":"06-05","count":"—","state":"pending"}
+      ] },
+    { "type":"warning","typeLabel":"검수 마감",
+      "campaign":{"name":"청담 라운지 4월 체험","code":"1766993536","thumbInit":"청",
+        "statusLabel":"승인","statusCls":"badge-success","sns":["ig","yt"],"recruit":"7/7","views":24,
+        "created":"2026-04-04","updated":"2026-04-22"},
+      "timeline":[
+        {"label":"신청","date":"04-07","count":"12/7","state":"done"},
+        {"label":"선정","date":"04-14","count":"7명","state":"done"},
+        {"label":"리뷰","date":"04-17","count":"7건","state":"done"},
+        {"label":"마감","date":"04-22","count":"승인5 반려2","state":"current"},
+        {"label":"결과","date":"04-30","count":"—","state":"pending"}
+      ] }
+  ]
+}
+</script>
+
+<script>
+(function(){
+  var DATA = JSON.parse(document.getElementById('cal-day-data').textContent).events;
+  var SNS = { ig:'인스타그램', yt:'유튜브', xhs:'샤오홍슈', tw:'X', dy:'더우인' };
+  var TYPES = [
+    { key:'all', label:'전체' },
+    { key:'accent', label:'신청' },
+    { key:'info', label:'진행' },
+    { key:'warning', label:'마감' },
+    { key:'success', label:'종료' }
+  ];
+  var subEl = document.getElementById('sheet-day-sub');
+  var filterEl = document.getElementById('sheet-day-filter');
+  var listEl = document.getElementById('sheet-day-events');
+  var titleEl = document.getElementById('sheet-day-title');
+  var dotStateCls = { done:'success', current:'accent', pending:'' };
+
+  var currentDay = '5월 22일 (금)';
+  var currentList = DATA;
+  var currentType = 'all';
+
+  function campCard(ev){
+    var c = ev.campaign;
+    var snsTags = (c.sns||[]).map(function(s){
+      return '<span class="c-mini-tag '+s+'">'+(SNS[s]||s)+'</span>';
+    }).join(' ');
+    var tl = c.timeline; // not used
+    var steps = ev.timeline.map(function(m){
+      var dc = dotStateCls[m.state] || '';
+      var cnt = (m.count && m.count !== '—')
+        ? ' · <span class="app-timeline-count">'+m.count+'</span>' : '';
+      return '<li class="app-timeline-item">'
+        + '<span class="app-timeline-dot '+dc+'"></span>'
+        + '<span class="app-timeline-title">'+m.label+'</span>'
+        + '<span class="app-timeline-meta">'+m.date+cnt+'</span>'
+        + '</li>';
+    }).join('');
+    return '<div class="app-day-camp">'
+      + '<div class="app-camp-head">'
+        + '<div class="app-camp-thumb">'+(c.thumbInit||'?')+'</div>'
+        + '<div class="app-camp-head-body">'
+          + '<div class="app-camp-head-title">'+c.name+'</div>'
+          + '<div class="app-camp-head-row">'
+            + '<span class="badge '+c.statusCls+' badge-sm"><span class="badge-dot"></span>'+c.statusLabel+'</span>'
+            + '<span class="app-card-id">#'+c.code+'</span>'
+            + '<span class="app-list-card-stat">모집 <b>'+c.recruit+'</b></span>'
+          + '</div>'
+          + '<div class="app-camp-head-row">'+snsTags+'</div>'
+        + '</div>'
+      + '</div>'
+      + '<ul class="app-timeline">'+steps+'</ul>'
+      + '<div class="app-kv-grid">'
+        + '<div class="app-kv"><span class="app-kv-label">등록일</span><span class="app-kv-value">'+c.created+'</span></div>'
+        + '<div class="app-kv"><span class="app-kv-label">수정일</span><span class="app-kv-value">'+c.updated+'</span></div>'
+        + '<div class="app-kv"><span class="app-kv-label">조회수</span><span class="app-kv-value">'+c.views+'</span></div>'
+      + '</div>'
+      + '</div>';
+  }
+
+  function renderFilter(list){
+    var counts = { all: list.length };
+    list.forEach(function(ev){ counts[ev.type] = (counts[ev.type]||0)+1; });
+    filterEl.innerHTML = TYPES.filter(function(t){ return counts[t.key]; }).map(function(t){
+      return '<button type="button" class="'+(currentType===t.key?'is-active':'')+'" data-type="'+t.key+'">'
+        + t.label+'<span class="cnt">'+counts[t.key]+'</span></button>';
+    }).join('');
+  }
+
+  function render(){
+    var filtered = currentType==='all' ? currentList : currentList.filter(function(e){ return e.type===currentType; });
+    titleEl.textContent = currentDay;
+    subEl.textContent = currentList.length
+      ? '관련 캠페인 '+filtered.length+'건'+(currentType!=='all'?' (전체 '+currentList.length+'건 중)':'')
+      : '등록된 일정이 없습니다';
+    renderFilter(currentList);
+    listEl.innerHTML = filtered.length
+      ? filtered.map(campCard).join('')
+      : '<div class="app-empty"><div class="app-empty-title">이 유형의 일정이 없어요</div><div class="app-empty-desc">다른 유형 탭을 선택해 보세요.</div></div>';
+  }
+
+  filterEl.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-type]');
+    if(!b) return;
+    currentType = b.dataset.type;
+    render();
+  });
+
+  function openDay(dayLabel, list){
+    currentDay = dayLabel; currentList = list; currentType = 'all';
+    render();
+    openSheet('sheet-day');
+  }
+
+  // day-event 탭 → 해당 캠페인만 시트로
+  document.querySelectorAll('.day-event[data-camp]').forEach(function(ev){
+    ev.addEventListener('click', function(e){
+      e.preventDefault();
+      var idx = Number(ev.dataset.camp);
+      openDay('5월 22일 (금)', [DATA[idx]]);
+    });
+  });
+
+  // 셀 탭(점 있는 날) → 선택된 날 전체 이벤트 (현재 데이터셋: 22일에 3건)
+  document.querySelectorAll('.cal-cell').forEach(function(cell){
+    cell.addEventListener('click', function(){
+      var dots = cell.querySelectorAll('.dot').length;
+      if(cell.classList.contains('other') || dots === 0) return;
+      var day = cell.querySelector('.day').textContent.trim();
+      // 22일은 풀 데이터셋, 그 외 점 표시일은 대표 캠페인으로 매핑
+      var list = (day === '22') ? DATA : [ DATA[ dots>=3 ? 1 : (dots===2 ? 2 : 0) ] ];
+      openDay('5월 ' + day + '일', list);
+    }, true);
+  });
+})();
+</script>
+
+<script src="../js/sheets.js"></script>
+</body></html>

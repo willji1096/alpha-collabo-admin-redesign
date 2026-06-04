@@ -12,7 +12,7 @@
   .tbl-scroll .tbl { min-width: 1600px; }
 </style>
 </head>
-<body data-active-tab="인플루언서 탐색">
+<body data-active-tab="인플루언서">
 <div class="layout">
 
 <div id="sidebar-slot"></div>
@@ -23,7 +23,7 @@
 
     <div class="pg-header">
       <h1 class="pg-title">저장한 인플루언서</h1>
-      <div class="pg-crumb">인플루언서 탐색 &gt; 인플루언서 &gt; <b>저장한 인플루언서</b></div>
+      <div class="pg-crumb">인플루언서 &gt; <b>저장한 인플루언서</b></div>
     </div>
 
     <div class="chip-bar">
@@ -106,6 +106,16 @@
       </div>
     </div>
 
+    <!-- 상태 미리보기 (시안용 — 개발 시 데이터 유무/통신 상태에 따라 자동 전환) -->
+    <div class="state-preview" role="group" aria-label="상태 미리보기 (시안)">
+      <span class="state-preview-label">상태 미리보기</span>
+      <button type="button" class="state-preview-btn is-active" data-state="data">데이터</button>
+      <button type="button" class="state-preview-btn" data-state="loading">로딩</button>
+      <button type="button" class="state-preview-btn" data-state="empty">빈 상태</button>
+      <button type="button" class="state-preview-btn" data-state="error">에러</button>
+    </div>
+
+    <!-- 데이터 상태 — 리스트 뷰 + 카드 뷰 (뷰 토글이 둘 사이를 전환) -->
     <div id="view-list" class="tbl-wrap" data-bulk-scope="#search-bulk-bar">
       <div class="tbl-scroll">
       <table class="tbl has-sticky">
@@ -130,8 +140,8 @@
             <th>제안하기</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody data-state-body="data">
+          <tr data-name="yuki_beauty" data-country="JP" data-sub="田中ゆき · 팔로워 1천~1만 · 단가 180,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">JP</span></td>
             <td>yuki_beauty</td>
@@ -148,9 +158,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="miku_travel" data-country="JP" data-sub="佐藤みく · 팔로워 10~50k · 단가 250,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">JP</span></td>
             <td>miku_travel</td>
@@ -167,9 +182,14 @@
             <td>10~50k</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 3 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 2</span></span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="kenji_style" data-country="JP" data-sub="鈴木健二 · 팔로워 1천~1만 · 단가 120,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">JP</span></td>
             <td>kenji_style</td>
@@ -186,9 +206,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="anna_moscow" data-country="RU" data-sub="Анна К. · 팔로워 1천~1만 · 단가 95,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">RU</span></td>
             <td>anna_moscow</td>
@@ -205,9 +230,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 1 · <span class="is-viewed">확인 0</span> · <span class="is-pending">대기 1</span></span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="xiaomei_cn" data-country="CN" data-sub="王小美 · 팔로워 50~100k · 단가 300,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">CN</span></td>
             <td>xiaomei_cn</td>
@@ -224,9 +254,14 @@
             <td>50~100k</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 5 · <span class="is-viewed">확인 3</span> · <span class="is-pending">대기 2</span></span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="linh_saigon" data-country="VN" data-sub="Nguyễn Linh · 팔로워 1천~1만 · 단가 85,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">VN</span></td>
             <td>linh_saigon</td>
@@ -243,9 +278,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="mei_taipei" data-country="TW" data-sub="陳美玲 · 팔로워 10~50k · 단가 150,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">TW</span></td>
             <td>mei_taipei</td>
@@ -262,9 +302,14 @@
             <td>10~50k</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 2 · <span class="is-viewed">확인 2</span> · <span class="is-pending">대기 0</span></span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="hk_foodie" data-country="HK" data-sub="李嘉欣 · 팔로워 10~50k · 단가 200,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">HK</span></td>
             <td>hk_foodie</td>
@@ -281,9 +326,14 @@
             <td>10~50k</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="rina_osaka" data-country="JP" data-sub="山田りな · 팔로워 1천~1만 · 단가 160,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">JP</span></td>
             <td>rina_osaka</td>
@@ -300,9 +350,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 4 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 3</span></span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="sg_glam" data-country="SG" data-sub="Rachel Tan · 팔로워 10~50k · 단가 220,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">SG</span></td>
             <td>sg_glam</td>
@@ -319,9 +374,14 @@
             <td>10~50k</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="thai_beauty" data-country="TH" data-sub="Ploy S. · 팔로워 1천~1만 · 단가 110,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">TH</span></td>
             <td>thai_beauty</td>
@@ -338,9 +398,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 2 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 1</span></span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="ivan_vlg" data-country="RU" data-sub="Иван П. · 팔로워 0~1k · 단가 75,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">RU</span></td>
             <td>ivan_vlg</td>
@@ -357,9 +422,14 @@
             <td>0~1k</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="kl_style" data-country="MY" data-sub="Aisha R. · 팔로워 1천~1만 · 단가 130,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">MY</span></td>
             <td>kl_style</td>
@@ -376,9 +446,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 3 · <span class="is-viewed">확인 2</span> · <span class="is-pending">대기 1</span></span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="manila_glow" data-country="PH" data-sub="Maria C. · 팔로워 1천~1만 · 단가 90,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">PH</span></td>
             <td>manila_glow</td>
@@ -395,9 +470,14 @@
             <td>1천~1만</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <tr>
+          <tr data-name="taro_tokyo" data-country="JP" data-sub="高橋太郎 · 팔로워 100k+ · 단가 1,500,000">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">JP</span></td>
             <td>taro_tokyo</td>
@@ -414,22 +494,55 @@
             <td>100k+</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
             <td><button class="btn btn-sm btn-secondary btn-danger">삭제</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 1 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 0</span></span>
+              </div>
+            </td>
           </tr>
-          <!-- Empty state 예시: 실제 데이터가 0건일 때 <tbody> 를 이것으로 교체
+        </tbody>
+
+        <!-- 로딩 (스켈레톤) -->
+        <tbody data-state-body="loading" hidden>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+        </tbody>
+
+        <!-- 빈 상태 -->
+        <tbody data-state-body="empty" hidden>
           <tr class="empty-row">
-            <td colspan="17">
+            <td colspan="18">
               <div class="empty-state">
                 <div class="empty-state-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 </div>
-                <div class="empty-state-title">조건에 맞는 인플루언서가 없습니다</div>
+                <div class="empty-state-title">저장한 인플루언서가 없습니다</div>
                 <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
-                <button class="btn btn-sm btn-secondary">필터 초기화</button>
+                <button class="btn btn-sm btn-secondary">인플루언서 검색으로</button>
               </div>
             </td>
           </tr>
-          -->
+        </tbody>
+
+        <!-- 에러 -->
+        <tbody data-state-body="error" hidden>
+          <tr class="empty-row">
+            <td colspan="18">
+              <div class="empty-state is-error">
+                <div class="empty-state-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div class="empty-state-title">목록을 불러오지 못했습니다</div>
+                <div class="empty-state-desc">일시적인 네트워크 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</div>
+                <button class="btn btn-sm btn-secondary">다시 시도</button>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
       </div>
@@ -445,9 +558,9 @@
 
     <!-- ============ 카드 뷰 ============ -->
     <div id="view-card" class="cards-wrap" hidden>
-      <div class="influencer-cards">
+      <div class="influencer-cards" data-state-body="data">
 
-        <article class="inf-card">
+        <article class="inf-card" data-name="yuki_beauty" data-country="JP" data-sub="田中ゆき · 팔로워 42,800 · 단가 180,000">
           <div class="inf-card-header">
             <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&q=80&auto=format" alt="">
             <div class="inf-card-name-wrap">
@@ -473,6 +586,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 4회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status is-none">제안 없음</span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary btn-danger" aria-label="저장 해제">
@@ -482,7 +596,7 @@
           </div>
         </article>
 
-        <article class="inf-card">
+        <article class="inf-card" data-name="mika_seoul" data-country="KR" data-sub="김미카 · 팔로워 128,500 · 단가 320,000">
           <div class="inf-card-header">
             <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&q=80&auto=format" alt="">
             <div class="inf-card-name-wrap">
@@ -508,6 +622,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 12회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 3 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 2</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary btn-danger" aria-label="저장 해제">
@@ -517,7 +632,7 @@
           </div>
         </article>
 
-        <article class="inf-card">
+        <article class="inf-card" data-name="natasha_mood" data-country="RU" data-sub="Наталья · 팔로워 87,200 · 단가 240,000">
           <div class="inf-card-header">
             <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&h=120&fit=crop&q=80&auto=format" alt="">
             <div class="inf-card-name-wrap">
@@ -542,6 +657,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 6회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 5 · <span class="is-viewed">확인 3</span> · <span class="is-pending">대기 2</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary btn-danger" aria-label="저장 해제">
@@ -551,7 +667,7 @@
           </div>
         </article>
 
-        <article class="inf-card">
+        <article class="inf-card" data-name="kumi_osaka" data-country="JP" data-sub="久美 · 팔로워 315,000 · 단가 580,000">
           <div class="inf-card-header">
             <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=120&h=120&fit=crop&q=80&auto=format" alt="">
             <div class="inf-card-name-wrap">
@@ -577,6 +693,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 28회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status is-none">제안 없음</span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary btn-danger" aria-label="저장 해제">
@@ -586,7 +703,7 @@
           </div>
         </article>
 
-        <article class="inf-card">
+        <article class="inf-card" data-name="lina_k" data-country="CN" data-sub="林娜 · 팔로워 52,400 · 단가 220,000">
           <div class="inf-card-header">
             <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop&q=80&auto=format" alt="">
             <div class="inf-card-name-wrap">
@@ -612,6 +729,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 9회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 2 · <span class="is-viewed">확인 2</span> · <span class="is-pending">대기 0</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary btn-danger" aria-label="저장 해제">
@@ -621,7 +739,7 @@
           </div>
         </article>
 
-        <article class="inf-card">
+        <article class="inf-card" data-name="sora_taipei" data-country="TW" data-sub="蘇拉 · 팔로워 73,600 · 단가 260,000">
           <div class="inf-card-header">
             <img class="inf-card-avatar" src="https://images.unsplash.com/photo-1463453091185-61582044d556?w=120&h=120&fit=crop&q=80&auto=format" alt="">
             <div class="inf-card-name-wrap">
@@ -647,6 +765,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 7회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 1 · <span class="is-viewed">확인 0</span> · <span class="is-pending">대기 1</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary btn-danger" aria-label="저장 해제">
@@ -657,7 +776,43 @@
         </article>
 
       </div>
+
+    <!-- 카드뷰 로딩 (카드 스켈레톤) -->
+    <div data-state-body="loading" hidden>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
     </div>
+
+    <!-- 빈 상태 — 데이터 0건 -->
+    <div data-state-body="empty" hidden>
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="empty-state-title">저장한 인플루언서가 없습니다</div>
+        <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
+        <button class="btn btn-sm btn-secondary">인플루언서 검색으로</button>
+      </div>
+    </div>
+
+    <!-- 에러 — 통신 실패 -->
+    <div data-state-body="error" hidden>
+      <div class="empty-state is-error">
+        <div class="empty-state-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="empty-state-title">목록을 불러오지 못했습니다</div>
+        <div class="empty-state-desc">일시적인 네트워크 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</div>
+        <button class="btn btn-sm btn-secondary">다시 시도</button>
+      </div>
+    </div>
+    </div>
+    <!-- /카드뷰 -->
+
     <div class="bulk-bar" id="search-bulk-bar" role="region" aria-label="일괄 작업 도구">
       <span class="bulk-count"><strong data-bulk-count>0</strong>명 선택</span>
       <span class="bulk-divider"></span>

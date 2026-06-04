@@ -34,6 +34,9 @@
       <div class="pg-crumb">신청서관리 / 리뷰통합관리 / <b>검수요청목록</b></div>
     </div>
 
+    <!-- 처리 단계 바 (components/pipeline.html 자동 주입) -->
+    <div id="pipeline-slot"></div>
+
     <div class="chip-bar">
       <div class="chip-bar-summary">
         <span class="f-summary-label">현재 조건</span>
@@ -113,6 +116,15 @@
       </div>
     </div>
 
+    <!-- 상태 미리보기 (시안용 — 개발 시 데이터 유무/통신 상태에 따라 자동 전환) -->
+    <div class="state-preview" role="group" aria-label="상태 미리보기 (시안)">
+      <span class="state-preview-label">상태 미리보기</span>
+      <button type="button" class="state-preview-btn is-active" data-state="data">데이터</button>
+      <button type="button" class="state-preview-btn" data-state="loading">로딩</button>
+      <button type="button" class="state-preview-btn" data-state="empty">빈 상태</button>
+      <button type="button" class="state-preview-btn" data-state="error">에러</button>
+    </div>
+
     <div class="tbl-wrap">
       <div class="tbl-warning">등록완료 시 리뷰파일이 삭제됩니다. 유의해주세요.</div>
       <div class="tbl-scroll">
@@ -139,7 +151,7 @@
             <th>초안수정요청</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody data-state-body="data">
           <tr>
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">RU</span></td>
@@ -340,20 +352,48 @@
             <td><button class="btn btn-sm btn-secondary">인플루언서미방문</button></td>
             <td><button class="btn btn-sm btn-secondary js-open-revision">초안수정요청</button></td>
           </tr>
-          <!-- Empty state 예시: 실제 데이터가 0건일 때 <tbody> 를 이것으로 교체
+        </tbody>
+
+        <!-- 로딩 (스켈레톤) — fetch 중 -->
+        <tbody data-state-body="loading" hidden>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+        </tbody>
+
+        <!-- 빈 상태 — 데이터 0건 -->
+        <tbody data-state-body="empty" hidden>
           <tr class="empty-row">
             <td colspan="18">
               <div class="empty-state">
                 <div class="empty-state-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 </div>
-                <div class="empty-state-title">검수할 리뷰가 없습니다</div>
+                <div class="empty-state-title">검수 대기 중인 리뷰가 없습니다</div>
                 <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
                 <button class="btn btn-sm btn-secondary">필터 초기화</button>
               </div>
             </td>
           </tr>
-          -->
+        </tbody>
+
+        <!-- 에러 — 통신 실패 -->
+        <tbody data-state-body="error" hidden>
+          <tr class="empty-row">
+            <td colspan="18">
+              <div class="empty-state is-error">
+                <div class="empty-state-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div class="empty-state-title">목록을 불러오지 못했습니다</div>
+                <div class="empty-state-desc">일시적인 네트워크 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</div>
+                <button class="btn btn-sm btn-secondary">다시 시도</button>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
       </div>

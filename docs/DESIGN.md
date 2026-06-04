@@ -932,6 +932,69 @@ Filter Chips(편집 팝오버 요구)의 대체 패턴. read-only 텍스트로 �
 
 ---
 
+## 10.15 App Mobile — P1 공통 패턴 (2026-05-29)
+
+`app/css/app-mobile.css` 하단 `P1 공통 패턴 추가` 섹션에 정의된 클래스. 2단계(HTML 치환)에서 인라인 style을 아래 클래스로 교체한다.
+
+| 클래스 | 대체 인라인 패턴 | 대상 화면 수 | 인스턴스 수 |
+|--------|-----------------|-------------|------------|
+| `.app-card-toprow` | `display:flex; align-items:center; gap:6px` (카드 첫 행) | 9 | 38+ |
+| `.app-card-id` | `font-size:12px; color:var(--text-tertiary)` (캠페인 ID) | 9 | 38+ |
+| `.app-card-action` | `font-size:12px;color:var(--text-link);font-weight:500` (상세/검수 텍스트) | 7 | 23 |
+| `.app-sns-ico-sm` | `style="width:16px;height:16px"` on `.sns-ico` | 4 | 16 |
+| `.app-sns-ico-md` | `style="display:inline-flex;width:18px;height:18px"` on `.sns-ico` | 2 | 5 |
+| `.app-reason-box` | `background:--bg-elevated; border-radius:--radius-sm; padding:6px 10px; …` | 3 | 4 |
+| `.app-reason-box.is-error` | `background:--status-error-bg; color:--status-error-strong` modifier | 2 | 2 |
+| `.app-reason-box.is-warning` | `background:--status-warning-bg; color:--status-warning-strong` modifier | — | 0 (예비) |
+| `.app-reason-box-title` | `font-weight:600` 첫 줄 타이틀 (list-cancel-selected 구조) | 1 | 1 |
+| `.app-list-more` | `text-align:center; padding:8px 0 24px` | 9 | 8 |
+| `.app-list-more.is-caption` | + `font-size:12px; color:--text-tertiary` (pricing 단위 주석) | 5 | 5 |
+| `.app-sort-select` | `<select style="font-size:12px; padding:6px 8px; border:…">` | 4 | 4 |
+| `.app-list-toolbar` | `display:flex; align-items:center; justify-content:space-between; padding:4px 0 12px` | 6 | 6 |
+| `.app-list-toolbar-count` | `font-size:12px; color:--text-secondary` (카운트 텍스트) | 6 | 6 |
+
+**사용 예 — 카드 첫 행:**
+```html
+<!-- Before (인라인) -->
+<div style="display:flex; align-items:center; gap:6px">
+  <span class="c-country-code">JP</span>
+  <span style="font-size:12px; color:var(--text-tertiary)">#1141</span>
+</div>
+
+<!-- After (클래스) -->
+<div class="app-card-toprow">
+  <span class="c-country-code">JP</span>
+  <span class="app-card-id">#1141</span>
+</div>
+```
+
+**사용 예 — 사유 박스:**
+```html
+<!-- 인플루언서 자체 취소 (기본) -->
+<div class="app-reason-box">사유: 일정 변경으로 참여 불가</div>
+
+<!-- 수정 요청 (error) -->
+<div class="app-reason-box is-error">요청 사유: 해시태그 누락</div>
+
+<!-- 위약 검토 (error, 2줄 구조) -->
+<div class="app-reason-box is-error">
+  <div class="app-reason-box-title">위약 검토 필요</div>
+  예약 일정 미준수, 사후 연락 두절
+</div>
+```
+
+**사용 예 — 목록 툴바:**
+```html
+<div class="app-list-toolbar">
+  <div class="app-list-toolbar-count">전체 <b style="color:var(--text-primary)">7</b>건 · 기간 전체</div>
+  <select class="app-sort-select">
+    <option>최신순</option><option>오래된 순</option>
+  </select>
+</div>
+```
+
+---
+
 ## 11. 개발자 인수인계 체크리스트
 
 - [ ] `css/common.css` + `css/admin.css` 복제 후 Tier 1/2/3 토큰만 프로젝트 테마에 맞춰 조정

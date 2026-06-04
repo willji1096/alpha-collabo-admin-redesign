@@ -10,9 +10,76 @@
 <link rel="stylesheet" href="css/admin.css">
 <style>
   .tbl-scroll .tbl { min-width: 1600px; }
+
+  /* 영업 핫리스트 안내 배너 (SERVICE-FLOW §5) */
+  .sales-callout {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-4);
+    background: var(--status-info-bg);
+    border: 1px solid var(--status-info-border);
+    border-radius: var(--radius-md);
+  }
+  .sales-callout-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    color: var(--status-info-strong);
+    margin-top: 1px;
+  }
+  .sales-callout-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+    flex-wrap: wrap;
+  }
+  .sales-callout-text {
+    margin: 0;
+    flex: 1 1 420px;
+    max-width: 760px;
+    font-size: var(--fs-md);
+    line-height: 1.55;
+    color: var(--text-primary);
+  }
+  .sales-callout-text strong { font-weight: 700; }
+  .sales-callout-sub { color: var(--text-secondary); }
+  .sales-callout-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    flex-shrink: 0;
+  }
+  .sales-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .sales-pill-num { font-weight: 700; color: var(--text-primary); }
+  .sales-pill-urgent {
+    background: var(--status-warning-bg);
+    border-color: var(--status-warning-border);
+    color: var(--status-warning-strong);
+  }
+  .sales-pill-urgent .sales-pill-num { color: var(--status-warning-strong); }
+
+  /* 임박 D-day 배지 + 정렬 라벨 */
+  .t-sort-note { color: var(--text-secondary); font-weight: 500; }
+  .c-visit-date { white-space: nowrap; }
+  td .c-dday { margin-left: 6px; vertical-align: middle; }
 </style>
 </head>
-<body data-active-tab="인플루언서 탐색">
+<body data-active-tab="인플루언서">
 <div class="layout">
 
 <div id="sidebar-slot"></div>
@@ -23,7 +90,21 @@
 
     <div class="pg-header">
       <h1 class="pg-title">한국 방문 예정 인플루언서</h1>
-      <div class="pg-crumb">인플루언서 탐색 &gt; 인플루언서 &gt; <b>한국 방문 예정 인플루언서</b></div>
+      <div class="pg-crumb">인플루언서 &gt; <b>한국 방문 예정 인플루언서</b></div>
+    </div>
+
+    <!-- 영업 핫리스트 안내 — "기왕 온 김에 우리 것도" 능동 제안 (SERVICE-FLOW §5) -->
+    <div class="sales-callout" role="note" aria-label="방문 예정 영업 안내">
+      <span class="sales-callout-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      </span>
+      <div class="sales-callout-body">
+        <p class="sales-callout-text">다른 캠페인으로 <strong>한국 방문이 확정된</strong> 인플루언서입니다. 방문 일정에 맞춰 우리 캠페인을 제안하세요. <span class="sales-callout-sub">방문비용 장벽이 이미 해결돼 매칭이 쉽습니다.</span></p>
+        <div class="sales-callout-summary">
+          <span class="sales-pill sales-pill-urgent"><span class="sales-pill-num">3</span>명 이번 주 방문</span>
+          <span class="sales-pill"><span class="sales-pill-num">1</span>명 다음 주 방문</span>
+        </div>
+      </div>
     </div>
 
     <div class="chip-bar">
@@ -89,7 +170,7 @@
     </div>
 
     <div class="t-toolbar">
-      <div class="t-count">전체 <strong>30</strong>건 / 검색 <strong>30</strong>건</div>
+      <div class="t-count">전체 <strong>30</strong>건 / 검색 <strong>30</strong>건 <span class="t-sort-note">· 방문 임박순</span></div>
       <div class="t-right">
         <!-- 뷰 토글: 리스트 / 카드 -->
         <div class="view-toggle" role="group" aria-label="보기 방식">
@@ -106,6 +187,16 @@
       </div>
     </div>
 
+    <!-- 상태 미리보기 (시안용 — 개발 시 데이터 유무/통신 상태에 따라 자동 전환) -->
+    <div class="state-preview" role="group" aria-label="상태 미리보기 (시안)">
+      <span class="state-preview-label">상태 미리보기</span>
+      <button type="button" class="state-preview-btn is-active" data-state="data">데이터</button>
+      <button type="button" class="state-preview-btn" data-state="loading">로딩</button>
+      <button type="button" class="state-preview-btn" data-state="empty">빈 상태</button>
+      <button type="button" class="state-preview-btn" data-state="error">에러</button>
+    </div>
+
+    <!-- 데이터 상태 — 리스트 뷰 + 카드 뷰 (뷰 토글이 둘 사이를 전환) -->
     <div id="view-list" class="tbl-wrap" data-bulk-scope="#search-bulk-bar">
       <div class="tbl-scroll">
       <table class="tbl has-sticky">
@@ -130,274 +221,9 @@
             <th>제안하기</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">JP</span></td>
-            <td>yuki_beauty</td>
-            <td>田中ゆき</td>
-            <td>여</td>
-            <td class="c-num">180,000</td>
-            <td class="c-num">3회</td>
-            <td>2026-05-10</td>
-            <td class="c-num">1,240</td>
-            <td class="c-num">8,500</td>
-            <td class="c-num">5</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">3/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">JP</span></td>
-            <td>miku_travel</td>
-            <td>佐藤みく</td>
-            <td>여</td>
-            <td class="c-num">250,000</td>
-            <td class="c-num">5회</td>
-            <td>2026-05-15</td>
-            <td class="c-num">3,820</td>
-            <td class="c-num">24,100</td>
-            <td class="c-num">12</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">5/7</td>
-            <td>10~50k</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">JP</span></td>
-            <td>kenji_style</td>
-            <td>鈴木健二</td>
-            <td>남</td>
-            <td class="c-num">120,000</td>
-            <td class="c-num">1회</td>
-            <td>2026-04-28</td>
-            <td class="c-num">580</td>
-            <td class="c-num">3,200</td>
-            <td class="c-num">2</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">2/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">RU</span></td>
-            <td>anna_moscow</td>
-            <td>Анна К.</td>
-            <td>여</td>
-            <td class="c-num">95,000</td>
-            <td class="c-num">2회</td>
-            <td>2026-06-01</td>
-            <td class="c-num">920</td>
-            <td class="c-num">4,600</td>
-            <td class="c-num">3</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">2/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">CN</span></td>
-            <td>xiaomei_cn</td>
-            <td>王小美</td>
-            <td>여</td>
-            <td class="c-num">300,000</td>
-            <td class="c-num">8회</td>
-            <td>2026-05-20</td>
-            <td class="c-num">5,400</td>
-            <td class="c-num">32,000</td>
-            <td class="c-num">18</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">4/7</td>
-            <td>50~100k</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">VN</span></td>
-            <td>linh_saigon</td>
-            <td>Nguyễn Linh</td>
-            <td>여</td>
-            <td class="c-num">85,000</td>
-            <td class="c-num">1회</td>
-            <td>2026-05-05</td>
-            <td class="c-num">760</td>
-            <td class="c-num">2,800</td>
-            <td class="c-num">1</td>
-            <td><span class="c-approve c-approve-pending">미승인</span></td>
-            <td class="c-num">1/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">TW</span></td>
-            <td>mei_taipei</td>
-            <td>陳美玲</td>
-            <td>여</td>
-            <td class="c-num">150,000</td>
-            <td class="c-num">4회</td>
-            <td>2026-05-22</td>
-            <td class="c-num">2,100</td>
-            <td class="c-num">15,300</td>
-            <td class="c-num">7</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">3/7</td>
-            <td>10~50k</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">HK</span></td>
-            <td>hk_foodie</td>
-            <td>李嘉欣</td>
-            <td>여</td>
-            <td class="c-num">200,000</td>
-            <td class="c-num">6회</td>
-            <td>2026-04-30</td>
-            <td class="c-num">4,200</td>
-            <td class="c-num">28,700</td>
-            <td class="c-num">9</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">4/7</td>
-            <td>10~50k</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">JP</span></td>
-            <td>rina_osaka</td>
-            <td>山田りな</td>
-            <td>여</td>
-            <td class="c-num">160,000</td>
-            <td class="c-num">2회</td>
-            <td>2026-05-18</td>
-            <td class="c-num">1,050</td>
-            <td class="c-num">6,400</td>
-            <td class="c-num">4</td>
-            <td><span class="c-approve c-approve-pending">미승인</span></td>
-            <td class="c-num">2/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">SG</span></td>
-            <td>sg_glam</td>
-            <td>Rachel Tan</td>
-            <td>여</td>
-            <td class="c-num">220,000</td>
-            <td class="c-num">3회</td>
-            <td>2026-06-10</td>
-            <td class="c-num">2,800</td>
-            <td class="c-num">19,500</td>
-            <td class="c-num">6</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">3/7</td>
-            <td>10~50k</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">TH</span></td>
-            <td>thai_beauty</td>
-            <td>Ploy S.</td>
-            <td>여</td>
-            <td class="c-num">110,000</td>
-            <td class="c-num">2회</td>
-            <td>2026-05-25</td>
-            <td class="c-num">890</td>
-            <td class="c-num">5,100</td>
-            <td class="c-num">3</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">2/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">RU</span></td>
-            <td>ivan_vlg</td>
-            <td>Иван П.</td>
-            <td>남</td>
-            <td class="c-num">75,000</td>
-            <td class="c-num">0회</td>
-            <td>2026-07-01</td>
-            <td class="c-num">340</td>
-            <td class="c-num">1,800</td>
-            <td class="c-num">0</td>
-            <td><span class="c-approve c-approve-pending">미승인</span></td>
-            <td class="c-num">1/7</td>
-            <td>0~1k</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">MY</span></td>
-            <td>kl_style</td>
-            <td>Aisha R.</td>
-            <td>여</td>
-            <td class="c-num">130,000</td>
-            <td class="c-num">1회</td>
-            <td>2026-05-12</td>
-            <td class="c-num">1,580</td>
-            <td class="c-num">9,200</td>
-            <td class="c-num">4</td>
-            <td><span class="c-approve c-approve-done">승인</span></td>
-            <td class="c-num">2/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
-            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
-            <td class="sticky-col"><span class="c-country-code">PH</span></td>
-            <td>manila_glow</td>
-            <td>Maria C.</td>
-            <td>여</td>
-            <td class="c-num">90,000</td>
-            <td class="c-num">1회</td>
-            <td>2026-06-05</td>
-            <td class="c-num">620</td>
-            <td class="c-num">3,400</td>
-            <td class="c-num">2</td>
-            <td><span class="c-approve c-approve-pending">미승인</span></td>
-            <td class="c-num">1/7</td>
-            <td>1천~1만</td>
-            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
-          </tr>
-          <tr>
+        <tbody data-state-body="data">
+          <!-- 방문 임박순 — D-7 이내 인플루언서 우선 노출 -->
+          <tr data-name="高橋太郎" data-country="JP" data-sub="taro_tokyo">
             <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
             <td class="sticky-col"><span class="c-country-code">JP</span></td>
             <td>taro_tokyo</td>
@@ -405,7 +231,7 @@
             <td>남</td>
             <td class="c-num">1,500,000</td>
             <td class="c-num">12회</td>
-            <td>2026-04-25</td>
+            <td><span class="c-visit-date">2026-04-25</span> <span class="badge badge-warning badge-sm c-dday"><span class="badge-dot"></span>D-1 임박</span></td>
             <td class="c-num">15,200</td>
             <td class="c-num">98,000</td>
             <td class="c-num">24</td>
@@ -413,23 +239,392 @@
             <td class="c-num">6/7</td>
             <td>100k+</td>
             <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
-            <td><button class="btn btn-sm btn-secondary">저장</button></td>
-            <td><button class="btn btn-sm btn-primary">제안하기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
           </tr>
-          <!-- Empty state 예시: 실제 데이터가 0건일 때 <tbody> 를 이것으로 교체
+          <tr data-name="鈴木健二" data-country="JP" data-sub="kenji_style">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">JP</span></td>
+            <td>kenji_style</td>
+            <td>鈴木健二</td>
+            <td>남</td>
+            <td class="c-num">120,000</td>
+            <td class="c-num">1회</td>
+            <td><span class="c-visit-date">2026-04-28</span> <span class="badge badge-warning badge-sm c-dday"><span class="badge-dot"></span>D-4 임박</span></td>
+            <td class="c-num">580</td>
+            <td class="c-num">3,200</td>
+            <td class="c-num">2</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 3 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 2</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="李嘉欣" data-country="HK" data-sub="hk_foodie">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">HK</span></td>
+            <td>hk_foodie</td>
+            <td>李嘉欣</td>
+            <td>여</td>
+            <td class="c-num">200,000</td>
+            <td class="c-num">6회</td>
+            <td><span class="c-visit-date">2026-04-30</span> <span class="badge badge-warning badge-sm c-dday"><span class="badge-dot"></span>D-6 임박</span></td>
+            <td class="c-num">4,200</td>
+            <td class="c-num">28,700</td>
+            <td class="c-num">9</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">4/7</td>
+            <td>10~50k</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="田中ゆき" data-country="JP" data-sub="yuki_beauty">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">JP</span></td>
+            <td>yuki_beauty</td>
+            <td>田中ゆき</td>
+            <td>여</td>
+            <td class="c-num">180,000</td>
+            <td class="c-num">3회</td>
+            <td><span class="c-visit-date">2026-05-10</span></td>
+            <td class="c-num">1,240</td>
+            <td class="c-num">8,500</td>
+            <td class="c-num">5</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">3/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 1 · <span class="is-viewed">확인 0</span> · <span class="is-pending">대기 1</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="Nguyễn Linh" data-country="VN" data-sub="linh_saigon">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">VN</span></td>
+            <td>linh_saigon</td>
+            <td>Nguyễn Linh</td>
+            <td>여</td>
+            <td class="c-num">85,000</td>
+            <td class="c-num">1회</td>
+            <td><span class="c-visit-date">2026-05-05</span></td>
+            <td class="c-num">760</td>
+            <td class="c-num">2,800</td>
+            <td class="c-num">1</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">1/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 5 · <span class="is-viewed">확인 3</span> · <span class="is-pending">대기 2</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="佐藤みく" data-country="JP" data-sub="miku_travel">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">JP</span></td>
+            <td>miku_travel</td>
+            <td>佐藤みく</td>
+            <td>여</td>
+            <td class="c-num">250,000</td>
+            <td class="c-num">5회</td>
+            <td><span class="c-visit-date">2026-05-15</span></td>
+            <td class="c-num">3,820</td>
+            <td class="c-num">24,100</td>
+            <td class="c-num">12</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">5/7</td>
+            <td>10~50k</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="Анна К." data-country="RU" data-sub="anna_moscow">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">RU</span></td>
+            <td>anna_moscow</td>
+            <td>Анна К.</td>
+            <td>여</td>
+            <td class="c-num">95,000</td>
+            <td class="c-num">2회</td>
+            <td><span class="c-visit-date">2026-06-01</span></td>
+            <td class="c-num">920</td>
+            <td class="c-num">4,600</td>
+            <td class="c-num">3</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 2 · <span class="is-viewed">확인 2</span> · <span class="is-pending">대기 0</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="王小美" data-country="CN" data-sub="xiaomei_cn">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">CN</span></td>
+            <td>xiaomei_cn</td>
+            <td>王小美</td>
+            <td>여</td>
+            <td class="c-num">300,000</td>
+            <td class="c-num">8회</td>
+            <td><span class="c-visit-date">2026-05-20</span></td>
+            <td class="c-num">5,400</td>
+            <td class="c-num">32,000</td>
+            <td class="c-num">18</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">4/7</td>
+            <td>50~100k</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="陳美玲" data-country="TW" data-sub="mei_taipei">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">TW</span></td>
+            <td>mei_taipei</td>
+            <td>陳美玲</td>
+            <td>여</td>
+            <td class="c-num">150,000</td>
+            <td class="c-num">4회</td>
+            <td><span class="c-visit-date">2026-05-22</span></td>
+            <td class="c-num">2,100</td>
+            <td class="c-num">15,300</td>
+            <td class="c-num">7</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">3/7</td>
+            <td>10~50k</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 4 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 3</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="山田りな" data-country="JP" data-sub="rina_osaka">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">JP</span></td>
+            <td>rina_osaka</td>
+            <td>山田りな</td>
+            <td>여</td>
+            <td class="c-num">160,000</td>
+            <td class="c-num">2회</td>
+            <td><span class="c-visit-date">2026-05-18</span></td>
+            <td class="c-num">1,050</td>
+            <td class="c-num">6,400</td>
+            <td class="c-num">4</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="Rachel Tan" data-country="SG" data-sub="sg_glam">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">SG</span></td>
+            <td>sg_glam</td>
+            <td>Rachel Tan</td>
+            <td>여</td>
+            <td class="c-num">220,000</td>
+            <td class="c-num">3회</td>
+            <td><span class="c-visit-date">2026-06-10</span></td>
+            <td class="c-num">2,800</td>
+            <td class="c-num">19,500</td>
+            <td class="c-num">6</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">3/7</td>
+            <td>10~50k</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 2 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 1</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="Ploy S." data-country="TH" data-sub="thai_beauty">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">TH</span></td>
+            <td>thai_beauty</td>
+            <td>Ploy S.</td>
+            <td>여</td>
+            <td class="c-num">110,000</td>
+            <td class="c-num">2회</td>
+            <td><span class="c-visit-date">2026-05-25</span></td>
+            <td class="c-num">890</td>
+            <td class="c-num">5,100</td>
+            <td class="c-num">3</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="Иван П." data-country="RU" data-sub="ivan_vlg">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">RU</span></td>
+            <td>ivan_vlg</td>
+            <td>Иван П.</td>
+            <td>남</td>
+            <td class="c-num">75,000</td>
+            <td class="c-num">0회</td>
+            <td><span class="c-visit-date">2026-07-01</span></td>
+            <td class="c-num">340</td>
+            <td class="c-num">1,800</td>
+            <td class="c-num">0</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">1/7</td>
+            <td>0~1k</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 3 · <span class="is-viewed">확인 2</span> · <span class="is-pending">대기 1</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="Aisha R." data-country="MY" data-sub="kl_style">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">MY</span></td>
+            <td>kl_style</td>
+            <td>Aisha R.</td>
+            <td>여</td>
+            <td class="c-num">130,000</td>
+            <td class="c-num">1회</td>
+            <td><span class="c-visit-date">2026-05-12</span></td>
+            <td class="c-num">1,580</td>
+            <td class="c-num">9,200</td>
+            <td class="c-num">4</td>
+            <td><span class="c-approve c-approve-done">승인</span></td>
+            <td class="c-num">2/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status is-none">제안 없음</span>
+              </div>
+            </td>
+          </tr>
+          <tr data-name="Maria C." data-country="PH" data-sub="manila_glow">
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-country-code">PH</span></td>
+            <td>manila_glow</td>
+            <td>Maria C.</td>
+            <td>여</td>
+            <td class="c-num">90,000</td>
+            <td class="c-num">1회</td>
+            <td><span class="c-visit-date">2026-06-05</span></td>
+            <td class="c-num">620</td>
+            <td class="c-num">3,400</td>
+            <td class="c-num">2</td>
+            <td><span class="c-approve c-approve-pending">미승인</span></td>
+            <td class="c-num">1/7</td>
+            <td>1천~1만</td>
+            <td><button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button></td>
+            <td><button class="btn btn-sm btn-secondary js-toast-save">저장</button></td>
+            <td>
+              <div class="cell-propose">
+                <button class="btn btn-sm btn-primary js-open-propose">제안하기</button>
+                <span class="cell-propose-status">제안 1 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 0</span></span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+        <!-- 로딩 (스켈레톤) -->
+        <tbody data-state-body="loading" hidden>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+          <tr class="skeleton-row"><td colspan="18"><div class="sk-row"><span class="skeleton sk-chip"></span><span class="skeleton sk-w1"></span><span class="skeleton sk-w4"></span><span class="skeleton sk-w3"></span><span class="skeleton sk-w2"></span><span class="skeleton sk-flex"></span></div></td></tr>
+        </tbody>
+
+        <!-- 빈 상태 -->
+        <tbody data-state-body="empty" hidden>
           <tr class="empty-row">
-            <td colspan="17">
+            <td colspan="18">
               <div class="empty-state">
                 <div class="empty-state-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 </div>
-                <div class="empty-state-title">조건에 맞는 인플루언서가 없습니다</div>
+                <div class="empty-state-title">방문 예정 인플루언서가 없습니다</div>
                 <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
                 <button class="btn btn-sm btn-secondary">필터 초기화</button>
               </div>
             </td>
           </tr>
-          -->
+        </tbody>
+
+        <!-- 에러 -->
+        <tbody data-state-body="error" hidden>
+          <tr class="empty-row">
+            <td colspan="18">
+              <div class="empty-state is-error">
+                <div class="empty-state-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div class="empty-state-title">목록을 불러오지 못했습니다</div>
+                <div class="empty-state-desc">일시적인 네트워크 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</div>
+                <button class="btn btn-sm btn-secondary">다시 시도</button>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
       </div>
@@ -445,7 +640,7 @@
 
     <!-- ============ 카드 뷰 ============ -->
     <div id="view-card" class="cards-wrap" hidden>
-      <div class="influencer-cards">
+      <div class="influencer-cards" data-state-body="data">
 
         <article class="inf-card">
           <div class="inf-card-header">
@@ -473,6 +668,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 4회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status is-none">제안 없음</span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
@@ -505,9 +701,11 @@
           </div>
           <div class="inf-card-meta">
             <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>방문예정 2026-04-30</span>
+            <span class="badge badge-warning badge-sm c-dday"><span class="badge-dot"></span>D-6 임박</span>
             <span class="mp-dot">·</span>
             <span>캠페인 12회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 3 · <span class="is-viewed">확인 1</span> · <span class="is-pending">대기 2</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
@@ -542,6 +740,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 6회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 5 · <span class="is-viewed">확인 3</span> · <span class="is-pending">대기 2</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
@@ -577,6 +776,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 28회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status is-none">제안 없음</span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
@@ -612,6 +812,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 9회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 2 · <span class="is-viewed">확인 2</span> · <span class="is-pending">대기 0</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
@@ -647,6 +848,7 @@
             <span class="mp-dot">·</span>
             <span>캠페인 7회</span>
           </div>
+          <div class="inf-card-propose"><span class="cell-propose-status">제안 1 · <span class="is-viewed">확인 0</span> · <span class="is-pending">대기 1</span></span></div>
           <div class="inf-card-actions">
             <button class="btn btn-sm btn-secondary js-open-influencer">상세보기</button>
             <button class="btn btn-sm btn-secondary js-toast-save" aria-label="저장">
@@ -657,7 +859,43 @@
         </article>
 
       </div>
+
+    <!-- 카드뷰 로딩 (카드 스켈레톤) -->
+    <div data-state-body="loading" hidden>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
+      <div class="skeleton" style="height:88px;width:100%;border-radius:var(--radius-md);margin-bottom:12px"></div>
     </div>
+
+    <!-- 빈 상태 — 데이터 0건 -->
+    <div data-state-body="empty" hidden>
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="empty-state-title">방문 예정 인플루언서가 없습니다</div>
+        <div class="empty-state-desc">검색 조건을 변경하거나 필터를 초기화해 보세요.</div>
+        <button class="btn btn-sm btn-secondary">필터 초기화</button>
+      </div>
+    </div>
+
+    <!-- 에러 — 통신 실패 -->
+    <div data-state-body="error" hidden>
+      <div class="empty-state is-error">
+        <div class="empty-state-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="empty-state-title">목록을 불러오지 못했습니다</div>
+        <div class="empty-state-desc">일시적인 네트워크 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</div>
+        <button class="btn btn-sm btn-secondary">다시 시도</button>
+      </div>
+    </div>
+    </div>
+    <!-- /카드뷰 -->
+
     <div class="bulk-bar" id="search-bulk-bar" role="region" aria-label="일괄 작업 도구">
       <span class="bulk-count"><strong data-bulk-count>0</strong>명 선택</span>
       <span class="bulk-divider"></span>

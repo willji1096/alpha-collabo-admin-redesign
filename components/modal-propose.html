@@ -62,6 +62,7 @@
               <div class="mp-camp-head">
                 <span class="mp-camp-name">봄 신메뉴 체험단</span>
                 <span class="badge badge-info badge-sm"><span class="badge-dot"></span>방문형</span>
+                <span class="mp-camp-status mp-status-new">미제안</span>
               </div>
               <div class="mp-camp-meta">
                 <span class="is-mono">1767340856</span>
@@ -82,6 +83,7 @@
               <div class="mp-camp-head">
                 <span class="mp-camp-name">프리미엄 스킨케어 체험단</span>
                 <span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span>
+                <span class="mp-camp-status mp-status-viewed">확인함</span>
               </div>
               <div class="mp-camp-meta">
                 <span class="is-mono">1771914476</span>
@@ -90,18 +92,19 @@
                 <span class="mp-dot">·</span>
                 <span>단가 <strong>120,000</strong></span>
                 <span class="mp-dot">·</span>
-                <span>마감 2026-05-10</span>
+                <span>3시간 전 확인 · 재전송 가능</span>
               </div>
             </div>
           </label>
         </li>
-        <li class="mp-camp" data-type="방문형">
+        <li class="mp-camp is-locked" data-type="방문형">
           <label class="mp-camp-label">
-            <input class="mp-camp-chk" type="checkbox">
+            <input class="mp-camp-chk" type="checkbox" disabled>
             <div class="mp-camp-body">
               <div class="mp-camp-head">
                 <span class="mp-camp-name">로담한의원 부산점</span>
                 <span class="badge badge-info badge-sm"><span class="badge-dot"></span>방문형</span>
+                <span class="mp-camp-status mp-status-pending">확인중</span>
               </div>
               <div class="mp-camp-meta">
                 <span class="is-mono">1739439117</span>
@@ -110,7 +113,7 @@
                 <span class="mp-dot">·</span>
                 <span>단가 <strong>250,000</strong></span>
                 <span class="mp-dot">·</span>
-                <span>마감 2026-04-30</span>
+                <span class="mp-camp-recool">재전송 6/02 14:00 가능</span>
               </div>
             </div>
           </label>
@@ -122,6 +125,7 @@
               <div class="mp-camp-head">
                 <span class="mp-camp-name">여름 리뷰 캠페인</span>
                 <span class="badge badge-info badge-sm"><span class="badge-dot"></span>리뷰형</span>
+                <span class="mp-camp-status mp-status-new">미제안</span>
               </div>
               <div class="mp-camp-meta">
                 <span class="is-mono">1766391050</span>
@@ -135,13 +139,14 @@
             </div>
           </label>
         </li>
-        <li class="mp-camp" data-type="배송형">
+        <li class="mp-camp is-locked" data-type="배송형">
           <label class="mp-camp-label">
-            <input class="mp-camp-chk" type="checkbox">
+            <input class="mp-camp-chk" type="checkbox" disabled>
             <div class="mp-camp-body">
               <div class="mp-camp-head">
                 <span class="mp-camp-name">봄 인기게시물 노출 캠페인</span>
                 <span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span>
+                <span class="mp-camp-status mp-status-pending">확인중</span>
               </div>
               <div class="mp-camp-meta">
                 <span class="is-mono">1769756657</span>
@@ -150,7 +155,7 @@
                 <span class="mp-dot">·</span>
                 <span>단가 <strong>160,000</strong></span>
                 <span class="mp-dot">·</span>
-                <span>마감 2026-05-15</span>
+                <span class="mp-camp-recool">재전송 6/01 09:00 가능</span>
               </div>
             </div>
           </label>
@@ -163,19 +168,25 @@
       <div class="mp-section-head">
         <h3 class="mp-section-title">제안 메시지 <span class="mp-optional">(선택)</span></h3>
       </div>
-      <textarea class="mp-textarea" rows="4" placeholder="예: 안녕하세요. 귀하의 채널 콘셉트와 잘 맞을 것 같아 캠페인을 제안드립니다. 검토 부탁드립니다."></textarea>
+      <textarea class="mp-textarea" rows="4" placeholder="인플루언서에게 함께 보낼 제안 메모를 남겨 주세요. 예: 채널 콘셉트가 캠페인과 잘 맞아 제안드립니다. 일정·단가 협의 가능합니다."></textarea>
       <div class="mp-charcount"><span data-propose-count>0</span> / 500</div>
     </div>
 
   </div>
 
-  <div class="modal-footer">
-    <div class="mp-footer-summary">
-      선택 <strong data-propose-selected>0</strong>건
-    </div>
-    <div class="mp-footer-actions">
-      <button type="button" class="btn btn-secondary btn-md js-close-propose">취소</button>
-      <button type="button" class="btn btn-primary btn-md js-send-propose" disabled>제안 보내기</button>
+  <div class="modal-footer mp-footer">
+    <p class="mp-footer-notice">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      선택한 캠페인이 인플루언서 앱으로 바로 푸시됩니다. <strong>확인중</strong>인 캠페인은 일정 시간 동안 재전송할 수 없습니다.
+    </p>
+    <div class="mp-footer-bar">
+      <div class="mp-footer-summary">
+        선택 <strong data-propose-selected>0</strong>건
+      </div>
+      <div class="mp-footer-actions">
+        <button type="button" class="btn btn-secondary btn-md js-close-propose">취소</button>
+        <button type="button" class="btn btn-primary btn-md js-send-propose" disabled>인플루언서에게 제안 보내기</button>
+      </div>
     </div>
   </div>
 

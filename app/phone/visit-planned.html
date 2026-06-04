@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Alphacollabo App — 한국 방문 예정 인플루언서 (Phone)</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/common.css">
+<link rel="stylesheet" href="../css/app-mobile.css">
+<style>
+  .vp-card { display: flex; gap: 12px; padding: 14px 16px; background: var(--bg-surface); border-bottom: 1px solid var(--border-light); cursor: pointer }
+  .vp-card:last-child { border-bottom: none }
+  .vp-card:hover { background: var(--bg-hover) }
+  .vp-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--bg-elevated); flex-shrink: 0; object-fit: cover; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06) }
+  .vp-body { flex: 1; min-width: 0 }
+  .vp-name { display: flex; align-items: center; gap: 6px; font-size:var(--fs-base); font-weight: 500; margin-bottom: 2px }
+  .vp-handle { font-size: var(--fs-sm); color: var(--text-tertiary); margin-bottom: 4px }
+  .vp-meta { display: flex; gap: 8px; font-size:var(--fs-sm); color: var(--text-secondary); flex-wrap: wrap }
+  .vp-meta b { color: var(--text-primary); font-weight: 600 }
+  .vp-when { margin-top: 6px; font-size: var(--fs-sm); color: var(--accent); font-weight: 600 }
+  /* admin 17컬럼 복원 */
+  .vp-head { display:flex; align-items:flex-start; justify-content:space-between; gap:6px }
+  .vp-statgrid { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; margin-top:6px }
+  .vp-stat { display:flex; justify-content:space-between; font-size:var(--fs-sm); color:var(--text-secondary) }
+  .vp-stat b { color:var(--text-primary); font-weight:600 }
+  .vp-price { margin-top:6px; font-size:var(--fs-sm); color:var(--text-secondary) }
+  .vp-price b { color:var(--text-primary); font-weight:700 }
+  .vp-actions { display:flex; gap:6px; margin-top:10px }
+  .vp-actions .btn { flex:1; justify-content:center }
+  .vp-actions .btn-save { flex:0 0 auto; width:36px; padding:0 }
+  .vp-actions .btn-save.is-on { color:var(--accent); border-color:var(--accent) }
+  .vp-actions .btn-save.is-on svg { fill:var(--accent) }
+  .vp-card { flex-direction: column }
+  .vp-card-top { display:flex; gap:12px }
+  .app-empty-desc { font-size:var(--fs-sm); color:var(--text-tertiary); margin-top:2px }
+</style>
+</head>
+<body class="app-body-phone">
+<div class="app-phone">
+  <header class="app-header">
+    <button class="app-header-icon" onclick="history.back()" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="app-header-title">방문 예정</div>
+    <div class="app-header-actions">
+      <button class="app-header-icon" aria-label="국가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg></button>
+      <button class="app-header-icon" onclick="openSheet('sheet-filter')" aria-label="필터"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+    </div>
+  </header>
+  <main class="app-body">
+    <div class="app-pill-tabs">
+      <a class="app-pill-tab is-active" href="#">전체</a>
+      <a class="app-pill-tab" href="#">일본<span class="count">5</span></a>
+      <a class="app-pill-tab" href="#">중국<span class="count">1</span></a>
+      <a class="app-pill-tab" href="#">러시아<span class="count">1</span></a>
+      <a class="app-pill-tab" href="#">대만<span class="count">1</span></a>
+    </div>
+    <div class="app-list-toolbar">
+      <div class="app-list-toolbar-count">한국 방문 예정 <b>8</b>명 · 국적 <b>일본</b></div>
+    </div>
+    <div class="app-section is-flush">
+      <div class="vp-card">
+        <a class="vp-card-top" href="influencer-detail.html" style="text-decoration:none;color:inherit">
+          <img class="vp-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop" alt="">
+          <div class="vp-body">
+            <div class="vp-head">
+              <div>
+                <div class="vp-name">yuki_beauty <span class="c-country-code">JP</span></div>
+                <div class="vp-handle">田中ゆき · 여</div>
+              </div>
+              <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+            </div>
+            <div class="vp-statgrid">
+              <div class="vp-stat"><span>팔로워</span><b>1천~1만</b></div>
+              <div class="vp-stat"><span>SNS</span><b>3/7</b></div>
+              <div class="vp-stat"><span>평균 좋아요</span><b>1,240</b></div>
+              <div class="vp-stat"><span>평균 조회수</span><b>8,500</b></div>
+              <div class="vp-stat"><span>캠페인</span><b>3회</b></div>
+              <div class="vp-stat"><span>저장 업체</span><b>5</b></div>
+            </div>
+            <div class="vp-price">단가 <b>180,000원</b></div>
+            <div class="vp-when">방문예정 2026-05-10</div>
+          </div>
+        </a>
+        <div class="vp-actions">
+          <button class="btn btn-sm btn-secondary btn-save" aria-pressed="false" aria-label="저장" onclick="toggleSave(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+          <button class="btn btn-sm btn-primary" onclick="proposeTo('yuki_beauty','JP','1천~1만','180,000','https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=88&h=88&fit=crop')">제안하기</button>
+        </div>
+      </div>
+
+      <div class="vp-card">
+        <a class="vp-card-top" href="influencer-detail.html" style="text-decoration:none;color:inherit">
+          <img class="vp-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop" alt="">
+          <div class="vp-body">
+            <div class="vp-head">
+              <div>
+                <div class="vp-name">miku_travel <span class="c-country-code">JP</span></div>
+                <div class="vp-handle">佐藤みく · 여</div>
+              </div>
+              <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+            </div>
+            <div class="vp-statgrid">
+              <div class="vp-stat"><span>팔로워</span><b>1만~5만</b></div>
+              <div class="vp-stat"><span>SNS</span><b>5/7</b></div>
+              <div class="vp-stat"><span>평균 좋아요</span><b>3,820</b></div>
+              <div class="vp-stat"><span>평균 조회수</span><b>24,100</b></div>
+              <div class="vp-stat"><span>캠페인</span><b>5회</b></div>
+              <div class="vp-stat"><span>저장 업체</span><b>12</b></div>
+            </div>
+            <div class="vp-price">단가 <b>250,000원</b></div>
+            <div class="vp-when">방문예정 2026-05-15</div>
+          </div>
+        </a>
+        <div class="vp-actions">
+          <button class="btn btn-sm btn-secondary btn-save" aria-pressed="false" aria-label="저장" onclick="toggleSave(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+          <button class="btn btn-sm btn-primary" onclick="proposeTo('miku_travel','JP','1만~5만','250,000','https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=88&h=88&fit=crop')">제안하기</button>
+        </div>
+      </div>
+
+      <div class="vp-card">
+        <a class="vp-card-top" href="influencer-detail.html" style="text-decoration:none;color:inherit">
+          <img class="vp-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop" alt="">
+          <div class="vp-body">
+            <div class="vp-head">
+              <div>
+                <div class="vp-name">kenji_style <span class="c-country-code">JP</span></div>
+                <div class="vp-handle">鈴木健二 · 남</div>
+              </div>
+              <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+            </div>
+            <div class="vp-statgrid">
+              <div class="vp-stat"><span>팔로워</span><b>1천~1만</b></div>
+              <div class="vp-stat"><span>SNS</span><b>2/7</b></div>
+              <div class="vp-stat"><span>평균 좋아요</span><b>580</b></div>
+              <div class="vp-stat"><span>평균 조회수</span><b>3,200</b></div>
+              <div class="vp-stat"><span>캠페인</span><b>1회</b></div>
+              <div class="vp-stat"><span>저장 업체</span><b>2</b></div>
+            </div>
+            <div class="vp-price">단가 <b>120,000원</b></div>
+            <div class="vp-when">방문예정 2026-04-28</div>
+          </div>
+        </a>
+        <div class="vp-actions">
+          <button class="btn btn-sm btn-secondary btn-save" aria-pressed="false" aria-label="저장" onclick="toggleSave(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+          <button class="btn btn-sm btn-primary" onclick="proposeTo('kenji_style','JP','1천~1만','120,000','https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=88&h=88&fit=crop')">제안하기</button>
+        </div>
+      </div>
+
+      <div class="vp-card">
+        <a class="vp-card-top" href="influencer-detail.html" style="text-decoration:none;color:inherit">
+          <img class="vp-avatar" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&h=120&fit=crop" alt="">
+          <div class="vp-body">
+            <div class="vp-head">
+              <div>
+                <div class="vp-name">anna_moscow <span class="c-country-code">RU</span></div>
+                <div class="vp-handle">Анна К. · 여</div>
+              </div>
+              <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+            </div>
+            <div class="vp-statgrid">
+              <div class="vp-stat"><span>팔로워</span><b>1천~1만</b></div>
+              <div class="vp-stat"><span>SNS</span><b>2/7</b></div>
+              <div class="vp-stat"><span>평균 좋아요</span><b>920</b></div>
+              <div class="vp-stat"><span>평균 조회수</span><b>4,600</b></div>
+              <div class="vp-stat"><span>캠페인</span><b>2회</b></div>
+              <div class="vp-stat"><span>저장 업체</span><b>3</b></div>
+            </div>
+            <div class="vp-price">단가 <b>95,000원</b></div>
+            <div class="vp-when">방문예정 2026-06-01</div>
+          </div>
+        </a>
+        <div class="vp-actions">
+          <button class="btn btn-sm btn-secondary btn-save" aria-pressed="false" aria-label="저장" onclick="toggleSave(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+          <button class="btn btn-sm btn-primary" onclick="proposeTo('anna_moscow','RU','1천~1만','95,000','https://images.unsplash.com/photo-1517841905240-472988babdf9?w=88&h=88&fit=crop')">제안하기</button>
+        </div>
+      </div>
+
+      <div class="vp-card">
+        <a class="vp-card-top" href="influencer-detail.html" style="text-decoration:none;color:inherit">
+          <img class="vp-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop" alt="">
+          <div class="vp-body">
+            <div class="vp-head">
+              <div>
+                <div class="vp-name">xiaomei_cn <span class="c-country-code">CN</span></div>
+                <div class="vp-handle">王小美 · 여</div>
+              </div>
+              <span class="badge badge-success badge-sm"><span class="badge-dot"></span>승인</span>
+            </div>
+            <div class="vp-statgrid">
+              <div class="vp-stat"><span>팔로워</span><b>5만~10만</b></div>
+              <div class="vp-stat"><span>SNS</span><b>4/7</b></div>
+              <div class="vp-stat"><span>평균 좋아요</span><b>5,400</b></div>
+              <div class="vp-stat"><span>평균 조회수</span><b>32,000</b></div>
+              <div class="vp-stat"><span>캠페인</span><b>8회</b></div>
+              <div class="vp-stat"><span>저장 업체</span><b>18</b></div>
+            </div>
+            <div class="vp-price">단가 <b>300,000원</b></div>
+            <div class="vp-when">방문예정 2026-05-20</div>
+          </div>
+        </a>
+        <div class="vp-actions">
+          <button class="btn btn-sm btn-secondary btn-save" aria-pressed="false" aria-label="저장" onclick="toggleSave(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+          <button class="btn btn-sm btn-primary" onclick="proposeTo('xiaomei_cn','CN','5만~10만','300,000','https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=88&h=88&fit=crop')">제안하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 빈 상태 (방문 예정 0명 시 .app-section 대체) -->
+    <div class="app-empty" id="vp-empty" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      <div class="app-empty-title">방문 예정 인플루언서가 없습니다</div>
+      <div class="app-empty-desc">필터 조건을 변경하거나 인플루언서 탐색에서 저장해 보세요.</div>
+    </div>
+  </main>
+  <nav class="app-tabbar">
+    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>홈</a>
+    <a class="app-tab" href="list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>신청서관리</a>
+    <a class="app-tab is-active" href="influencer-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>인플루언서</a>
+    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
+    <a class="app-tab" href="more.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18" r="1.4"/></svg>더보기</a>
+  </nav>
+</div>
+<div class="app-sheet-root" id="sheet-filter" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-filter')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-filter-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head"><div class="app-sheet-head-titles"><h2 class="app-sheet-title" id="sheet-filter-title">필터</h2></div><button class="app-sheet-close" onclick="closeSheet('sheet-filter')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="app-sheet-body">
+      <div class="app-filter-group"><div class="app-filter-label">국적</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="checkbox" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>일본</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>한국</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>중국</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>러시아</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>대만</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>홍콩</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">플랫폼</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="checkbox" checked><span>인스타그램</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>유튜브</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>틱톡</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>샤오훙슈</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>페이스북</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>X</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">팔로워</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="radio" name="f-follower" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-follower"><span>1천 이하</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-follower"><span>1천~1만</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-follower"><span>1만~5만</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-follower"><span>5만~10만</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-follower"><span>10만 이상</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">성별</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="radio" name="f-gender" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-gender"><span>여성</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-gender"><span>남성</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">방문 예정일</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="radio" name="f-visit" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-visit"><span>이번 주</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-visit"><span>이번 달</span></label>
+          <label class="app-filter-chip"><input type="radio" name="f-visit"><span>날짜 지정</span></label>
+        </div></div>
+    </div>
+    <div class="app-sheet-foot">
+      <button class="btn btn-ghost btn-md btn-reset" onclick="document.querySelectorAll('#sheet-filter input').forEach(function(c){c.checked=false})">초기화</button>
+      <button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-filter')">적용</button>
+    </div>
+  </div>
+</div>
+<!-- ── 캠페인 제안 시트 (admin modal-propose 패턴 이식) ───────────── -->
+<div class="app-sheet-root" id="sheet-propose" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-propose')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-propose-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head">
+      <div class="app-sheet-head-titles">
+        <h2 class="app-sheet-title" id="sheet-propose-title">캠페인 제안 보내기</h2>
+      </div>
+      <button class="app-sheet-close" onclick="closeSheet('sheet-propose')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="app-sheet-body">
+
+      <div class="app-sheet-recipient">
+        <img class="app-sheet-recipient-avt" id="propose-avt" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=88&h=88&fit=crop" alt="">
+        <div class="app-sheet-recipient-body">
+          <div class="app-sheet-recipient-label">받는 인플루언서</div>
+          <div class="app-sheet-recipient-name"><span id="propose-name">yuki_beauty</span> <span class="c-country-code" id="propose-country">JP</span></div>
+          <div class="app-sheet-recipient-sub" id="propose-sub">1천~1만 팔로워 · 단가 180,000</div>
+        </div>
+      </div>
+
+      <div class="app-sheet-sec">
+        <div class="app-sheet-sec-head">
+          <h3 class="app-sheet-sec-title">제안할 캠페인 선택</h3>
+          <span class="app-sheet-sec-hint">최대 3개</span>
+        </div>
+        <div class="app-sheet-camp-list">
+          <label class="app-sheet-camp">
+            <input type="checkbox" name="propose-camp">
+            <span class="app-sheet-camp-box">
+              <span class="app-sheet-camp-head">
+                <span class="app-sheet-camp-name">프리미엄 스킨케어 체험단</span>
+                <span class="badge badge-info badge-sm"><span class="badge-dot"></span>배송형</span>
+              </span>
+              <span class="app-sheet-camp-meta"><span class="is-mono">1771914476</span> · 모집 5/20 · 단가 <b>120,000</b> · 마감 2026-05-10</span>
+            </span>
+          </label>
+          <label class="app-sheet-camp">
+            <input type="checkbox" name="propose-camp">
+            <span class="app-sheet-camp-box">
+              <span class="app-sheet-camp-head">
+                <span class="app-sheet-camp-name">여름 리뷰 캠페인</span>
+                <span class="badge badge-info badge-sm"><span class="badge-dot"></span>리뷰형</span>
+              </span>
+              <span class="app-sheet-camp-meta"><span class="is-mono">1766391050</span> · 모집 1/15 · 단가 <b>95,000</b> · 마감 2026-05-20</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="app-sheet-sec">
+        <div class="app-sheet-sec-head">
+          <h3 class="app-sheet-sec-title">제안 메시지 <span class="app-sheet-sec-hint">(선택)</span></h3>
+        </div>
+        <textarea class="form-input" rows="4" placeholder="예: 채널 콘셉트와 잘 맞을 것 같아 캠페인을 제안드립니다. 검토 부탁드립니다."></textarea>
+        <div class="app-sheet-charcount">0 / 500</div>
+      </div>
+
+    </div>
+    <div class="app-sheet-foot">
+      <span class="app-sheet-foot-note">선택 <strong>0</strong>건</span>
+      <button class="btn btn-secondary btn-md" onclick="closeSheet('sheet-propose')">취소</button>
+      <button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-propose'); confirmDialog({title:'캠페인 제안을 보낼까요?', desc:'선택한 제안은 매니저를 통해 인플루언서에게 전달됩니다.', tone:'info', okLabel:'보내기'})">제안 보내기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 확인 다이얼로그 (공통) ───────────────────────────────────── -->
+<div class="app-confirm-root" id="app-confirm" hidden>
+  <div class="app-confirm-backdrop" onclick="closeSheet('app-confirm')"></div>
+  <div class="app-confirm" role="alertdialog" aria-modal="true" aria-labelledby="app-confirm-title" aria-describedby="app-confirm-desc">
+    <div class="app-confirm-icon is-info">
+      <svg data-icon="warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <svg data-icon="danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+      <svg data-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <svg data-icon="success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="app-confirm-title" id="app-confirm-title" data-confirm-title>진행하시겠습니까?</h2>
+    <p class="app-confirm-desc" id="app-confirm-desc" data-confirm-desc></p>
+    <div class="app-confirm-actions">
+      <button type="button" class="btn btn-secondary btn-md" onclick="closeSheet('app-confirm')">취소</button>
+      <button type="button" class="btn btn-primary btn-md" data-confirm-ok>확인</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/sheets.js"></script>
+<script>
+  function toggleSave(btn){
+    var on = btn.classList.toggle('is-on');
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? '저장됨' : '저장');
+  }
+  function proposeTo(name, country, follower, price, avt){
+    document.getElementById('propose-name').textContent = name;
+    document.getElementById('propose-country').textContent = country;
+    document.getElementById('propose-sub').textContent = follower + ' 팔로워 · 단가 ' + price;
+    document.getElementById('propose-avt').src = avt;
+    openSheet('sheet-propose');
+  }
+</script>
+</body></html>

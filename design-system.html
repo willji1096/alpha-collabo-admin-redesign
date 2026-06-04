@@ -218,6 +218,7 @@
     <a class="ds-side-link" href="#progress">Progress</a>
     <a class="ds-side-link" href="#skeleton">Skeleton</a>
     <a class="ds-side-link" href="#empty">Empty State</a>
+    <a class="ds-side-link" href="#error">Error State</a>
     <a class="ds-side-link" href="#modal">Modal & Drawer</a>
     <a class="ds-side-link" href="#sns">SNS Tags</a>
 
@@ -709,6 +710,25 @@
           <div class="empty-state-title">등록된 캠페인이 없습니다</div>
           <div class="empty-state-desc">첫 캠페인을 등록하고 인플루언서 모집을 시작해 보세요.</div>
           <button class="btn btn-primary btn-md">새 캠페인 등록</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error State -->
+    <section class="ds-section" id="error">
+      <div class="ds-section-head">
+        <span class="ds-eyebrow">Components</span>
+        <h2>Error State</h2>
+      </div>
+      <p>통신 실패 시. empty-state 레이아웃 재사용 + <code>.is-error</code> (danger 톤 아이콘) + 재시도 버튼.</p>
+      <div class="demo" style="padding:0">
+        <div class="empty-state is-error">
+          <div class="empty-state-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="empty-state-title">목록을 불러오지 못했습니다</div>
+          <div class="empty-state-desc">일시적인 네트워크 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</div>
+          <button class="btn btn-secondary btn-md">다시 시도</button>
         </div>
       </div>
     </section>

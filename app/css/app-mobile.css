@@ -1,0 +1,1468 @@
+/* ================================================================
+   알파콜라보 관리자 앱 — 모바일/태블릿 전용 패턴
+   common.css + admin.css 토큰을 그대로 사용. 추가 패턴만 정의.
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   App Shell — 폰 풀스크린 / 태블릿 사이드바 레이아웃
+   ---------------------------------------------------------------- */
+html, body {
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+body.app-body-phone {
+  background: var(--bg-page);
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 모바일 사용성 가이드 — 인터랙티브 요소 공통 */
+.app-phone button,
+.app-phone a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.app-phone button:focus-visible,
+.app-phone a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* tap target 보강 — common.css btn-sm/md 사이즈 모바일 한정 상향 */
+.app-phone .btn-sm { height: 40px; min-height: 40px; font-size:var(--fs-base); padding: 0 14px; }
+.app-phone .btn-md { height: 44px; min-height: 44px; }
+.app-phone .btn-icon.btn-sm { width: 40px; height: 40px; }
+.app-phone .btn-icon.btn-md { width: 44px; height: 44px; }
+body.app-body-tablet {
+  background: var(--bg-page);
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: var(--text-primary);
+}
+
+/* ── 폰 Shell ──────────────────────────────────────────────────── */
+.app-phone {
+  display: grid;
+  grid-template-rows: 56px 1fr 64px;
+  height: 100dvh;
+  max-width: 480px; /* 폰 시뮬레이션 화면에서만 가운데 정렬 */
+  margin: 0 auto;
+  background: var(--bg-page);
+  position: relative;
+  isolation: isolate;
+}
+
+/* ── 폰 Header ─────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  position: sticky;
+  top: 0;
+  z-index: 15;
+}
+.app-header-title {
+  flex: 1;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.2px;
+}
+/* 홈 헤더 브랜드 로고 (햄버거 대체) */
+.app-header-logo {
+  height: 48px;
+  width: auto;
+  display: block;
+  margin-right: 2px;
+}
+.app-header-back,
+.app-header-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-header-back:hover,
+.app-header-icon:hover { background: var(--bg-hover); }
+.app-header-back:active,
+.app-header-icon:active { background: var(--bg-elevated); transform: scale(0.94); }
+.app-header-back:focus-visible,
+.app-header-icon:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app-header-back svg,
+.app-header-icon svg { width: 22px; height: 22px; }
+.app-header-actions { display: flex; align-items: center; gap: 4px; }
+/* 엣지 아이콘 글리프를 콘텐츠 패딩 라인에 정렬 (44px 터치영역은 유지) */
+.app-header > .app-header-icon:first-child,
+.app-header > .app-header-back:first-child { margin-left: -10px; }
+.app-header-actions > *:last-child { margin-right: -10px; }
+.app-header-badge {
+  position: relative;
+}
+.app-header-badge::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 2px solid var(--bg-surface);
+}
+
+/* ── 폰 Body (스크롤 영역) ─────────────────────────────────────── */
+.app-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  padding-bottom: 24px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── 폰 Tabbar ─────────────────────────────────────────────────── */
+.app-tabbar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.app-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  padding: 8px 4px;
+  font-size:var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+}
+.app-tab svg {
+  width: 22px;
+  height: 22px;
+}
+.app-tab.is-active {
+  color: var(--accent);
+}
+.app-tab.is-active svg {
+  color: var(--accent);
+}
+
+/* ----------------------------------------------------------------
+   Tablet Shell
+   ---------------------------------------------------------------- */
+.app-tablet {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  height: 100dvh;
+}
+.app-tablet-rail {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0 24px;
+  gap: 4px;
+  overflow-y: auto;
+}
+.app-tablet-rail-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+.app-tablet-rail-item {
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size:var(--fs-sm);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+}
+.app-tablet-rail-item svg {
+  width: 22px;
+  height: 22px;
+}
+.app-tablet-rail-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.app-tablet-rail-item.is-active {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+.app-tablet-rail-item.is-active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+.app-tablet-rail-divider {
+  width: 32px;
+  height: 1px;
+  background: var(--border-light);
+  margin: 8px 0;
+}
+.app-tablet-rail-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-tablet-main {
+  display: grid;
+  grid-template-rows: 56px 1fr;
+  min-height: 0;
+}
+.app-tablet-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+}
+.app-tablet-header-title {
+  flex: 1;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.2px;
+}
+.app-tablet-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.app-tablet-body {
+  overflow-y: auto;
+  padding: 24px;
+}
+
+/* ----------------------------------------------------------------
+   SNS 아이콘 모바일 — CSS background로 강제 정상화
+   HTML inline svg는 일부 path가 잘려있어 안 보임. 여기서 덮어씀
+   ---------------------------------------------------------------- */
+.app-phone .sns-ico {
+  width: 18px !important;
+  height: 18px !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: 16px 16px !important;
+  border: none !important;
+  display: inline-block !important;
+  vertical-align: middle;
+}
+.app-phone .sns-ico > svg,
+.app-phone .sns-ico svg { display: none !important; }
+
+.app-phone .sns-ico.tag-instagram {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C026D3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='2' width='20' height='20' rx='5'/%3E%3Cpath d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z'/%3E%3Cline x1='17.5' y1='6.5' x2='17.51' y2='6.5'/%3E%3C/svg%3E") !important;
+}
+.app-phone .sns-ico.tag-youtube {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23DC2626' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z'/%3E%3Cpolygon points='9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02' fill='%23DC2626'/%3E%3C/svg%3E") !important;
+}
+.app-phone .sns-ico.tag-xiaohongshu {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23BE123C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E") !important;
+}
+.app-phone .sns-ico.tag-douyin {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF0050'%3E%3Cpath d='M21 8.5a7.4 7.4 0 0 1-4.3-1.4V15a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V2h3a4.4 4.4 0 0 0 4.8 4.5z'/%3E%3C/svg%3E") !important;
+}
+.app-phone .sns-ico.tag-tiktok {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111'%3E%3Cpath d='M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z'/%3E%3C/svg%3E") !important;
+}
+
+/* ----------------------------------------------------------------
+   검색바 강조 — 페르소나가 못 찾던 문제 해결
+   ---------------------------------------------------------------- */
+.app-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+  transition: border-color var(--duration-fast) var(--ease);
+}
+.app-search-bar:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+.app-search-bar svg {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+.app-search-bar input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size:var(--fs-base);
+  outline: none;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+.app-search-bar input::placeholder { color: var(--text-tertiary); }
+
+/* ----------------------------------------------------------------
+   Page Hero (페이지 진입 부분 — 폰 공통)
+   헤더 바로 아래 붙도록 음수 margin으로 body padding 상쇄
+   ---------------------------------------------------------------- */
+.app-hero {
+  margin: -16px -16px 16px;
+  padding: 20px 16px 18px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+}
+.app-hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app-hero-title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+}
+.app-hero-meta {
+  margin-top: 6px;
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+}
+
+/* ----------------------------------------------------------------
+   KPI — 모바일 2x2 그리드
+   ---------------------------------------------------------------- */
+.app-kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.app-kpi {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.app-kpi-label {
+  font-size:var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  letter-spacing: 0.1px;
+}
+.app-kpi-value {
+  font-size: 22px;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.4px;
+  font-variant-numeric: tabular-nums;
+}
+.app-kpi-delta {
+  font-size:var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.app-kpi-delta.up    { color: var(--status-success); }
+.app-kpi-delta.down  { color: var(--status-error); }
+.app-kpi-spark {
+  width: 100%;
+  height: 28px;
+  margin-top: 2px;
+  display: block;
+}
+
+/* ----------------------------------------------------------------
+   Section Card — 모바일 공통 카드
+   ---------------------------------------------------------------- */
+.app-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.app-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+}
+.app-section-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.1px;
+}
+.app-section-sub {
+  font-size:var(--fs-sm);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+.app-section-link {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-link);
+  text-decoration: none;
+}
+.app-section-body { padding: 4px 16px 14px; }
+.app-section-body.no-padding-x { padding: 4px 0 14px; }
+
+/* 풀폭(블리드) 변형 — 리스트 페이지 전용 */
+.app-section.is-flush {
+  margin-left: -16px;
+  margin-right: -16px;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------------
+   Mini Row (목록형 한 줄)
+   ---------------------------------------------------------------- */
+/* 취소 2종(선정후취소·인플루언서취소) 전환 서브 세그먼트 */
+.app-subseg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 12px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+}
+.app-subseg-btn {
+  flex: 1;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.app-subseg-btn.is-active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+
+.app-mini-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size:var(--fs-base);
+  text-decoration: none;
+  color: inherit;
+}
+.app-mini-row:last-child { border-bottom: none; }
+a.app-mini-row:active { background: var(--bg-elevated); }
+a.app-mini-row .app-mini-chevron { color: var(--text-tertiary); flex-shrink: 0; margin-left: 6px; }
+.app-mini-end { display: inline-flex; align-items: center; }
+.app-mini-label {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.app-mini-value {
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+/* ----------------------------------------------------------------
+   List Card — 테이블 대체 카드 (폰 list/매칭 화면용)
+   ---------------------------------------------------------------- */
+.app-list-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.app-list-card:hover { background: var(--bg-hover); }
+.app-list-card-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  flex-shrink: 0;
+  object-fit: cover;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+}
+.app-list-card-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.app-list-card-title {
+  font-size:var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+}
+.app-list-card-meta {
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.app-list-card-meta-sep {
+  display: inline-block;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  opacity: 0.6;
+}
+/* 캠페인 코드 · 가맹점명 / 채널 URL 등 부가 메타 1행 (말줄임) */
+.app-list-card-subline {
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+  font-variant-numeric: tabular-nums;
+}
+.app-list-card-subline.is-url { word-break: break-all; }
+.app-list-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.app-list-card-stat {
+  font-size:var(--fs-sm);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.app-list-card-stat b {
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+/* 캠페인 일정 리스트용 stat 행 (신청/선정/리뷰 3열) */
+.app-list-card-stat.is-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+/* 마지막 카드 하단 구분선 제거 */
+.app-list-card:last-child {
+  border-bottom: none;
+}
+/* toprow 내 우측 push 유틸 */
+.app-card-toprow .is-push-end {
+  margin-left: auto;
+}
+
+/* ----------------------------------------------------------------
+   Timeline — 모바일 컴팩트
+   ---------------------------------------------------------------- */
+.app-timeline { list-style: none; margin: 0; padding: 0; }
+.app-timeline-item {
+  position: relative;
+  padding: 8px 0 12px 24px;
+}
+.app-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 14px;
+  bottom: -4px;
+  width: 1px;
+  background: var(--border-light);
+}
+.app-timeline-item:last-child::before { display: none; }
+.app-timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--neutral-300);
+  border: 2px solid var(--bg-surface);
+  box-shadow: 0 0 0 1px var(--border-default);
+}
+.app-timeline-dot.accent  { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.app-timeline-dot.success { background: var(--status-success); box-shadow: 0 0 0 1px var(--status-success); }
+.app-timeline-dot.warning { background: var(--status-warning); box-shadow: 0 0 0 1px var(--status-warning); }
+.app-timeline-title {
+  font-size:var(--fs-base);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.app-timeline-meta {
+  display: block;
+  margin-top: 2px;
+  font-size:var(--fs-sm);
+  color: var(--text-tertiary);
+}
+.app-timeline-body {
+  margin-top: 4px;
+  font-size:var(--fs-base);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+}
+
+/* ----------------------------------------------------------------
+   Pill Tabs (모바일 필터)
+   ---------------------------------------------------------------- */
+.app-pill-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 12px 16px;
+  margin: -16px -16px 16px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  scrollbar-width: none;
+}
+.app-pill-tabs::-webkit-scrollbar { display: none; }
+.app-pill-tab {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  min-height: 32px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  font-size:var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-pill-tab:active { transform: scale(0.96); }
+.app-pill-tab.is-active {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border-color: var(--text-primary);
+}
+.app-pill-tab .count {
+  font-size:var(--fs-xs);
+  line-height: 1;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  color: var(--text-tertiary);
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+.app-pill-tab.is-active .count {
+  background: rgba(255,255,255,0.16);
+  color: var(--text-inverse);
+}
+
+/* ----------------------------------------------------------------
+   Bottom Sheet (드로어 대체)
+   ---------------------------------------------------------------- */
+.app-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-scrim, rgba(17,17,17,0.45));
+  z-index: 80;
+}
+.app-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-surface);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  z-index: 90;
+  max-height: 86dvh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -10px 40px rgba(17,17,17,0.18);
+}
+.app-sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: 999px;
+  margin: 10px auto 6px;
+}
+.app-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.app-sheet-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+}
+.app-sheet-sub {
+  margin: 2px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+}
+.app-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+.app-sheet-foot {
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  gap: 8px;
+}
+
+/* ----------------------------------------------------------------
+   Empty / Spinner 등 미사용 시 노출용 — 추후 필요 시 확장
+   ---------------------------------------------------------------- */
+.app-empty {
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--text-tertiary);
+}
+.app-empty svg {
+  width: 56px;
+  height: 56px;
+  color: var(--neutral-300);
+  margin: 0 auto 12px;
+  display: block;
+}
+.app-empty-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+/* ----------------------------------------------------------------
+   Quick Action Strip (홈 상단 빠른 액션)
+   ---------------------------------------------------------------- */
+.app-quick-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.app-quick-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size:var(--fs-sm);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+.app-quick-item:hover { background: var(--bg-hover); }
+.app-quick-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--accent-light);
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.app-quick-icon svg { width: 18px; height: 18px; }
+.app-quick-count {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size:var(--fs-sm);
+  font-weight: var(--fw-bold);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  border-radius: 999px;
+  padding: 1px 5px;
+  line-height: 1.3;
+}
+.app-quick-item { position: relative; }
+
+/* ----------------------------------------------------------------
+   Frame (데스크탑 미리보기용 폰 프레임)
+   index 페이지 외 직접 접근 시는 풀스크린.
+   ---------------------------------------------------------------- */
+.app-preview-page {
+  background: #E5E5E5;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.app-preview-phone {
+  width: 390px;
+  height: 844px;
+  border-radius: 36px;
+  border: 8px solid #1a1a1a;
+  background: var(--bg-page);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+  position: relative;
+}
+.app-preview-phone iframe { width: 100%; height: 100%; border: none; }
+.app-preview-tablet {
+  width: 1024px;
+  max-width: 100%;
+  height: 768px;
+  border-radius: 18px;
+  border: 8px solid #1a1a1a;
+  background: var(--bg-page);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+}
+.app-preview-tablet iframe { width: 100%; height: 100%; border: none; }
+.app-preview-label {
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  letter-spacing: 0.2px;
+}
+
+/* ----------------------------------------------------------------
+   Status Pulse (live indicator) — 모바일 작은 크기
+   ---------------------------------------------------------------- */
+.app-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--neutral-400);
+  position: relative;
+  flex-shrink: 0;
+}
+.app-pulse.is-accent { background: var(--accent); }
+.app-pulse.is-info { background: var(--status-info); }
+.app-pulse.is-success { background: var(--status-success); }
+.app-pulse.is-warning { background: var(--status-warning); }
+.app-pulse.is-accent::after,
+.app-pulse.is-info::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.4;
+  animation: app-pulse 1.8s ease-out infinite;
+}
+.app-pulse.is-accent::after { color: var(--accent); }
+.app-pulse.is-info::after { color: var(--status-info); }
+@keyframes app-pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-pulse::after { animation: none; }
+}
+
+/* ================================================================
+   P1 공통 패턴 추가 (2026-05-29)
+   진단 근거: docs/app-phone-진단.md — 인라인 style 215+건 중
+   3회 이상 반복 패턴을 클래스로 추출. HTML은 2단계에서 치환.
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   1. .app-card-toprow
+      인라인: style="display:flex; align-items:center; gap:6px"
+      용도: 리스트 카드 첫 행 — 국가코드 칩 + 캠페인 ID + 우측 뱃지
+      적용 화면: list / list-selection / list-completed / list-inspection
+               / list-revision / list-unselected / list-cancel-influencer
+               / list-cancel-selected / campaign-schedule-list (9개)
+      카운트: 38건 이상
+   ---------------------------------------------------------------- */
+.app-card-toprow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);   /* 8px — 원본 인라인은 6px였으나 DS 8px 그리드 최소 단위로 정렬 */
+}
+
+/* ----------------------------------------------------------------
+   2. .app-card-id
+      인라인: style="font-size:var(--fs-sm); color:var(--text-tertiary)"
+              (+ 일부 font-variant-numeric:tabular-nums)
+      용도: 카드 첫 행의 캠페인 ID 텍스트 (#1141, #303 등)
+      적용 화면: list 계열 9개 화면
+      카운트: 38건 이상 (.app-card-toprow와 항상 쌍으로)
+   ---------------------------------------------------------------- */
+.app-card-id {
+  font-size: var(--fs-sm);        /* 12px */
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+.app-card-id b {
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+/* ----------------------------------------------------------------
+   3. .app-card-action
+      인라인: style="font-size:var(--fs-sm);color:var(--text-link);font-weight:500"
+      용도: 카드 foot 우측 텍스트 액션 — "상세" / "검수"
+      적용 화면: list-selection(5) / list-completed(4) / list-unselected(3)
+               / list-inspection(4) / list-revision(1) / list-cancel-selected(1)
+               / list-cancel-influencer(2)
+      카운트: 23건
+      시맨틱: span → 2단계에서 button으로 교체 권장
+   ---------------------------------------------------------------- */
+.app-card-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 5px 11px;
+  font-size: var(--fs-sm);        /* 12px */
+  font-weight: var(--fw-medium);  /* 500 */
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease);
+}
+.app-card-action:hover { background: var(--bg-hover); border-color: var(--border-hover); }
+.app-card-action:active { transform: scale(0.96); }
+
+/* ----------------------------------------------------------------
+   4. .app-sns-ico-sm / .app-sns-ico-md
+      인라인: style="width:16px;height:16px" (sm)
+              style="display:inline-flex;width:18px;height:18px" (md)
+      용도: .sns-ico 위에 겹쳐 쓰는 크기 수정자
+             app-mobile.css의 .app-phone .sns-ico가 18px 강제하므로
+             sm은 카드 메타 행에서만 사용 (16px — 텍스트 baseline 맞춤)
+      적용 화면:
+        sm(16px): list / list-selection / list-completed / list-unselected (16건)
+        md(18px): campaign-detail / influencer-detail (5건)
+      카운트: 21건
+   ---------------------------------------------------------------- */
+.app-sns-ico-sm {
+  width: 16px  !important;
+  height: 16px !important;
+  background-size: 14px 14px !important;
+  display: inline-block;
+  vertical-align: middle;
+}
+.app-sns-ico-md {
+  width: 18px  !important;
+  height: 18px !important;
+  background-size: 16px 16px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+/* ----------------------------------------------------------------
+   5. .app-reason-box
+      인라인: style="background:…; border-radius:var(--radius-sm);
+                     padding:6px 10px; font-size:var(--fs-sm); …; margin-top:4px"
+      용도: 취소·수정 사유 텍스트 박스. severity modifier로 색 결정.
+      modifier:
+        (기본)        — bg-elevated + text-secondary (인플루언서 자체 취소)
+        .is-warning   — status-warning-bg + warning-strong (어드민 주의 사항)
+        .is-error     — status-error-bg + error-strong (수정 요청 / 위약 검토)
+      적용 화면: list-revision(1) / list-cancel-influencer(2) / list-cancel-selected(1)
+      카운트: 4건 (사유 박스 인스턴스 기준)
+   ---------------------------------------------------------------- */
+.app-reason-box {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);   /* 4px 12px — 원본 6px/10px, DS 그리드 4/12로 정렬 */
+  font-size: var(--fs-sm);                  /* 12px */
+  color: var(--text-secondary);
+  margin-top: var(--space-1);               /* 4px */
+  line-height: 1.5;
+}
+.app-reason-box.is-error {
+  background: var(--status-error-bg);
+  color: var(--status-error-strong);
+}
+.app-reason-box.is-warning {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-strong);
+}
+/* 박스 내 타이틀 (list-cancel-selected처럼 제목+본문 2줄 구조) */
+.app-reason-box-title {
+  font-weight: var(--fw-semibold);
+  margin-bottom: 2px;
+}
+
+/* ----------------------------------------------------------------
+   6. .app-list-more
+      인라인: style="text-align:center; padding:8px 0 24px"
+              일부: + font-size:var(--fs-sm); color:var(--text-tertiary)
+      용도: 목록 하단 "더 보기" 버튼 / 단위 주석 텍스트 중앙 정렬 래퍼
+      적용 화면: saved-influencer / influencer-search / balance-history
+               / pricing / pricing-it / pricing-korea / pricing-translation
+               / pricing-account / pricing-superpass
+      카운트: 8건
+   ---------------------------------------------------------------- */
+.app-list-more {
+  text-align: center;
+  padding: var(--space-2) 0 var(--space-6);   /* 8px 0 24px */
+}
+/* 단위 주석 텍스트 변형 (pricing 계열) */
+.app-list-more.is-caption {
+  font-size: var(--fs-sm);     /* 12px */
+  color: var(--text-tertiary);
+}
+
+/* ----------------------------------------------------------------
+   7. .app-sort-select
+      인라인: style="font-size:var(--fs-sm); padding:6px 8px;
+                     border:1px solid var(--border-default);
+                     border-radius:var(--radius-sm);
+                     background:var(--bg-surface);
+                     color:var(--text-secondary)"
+      용도: 목록 상단 정렬 드롭다운
+      적용 화면: list / list-completed / list-selection / influencer-search
+      카운트: 4건
+   ---------------------------------------------------------------- */
+.app-sort-select {
+  font-size: var(--fs-sm);              /* 12px */
+  padding: 0 26px 0 12px;               /* 우측은 chevron 자리 — 칩 스케일에 맞춰 컴팩트 */
+  height: 34px;                         /* 칩(32~33px)과 동일 스케일 */
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  /* chevron을 우측 끝에 고정 — 네이티브 화살표가 옵션 너비만큼 떠 보이는 문제 제거 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  color: var(--text-secondary);
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.app-sort-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ----------------------------------------------------------------
+   8. .app-list-toolbar
+      인라인: style="display:flex; align-items:center;
+                     justify-content:space-between; padding:4px 0 12px"
+      용도: 목록 상단 카운트 텍스트 + 정렬 드롭다운을 묶는 툴바 행
+      적용 화면: list / list-completed / list-selection / list-revision
+               / list-cancel-selected / influencer-search (6개)
+      카운트: 6건
+   ---------------------------------------------------------------- */
+.app-list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-1) 0 var(--space-3);  /* 4px 0 12px */
+}
+.app-list-toolbar-count {
+  font-size: var(--fs-sm);     /* 12px */
+  color: var(--text-secondary);
+}
+.app-list-toolbar-count b {
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+/* ================================================================
+   Sheet Layer — 어드민 모달/드로어의 모바일 변환 (배송/제안/수정/확인)
+   베이스 .app-sheet* (672~723) 위에 콘텐츠 패턴만 정의.
+   ================================================================ */
+/* 루트 래퍼: backdrop + sheet를 한 번에 토글 */
+.app-sheet-root[hidden] { display: none; }
+.app-sheet-root .app-sheet {
+  animation: app-sheet-up var(--duration-base, .24s) var(--ease, ease) both;
+}
+@keyframes app-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .app-sheet-root .app-sheet { animation: none; }
+}
+
+/* head 닫기 버튼 */
+.app-sheet-close {
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; background: transparent; color: var(--text-tertiary);
+  border-radius: var(--radius-md); cursor: pointer;
+}
+.app-sheet-close:hover { background: var(--bg-hover); color: var(--text-primary); }
+.app-sheet-close svg { width: 20px; height: 20px; }
+.app-sheet-head-titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.app-sheet-head-sub {
+  font-size: var(--fs-sm); color: var(--text-tertiary);
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+
+/* 안내 배너 (정보/주의) */
+.app-sheet-hint {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px 12px; margin-bottom: 16px;
+  background: var(--status-info-bg); border: 1px solid var(--status-info-border);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm); color: var(--text-secondary); line-height: 1.5;
+}
+.app-sheet-hint svg { width: 15px; height: 15px; color: var(--status-info); flex-shrink: 0; margin-top: 1px; }
+.app-sheet-hint strong { color: var(--text-primary); font-weight: var(--fw-semibold); }
+.app-sheet-hint.is-warning { background: var(--status-warning-bg); border-color: var(--status-warning-border); }
+.app-sheet-hint.is-warning svg { color: var(--status-warning); }
+
+/* 수령/받는 인플루언서 요약 카드 */
+.app-sheet-recipient {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px; margin-bottom: 16px;
+  background: var(--bg-subtle); border-radius: var(--radius-lg);
+}
+.app-sheet-recipient-avt {
+  width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+}
+.app-sheet-recipient-body { min-width: 0; }
+.app-sheet-recipient-label { font-size: var(--fs-sm); color: var(--text-tertiary); margin-bottom: 2px; }
+.app-sheet-recipient-name { font-weight: var(--fw-semibold); display: flex; align-items: center; gap: 6px; }
+.app-sheet-recipient-sub { font-size: var(--fs-sm); color: var(--text-secondary); margin-top: 2px; }
+
+/* 폼 필드 (common .form-* 재사용, 모바일 높이/간격만 보강) */
+.app-sheet .form-group { margin-bottom: 16px; }
+.app-sheet .form-input, .app-sheet .form-select { height: 46px; font-size: var(--fs-md); }
+.app-sheet .form-input.is-mono { font-variant-numeric: tabular-nums; letter-spacing: 0.2px; }
+.app-sheet-field-help { font-size: var(--fs-sm); color: var(--text-tertiary); margin-top: 6px; }
+.app-sheet-req { color: var(--accent); }
+
+/* 섹션 헤더 (제안 시트 등) */
+.app-sheet-sec { margin-bottom: 18px; }
+.app-sheet-sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.app-sheet-sec-title { font-size: var(--fs-md); font-weight: var(--fw-semibold); }
+.app-sheet-sec-hint { font-size: var(--fs-sm); color: var(--text-tertiary); }
+
+/* 캠페인 선택 리스트 (제안 시트) */
+.app-sheet-camp-list { display: flex; flex-direction: column; gap: 8px; }
+.app-sheet-camp { display: block; }
+.app-sheet-camp input { position: absolute; opacity: 0; pointer-events: none; }
+.app-sheet-camp-box {
+  display: block;
+  border: 1px solid var(--border-default); border-radius: var(--radius-lg);
+  padding: 12px; cursor: pointer; transition: border-color var(--duration-fast) var(--ease), background var(--duration-fast) var(--ease);
+}
+.app-sheet-camp input:checked + .app-sheet-camp-box { border-color: var(--accent); background: var(--accent-light); }
+.app-sheet-camp input:focus-visible + .app-sheet-camp-box { box-shadow: var(--focus-ring); }
+.app-sheet-camp-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.app-sheet-camp-name { font-weight: var(--fw-semibold); font-size: var(--fs-md); }
+.app-sheet-camp-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  font-size: var(--fs-sm); color: var(--text-tertiary);
+}
+.app-sheet-camp-meta b { color: var(--text-secondary); font-weight: var(--fw-semibold); }
+.app-sheet-camp-meta .is-mono { font-variant-numeric: tabular-nums; }
+.app-sheet-charcount { text-align: right; font-size: var(--fs-sm); color: var(--text-tertiary); margin-top: 6px; }
+.app-sheet textarea.form-input { height: auto; padding: 10px 12px; line-height: 1.5; resize: vertical; }
+
+/* 푸터 요약 + 액션 정렬 */
+.app-sheet-foot { align-items: center; }
+.app-sheet-foot-note { font-size: var(--fs-sm); color: var(--text-tertiary); margin-right: auto; }
+.app-sheet-foot .btn { flex: 0 0 auto; }
+.app-sheet-foot .btn-grow { flex: 1; }
+
+/* 수정요청 스레드 (클라이언트 ↔ 알파콜라보 스태프) */
+.app-sheet-policy {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px 16px; margin: 0;
+  background: var(--status-warning-bg); border-bottom: 1px solid var(--status-warning-border);
+  font-size: var(--fs-sm); color: var(--text-secondary); line-height: 1.5;
+}
+.app-sheet-policy strong { color: var(--status-warning-strong); font-weight: var(--fw-semibold); }
+.app-sheet-thread { display: flex; flex-direction: column; gap: 14px; }
+.app-sheet-date-sep { text-align: center; font-size: var(--fs-sm); color: var(--text-tertiary); margin: 4px 0; }
+.app-sheet-msg { display: flex; gap: 8px; max-width: 86%; }
+.app-sheet-msg-bubble {
+  padding: 9px 12px; border-radius: var(--radius-lg);
+  font-size: var(--fs-md); line-height: 1.5;
+}
+.app-sheet-msg-time { font-size: var(--fs-sm); color: var(--text-tertiary); margin-top: 4px; }
+.app-sheet-msg-author { font-size: var(--fs-sm); color: var(--text-secondary); font-weight: var(--fw-medium); margin-bottom: 4px; }
+.app-sheet-msg-role { font-size: var(--fs-xs); color: var(--accent); font-weight: var(--fw-semibold); margin-left: 4px; }
+/* 클라이언트(나) — 우측 */
+.app-sheet-msg.is-me { margin-left: auto; flex-direction: row-reverse; }
+.app-sheet-msg.is-me .app-sheet-msg-bubble { background: var(--accent); color: var(--text-on-accent); }
+.app-sheet-msg.is-me .app-sheet-msg-time { text-align: right; }
+/* 스태프 — 좌측 */
+.app-sheet-msg.is-staff .app-sheet-msg-bubble { background: var(--bg-subtle); color: var(--text-primary); }
+.app-sheet-msg-avt {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--bg-elevated); color: var(--text-secondary);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--fs-sm); font-weight: var(--fw-semibold);
+}
+
+/* ── 확인 다이얼로그 (centered alertdialog) ───────────────────── */
+.app-confirm-root[hidden] { display: none; }
+.app-confirm-root { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.app-confirm-backdrop { position: absolute; inset: 0; background: var(--overlay-scrim); }
+.app-confirm {
+  position: relative; width: 100%; max-width: 320px;
+  background: var(--bg-surface); border-radius: var(--radius-xl);
+  padding: 24px 20px 16px; text-align: center;
+  box-shadow: 0 12px 48px rgba(17,17,17,0.24);
+  animation: app-confirm-pop var(--duration-fast, .15s) var(--ease, ease) both;
+}
+@keyframes app-confirm-pop { from { transform: scale(0.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .app-confirm { animation: none; } }
+.app-confirm-icon {
+  width: 48px; height: 48px; border-radius: 50%; margin: 0 auto 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.app-confirm-icon svg { width: 24px; height: 24px; }
+.app-confirm-icon.is-danger { background: var(--status-error-bg); color: var(--status-error); }
+.app-confirm-icon.is-warning { background: var(--status-warning-bg); color: var(--status-warning); }
+.app-confirm-icon.is-success { background: var(--status-success-bg); color: var(--status-success); }
+.app-confirm-icon.is-info { background: var(--status-info-bg); color: var(--status-info); }
+.app-confirm-title { font-size: var(--fs-lg); font-weight: var(--fw-semibold); margin-bottom: 6px; }
+.app-confirm-desc { font-size: var(--fs-md); color: var(--text-secondary); line-height: 1.55; margin-bottom: 20px; }
+.app-confirm-actions { display: flex; gap: 8px; }
+.app-confirm-actions .btn { flex: 1; }
+
+/* 카드 푸터 액션 — 배송입력 등 주요 행동 강조 */
+.app-list-card-foot .app-card-action.is-primary {
+  color: var(--accent);
+  background: var(--accent-light);
+  border-color: var(--accent-subtle);
+  font-weight: var(--fw-semibold);
+}
+.app-list-card-foot .app-card-action.is-primary:hover { background: var(--accent-subtle); border-color: var(--accent); }
+.app-list-card-foot .app-card-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-left: auto; }
+
+/* 요금표 — 원본 차등단가 테이블 무손실 복원 (모바일 가로 스크롤) */
+.pr-section { margin-bottom: 22px; }
+.pr-section .price-section-title { display: flex; align-items: center; gap: 6px; font-size: var(--fs-md); font-weight: var(--fw-semibold); margin-bottom: 10px; }
+.pr-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-default); border-radius: var(--radius-lg); }
+.price-tbl { border-collapse: collapse; width: 100%; min-width: 540px; font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.price-tbl th { background: var(--bg-elevated); color: var(--text-secondary); font-weight: var(--fw-semibold); padding: 8px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border-default); }
+.price-tbl th:first-child { text-align: left; position: sticky; left: 0; background: var(--bg-elevated); }
+.price-tbl td { padding: 8px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--border-light); color: var(--text-primary); }
+.price-tbl td.row-label { text-align: left; font-weight: var(--fw-medium); color: var(--text-secondary); position: sticky; left: 0; background: var(--bg-surface); }
+.price-tbl tr:last-child td { border-bottom: none; }
+.price-tbl .total-row td { background: var(--bg-subtle); font-weight: var(--fw-semibold); color: var(--text-primary); }
+.price-tbl .total-row td[colspan] { text-align: left; }
+
+/* 필터 시트 — 칩 그룹 (국적/플랫폼/팔로워/성별/방문예정일) */
+.app-filter-group { margin-bottom: 20px; }
+.app-filter-label { font-size: var(--fs-md); font-weight: var(--fw-semibold); margin-bottom: 10px; }
+.app-filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.app-filter-chip { position: relative; display: inline-flex; }
+.app-filter-chip input { position: absolute; opacity: 0; pointer-events: none; }
+.app-filter-chip span {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border: 1px solid var(--border-default); border-radius: 999px;
+  font-size: var(--fs-sm); color: var(--text-secondary); cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease), background var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease);
+}
+.app-filter-chip input:checked + span {
+  background: var(--accent-light); border-color: var(--accent);
+  color: var(--accent-emphasis); font-weight: var(--fw-semibold);
+}
+.app-filter-chip input:focus-visible + span { box-shadow: var(--focus-ring); }
+.app-sheet-foot .btn-reset { margin-right: auto; }
+
+/* ----------------------------------------------------------------
+   국가 코드 칩 / SNS 미니 태그 / 팔로워 — 앱 전역 (admin .c-* 이식)
+   여러 앱 화면이 .c-country-code 를 사용하나 정의가 admin.css 에만 있어
+   앱 번들에선 미스타일이었음 → 여기서 1회 정의.
+   ---------------------------------------------------------------- */
+.app-phone .c-country-code {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 26px; height: 18px; padding: 0 6px;
+  background: var(--bg-elevated); color: var(--text-secondary);
+  font-size: var(--fs-xs); font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  border-radius: var(--radius-sm); font-variant-numeric: tabular-nums;
+}
+.app-phone .c-mini-tag {
+  display: inline-flex; align-items: center; padding: 2px 7px;
+  border-radius: var(--radius-sm); font-size: var(--fs-xs); font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+.app-phone .c-mini-tag.ig  { background: var(--sns-ig-bg);  color: var(--sns-ig); }
+.app-phone .c-mini-tag.yt  { background: var(--sns-yt-bg);  color: var(--sns-yt); }
+.app-phone .c-mini-tag.xhs { background: var(--sns-xhs-bg); color: var(--sns-xhs); }
+.app-phone .c-mini-tag.tw  { background: var(--sns-tw-bg);  color: var(--sns-tw); }
+.app-phone .c-mini-tag.dy  { background: var(--sns-dy-bg);  color: var(--sns-dy); }
+.app-phone .c-followers { font-size: var(--fs-xs); color: var(--text-tertiary); }
+
+/* ----------------------------------------------------------------
+   캠페인 일정 — 시트 헤더(캠페인 메타) + 키값 그리드 + 일자 그리드
+   ---------------------------------------------------------------- */
+.app-camp-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; }
+.app-camp-thumb {
+  width: 48px; height: 48px; border-radius: var(--radius-md);
+  background: var(--accent-light); color: var(--accent-emphasis);
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--fs-lg); font-weight: var(--fw-bold);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+}
+.app-camp-head-body { flex: 1; min-width: 0; }
+.app-camp-head-title { font-size: var(--fs-lg); font-weight: var(--fw-semibold); letter-spacing: -0.1px; }
+.app-camp-head-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+.app-camp-head-row .app-card-id { font-variant-numeric: tabular-nums; }
+
+/* 키-값 메타 그리드 (등록/수정/조회 등) */
+.app-kv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 12px; margin: 14px 0 4px; }
+.app-kv { display: flex; flex-direction: column; gap: 2px; }
+.app-kv-label { font-size: var(--fs-xs); color: var(--text-tertiary); }
+.app-kv-value { font-size: var(--fs-sm); color: var(--text-primary); font-weight: var(--fw-medium); font-variant-numeric: tabular-nums; }
+
+/* 5단계 타임라인의 날짜+건수 (app-timeline-meta 재사용 + count 강조) */
+.app-timeline-count { color: var(--text-secondary); font-weight: var(--fw-semibold); }
+
+/* 일정 카드 — 일자 그리드 (신청/선정/방문/검수/등록) */
+.app-date-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px 6px; margin-top: 8px;
+  padding: 8px 10px; background: var(--bg-elevated); border-radius: var(--radius-md);
+}
+.app-date-cell { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.app-date-label { font-size: var(--fs-xs); color: var(--text-tertiary); }
+.app-date-value { font-size: var(--fs-sm); color: var(--text-primary); font-weight: var(--fw-medium); font-variant-numeric: tabular-nums; }
+.app-date-value.is-null { color: var(--text-disabled); font-weight: var(--fw-regular); }
+
+/* 캠페인 담당자 / 채널 행 */
+.app-card-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: var(--fs-sm); color: var(--text-secondary); }
+.app-card-line .lbl { color: var(--text-tertiary); }
+
+/* 카드 내 인플루언서 신청 리스트 (캠페인 단위 카드 → 신청건) */
+.app-applicant-list { margin-top: 10px; border-top: 1px solid var(--border-light); }
+.app-applicant {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 9px 0; border-bottom: 1px solid var(--border-light);
+}
+.app-applicant:last-child { border-bottom: none; }
+.app-applicant-handle { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--text-primary); }
+.app-applicant-dates { margin-left: auto; font-size: var(--fs-xs); color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+
+/* 슈퍼패스 상태 칩 (표시 전용 — 발송 액션 없음) */
+.app-superpass {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border-radius: var(--radius-sm); font-size: var(--fs-xs); font-weight: var(--fw-medium);
+}
+.app-superpass.on  { background: var(--status-warning-bg); color: var(--status-warning); }
+.app-superpass.off { background: var(--bg-elevated); color: var(--text-tertiary); }
+
+/* 시트 내 이벤트 유형 필터 pill (캘린더 day 시트) */
+.app-day-typefilter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.app-day-typefilter button {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 11px; border: 1px solid var(--border-default); border-radius: 999px;
+  background: var(--bg-surface); color: var(--text-secondary);
+  font-size: var(--fs-sm); cursor: pointer;
+}
+.app-day-typefilter button .cnt { color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+.app-day-typefilter button.is-active {
+  background: var(--accent-light); border-color: var(--accent);
+  color: var(--accent-emphasis); font-weight: var(--fw-semibold);
+}
+.app-day-typefilter button.is-active .cnt { color: var(--accent-emphasis); }
+
+/* day 시트 내 캠페인 이벤트 블록 구분 */
+.app-day-camp { padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border-light); }
+.app-day-camp:first-child { padding-top: 0; margin-top: 0; border-top: none; }
+
+/* 캠페인 단위 카드 — 썸네일 없이 본문만 (일정 리스트) */
+.app-list-card.is-block { display: block; }
+.app-list-card.is-block .app-list-card-body { width: 100%; }
+
+/* 리스트 툴바 우측 정렬 select */
+.app-list-toolbar-right { display: flex; align-items: center; gap: 8px; }
+.app-list-sort {
+  height: 30px; padding: 0 26px 0 10px; border: 1px solid var(--border-default);
+  border-radius: var(--radius-md); background: var(--bg-surface) no-repeat right 8px center;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  font-size: var(--fs-sm); color: var(--text-secondary);
+  -webkit-appearance: none; appearance: none; cursor: pointer;
+}

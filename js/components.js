@@ -13,26 +13,62 @@
   if (!ok) location.replace('login.html');
 })();
 
+// ===== file:// 가드 — 직접 파일 열기 시 fetch가 막혀 사이드바·헤더가 빈 채로 남는 문제 방지 =====
+// 빈 화면 대신 원인과 해결법을 알려주는 배너를 띄운다.
+(function fileProtocolGuard() {
+  if (location.protocol !== 'file:') return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (document.querySelector('.file-proto-warning')) return;
+    const bar = document.createElement('div');
+    bar.className = 'file-proto-warning';
+    bar.setAttribute('role', 'alert');
+    bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#FEF2F2;color:#991B1B;border-bottom:1px solid #FCA5A5;padding:12px 16px;font:500 13px/1.5 -apple-system,system-ui,sans-serif;display:flex;gap:10px;align-items:center;justify-content:center;text-align:center';
+    bar.innerHTML = '사이드바·헤더는 로컬 서버에서만 표시됩니다. 폴더의 <b style="margin:0 3px">어드민-열기.command</b> 를 더블클릭해 <b style="margin:0 3px">http://localhost:8777</b> 로 여세요. (file://에서는 브라우저가 컴포넌트 로드를 차단합니다)';
+    document.body.appendChild(bar);
+    document.body.style.paddingTop = bar.offsetHeight + 'px';
+  });
+})();
+
 document.addEventListener('DOMContentLoaded', async () => {
   // 캐시 버스팅: 개발 중 sidebar/header 변경이 즉시 반영되도록
   const bust = `?v=${Date.now()}`;
 
-  // 사이드바 로드
+  // 사이드바 로드 — fetch 실패(file:// 등)해도 나머지 스크립트가 멈추지 않도록 가드
   const sidebarSlot = document.getElementById('sidebar-slot');
   if (sidebarSlot) {
-    const res = await fetch('components/sidebar.html' + bust, { cache: 'no-store' });
-    sidebarSlot.innerHTML = await res.text();
-    activateSidebarNav();
+    try {
+      const res = await fetch('components/sidebar.html' + bust, { cache: 'no-store' });
+      sidebarSlot.innerHTML = await res.text();
+      activateSidebarNav();
+    } catch (_) { /* file:// 가드 배너가 안내 */ }
   }
 
   // 헤더 로드
   const headerSlot = document.getElementById('header-slot');
   if (headerSlot) {
-    const res = await fetch('components/header.html' + bust, { cache: 'no-store' });
-    headerSlot.innerHTML = await res.text();
-    activateHeaderTab();
-    wireMobileSidebar();
+    try {
+      const res = await fetch('components/header.html' + bust, { cache: 'no-store' });
+      headerSlot.innerHTML = await res.text();
+      activateHeaderTab();
+      wireMobileSidebar();
+    } catch (_) { /* file:// 가드 배너가 안내 */ }
   }
+
+  // 처리 단계 바(파이프라인) 로드 — #pipeline-slot 있는 페이지만, 현재 단계 자동 강조
+  const pipelineSlot = document.getElementById('pipeline-slot');
+  if (pipelineSlot) {
+    try {
+      const res = await fetch('components/pipeline.html' + bust, { cache: 'no-store' });
+      pipelineSlot.innerHTML = await res.text();
+      const curFile = location.pathname.split('/').pop();
+      pipelineSlot.querySelectorAll('.pipeline-step').forEach(step => {
+        if (step.getAttribute('href') === curFile) step.classList.add('is-current');
+      });
+    } catch (_) { /* file:// 가드 배너가 안내 */ }
+  }
+
+  // 상태 미리보기 토글 (시안) — data/loading/empty/error 전환
+  wireStatePreview();
 
   // 전역 패턴 (2025)
   wireCommandPalette();
@@ -176,6 +212,33 @@ function wireLogout() {
       try { sessionStorage.removeItem('alpha-auth'); } catch(_) {}
       location.href = 'login.html';
     }
+  });
+}
+
+/** 상태 미리보기 토글 (시안) — .state-preview-btn[data-state] 클릭 시
+ *  같은 페이지의 [data-state-body] 요소 중 해당 상태만 노출.
+ *  데이터 상태가 아닐 땐 .tbl-foot(하단 액션)·.bulk-bar 숨김. */
+function wireStatePreview() {
+  var group = document.querySelector('.state-preview');
+  if (!group) return;
+  var btns = group.querySelectorAll('.state-preview-btn');
+  var bodies = document.querySelectorAll('[data-state-body]');
+  if (!bodies.length) return;
+  var foot = document.querySelector('.tbl-foot');
+
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      btns.forEach(function (x) {
+        var on = x === b;
+        x.classList.toggle('is-active', on);
+        x.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      var st = b.dataset.state;
+      bodies.forEach(function (el) {
+        el.hidden = (el.dataset.stateBody !== st);
+      });
+      if (foot) foot.style.display = (st === 'data') ? '' : 'none';
+    });
   });
 }
 
@@ -1686,6 +1749,7 @@ function wireToastAutoTriggers() {
       '일괄 저장':    ['success', '일괄 저장 완료'],
       '거절':         ['confirm:danger', '정말 거절하시겠습니까?', '거절한 내역은 복구되지 않습니다', 'error', '거절 처리됨'],
       '채택':         ['success', '채택 완료'],
+      '삭제':         ['confirm:danger', '저장 목록에서 삭제할까요?', '저장이 해제됩니다. 인플루언서는 탐색에서 다시 찾을 수 있어요.', 'success', '저장 해제됨'],
     };
     const entry = map[text];
     if (!entry) return;
@@ -1709,6 +1773,19 @@ function activateSidebarNav() {
   // 탭에 맞는 nav-group/nav-sep만 표시
   document.querySelectorAll('.nav-group[data-tab], .nav-sep[data-tab]').forEach(el => {
     el.style.display = el.dataset.tab === activeTab ? '' : 'none';
+  });
+
+  // 사이드바 상단 — 현재 섹션(헤더 탭) 이름 표시로 맥락 제공
+  const sectionTitle = document.querySelector('[data-section-title]');
+  if (sectionTitle) sectionTitle.textContent = activeTab;
+
+  // 섹션에 그룹이 하나뿐이면 그룹 라벨은 섹션 제목과 중복 → 숨김.
+  // 여러 그룹일 때만(예: 신청서관리 = 리뷰통합관리 + 취소/미선정) 라벨 표시.
+  const visibleGroups = [...document.querySelectorAll('.nav-group[data-tab]')]
+    .filter(g => g.dataset.tab === activeTab);
+  visibleGroups.forEach(g => {
+    const label = g.querySelector('.nav-group-label');
+    if (label) label.style.display = visibleGroups.length > 1 ? '' : 'none';
   });
 
   // 현재 페이지 활성화

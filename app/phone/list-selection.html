@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Alphacollabo App — 선정목록 (Phone)</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/common.css">
+<link rel="stylesheet" href="../css/app-mobile.css">
+</head>
+<body class="app-body-phone">
+<div class="app-phone">
+
+  <header class="app-header">
+    <button class="app-header-icon" onclick="history.back()" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="app-header-title">선정목록</div>
+    <div class="app-header-actions">
+      <button class="app-header-icon" onclick="openSheet('sheet-search')" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+      <button class="app-header-icon" onclick="openSheet('sheet-filter')" aria-label="필터"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+    </div>
+  </header>
+
+  <main class="app-body">
+
+    <div class="app-pill-tabs">
+      <a class="app-pill-tab" href="list.html">신청<span class="count">7</span></a>
+      <a class="app-pill-tab is-active" href="list-selection.html">선정<span class="count">1</span></a>
+      <a class="app-pill-tab" href="list-inspection.html">검수<span class="count">10</span></a>
+      <a class="app-pill-tab" href="list-revision.html">수정<span class="count">1</span></a>
+      <a class="app-pill-tab" href="list-completed.html">완료<span class="count">2</span></a>
+      <a class="app-pill-tab" href="list-unselected.html">미선정<span class="count">1</span></a>
+      <a class="app-pill-tab" href="list-cancel-influencer.html">취소</a>
+    </div>
+
+    <div class="app-list-toolbar">
+      <div class="app-list-toolbar-count">전체 <b style="color:var(--text-primary)">1</b>건 · 진행 중</div>
+      <select class="app-sort-select"><option>마감 임박순</option><option>최신순</option></select>
+    </div>
+
+    <div class="app-section is-flush">
+      <a class="app-list-card" href="influencer-detail.html" style="border-bottom:none">
+        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=120&h=120&fit=crop" alt="">
+        <div class="app-list-card-body">
+          <div class="app-card-toprow">
+            <span class="c-country-code">CN</span><span class="app-card-id">#123</span>
+            <span class="badge badge-warning badge-sm" style="margin-left:auto"><span class="badge-dot"></span>리뷰제출지연 42일</span>
+          </div>
+          <div class="app-list-card-title">겨울 뷰티 리뷰 캠페인</div>
+          <div class="app-list-card-subline">1771914476 · glowlab_kr</div>
+          <div class="app-list-card-meta">
+            <span class="badge badge-info badge-sm">배송형</span>
+            <span>mika_seoul</span><span class="app-list-card-meta-sep"></span>
+            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/></svg></span>
+            <span>1천~1만</span>
+          </div>
+          <div class="app-list-card-subline is-url">instagram.com/esg</div>
+          <div class="app-list-card-foot">
+            <span class="app-list-card-stat">신청·선정 <b>2026-03-06</b></span>
+            <span class="app-card-actions">
+              <button type="button" class="app-card-action is-primary" onclick="event.preventDefault();event.stopPropagation();openSheet('sheet-shipping')" aria-label="mika_seoul #123 배송정보 입력">배송입력</button>
+              <button type="button" class="app-card-action" aria-label="mika_seoul #123 상세 보기">상세</button>
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </main>
+
+  <nav class="app-tabbar">
+    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>홈</a>
+    <a class="app-tab is-active" href="list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>신청서관리</a>
+    <a class="app-tab" href="influencer-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>인플루언서</a>
+    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
+    <a class="app-tab" href="more.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18" r="1.4"/></svg>더보기</a>
+  </nav>
+
+</div>
+
+<!-- ── 배송정보 입력 시트 (admin modal-shipping 변환) ──────────────── -->
+<div class="app-sheet-root" id="sheet-shipping" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-shipping')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-shipping-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head">
+      <div class="app-sheet-head-titles">
+        <h2 class="app-sheet-title" id="sheet-shipping-title">배송정보 입력</h2>
+      </div>
+      <button class="app-sheet-close" onclick="closeSheet('sheet-shipping')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="app-sheet-body">
+
+      <div class="app-sheet-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>저장 시 인플루언서에게 <strong>배송 시작 알림</strong>이 자동 발송됩니다.</span>
+      </div>
+
+      <div class="app-sheet-recipient">
+        <div class="app-sheet-recipient-body">
+          <div class="app-sheet-recipient-label">수령 인플루언서</div>
+          <div class="app-sheet-recipient-name">mika_seoul <span class="c-country-code">CN</span></div>
+          <div class="app-sheet-recipient-sub">겨울 뷰티 리뷰 캠페인 · #123</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="ship-carrier">택배사 <span class="app-sheet-req">*</span></label>
+        <select class="form-input form-select" id="ship-carrier">
+          <option value="" disabled selected>택배사를 선택하세요</option>
+          <option>CJ대한통운</option><option>롯데택배</option><option>한진택배</option>
+          <option>로젠택배</option><option>우체국택배</option><option>CU편의점택배</option>
+          <option>GS편의점택배</option><option>DHL</option><option>FedEx</option>
+          <option>EMS</option><option>기타 직접 입력</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="ship-tracking">송장번호 <span class="app-sheet-req">*</span></label>
+        <input class="form-input is-mono" id="ship-tracking" type="text" inputmode="numeric" placeholder="숫자만 입력 · 예: 617512340987">
+        <p class="app-sheet-field-help">공백·하이픈 없이 숫자만 입력해주세요.</p>
+      </div>
+
+    </div>
+    <div class="app-sheet-foot">
+      <span class="app-sheet-foot-note"><span class="app-sheet-req">*</span> 필수 입력</span>
+      <button class="btn btn-secondary btn-md" onclick="closeSheet('sheet-shipping')">취소</button>
+      <button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-shipping'); confirmDialog({title:'배송정보를 저장할까요?', desc:'저장 시 인플루언서에게 배송 시작 알림이 발송됩니다.', tone:'info', okLabel:'저장'})">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 확인 다이얼로그 (공통) ───────────────────────────────────── -->
+<div class="app-confirm-root" id="app-confirm" hidden>
+  <div class="app-confirm-backdrop" onclick="closeSheet('app-confirm')"></div>
+  <div class="app-confirm" role="alertdialog" aria-modal="true" aria-labelledby="app-confirm-title" aria-describedby="app-confirm-desc">
+    <div class="app-confirm-icon is-info">
+      <svg data-icon="warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <svg data-icon="danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+      <svg data-icon="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <svg data-icon="success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="app-confirm-title" id="app-confirm-title" data-confirm-title>진행하시겠습니까?</h2>
+    <p class="app-confirm-desc" id="app-confirm-desc" data-confirm-desc></p>
+    <div class="app-confirm-actions">
+      <button type="button" class="btn btn-secondary btn-md" onclick="closeSheet('app-confirm')">취소</button>
+      <button type="button" class="btn btn-primary btn-md" data-confirm-ok>확인</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/sheets.js"></script>
+
+<div class="app-sheet-root" id="sheet-search" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-search')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-search-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head"><div class="app-sheet-head-titles"><h2 class="app-sheet-title" id="sheet-search-title">검색</h2></div><button class="app-sheet-close" onclick="closeSheet('sheet-search')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="app-sheet-body">
+      <div class="app-search-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" placeholder="검색어를 입력하세요">
+      </div>
+      <div class="app-filter-group"><div class="app-filter-label">최근 검색어</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="checkbox"><span>로담 캠페인</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>비타C 세럼</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>yuki_tokyo</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>방문형</span></label>
+        </div></div>
+    </div>
+    <div class="app-sheet-foot"><button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-search')">검색</button></div>
+  </div>
+</div>
+<div class="app-sheet-root" id="sheet-filter" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-filter')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-filter-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head"><div class="app-sheet-head-titles"><h2 class="app-sheet-title" id="sheet-filter-title">필터</h2></div><button class="app-sheet-close" onclick="closeSheet('sheet-filter')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="app-sheet-body">
+      <div class="app-filter-group"><div class="app-filter-label">캠페인 유형</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="radio" name="p-type" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="radio" name="p-type"><span>방문형</span></label>
+          <label class="app-filter-chip"><input type="radio" name="p-type"><span>배송형</span></label>
+          <label class="app-filter-chip"><input type="radio" name="p-type"><span>리뷰형</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">국가</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="checkbox"><span>일본</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>한국</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>중국</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>러시아</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">채널</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="checkbox"><span>인스타그램</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>유튜브</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>틱톡</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>샤오훙슈</span></label>
+        </div></div>
+      <div class="app-filter-group"><div class="app-filter-label">기간</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="radio" name="p-period" checked><span>전체</span></label>
+          <label class="app-filter-chip"><input type="radio" name="p-period"><span>이번 주</span></label>
+          <label class="app-filter-chip"><input type="radio" name="p-period"><span>이번 달</span></label>
+          <label class="app-filter-chip"><input type="radio" name="p-period"><span>직접 지정</span></label>
+        </div></div>
+    </div>
+    <div class="app-sheet-foot">
+      <button class="btn btn-ghost btn-md btn-reset" onclick="document.querySelectorAll('#sheet-filter input').forEach(function(c){c.checked=false})">초기화</button>
+      <button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-filter')">적용</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Alphacollabo App — 대시보드 (Phone)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/common.css">
+<link rel="stylesheet" href="../css/app-mobile.css">
+<style>
+  /* 매니저 카드 */
+  .app-manager-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    margin-bottom: 16px;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+  }
+  .app-manager-card-avt {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+  }
+  .app-manager-card-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .app-manager-card-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 2px;
+  }
+  .app-manager-card-name {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-medium);
+  }
+  .app-manager-card-msg {
+    font-size: var(--fs-md);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .app-manager-card-dot {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  /* SNS 그리드 */
+  .app-sns-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .app-sns-grid-cell {
+    text-align: center;
+  }
+  .app-sns-grid-count {
+    font-size: 22px;
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 프로그레스 바 래퍼 (KPI 내부) */
+  .app-kpi-progress {
+    margin-top: 6px;
+    height: 5px;
+    background: var(--bg-elevated);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .app-kpi-progress-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+  }
+</style>
+</head>
+<body class="app-body-phone">
+<div class="app-phone">
+
+  <!-- Header ─────────────────────────────────────── -->
+  <header class="app-header">
+    <img class="app-header-logo" src="../../logo/alpha-collabo-black.svg" alt="알파콜라보">
+    <div class="app-header-title"></div>
+    <div class="app-header-actions">
+      <button class="app-header-icon" onclick="openSheet('sheet-search')" aria-label="검색">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+      <a class="app-header-icon app-header-badge" href="notification-center.html" aria-label="알림">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 5 3 9H3c0-4 3-2 3-9Z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Body ───────────────────────────────────────── -->
+  <main class="app-body">
+
+    <!-- Hero -->
+    <section class="app-hero">
+      <div class="app-hero-row">
+        <div>
+          <div class="app-hero-title">안녕하세요, 김민지님</div>
+          <div class="app-hero-meta">2026년 5월 22일 (금) · 글로벌 알파미디어</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 매니저 카드 ──────── -->
+    <a href="notification-center.html" class="app-manager-card">
+      <img src="https://images.unsplash.com/photo-1573497019418-b400bb3ab074?w=120&h=120&fit=crop" alt="박지수 매니저" class="app-manager-card-avt">
+      <div class="app-manager-card-body">
+        <div class="app-manager-card-row">
+          <span class="app-manager-card-name">박지수 매니저</span>
+          <span class="app-card-id">방금 전</span>
+        </div>
+        <div class="app-manager-card-msg">민지님 잔액이 342만원입니다. 다음 주 정산 대비 500만원 충전 추천드려요.</div>
+      </div>
+      <span class="app-manager-card-dot"></span>
+    </a>
+
+    <!-- Quick actions -->
+    <div class="app-quick-strip">
+      <a class="app-quick-item" href="list.html">
+        <span class="app-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+        신청 관리
+      </a>
+      <a class="app-quick-item" href="influencer-search.html">
+        <span class="app-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+        인플루언서
+      </a>
+      <a class="app-quick-item" href="list-inspection.html">
+        <span class="app-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        검수
+        <span class="app-quick-count">4</span>
+      </a>
+      <a class="app-quick-item" href="balance-history.html">
+        <span class="app-quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span>
+        잔액내역
+      </a>
+    </div>
+
+    <!-- KPI 2x2 -->
+    <div class="app-kpi-grid">
+      <div class="app-kpi">
+        <span class="app-kpi-label">활성 캠페인</span>
+        <span class="app-kpi-value">47</span>
+        <span class="app-kpi-delta up">↑ 12% 지난주</span>
+        <svg class="app-kpi-spark" viewBox="0 0 240 40" preserveAspectRatio="none">
+          <path fill="none" style="stroke:var(--status-success)" stroke-width="2" d="M0,30 L20,28 L40,25 L60,22 L80,18 L100,20 L120,14 L140,16 L160,11 L180,13 L200,9 L220,6 L240,4"/>
+        </svg>
+      </div>
+      <div class="app-kpi">
+        <span class="app-kpi-label">신규 지원</span>
+        <span class="app-kpi-value">1,284</span>
+        <span class="app-kpi-delta up">↑ 8.4% 이번주</span>
+        <svg class="app-kpi-spark" viewBox="0 0 240 40" preserveAspectRatio="none">
+          <path fill="none" style="stroke:var(--status-success)" stroke-width="2" d="M0,26 L20,22 L40,28 L60,20 L80,24 L100,16 L120,22 L140,12 L160,18 L180,8 L200,14 L220,10 L240,6"/>
+        </svg>
+      </div>
+      <div class="app-kpi">
+        <span class="app-kpi-label">완료 리뷰</span>
+        <span class="app-kpi-value">892</span>
+        <span class="app-kpi-delta down">↓ 2.1% 이번달</span>
+        <svg class="app-kpi-spark" viewBox="0 0 240 40" preserveAspectRatio="none">
+          <path fill="none" style="stroke:var(--status-error)" stroke-width="2" d="M0,10 L20,14 L40,12 L60,18 L80,16 L100,22 L120,20 L140,26 L160,24 L180,28 L200,25 L220,30 L240,32"/>
+        </svg>
+      </div>
+      <div class="app-kpi">
+        <span class="app-kpi-label">이번 달 매출</span>
+        <span class="app-kpi-value">48.2M</span>
+        <span class="app-kpi-delta up">↑ 22% 목표 80%</span>
+        <div class="app-kpi-progress">
+          <div class="app-kpi-progress-bar" style="width:80%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오늘의 일정 -->
+    <section class="app-section">
+      <div class="app-section-head">
+        <div>
+          <div class="app-section-title">오늘의 일정</div>
+          <div class="app-section-sub">5월 22일 (금) · 4건 진행 중</div>
+        </div>
+        <a href="campaign-calendar.html" class="app-section-link">캘린더</a>
+      </div>
+      <div class="app-section-body">
+        <a class="app-mini-row" href="list.html">
+          <span class="app-mini-label"><span class="app-pulse is-accent"></span>신청목록</span>
+          <span class="app-mini-end"><span class="app-mini-value">2건</span><svg class="app-mini-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+        <a class="app-mini-row" href="list-inspection.html">
+          <span class="app-mini-label"><span class="app-pulse is-info"></span>검수요청목록</span>
+          <span class="app-mini-end"><span class="app-mini-value">4건</span><svg class="app-mini-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+        <a class="app-mini-row" href="list-revision.html">
+          <span class="app-mini-label"><span class="app-pulse is-warning"></span>수정요청목록</span>
+          <span class="app-mini-end"><span class="app-mini-value">1건</span><svg class="app-mini-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+        <a class="app-mini-row" href="list-completed.html">
+          <span class="app-mini-label"><span class="app-pulse is-success"></span>등록완료목록</span>
+          <span class="app-mini-end"><span class="app-mini-value">3건</span><svg class="app-mini-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 최근 활동 -->
+    <section class="app-section">
+      <div class="app-section-head">
+        <div>
+          <div class="app-section-title">최근 활동</div>
+          <div class="app-section-sub">최근 12시간</div>
+        </div>
+        <a href="#" class="app-section-link">전체</a>
+      </div>
+      <div class="app-section-body">
+        <ul class="app-timeline">
+          <li class="app-timeline-item">
+            <span class="app-timeline-dot accent"></span>
+            <span class="app-timeline-title">김민지 님이 리뷰를 제출했습니다</span>
+            <span class="app-timeline-meta">12분 전 · 로담 부산점 5월 캠페인</span>
+            <div class="app-timeline-body">인스타그램 포스팅 1건 + 스토리 2건. 해시태그 5개 포함.</div>
+          </li>
+          <li class="app-timeline-item">
+            <span class="app-timeline-dot success"></span>
+            <span class="app-timeline-title">비타C 세럼 4월 키트 — 5명 선정 확정</span>
+            <span class="app-timeline-meta">1시간 전 · 12명 지원 / 5명 선정</span>
+          </li>
+          <li class="app-timeline-item">
+            <span class="app-timeline-dot warning"></span>
+            <span class="app-timeline-title">청담 라운지 4월 체험 검수 마감 임박</span>
+            <span class="app-timeline-meta">3시간 전 · 4건 검수 대기 중</span>
+          </li>
+          <li class="app-timeline-item">
+            <span class="app-timeline-dot accent"></span>
+            <span class="app-timeline-title">청담 라운지 4월 체험 신규 지원자 3명</span>
+            <span class="app-timeline-meta">5시간 전</span>
+          </li>
+          <li class="app-timeline-item">
+            <span class="app-timeline-dot"></span>
+            <span class="app-timeline-title">새 캠페인이 등록되었습니다</span>
+            <span class="app-timeline-meta">오전 9:20 · glowlab_kr</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 활성 채널 -->
+    <section class="app-section">
+      <div class="app-section-head">
+        <div>
+          <div class="app-section-title">활성 SNS 채널</div>
+          <div class="app-section-sub">채널별 활성 캠페인 · 합계 47건</div>
+        </div>
+      </div>
+      <div class="app-section-body">
+        <div class="app-sns-grid">
+          <div class="app-sns-grid-cell">
+            <span class="sns-ico tag-instagram app-sns-ico-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+            <div class="app-sns-grid-count">21</div>
+          </div>
+          <div class="app-sns-grid-cell">
+            <span class="sns-ico tag-youtube app-sns-ico-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg></span>
+            <div class="app-sns-grid-count">9</div>
+          </div>
+          <div class="app-sns-grid-cell">
+            <span class="sns-ico tag-xiaohongshu app-sns-ico-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+            <div class="app-sns-grid-count">8</div>
+          </div>
+          <div class="app-sns-grid-cell">
+            <span class="sns-ico tag-douyin app-sns-ico-md"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 8.5a7.4 7.4 0 0 1-4.3-1.4V15a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V2h3a4.4 4.4 0 0 0 4.8 4.5z"/></svg></span>
+            <div class="app-sns-grid-count">5</div>
+          </div>
+          <div class="app-sns-grid-cell">
+            <span class="sns-ico tag-tiktok app-sns-ico-md"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg></span>
+            <div class="app-sns-grid-count">4</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Tabbar ─────────────────────────────────────── -->
+  <nav class="app-tabbar">
+    <a class="app-tab is-active" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>홈</a>
+    <a class="app-tab" href="list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>신청서관리</a>
+    <a class="app-tab" href="influencer-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>인플루언서</a>
+    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
+    <a class="app-tab" href="more.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18" r="1.4"/></svg>더보기</a>
+  </nav>
+
+</div>
+
+<div class="app-sheet-root" id="sheet-search" hidden>
+  <div class="app-sheet-backdrop" onclick="closeSheet('sheet-search')"></div>
+  <div class="app-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-search-title">
+    <div class="app-sheet-handle"></div>
+    <div class="app-sheet-head"><div class="app-sheet-head-titles"><h2 class="app-sheet-title" id="sheet-search-title">검색</h2></div><button class="app-sheet-close" onclick="closeSheet('sheet-search')" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="app-sheet-body">
+      <div class="app-search-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" placeholder="검색어를 입력하세요">
+      </div>
+      <div class="app-filter-group"><div class="app-filter-label">최근 검색어</div><div class="app-filter-chips">
+          <label class="app-filter-chip"><input type="checkbox"><span>로담 캠페인</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>비타C 세럼</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>yuki_tokyo</span></label>
+          <label class="app-filter-chip"><input type="checkbox"><span>방문형</span></label>
+        </div></div>
+    </div>
+    <div class="app-sheet-foot"><button class="btn btn-primary btn-md btn-grow" onclick="closeSheet('sheet-search')">검색</button></div>
+  </div>
+</div>
+<script src="../js/sheets.js"></script>
+</body>
+</html>

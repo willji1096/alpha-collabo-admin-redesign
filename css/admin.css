@@ -39,9 +39,7 @@ body { background: var(--bg-page); }
   gap: 10px;
   padding: 6px 8px;
   border-radius: var(--radius-md);
-  transition: background var(--transition-fast);
 }
-.sidebar-ws:hover { background: var(--bg-hover); }
 .sidebar-logo-mark {
   width: 28px;
   height: 28px;
@@ -135,6 +133,17 @@ body { background: var(--bg-page); }
 
 .sidebar-nav {
   padding: 4px 0 12px;
+}
+
+/* 현재 섹션 이름 (헤더 탭 = 대분류) — 사이드바가 "그 섹션의 하위 메뉴"임을 알림 */
+.sidebar-section {
+  padding: 4px 20px 12px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  letter-spacing: -0.1px;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .nav-group { margin-bottom: 12px; }
@@ -1866,6 +1875,30 @@ body { background: var(--bg-page); }
   .drawer-influencer .di-strip { grid-template-columns: auto 1fr; }
 }
 
+/* 연락처 보호 안내 — 옅은 박스 + 아이콘 정렬 */
+.drawer-influencer .di-contact-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.drawer-influencer .di-contact-notice-icon {
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.drawer-influencer .di-contact-notice strong {
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+}
+
 /* ===== Tabs ===== */
 .drawer-influencer .di-tabs {
   display: flex;
@@ -2672,6 +2705,120 @@ body { background: var(--bg-page); }
 .sns-ico.tag-twitter     { background: var(--sns-tw-bg);  color: var(--sns-tw); }
 .sns-ico.tag-douyin      { background: var(--sns-dy-bg);  color: var(--sns-dy); }
 
+/* 대시보드 — 채널별 활성 캠페인 건수 (아이콘 + 숫자) */
+.sns-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px 4px 5px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  background: var(--bg-surface);
+}
+.sns-stat .sns-ico { width: 24px; height: 24px; }
+.sns-stat .sns-ico svg { width: 15px; height: 15px; }
+.sns-stat-num { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+/* ── 상태 미리보기 토글 (시안용 — 데이터/로딩/빈/에러) ── */
+.state-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--space-3);
+  padding: 4px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+.state-preview-label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  padding: 0 8px 0 6px;
+}
+.state-preview-btn {
+  padding: 5px 12px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.state-preview-btn.is-active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+
+/* ── 신청서 처리 단계 바 (파이프라인) — 메뉴가 "순차 단계"임을 시각화 ── */
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+  padding: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+.pipeline-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  transition: background .12s ease;
+}
+.pipeline-step:hover { background: var(--bg-surface); }
+.pipeline-step.is-current {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+.pipeline-step-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  color: var(--bg-surface);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+.pipeline-step.is-current .pipeline-step-no { background: var(--accent); }
+.pipeline-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--bg-page);
+  color: var(--text-secondary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.pipeline-step.is-current .pipeline-count { background: var(--accent-light); color: var(--accent); }
+.pipeline-arrow { flex-shrink: 0; color: var(--text-disabled); }
+@media (max-width: 900px) { .pipeline-step { font-size: var(--fs-sm); padding: 6px 9px; } }
+
 /* 컬럼: 승인상태 + 모집/신청 (stack) */
 .day-tbl-stack {
   display: flex;
@@ -3226,11 +3373,32 @@ body { background: var(--bg-page); }
 }
 .modal-propose .modal-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-6);
   border-top: 1px solid var(--border-default);
+}
+.mp-footer-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+.mp-footer-notice svg { flex-shrink: 0; margin-top: 2px; color: var(--text-tertiary); }
+.mp-footer-notice strong { color: var(--text-primary); font-weight: var(--fw-semibold); }
+.mp-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
 
 /* 수신자 */
@@ -3410,6 +3578,35 @@ body { background: var(--bg-page); }
 /* 선택된 캠페인 하이라이트 */
 .mp-camp:has(input:checked) { background: var(--accent-light); }
 .mp-camp:has(input:checked) .mp-camp-name { color: var(--accent-emphasis); }
+
+/* 캠페인별 제안 상태 칩 (미제안/확인함/확인중) */
+.mp-camp-status {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.mp-status-new { background: var(--bg-elevated); color: var(--text-tertiary); }
+.mp-status-viewed { background: var(--status-success-bg); color: var(--status-success-strong); }
+.mp-status-pending { background: var(--status-warning-bg); color: var(--status-warning-strong); }
+.mp-camp-recool { color: var(--status-warning-strong); font-weight: var(--fw-medium); }
+
+/* 확인중(쿨다운) 잠금 — 재전송 불가 */
+.mp-camp.is-locked .mp-camp-label { cursor: not-allowed; opacity: 0.6; }
+.mp-camp.is-locked .mp-camp-label:hover { background: transparent; }
+.mp-camp.is-locked .mp-camp-chk { cursor: not-allowed; }
+
+/* 인플루언서 테이블 — 제안하기 버튼 아래 진행 요약 */
+.cell-propose { display: inline-flex; flex-direction: column; align-items: stretch; gap: 4px; }
+.cell-propose-status { font-size: var(--fs-xs); color: var(--text-tertiary); white-space: nowrap; text-align: center; }
+.cell-propose-status .is-viewed { color: var(--status-success-strong); font-weight: var(--fw-semibold); }
+.cell-propose-status .is-pending { color: var(--status-warning-strong); font-weight: var(--fw-semibold); }
+.cell-propose-status.is-none { color: var(--text-disabled); }
 
 /* 캠페인 리스트 Empty State */
 .mp-camp-empty {
@@ -4790,6 +4987,12 @@ body { background: var(--bg-page); }
 }
 .inf-card-actions .btn { flex: 1 1 auto; }
 .inf-card-actions .btn.btn-icon, .inf-card-actions .btn[aria-label] { flex: 0 0 auto; padding: 0; width: 32px; justify-content: center; }
+/* 카드 제안 현황 — 리스트뷰와 동일 정보 */
+.inf-card-propose { margin-top: var(--space-2); text-align: center; }
+.inf-card-propose .cell-propose-status { display: block; }
+
+/* 상태 전환 — display 가진 컨테이너(.influencer-cards 등)가 [hidden]을 덮어쓰지 않도록 강제 */
+[data-state-body][hidden] { display: none !important; }
 
 @media (max-width: 768px) {
   .influencer-cards { grid-template-columns: 1fr; gap: var(--space-3); }

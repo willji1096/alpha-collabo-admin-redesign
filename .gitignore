@@ -6,3 +6,4 @@ screenshots/
 node_modules/
 .netlify/
 *.log
+.gstack/

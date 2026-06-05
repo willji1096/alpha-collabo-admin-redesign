@@ -3412,8 +3412,8 @@ body { background: var(--bg-page); }
 }
 .mp-recipient-avatar {
   flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid var(--border-default);
@@ -3431,7 +3431,7 @@ body { background: var(--bg-page); }
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: var(--fs-lg);
+  font-size: var(--fs-2xl);
   font-weight: var(--fw-semibold);
   color: var(--text-primary);
   margin-bottom: var(--space-1);
@@ -3602,7 +3602,7 @@ body { background: var(--bg-page); }
 .mp-camp.is-locked .mp-camp-chk { cursor: not-allowed; }
 
 /* 인플루언서 테이블 — 제안하기 버튼 아래 진행 요약 */
-.cell-propose { display: inline-flex; flex-direction: column; align-items: stretch; gap: 4px; }
+.cell-propose { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
 .cell-propose-status { font-size: var(--fs-xs); color: var(--text-tertiary); white-space: nowrap; text-align: center; }
 .cell-propose-status .is-viewed { color: var(--status-success-strong); font-weight: var(--fw-semibold); }
 .cell-propose-status .is-pending { color: var(--status-warning-strong); font-weight: var(--fw-semibold); }
@@ -4987,9 +4987,9 @@ body { background: var(--bg-page); }
 }
 .inf-card-actions .btn { flex: 1 1 auto; }
 .inf-card-actions .btn.btn-icon, .inf-card-actions .btn[aria-label] { flex: 0 0 auto; padding: 0; width: 32px; justify-content: center; }
-/* 카드 제안 현황 — 리스트뷰와 동일 정보 */
-.inf-card-propose { margin-top: var(--space-2); text-align: center; }
-.inf-card-propose .cell-propose-status { display: block; }
+/* 카드 제안 현황 — 메타 바로 아랫줄에 붙임(카드 flex gap 12px 상쇄), 좌측 정렬 */
+.inf-card-propose { margin-top: calc(-1 * var(--space-3) + 4px); }
+.inf-card-propose .cell-propose-status { display: block; text-align: left; }
 
 /* 상태 전환 — display 가진 컨테이너(.influencer-cards 등)가 [hidden]을 덮어쓰지 않도록 강제 */
 [data-state-body][hidden] { display: none !important; }

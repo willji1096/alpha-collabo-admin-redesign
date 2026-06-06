@@ -16,6 +16,8 @@
     grid-template-columns: 200px minmax(0, 760px);
     gap: var(--space-8);
     align-items: start;
+    max-width: 1000px;
+    margin-inline: auto;
   }
   @media (max-width: 1023px) {
     .gdw-layout { grid-template-columns: minmax(0, 1fr); }
@@ -56,13 +58,11 @@
     flex-shrink: 0;
   }
 
-  /* 표지 카드 */
+  /* 표지 — 카드가 아닌 문서 헤더 (본문 섹션 카드와 위계 분리) */
   .gdw-cover {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    padding: var(--space-7) var(--space-7) var(--space-6);
-    margin-bottom: var(--space-5);
+    padding: var(--space-4) 0 var(--space-6);
+    margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-default);
   }
   .gdw-cover-eyebrow {
     font-size: var(--fs-sm);
@@ -71,11 +71,11 @@
     margin-bottom: var(--space-2);
   }
   .gdw-cover-title {
-    font-size: var(--fs-2xl);
+    font-size: var(--fs-3xl);
     font-weight: var(--fw-bold);
-    letter-spacing: -0.5px;
-    line-height: 1.3;
-    margin: 0 0 var(--space-2);
+    letter-spacing: -0.6px;
+    line-height: 1.25;
+    margin: 0 0 var(--space-3);
   }
   .gdw-cover-desc {
     font-size: var(--fs-base);
@@ -87,9 +87,7 @@
   .gdw-cover-meta {
     display: flex;
     gap: var(--space-5);
-    margin-top: var(--space-5);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--border-light);
+    margin-top: var(--space-4);
     font-size: var(--fs-sm);
     color: var(--text-tertiary);
   }
@@ -260,7 +258,7 @@
   }
   .gdw-term-desc {
     font-size: var(--fs-sm);
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
     line-height: 1.6;
     word-break: keep-all;
   }

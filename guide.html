@@ -9,99 +9,91 @@
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/admin.css">
 <style>
-  /* 사용 가이드 (백서) — 문서형 레이아웃, 페이지 전용 gdw- 프리픽스 */
+  /* 사용 가이드 (백서) — 타이포그래피 문서 레이아웃, 페이지 전용 gdw- 프리픽스
+     벤치마크: 본문은 카드 없이 헤딩+본문+구분선, 우측 미니 TOC, 스텝은 숫자+연결선 */
 
   .gdw-layout {
     display: grid;
-    grid-template-columns: 200px minmax(0, 760px);
-    gap: var(--space-8);
-    align-items: start;
-    max-width: 1000px;
+    grid-template-columns: minmax(0, 700px) 180px;
+    gap: var(--space-9);
+    max-width: 940px;
     margin-inline: auto;
+    align-items: start;
   }
-  @media (max-width: 1023px) {
-    .gdw-layout { grid-template-columns: minmax(0, 1fr); }
+  @media (max-width: 1279px) {
+    .gdw-layout { grid-template-columns: minmax(0, 700px); max-width: 700px; }
     .gdw-toc { display: none; }
   }
 
-  /* 좌측 목차 — sticky */
+  /* ── 우측 미니 TOC (On this page) ── */
   .gdw-toc {
     position: sticky;
     top: calc(56px + var(--space-6));
+    border-left: 1px solid var(--border-light);
+    padding-left: var(--space-4);
   }
   .gdw-toc-label {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-xs);
     font-weight: var(--fw-semibold);
     color: var(--text-tertiary);
-    margin-bottom: var(--space-2);
-    padding: 0 var(--space-3);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: var(--space-3);
   }
   .gdw-toc-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-md);
-    font-size: var(--fs-base);
+    display: block;
+    padding: var(--space-1) 0;
+    font-size: var(--fs-sm);
     font-weight: var(--fw-medium);
-    color: var(--text-secondary);
-    text-decoration: none;
-  }
-  .gdw-toc-item:hover { background: var(--bg-hover); color: var(--text-primary); }
-  .gdw-toc-item.is-active { background: var(--bg-elevated); color: var(--text-primary); font-weight: var(--fw-semibold); }
-  .gdw-toc-no {
-    font-size: var(--fs-xs);
-    font-weight: var(--fw-bold);
     color: var(--text-tertiary);
-    font-variant-numeric: tabular-nums;
-    width: 14px;
-    flex-shrink: 0;
+    text-decoration: none;
+    line-height: 1.5;
   }
+  .gdw-toc-item:hover { color: var(--text-primary); }
+  .gdw-toc-item.is-active { color: var(--text-primary); font-weight: var(--fw-semibold); }
 
-  /* 표지 — 카드가 아닌 문서 헤더 (본문 섹션 카드와 위계 분리) */
-  .gdw-cover {
-    padding: var(--space-4) 0 var(--space-6);
-    margin-bottom: var(--space-6);
+  /* ── 문서 헤더 ── */
+  .gdw-head {
+    padding: var(--space-4) 0 var(--space-7);
+    margin-bottom: var(--space-7);
     border-bottom: 1px solid var(--border-default);
   }
-  .gdw-cover-eyebrow {
+  .gdw-eyebrow {
     font-size: var(--fs-sm);
     font-weight: var(--fw-semibold);
     color: var(--accent-emphasis);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
   }
-  .gdw-cover-title {
+  .gdw-title {
     font-size: var(--fs-3xl);
     font-weight: var(--fw-bold);
     letter-spacing: -0.6px;
     line-height: 1.25;
     margin: 0 0 var(--space-3);
   }
-  .gdw-cover-desc {
-    font-size: var(--fs-base);
+  .gdw-lede {
+    font-size: var(--fs-lg);
     color: var(--text-secondary);
     line-height: 1.65;
     word-break: keep-all;
-    max-width: 580px;
+    margin: 0 0 var(--space-4);
   }
-  .gdw-cover-meta {
+  .gdw-meta {
     display: flex;
     gap: var(--space-5);
-    margin-top: var(--space-4);
     font-size: var(--fs-sm);
     color: var(--text-tertiary);
   }
-  .gdw-cover-meta b { color: var(--text-secondary); font-weight: var(--fw-semibold); }
+  .gdw-meta b { color: var(--text-secondary); font-weight: var(--fw-semibold); }
 
-  /* 섹션 카드 */
+  /* ── 섹션 (카드 없음 — 헤딩 + 본문 + 구분선) ── */
   .gdw-sec {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6) var(--space-7);
-    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border-light);
     scroll-margin-top: calc(56px + var(--space-4));
   }
+  .gdw-sec:last-of-type { border-bottom: none; padding-bottom: var(--space-4); }
   .gdw-sec-head {
     display: flex;
     align-items: center;
@@ -112,11 +104,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px; height: 24px;
+    width: 26px; height: 26px;
     border-radius: var(--radius-full);
     background: var(--bg-inverse);
     color: var(--text-inverse);
-    font-size: var(--fs-xs);
+    font-size: var(--fs-sm);
     font-weight: var(--fw-bold);
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
@@ -124,40 +116,90 @@
   .gdw-sec-title {
     margin: 0;
     font-size: var(--fs-xl);
-    font-weight: var(--fw-semibold);
-    letter-spacing: -0.2px;
+    font-weight: var(--fw-bold);
+    letter-spacing: -0.3px;
   }
   .gdw-p {
     font-size: var(--fs-base);
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: 1.75;
     word-break: keep-all;
-    margin: 0 0 var(--space-4);
+    margin: 0 0 var(--space-5);
   }
   .gdw-p b { color: var(--text-primary); font-weight: var(--fw-semibold); }
-  .gdw-p a { color: var(--text-link); text-decoration: none; font-weight: var(--fw-medium); }
-  .gdw-p a:hover { text-decoration: underline; }
+  .gdw-p a, .gdw-step-desc a, .gdw-term-desc a, .gdw-note-body a, .gdw-foot a {
+    color: var(--text-link);
+    text-decoration: none;
+    font-weight: var(--fw-medium);
+  }
+  .gdw-p a:hover, .gdw-step-desc a:hover, .gdw-term-desc a:hover, .gdw-note-body a:hover, .gdw-foot a:hover { text-decoration: underline; }
 
   /* 소제목 */
   .gdw-h4 {
-    margin: var(--space-5) 0 var(--space-2);
+    margin: var(--space-6) 0 var(--space-3);
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+  }
+
+  /* ── 스텝 — 숫자 칩 + 세로 연결선 ── */
+  .gdw-steps { display: flex; flex-direction: column; }
+  .gdw-step {
+    position: relative;
+    display: flex;
+    gap: var(--space-4);
+    padding-bottom: var(--space-5);
+  }
+  .gdw-step:last-child { padding-bottom: 0; }
+  .gdw-step::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 28px;
+    bottom: 2px;
+    width: 1px;
+    background: var(--border-default);
+  }
+  .gdw-step:last-child::before { display: none; }
+  .gdw-step-no {
+    width: 25px; height: 25px;
+    border-radius: var(--radius-full);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-strong, var(--border-default));
+    color: var(--text-primary);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .gdw-step-body { flex: 1; min-width: 0; padding-top: 2px; }
+  .gdw-step-title {
     font-size: var(--fs-base);
     font-weight: var(--fw-semibold);
     color: var(--text-primary);
+    margin-bottom: 3px;
   }
-  .gdw-h4:first-of-type { margin-top: 0; }
+  .gdw-step-desc {
+    font-size: var(--fs-base);
+    color: var(--text-secondary);
+    line-height: 1.65;
+    word-break: keep-all;
+  }
 
-  /* 파이프라인 스트립 */
+  /* ── 파이프라인 스트립 ── */
   .gdw-flow {
     display: flex;
     align-items: center;
     gap: var(--space-2);
     flex-wrap: wrap;
     background: var(--bg-elevated);
-    border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
     padding: var(--space-4) var(--space-5);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
   }
   .gdw-flow-step {
     font-size: var(--fs-sm);
@@ -169,101 +211,58 @@
     padding: var(--space-1) var(--space-3);
     white-space: nowrap;
   }
-  .gdw-flow-arrow {
-    font-size: var(--fs-sm);
-    color: var(--text-disabled);
-  }
+  .gdw-flow-arrow { font-size: var(--fs-sm); color: var(--text-disabled); }
   .gdw-flow-note {
     flex-basis: 100%;
-    font-size: var(--fs-xs);
-    color: var(--text-tertiary);
-    margin-top: var(--space-1);
-  }
-
-  /* 단계 리스트 */
-  .gdw-steps { display: flex; flex-direction: column; }
-  .gdw-step {
-    display: flex;
-    gap: var(--space-4);
-    padding: var(--space-3) 0;
-    border-bottom: 1px solid var(--border-light);
-  }
-  .gdw-step:last-child { border-bottom: none; }
-  .gdw-step-no {
-    width: 22px; height: 22px;
-    border-radius: var(--radius-full);
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-default);
-    color: var(--text-secondary);
-    font-size: var(--fs-xs);
-    font-weight: var(--fw-bold);
-    display: inline-flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-    font-variant-numeric: tabular-nums;
-  }
-  .gdw-step-body { flex: 1; min-width: 0; }
-  .gdw-step-title {
-    font-size: var(--fs-base);
-    font-weight: var(--fw-semibold);
-    color: var(--text-primary);
-    margin-bottom: 2px;
-  }
-  .gdw-step-desc {
     font-size: var(--fs-sm);
     color: var(--text-tertiary);
-    line-height: 1.6;
-    word-break: keep-all;
+    margin-top: var(--space-2);
   }
-  .gdw-step-desc a, .gdw-term-desc a { color: var(--text-link); text-decoration: none; font-weight: var(--fw-medium); }
-  .gdw-step-desc a:hover, .gdw-term-desc a:hover { text-decoration: underline; }
 
-  /* 안내 박스 */
+  /* ── 콜아웃 ── */
   .gdw-note {
     display: flex;
     gap: var(--space-3);
     background: var(--bg-elevated);
-    border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
     padding: var(--space-4) var(--space-5);
-    margin-top: var(--space-4);
+    margin-top: var(--space-5);
   }
-  .gdw-note svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: var(--text-tertiary); }
+  .gdw-note svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; color: var(--text-tertiary); }
   .gdw-note-body {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.65;
     word-break: keep-all;
   }
   .gdw-note-body b { font-weight: var(--fw-semibold); color: var(--text-primary); }
-  .gdw-note-body a { color: var(--text-link); text-decoration: none; font-weight: var(--fw-medium); }
-  .gdw-note-body a:hover { text-decoration: underline; }
 
-  /* 용어 정의 */
+  /* ── 용어 정의 — 볼드 텀 + 옅은 본문 리듬 ── */
   .gdw-terms { display: flex; flex-direction: column; }
   .gdw-term {
     display: flex;
     align-items: baseline;
-    gap: var(--space-4);
+    gap: var(--space-5);
     padding: var(--space-3) 0;
     border-bottom: 1px solid var(--border-light);
   }
-  .gdw-term:last-child { border-bottom: none; }
+  .gdw-term:first-child { padding-top: 0; }
+  .gdw-term:last-child { border-bottom: none; padding-bottom: 0; }
   .gdw-term-name {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     font-weight: var(--fw-semibold);
     color: var(--text-primary);
-    width: 110px;
+    width: 118px;
     flex-shrink: 0;
   }
   .gdw-term-desc {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.65;
     word-break: keep-all;
   }
 
-  /* FAQ 아코디언 */
+  /* ── FAQ ── */
   .gdw-faq { border-bottom: 1px solid var(--border-light); }
   .gdw-faq:last-child { border-bottom: none; }
   .gdw-faq summary {
@@ -291,12 +290,31 @@
   .gdw-faq[open] .gdw-faq-chev { transform: rotate(180deg); }
   .gdw-faq-a {
     padding: 0 0 var(--space-4) calc(var(--space-3) + 14px);
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     color: var(--text-secondary);
     line-height: 1.65;
     word-break: keep-all;
     max-width: 620px;
   }
+
+  /* ── 도움 푸터 ── */
+  .gdw-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-7);
+    margin-top: var(--space-7);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-default);
+  }
+  .gdw-foot-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+  }
+  .gdw-foot-item svg { width: 14px; height: 14px; color: var(--text-tertiary); flex-shrink: 0; }
+
   @media (prefers-reduced-motion: reduce) {
     .gdw-faq-chev { transition: none; }
   }
@@ -318,30 +336,20 @@
 
     <div class="gdw-layout">
 
-      <!-- 좌측 목차 -->
-      <nav class="gdw-toc" aria-label="가이드 목차">
-        <div class="gdw-toc-label">목차</div>
-        <a class="gdw-toc-item is-active" href="#gdw-start"><span class="gdw-toc-no">1</span>시작하기</a>
-        <a class="gdw-toc-item" href="#gdw-select"><span class="gdw-toc-no">2</span>지원자 선정</a>
-        <a class="gdw-toc-item" href="#gdw-inspect"><span class="gdw-toc-no">3</span>콘텐츠 검수</a>
-        <a class="gdw-toc-item" href="#gdw-settle"><span class="gdw-toc-no">4</span>포인트 정산</a>
-        <a class="gdw-toc-item" href="#gdw-faq"><span class="gdw-toc-no">5</span>자주 묻는 질문</a>
-      </nav>
-
       <!-- 본문 -->
-      <div>
+      <article>
 
-        <!-- 표지 -->
-        <div class="gdw-cover">
-          <div class="gdw-cover-eyebrow">Alphacollabo 백서</div>
-          <h2 class="gdw-cover-title">브랜드사 어드민 — 캠페인 운영의 전 과정</h2>
-          <div class="gdw-cover-desc">알파콜라보가 어떻게 움직이는지, 이 어드민으로 무엇을 하는지 — 서비스 구조부터 신청서 파이프라인, 포인트 정산까지 5개 섹션으로 정리했습니다.</div>
-          <div class="gdw-cover-meta">
+        <!-- 문서 헤더 -->
+        <header class="gdw-head">
+          <div class="gdw-eyebrow">Alphacollabo 백서</div>
+          <h2 class="gdw-title">브랜드사 어드민 — 캠페인 운영의 전 과정</h2>
+          <p class="gdw-lede">알파콜라보가 어떻게 움직이는지, 이 어드민으로 무엇을 하는지 — 서비스 구조부터 신청서 파이프라인, 포인트 정산까지 5개 섹션으로 정리했습니다.</p>
+          <div class="gdw-meta">
             <span>버전 <b>1.2</b></span>
             <span>업데이트 <b>2025-01-03</b></span>
-            <span><b>5</b>개 섹션</span>
+            <span>읽는 시간 <b>약 7분</b></span>
           </div>
-        </div>
+        </header>
 
         <!-- 1. 시작 -->
         <section class="gdw-sec" id="gdw-start">
@@ -549,7 +557,30 @@
           </details>
         </section>
 
-      </div>
+        <!-- 도움 푸터 -->
+        <footer class="gdw-foot">
+          <span class="gdw-foot-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            더 궁금한 내용이 있나요? 담당 매니저에게 문의하세요
+          </span>
+          <span class="gdw-foot-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5Z"/><polyline points="14,2 14,8 20,8"/></svg>
+            정책 변경 소식은 <a href="notice.html">입점업체 공지사항</a>에서
+          </span>
+        </footer>
+
+      </article>
+
+      <!-- 우측 미니 TOC -->
+      <nav class="gdw-toc" aria-label="이 문서의 목차">
+        <div class="gdw-toc-label">이 문서에서</div>
+        <a class="gdw-toc-item is-active" href="#gdw-start">시작하기</a>
+        <a class="gdw-toc-item" href="#gdw-select">지원자 선정</a>
+        <a class="gdw-toc-item" href="#gdw-inspect">콘텐츠 검수</a>
+        <a class="gdw-toc-item" href="#gdw-settle">포인트 정산</a>
+        <a class="gdw-toc-item" href="#gdw-faq">자주 묻는 질문</a>
+      </nav>
+
     </div>
 
   </div>
@@ -558,13 +589,22 @@
 </div>
 <script src="js/components.js"></script>
 <script>
-  // 목차 활성 상태 — 앵커 클릭 시 동기화
-  document.querySelectorAll('.gdw-toc-item').forEach(function (item) {
-    item.addEventListener('click', function () {
-      document.querySelectorAll('.gdw-toc-item').forEach(function (t) { t.classList.remove('is-active'); });
-      item.classList.add('is-active');
-    });
-  });
+  // 우측 TOC 스크롤 스파이 — 화면에 보이는 섹션 강조
+  (function () {
+    const items = document.querySelectorAll('.gdw-toc-item');
+    const map = {};
+    items.forEach(item => { map[item.getAttribute('href').slice(1)] = item; });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          items.forEach(i => i.classList.remove('is-active'));
+          const item = map[entry.target.id];
+          if (item) item.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.gdw-sec').forEach(sec => observer.observe(sec));
+  })();
 </script>
 </body>
 </html>

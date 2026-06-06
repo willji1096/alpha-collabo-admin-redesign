@@ -9,23 +9,23 @@
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/admin.css">
 <style>
-  /* 사용 가이드 (백서) — 타이포그래피 문서 레이아웃, 페이지 전용 gdw- 프리픽스
-     벤치마크: 본문은 카드 없이 헤딩+본문+구분선, 우측 미니 TOC, 스텝은 숫자+연결선 */
+  /* 사용 가이드 (백서) — 에디토리얼 문서. 페이지 전용 gdw- 프리픽스
+     섹션 컴포넌트: 챕터 헤더(큰 번호+룰) / 주체 관계도 / 파이프라인 다이어그램 / 요금 그리드 */
 
   .gdw-layout {
     display: grid;
-    grid-template-columns: minmax(0, 700px) 180px;
+    grid-template-columns: minmax(0, 720px) 180px;
     gap: var(--space-9);
-    max-width: 940px;
+    max-width: 960px;
     margin-inline: auto;
     align-items: start;
   }
   @media (max-width: 1279px) {
-    .gdw-layout { grid-template-columns: minmax(0, 700px); max-width: 700px; }
+    .gdw-layout { grid-template-columns: minmax(0, 720px); max-width: 720px; }
     .gdw-toc { display: none; }
   }
 
-  /* ── 우측 미니 TOC (On this page) ── */
+  /* ── 우측 미니 TOC ── */
   .gdw-toc {
     position: sticky;
     top: calc(56px + var(--space-6));
@@ -41,7 +41,9 @@
     margin-bottom: var(--space-3);
   }
   .gdw-toc-item {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
     padding: var(--space-1) 0;
     font-size: var(--fs-sm);
     font-weight: var(--fw-medium);
@@ -51,74 +53,139 @@
   }
   .gdw-toc-item:hover { color: var(--text-primary); }
   .gdw-toc-item.is-active { color: var(--text-primary); font-weight: var(--fw-semibold); }
+  .gdw-toc-no {
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
 
-  /* ── 문서 헤더 ── */
-  .gdw-head {
-    padding: var(--space-4) 0 var(--space-7);
-    margin-bottom: var(--space-7);
-    border-bottom: 1px solid var(--border-default);
+  /* ── 문서 표지 — 차례 내장 ── */
+  .gdw-cover {
+    padding: var(--space-6) 0 var(--space-8);
+    margin-bottom: var(--space-9);
+    border-bottom: 1px solid var(--bg-inverse);
   }
   .gdw-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
     font-size: var(--fs-sm);
     font-weight: var(--fw-semibold);
     color: var(--accent-emphasis);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+  .gdw-eyebrow::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border-default);
   }
   .gdw-title {
     font-size: var(--fs-3xl);
     font-weight: var(--fw-bold);
     letter-spacing: -0.6px;
-    line-height: 1.25;
+    line-height: 1.3;
     margin: 0 0 var(--space-3);
+    max-width: 520px;
   }
   .gdw-lede {
     font-size: var(--fs-lg);
     color: var(--text-secondary);
     line-height: 1.65;
     word-break: keep-all;
-    margin: 0 0 var(--space-4);
+    margin: 0 0 var(--space-6);
+    max-width: 560px;
+  }
+  /* 차례 — 번호 + 제목 + 리더 라인 */
+  .gdw-contents {
+    display: flex;
+    flex-direction: column;
+    max-width: 440px;
+  }
+  .gdw-contents-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: var(--space-2);
+  }
+  .gdw-contents-item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+    text-decoration: none;
+  }
+  .gdw-contents-no {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--accent-emphasis);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .gdw-contents-name {
+    font-size: var(--fs-base);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    flex-shrink: 0;
+  }
+  .gdw-contents-item:hover .gdw-contents-name { color: var(--accent); }
+  .gdw-contents-leader {
+    flex: 1;
+    border-bottom: 1px dotted var(--border-strong, var(--border-default));
+    transform: translateY(-3px);
+  }
+  .gdw-contents-sub {
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+    flex-shrink: 0;
   }
   .gdw-meta {
     display: flex;
     gap: var(--space-5);
+    margin-top: var(--space-6);
     font-size: var(--fs-sm);
     color: var(--text-tertiary);
   }
   .gdw-meta b { color: var(--text-secondary); font-weight: var(--fw-semibold); }
 
-  /* ── 섹션 (카드 없음 — 헤딩 + 본문 + 구분선) ── */
+  /* ── 챕터 헤더 — 큰 번호 + 제목 + 룰 ── */
   .gdw-sec {
-    padding-bottom: var(--space-8);
-    margin-bottom: var(--space-8);
-    border-bottom: 1px solid var(--border-light);
+    margin-bottom: var(--space-9);
     scroll-margin-top: calc(56px + var(--space-4));
   }
-  .gdw-sec:last-of-type { border-bottom: none; padding-bottom: var(--space-4); }
-  .gdw-sec-head {
+  .gdw-ch {
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 2px solid var(--bg-inverse);
+    margin-bottom: var(--space-5);
   }
-  .gdw-no {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px; height: 26px;
-    border-radius: var(--radius-full);
-    background: var(--bg-inverse);
-    color: var(--text-inverse);
-    font-size: var(--fs-sm);
+  .gdw-ch-no {
+    font-size: var(--fs-3xl);
     font-weight: var(--fw-bold);
-    flex-shrink: 0;
+    color: var(--text-disabled);
     font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+    line-height: 1;
+    flex-shrink: 0;
   }
-  .gdw-sec-title {
+  .gdw-ch-body { flex: 1; min-width: 0; }
+  .gdw-ch-title {
     margin: 0;
-    font-size: var(--fs-xl);
+    font-size: var(--fs-2xl);
     font-weight: var(--fw-bold);
-    letter-spacing: -0.3px;
+    letter-spacing: -0.4px;
+    line-height: 1.3;
   }
+  .gdw-ch-sub {
+    margin-top: 2px;
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+  }
+
   .gdw-p {
     font-size: var(--fs-base);
     color: var(--text-secondary);
@@ -127,23 +194,90 @@
     margin: 0 0 var(--space-5);
   }
   .gdw-p b { color: var(--text-primary); font-weight: var(--fw-semibold); }
-  .gdw-p a, .gdw-step-desc a, .gdw-term-desc a, .gdw-note-body a, .gdw-foot a {
+  .gdw-p a, .gdw-step-desc a, .gdw-term-desc a, .gdw-note-body a, .gdw-foot a, .gdw-pipe-menu a, .gdw-price-link {
     color: var(--text-link);
     text-decoration: none;
     font-weight: var(--fw-medium);
   }
-  .gdw-p a:hover, .gdw-step-desc a:hover, .gdw-term-desc a:hover, .gdw-note-body a:hover, .gdw-foot a:hover { text-decoration: underline; }
+  .gdw-p a:hover, .gdw-step-desc a:hover, .gdw-term-desc a:hover, .gdw-note-body a:hover, .gdw-foot a:hover, .gdw-pipe-menu a:hover, .gdw-price-link:hover { text-decoration: underline; }
 
-  /* 소제목 */
   .gdw-h4 {
-    margin: var(--space-6) 0 var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-7) 0 var(--space-4);
     font-size: var(--fs-lg);
     font-weight: var(--fw-semibold);
     color: var(--text-primary);
     letter-spacing: -0.2px;
   }
+  .gdw-h4::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+  }
 
-  /* ── 스텝 — 숫자 칩 + 세로 연결선 ── */
+  /* ── 주체 관계도 ── */
+  .gdw-actors {
+    display: grid;
+    grid-template-columns: 1fr 24px 1fr 24px 1fr;
+    align-items: stretch;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .gdw-actor {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    text-align: center;
+  }
+  .gdw-actor.is-core {
+    background: var(--bg-surface);
+    border: 1.5px solid var(--bg-inverse);
+  }
+  .gdw-actor-role {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: var(--space-1);
+  }
+  .gdw-actor-name {
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+  .gdw-actor-desc {
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    line-height: 1.5;
+    word-break: keep-all;
+  }
+  .gdw-actor-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-disabled);
+  }
+  .gdw-actor-arrow svg { width: 14px; height: 14px; }
+  .gdw-actors-foot {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: 1px dashed var(--border-strong, var(--border-default));
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-5);
+  }
+  .gdw-actors-foot svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .gdw-actors-foot b { color: var(--text-secondary); font-weight: var(--fw-semibold); }
+
+  /* ── 스텝 — 숫자 칩 + 연결선 ── */
   .gdw-steps { display: flex; flex-direction: column; }
   .gdw-step {
     position: relative;
@@ -165,9 +299,8 @@
   .gdw-step-no {
     width: 25px; height: 25px;
     border-radius: var(--radius-full);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-strong, var(--border-default));
-    color: var(--text-primary);
+    background: var(--bg-inverse);
+    color: var(--text-inverse);
     font-size: var(--fs-sm);
     font-weight: var(--fw-bold);
     display: inline-flex; align-items: center; justify-content: center;
@@ -190,33 +323,117 @@
     word-break: keep-all;
   }
 
-  /* ── 파이프라인 스트립 ── */
-  .gdw-flow {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    flex-wrap: wrap;
-    background: var(--bg-elevated);
-    border-radius: var(--radius-md);
-    padding: var(--space-4) var(--space-5);
+  /* ── 파이프라인 다이어그램 ── */
+  .gdw-pipe {
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
     margin-bottom: var(--space-5);
   }
-  .gdw-flow-step {
-    font-size: var(--fs-sm);
-    font-weight: var(--fw-semibold);
+  .gdw-pipe-main {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: var(--bg-surface);
+  }
+  .gdw-pipe-node {
+    position: relative;
+    padding: var(--space-4) var(--space-3) var(--space-4);
+    text-align: center;
+    border-right: 1px solid var(--border-light);
+  }
+  .gdw-pipe-node:last-child { border-right: none; }
+  .gdw-pipe-stage {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
     color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+  .gdw-pipe-stage .gdw-pipe-idx {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-disabled);
+    font-variant-numeric: tabular-nums;
+  }
+  .gdw-pipe-menu {
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    line-height: 1.4;
+  }
+  .gdw-pipe-arrow {
+    position: absolute;
+    right: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    width: 14px; height: 14px;
+    color: var(--text-disabled);
+    background: var(--bg-surface);
+    border-radius: var(--radius-full);
+  }
+  .gdw-pipe-node.is-loop .gdw-pipe-loop {
+    display: inline-block;
+    margin-top: var(--space-1);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--text-tertiary);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-full);
+    padding: 1px 8px;
+  }
+  .gdw-pipe-exits {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-elevated);
+    border-top: 1px dashed var(--border-strong, var(--border-default));
+    flex-wrap: wrap;
+  }
+  .gdw-pipe-exits-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .gdw-pipe-exit {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--text-secondary);
     background: var(--bg-surface);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-full);
-    padding: var(--space-1) var(--space-3);
-    white-space: nowrap;
+    padding: 2px 10px;
+    text-decoration: none;
   }
-  .gdw-flow-arrow { font-size: var(--fs-sm); color: var(--text-disabled); }
-  .gdw-flow-note {
-    flex-basis: 100%;
-    font-size: var(--fs-sm);
-    color: var(--text-tertiary);
-    margin-top: var(--space-2);
+  .gdw-pipe-exit:hover { color: var(--text-primary); border-color: var(--border-strong, var(--border-default)); }
+
+  /* ── 용어 정의 ── */
+  .gdw-terms { display: flex; flex-direction: column; }
+  .gdw-term {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-5);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .gdw-term:first-child { padding-top: 0; }
+  .gdw-term:last-child { border-bottom: none; padding-bottom: 0; }
+  .gdw-term-name {
+    font-size: var(--fs-base);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    width: 118px;
+    flex-shrink: 0;
+  }
+  .gdw-term-desc {
+    font-size: var(--fs-base);
+    color: var(--text-secondary);
+    line-height: 1.65;
+    word-break: keep-all;
   }
 
   /* ── 콜아웃 ── */
@@ -237,37 +454,55 @@
   }
   .gdw-note-body b { font-weight: var(--fw-semibold); color: var(--text-primary); }
 
-  /* ── 용어 정의 — 볼드 텀 + 옅은 본문 리듬 ── */
-  .gdw-terms { display: flex; flex-direction: column; }
-  .gdw-term {
+  /* ── 요금표 그리드 ── */
+  .gdw-price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+  .gdw-price {
     display: flex;
-    align-items: baseline;
-    gap: var(--space-5);
-    padding: var(--space-3) 0;
-    border-bottom: 1px solid var(--border-light);
+    flex-direction: column;
+    gap: var(--space-1);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    text-decoration: none;
+    transition: border-color var(--transition-fast);
   }
-  .gdw-term:first-child { padding-top: 0; }
-  .gdw-term:last-child { border-bottom: none; padding-bottom: 0; }
-  .gdw-term-name {
+  .gdw-price:hover { border-color: var(--bg-inverse); }
+  .gdw-price-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+  .gdw-price-name {
     font-size: var(--fs-base);
-    font-weight: var(--fw-semibold);
+    font-weight: var(--fw-bold);
     color: var(--text-primary);
-    width: 118px;
-    flex-shrink: 0;
   }
-  .gdw-term-desc {
-    font-size: var(--fs-base);
-    color: var(--text-secondary);
-    line-height: 1.65;
+  .gdw-price-head svg { width: 14px; height: 14px; color: var(--text-disabled); flex-shrink: 0; }
+  .gdw-price:hover .gdw-price-head svg { color: var(--text-primary); }
+  .gdw-price-desc {
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+    line-height: 1.55;
     word-break: keep-all;
+  }
+  .gdw-price-tag {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--accent-emphasis);
   }
 
   /* ── FAQ ── */
   .gdw-faq { border-bottom: 1px solid var(--border-light); }
-  .gdw-faq:last-child { border-bottom: none; }
+  .gdw-faq:last-of-type { border-bottom: none; }
   .gdw-faq summary {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: var(--space-3);
     padding: var(--space-4) 0;
     font-size: var(--fs-base);
@@ -283,13 +518,16 @@
     flex-shrink: 0;
     font-size: var(--fs-sm);
     font-weight: var(--fw-bold);
-    color: var(--accent-emphasis);
+    color: var(--text-disabled);
+    font-variant-numeric: tabular-nums;
+    width: 26px;
   }
-  .gdw-faq-chev { margin-left: auto; flex-shrink: 0; color: var(--text-disabled); transition: transform var(--transition-fast); }
+  .gdw-faq[open] .gdw-faq-q { color: var(--accent-emphasis); }
+  .gdw-faq-chev { margin-left: auto; flex-shrink: 0; color: var(--text-disabled); transition: transform var(--transition-fast); align-self: center; }
   .gdw-faq-chev svg { width: 14px; height: 14px; }
   .gdw-faq[open] .gdw-faq-chev { transform: rotate(180deg); }
   .gdw-faq-a {
-    padding: 0 0 var(--space-4) calc(var(--space-3) + 14px);
+    padding: 0 0 var(--space-4) calc(26px + var(--space-3));
     font-size: var(--fs-base);
     color: var(--text-secondary);
     line-height: 1.65;
@@ -302,9 +540,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3) var(--space-7);
-    margin-top: var(--space-7);
     padding-top: var(--space-6);
-    border-top: 1px solid var(--border-default);
+    border-top: 2px solid var(--bg-inverse);
   }
   .gdw-foot-item {
     display: flex;
@@ -316,7 +553,7 @@
   .gdw-foot-item svg { width: 14px; height: 14px; color: var(--text-tertiary); flex-shrink: 0; }
 
   @media (prefers-reduced-motion: reduce) {
-    .gdw-faq-chev { transition: none; }
+    .gdw-faq-chev, .gdw-price { transition: none; }
   }
 </style>
 </head>
@@ -339,11 +576,19 @@
       <!-- 본문 -->
       <article>
 
-        <!-- 문서 헤더 -->
-        <header class="gdw-head">
+        <!-- 표지 — 차례 내장 -->
+        <header class="gdw-cover">
           <div class="gdw-eyebrow">Alphacollabo 백서</div>
-          <h2 class="gdw-title">브랜드사 어드민 — 캠페인 운영의 전 과정</h2>
-          <p class="gdw-lede">알파콜라보가 어떻게 움직이는지, 이 어드민으로 무엇을 하는지 — 서비스 구조부터 신청서 파이프라인, 포인트 정산까지 5개 섹션으로 정리했습니다.</p>
+          <h2 class="gdw-title">브랜드사 어드민,<br>캠페인 운영의 전 과정</h2>
+          <p class="gdw-lede">알파콜라보가 어떻게 움직이는지, 이 어드민으로 무엇을 하는지 — 서비스 구조부터 신청서 파이프라인, 포인트 정산까지.</p>
+          <nav class="gdw-contents" aria-label="차례">
+            <div class="gdw-contents-label">차례</div>
+            <a class="gdw-contents-item" href="#gdw-start"><span class="gdw-contents-no">01</span><span class="gdw-contents-name">시작하기</span><span class="gdw-contents-leader"></span><span class="gdw-contents-sub">구조와 주체</span></a>
+            <a class="gdw-contents-item" href="#gdw-select"><span class="gdw-contents-no">02</span><span class="gdw-contents-name">지원자 선정</span><span class="gdw-contents-leader"></span><span class="gdw-contents-sub">운영과 영업</span></a>
+            <a class="gdw-contents-item" href="#gdw-inspect"><span class="gdw-contents-no">03</span><span class="gdw-contents-name">콘텐츠 검수</span><span class="gdw-contents-leader"></span><span class="gdw-contents-sub">파이프라인</span></a>
+            <a class="gdw-contents-item" href="#gdw-settle"><span class="gdw-contents-no">04</span><span class="gdw-contents-name">포인트 정산</span><span class="gdw-contents-leader"></span><span class="gdw-contents-sub">요금과 차감</span></a>
+            <a class="gdw-contents-item" href="#gdw-faq"><span class="gdw-contents-no">05</span><span class="gdw-contents-name">자주 묻는 질문</span><span class="gdw-contents-leader"></span><span class="gdw-contents-sub">정책 6문</span></a>
+          </nav>
           <div class="gdw-meta">
             <span>버전 <b>1.2</b></span>
             <span>업데이트 <b>2025-01-03</b></span>
@@ -351,19 +596,39 @@
           </div>
         </header>
 
-        <!-- 1. 시작 -->
+        <!-- 01 시작 -->
         <section class="gdw-sec" id="gdw-start">
-          <div class="gdw-sec-head">
-            <span class="gdw-no">1</span>
-            <h3 class="gdw-sec-title">시작하기</h3>
+          <div class="gdw-ch">
+            <span class="gdw-ch-no">01</span>
+            <div class="gdw-ch-body">
+              <h3 class="gdw-ch-title">시작하기</h3>
+              <div class="gdw-ch-sub">알파콜라보의 구조와 세 주체</div>
+            </div>
           </div>
           <p class="gdw-p">알파콜라보는 <b>글로벌 인플루언서 리뷰 캠페인 플랫폼</b>입니다. 이 어드민은 브랜드사가 자기 캠페인의 지원자를 관리하고, 인플루언서를 탐색하고, 검수와 정산을 운영하는 <b>운영 콘솔</b>입니다.</p>
 
-          <div class="gdw-h4">세 주체가 움직입니다</div>
-          <div class="gdw-terms">
-            <div class="gdw-term"><span class="gdw-term-name">알파콜라보 매니저</span><span class="gdw-term-desc">캠페인 생성과 정산을 총괄하고, 브랜드사와 인플루언서 사이의 소통을 중개합니다. 계정 발급도 매니저 몫입니다.</span></div>
-            <div class="gdw-term"><span class="gdw-term-name">브랜드사 (광고주)</span><span class="gdw-term-desc">캠페인의 주인이자 이 어드민의 사용자. 지원자 선정·검수·운영을 직접 합니다.</span></div>
-            <div class="gdw-term"><span class="gdw-term-name">인플루언서</span><span class="gdw-term-desc">알파콜라보 앱에서 캠페인을 보고 지원하며, 선정되면 콘텐츠를 제작합니다.</span></div>
+          <div class="gdw-actors" role="img" aria-label="브랜드사는 매니저와 상담하고, 매니저가 인플루언서와의 소통을 중개합니다">
+            <div class="gdw-actor is-core">
+              <div class="gdw-actor-role">You</div>
+              <div class="gdw-actor-name">브랜드사</div>
+              <div class="gdw-actor-desc">캠페인의 주인.<br>선정·검수·운영 담당</div>
+            </div>
+            <div class="gdw-actor-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 12h10m0 0-4-4m4 4-4 4"/></svg></div>
+            <div class="gdw-actor">
+              <div class="gdw-actor-role">Alphacollabo</div>
+              <div class="gdw-actor-name">매니저</div>
+              <div class="gdw-actor-desc">캠페인 생성·정산 총괄.<br>소통 중개, 계정 발급</div>
+            </div>
+            <div class="gdw-actor-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 12h10m0 0-4-4m4 4-4 4"/></svg></div>
+            <div class="gdw-actor">
+              <div class="gdw-actor-role">Creator</div>
+              <div class="gdw-actor-name">인플루언서</div>
+              <div class="gdw-actor-desc">앱에서 지원하고<br>콘텐츠 제작</div>
+            </div>
+          </div>
+          <div class="gdw-actors-foot">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+            브랜드사 ↔ 인플루언서 <b>직접 소통 없음</b> — 모든 소통은 매니저 경유, 계정도 알파콜라보 발급
           </div>
 
           <div class="gdw-h4">캠페인이 만들어지는 과정</div>
@@ -390,17 +655,16 @@
               </div>
             </div>
           </div>
-          <div class="gdw-note">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-            <div class="gdw-note-body">계정은 <b>알파콜라보가 발급</b>합니다 — 별도 가입 절차가 없고, 계정 정보 변경은 담당 매니저에게 요청합니다. 인플루언서와의 소통도 <b>매니저 경유</b>가 원칙입니다.</div>
-          </div>
         </section>
 
-        <!-- 2. 선정 -->
+        <!-- 02 선정 -->
         <section class="gdw-sec" id="gdw-select">
-          <div class="gdw-sec-head">
-            <span class="gdw-no">2</span>
-            <h3 class="gdw-sec-title">지원자 선정</h3>
+          <div class="gdw-ch">
+            <span class="gdw-ch-no">02</span>
+            <div class="gdw-ch-body">
+              <h3 class="gdw-ch-title">지원자 선정</h3>
+              <div class="gdw-ch-sub">기다리는 운영, 찾아가는 영업</div>
+            </div>
           </div>
           <p class="gdw-p">선정에는 두 가지 길이 있습니다. 들어온 지원을 고르는 <b>신청서 관리</b>, 그리고 원하는 인플루언서를 먼저 찾아가는 <b>인플루언서 탐색</b>입니다.</p>
 
@@ -429,7 +693,7 @@
             </div>
           </div>
 
-          <div class="gdw-h4">먼저 찾아가기 (탐색)</div>
+          <div class="gdw-h4">먼저 찾아가기</div>
           <div class="gdw-steps">
             <div class="gdw-step">
               <span class="gdw-step-no">1</span>
@@ -447,33 +711,63 @@
             </div>
           </div>
           <div class="gdw-note">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
             <div class="gdw-note-body"><a href="visit-planned.html"><b>한국 방문 예정</b></a>은 다른 캠페인으로라도 방한 일정이 잡힌 인플루언서를 모은 목록입니다. 방문 비용 장벽이 이미 해결된 사람들이라 "온 김에 우리 것도" 제안이 잘 통합니다.</div>
           </div>
         </section>
 
-        <!-- 3. 검수 -->
+        <!-- 03 검수 -->
         <section class="gdw-sec" id="gdw-inspect">
-          <div class="gdw-sec-head">
-            <span class="gdw-no">3</span>
-            <h3 class="gdw-sec-title">콘텐츠 검수</h3>
+          <div class="gdw-ch">
+            <span class="gdw-ch-no">03</span>
+            <div class="gdw-ch-body">
+              <h3 class="gdw-ch-title">콘텐츠 검수</h3>
+              <div class="gdw-ch-sub">신청서 파이프라인 — 단계가 곧 메뉴</div>
+            </div>
           </div>
-          <p class="gdw-p">모든 신청서는 하나의 파이프라인을 따라 움직입니다. 각 단계가 곧 메뉴(목록)입니다.</p>
+          <p class="gdw-p">모든 신청서는 하나의 파이프라인을 따라 움직입니다. 사이드바의 목록 메뉴는 이 단계들을 그대로 옮긴 것입니다.</p>
 
-          <div class="gdw-flow" role="img" aria-label="신청서 파이프라인: 신청, 선정, 검수, 수정, 완료 순서. 검수와 수정은 반복 가능">
-            <span class="gdw-flow-step">신청</span><span class="gdw-flow-arrow">→</span>
-            <span class="gdw-flow-step">선정</span><span class="gdw-flow-arrow">→</span>
-            <span class="gdw-flow-step">검수</span><span class="gdw-flow-arrow">⇄</span>
-            <span class="gdw-flow-step">수정</span><span class="gdw-flow-arrow">→</span>
-            <span class="gdw-flow-step">완료</span>
-            <span class="gdw-flow-note">이탈 분기: 미선정 · 선정후 취소 · 인플루언서 취소 (별도 목록에서 관리)</span>
+          <div class="gdw-pipe">
+            <div class="gdw-pipe-main" role="img" aria-label="신청서 파이프라인: 신청, 선정, 검수, 수정, 완료 순서. 검수와 수정은 반복 가능">
+              <div class="gdw-pipe-node">
+                <div class="gdw-pipe-stage"><span class="gdw-pipe-idx">1</span>신청</div>
+                <div class="gdw-pipe-menu"><a href="list.html">신청목록</a></div>
+                <svg class="gdw-pipe-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </div>
+              <div class="gdw-pipe-node">
+                <div class="gdw-pipe-stage"><span class="gdw-pipe-idx">2</span>선정</div>
+                <div class="gdw-pipe-menu"><a href="list-selection.html">선정목록</a></div>
+                <svg class="gdw-pipe-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </div>
+              <div class="gdw-pipe-node is-loop">
+                <div class="gdw-pipe-stage"><span class="gdw-pipe-idx">3</span>검수</div>
+                <div class="gdw-pipe-menu"><a href="list-inspection.html">검수요청목록</a></div>
+                <span class="gdw-pipe-loop">⇄ 수정과 반복</span>
+                <svg class="gdw-pipe-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </div>
+              <div class="gdw-pipe-node is-loop">
+                <div class="gdw-pipe-stage"><span class="gdw-pipe-idx">4</span>수정</div>
+                <div class="gdw-pipe-menu"><a href="list-revision.html">수정요청목록</a></div>
+                <span class="gdw-pipe-loop">⇄ 재검수</span>
+                <svg class="gdw-pipe-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </div>
+              <div class="gdw-pipe-node">
+                <div class="gdw-pipe-stage"><span class="gdw-pipe-idx">5</span>완료</div>
+                <div class="gdw-pipe-menu"><a href="list-completed.html">등록완료목록</a></div>
+              </div>
+            </div>
+            <div class="gdw-pipe-exits">
+              <span class="gdw-pipe-exits-label">이탈 분기</span>
+              <a class="gdw-pipe-exit" href="list-unselected.html">미선정</a>
+              <a class="gdw-pipe-exit" href="list-cancel-selected.html">선정후 취소</a>
+              <a class="gdw-pipe-exit" href="list-cancel-influencer.html">인플루언서 취소</a>
+            </div>
           </div>
 
           <div class="gdw-terms">
-            <div class="gdw-term"><span class="gdw-term-name">검수요청</span><span class="gdw-term-desc">인플루언서가 콘텐츠 초안을 제출한 상태. <a href="list-inspection.html">검수요청목록</a>에서 <b>리뷰 검수</b>로 컨펌하면 완료로, 보완이 필요하면 <b>초안수정요청</b>으로 수정 단계로 보냅니다. 방문형에서 방문이 이뤄지지 않은 건은 <b>미방문</b> 처리합니다.</span></div>
-            <div class="gdw-term"><span class="gdw-term-name">수정요청</span><span class="gdw-term-desc">보완 사항을 적어 반려한 상태. <a href="list-revision.html">수정요청목록</a>에서 추적하며, 재제출되면 다시 리뷰 검수를 진행합니다 — 검수와 수정은 통과할 때까지 반복되는 루프입니다.</span></div>
-            <div class="gdw-term"><span class="gdw-term-name">등록완료</span><span class="gdw-term-desc">검수를 통과해 콘텐츠가 채널에 게시된 상태. <a href="list-completed.html">등록완료목록</a>에 게시 링크와 함께 기록되며, 이 시점에 포인트가 차감됩니다.</span></div>
-            <div class="gdw-term"><span class="gdw-term-name">이탈 3종</span><span class="gdw-term-desc">선정되지 않은 건은 <a href="list-unselected.html">미선정</a>, 선정 뒤 취소된 건은 <a href="list-cancel-selected.html">선정후 취소</a>, 인플루언서 본인이 이탈한 건은 <a href="list-cancel-influencer.html">인플루언서 취소</a>에서 따로 관리합니다.</span></div>
+            <div class="gdw-term"><span class="gdw-term-name">검수요청</span><span class="gdw-term-desc">인플루언서가 콘텐츠 초안을 제출한 상태. <b>리뷰 검수</b>로 컨펌하면 완료로, 보완이 필요하면 <b>초안수정요청</b>으로 수정 단계로 보냅니다. 방문형에서 방문이 이뤄지지 않은 건은 <b>미방문</b> 처리합니다.</span></div>
+            <div class="gdw-term"><span class="gdw-term-name">수정요청</span><span class="gdw-term-desc">보완 사항을 적어 반려한 상태. 재제출되면 다시 리뷰 검수를 진행합니다 — 검수와 수정은 통과할 때까지 반복되는 루프입니다.</span></div>
+            <div class="gdw-term"><span class="gdw-term-name">등록완료</span><span class="gdw-term-desc">검수를 통과해 콘텐츠가 채널에 게시된 상태. 게시 링크와 함께 기록되며, 이 시점에 포인트가 차감됩니다.</span></div>
           </div>
           <div class="gdw-note">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -481,22 +775,44 @@
           </div>
         </section>
 
-        <!-- 4. 정산 -->
+        <!-- 04 정산 -->
         <section class="gdw-sec" id="gdw-settle">
-          <div class="gdw-sec-head">
-            <span class="gdw-no">4</span>
-            <h3 class="gdw-sec-title">포인트 정산</h3>
+          <div class="gdw-ch">
+            <span class="gdw-ch-no">04</span>
+            <div class="gdw-ch-body">
+              <h3 class="gdw-ch-title">포인트 정산</h3>
+              <div class="gdw-ch-sub">차감은 등록완료 시점에만</div>
+            </div>
           </div>
           <p class="gdw-p">캠페인 비용은 충전해 둔 포인트에서 차감됩니다. 차감 시점은 <b>등록완료</b> — 콘텐츠가 실제로 게시된 건에 대해서만 비용이 발생합니다. 단가는 캠페인 유형별 요금표 기준입니다.</p>
 
           <div class="gdw-h4">요금표 6종</div>
-          <div class="gdw-terms">
-            <div class="gdw-term"><span class="gdw-term-name">제품형/방문형</span><span class="gdw-term-desc">기본 리뷰 캠페인. 국가 × 팔로워 구간(1만 이하 ~ 100만 이상)별 단가. <a href="pricing.html">요금표 보기</a></span></div>
-            <div class="gdw-term"><span class="gdw-term-name">한국방문형</span><span class="gdw-term-desc">방한 인플루언서 대상 캠페인. 구조는 제품형/방문형과 동일합니다. <a href="pricing-korea.html">요금표 보기</a></span></div>
-            <div class="gdw-term"><span class="gdw-term-name">IT/식품</span><span class="gdw-term-desc">IT·식품 카테고리 전용 단가. <a href="pricing-it.html">요금표 보기</a></span></div>
-            <div class="gdw-term"><span class="gdw-term-name">슈퍼패스</span><span class="gdw-term-desc">국가별 정액 지원금 상품 — 팔로워 구간 없이 국가당 한 가격입니다. <a href="pricing-superpass.html">요금표 보기</a></span></div>
-            <div class="gdw-term"><span class="gdw-term-name">통역</span><span class="gdw-term-desc">방문 캠페인 통역 지원. 건당/시간당 단가. <a href="pricing-translation.html">요금표 보기</a></span></div>
-            <div class="gdw-term"><span class="gdw-term-name">계정 및 댓글 관리</span><span class="gdw-term-desc">SNS 계정 운영대행 부가서비스(계정 관리·댓글 관리·공동게재) 단가표입니다. 로그인 계정 설정 메뉴가 아닙니다. <a href="pricing-account.html">요금표 보기</a></span></div>
+          <div class="gdw-price-grid">
+            <a class="gdw-price" href="pricing.html">
+              <div class="gdw-price-head"><span class="gdw-price-name">제품형/방문형</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></div>
+              <div class="gdw-price-desc">기본 리뷰 캠페인. 국가 × 팔로워 구간별 단가</div>
+            </a>
+            <a class="gdw-price" href="pricing-korea.html">
+              <div class="gdw-price-head"><span class="gdw-price-name">한국방문형</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></div>
+              <div class="gdw-price-desc">방한 인플루언서 대상. 구조는 제품형과 동일</div>
+            </a>
+            <a class="gdw-price" href="pricing-it.html">
+              <div class="gdw-price-head"><span class="gdw-price-name">IT/식품</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></div>
+              <div class="gdw-price-desc">IT·식품 카테고리 전용 단가</div>
+            </a>
+            <a class="gdw-price" href="pricing-superpass.html">
+              <div class="gdw-price-head"><span class="gdw-price-name">슈퍼패스</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></div>
+              <div class="gdw-price-desc">국가별 정액 지원금 — 팔로워 구간 없이 한 가격</div>
+            </a>
+            <a class="gdw-price" href="pricing-translation.html">
+              <div class="gdw-price-head"><span class="gdw-price-name">통역</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></div>
+              <div class="gdw-price-desc">방문 캠페인 통역 지원. 건당/시간당 단가</div>
+            </a>
+            <a class="gdw-price" href="pricing-account.html">
+              <div class="gdw-price-head"><span class="gdw-price-name">계정 및 댓글 관리</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></div>
+              <div class="gdw-price-desc">SNS 운영대행 부가서비스 — 로그인 계정 설정 아님</div>
+              <span class="gdw-price-tag">이름 주의</span>
+            </a>
           </div>
 
           <div class="gdw-h4">잔액 관리</div>
@@ -525,34 +841,37 @@
           </div>
         </section>
 
-        <!-- 5. FAQ -->
+        <!-- 05 FAQ -->
         <section class="gdw-sec" id="gdw-faq">
-          <div class="gdw-sec-head">
-            <span class="gdw-no">5</span>
-            <h3 class="gdw-sec-title">자주 묻는 질문</h3>
+          <div class="gdw-ch">
+            <span class="gdw-ch-no">05</span>
+            <div class="gdw-ch-body">
+              <h3 class="gdw-ch-title">자주 묻는 질문</h3>
+              <div class="gdw-ch-sub">정책으로 정해져 있는 것들</div>
+            </div>
           </div>
           <details class="gdw-faq">
-            <summary><span class="gdw-faq-q">Q</span>새 캠페인을 어드민에서 직접 만들 수 있나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+            <summary><span class="gdw-faq-q">Q1</span>새 캠페인을 어드민에서 직접 만들 수 있나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
             <div class="gdw-faq-a">캠페인 등록은 담당 매니저와의 상담으로 진행됩니다. 이 어드민은 등록된 캠페인을 운영하는 곳입니다 — 지원자 선정, 검수, 정산이 여기서 이뤄집니다.</div>
           </details>
           <details class="gdw-faq">
-            <summary><span class="gdw-faq-q">Q</span>인플루언서에게 직접 연락할 수 있나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+            <summary><span class="gdw-faq-q">Q2</span>인플루언서에게 직접 연락할 수 있나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
             <div class="gdw-faq-a">전달할 내용은 담당 매니저를 통해 전합니다. 다만 탐색의 "제안하기"는 인플루언서 앱으로 바로 전달됩니다 — 제안 발송 자체는 매니저를 거치지 않습니다.</div>
           </details>
           <details class="gdw-faq">
-            <summary><span class="gdw-faq-q">Q</span>제안을 보냈는데 응답이 없으면 다시 보낼 수 있나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+            <summary><span class="gdw-faq-q">Q3</span>제안을 보냈는데 응답이 없으면 다시 보낼 수 있나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
             <div class="gdw-faq-a">인플루언서가 확인 중인 동안은 같은 캠페인으로 재전송할 수 없습니다. 확인이 끝나면 다시 보낼 수 있고, 상태는 제안 팝업과 목록에서 확인됩니다.</div>
           </details>
           <details class="gdw-faq">
-            <summary><span class="gdw-faq-q">Q</span>수정요청은 몇 번까지 가능한가요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+            <summary><span class="gdw-faq-q">Q4</span>수정요청은 몇 번까지 가능한가요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
             <div class="gdw-faq-a">검수와 수정은 통과할 때까지 반복되는 루프입니다. 다만 캠페인 가이드 범위를 벗어나는 요청은 담당 매니저와 협의가 필요합니다.</div>
           </details>
           <details class="gdw-faq">
-            <summary><span class="gdw-faq-q">Q</span>선정 후 인플루언서가 취소하면 비용은 어떻게 되나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+            <summary><span class="gdw-faq-q">Q5</span>선정 후 인플루언서가 취소하면 비용은 어떻게 되나요?<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
             <div class="gdw-faq-a">포인트 차감은 등록완료 시점에 발생합니다. 등록 전에 취소된 건은 차감되지 않으며, 인플루언서 취소 목록에서 사유와 함께 확인할 수 있습니다.</div>
           </details>
           <details class="gdw-faq">
-            <summary><span class="gdw-faq-q">Q</span>계정 정보를 바꾸고 싶어요.<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+            <summary><span class="gdw-faq-q">Q6</span>계정 정보를 바꾸고 싶어요.<span class="gdw-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary>
             <div class="gdw-faq-a">계정은 알파콜라보가 발급·관리합니다. 어드민에는 계정 설정 메뉴가 없으며, 담당자 변경·정보 수정은 담당 매니저에게 요청하세요.</div>
           </details>
         </section>
@@ -574,11 +893,11 @@
       <!-- 우측 미니 TOC -->
       <nav class="gdw-toc" aria-label="이 문서의 목차">
         <div class="gdw-toc-label">이 문서에서</div>
-        <a class="gdw-toc-item is-active" href="#gdw-start">시작하기</a>
-        <a class="gdw-toc-item" href="#gdw-select">지원자 선정</a>
-        <a class="gdw-toc-item" href="#gdw-inspect">콘텐츠 검수</a>
-        <a class="gdw-toc-item" href="#gdw-settle">포인트 정산</a>
-        <a class="gdw-toc-item" href="#gdw-faq">자주 묻는 질문</a>
+        <a class="gdw-toc-item is-active" href="#gdw-start"><span class="gdw-toc-no">01</span>시작하기</a>
+        <a class="gdw-toc-item" href="#gdw-select"><span class="gdw-toc-no">02</span>지원자 선정</a>
+        <a class="gdw-toc-item" href="#gdw-inspect"><span class="gdw-toc-no">03</span>콘텐츠 검수</a>
+        <a class="gdw-toc-item" href="#gdw-settle"><span class="gdw-toc-no">04</span>포인트 정산</a>
+        <a class="gdw-toc-item" href="#gdw-faq"><span class="gdw-toc-no">05</span>자주 묻는 질문</a>
       </nav>
 
     </div>

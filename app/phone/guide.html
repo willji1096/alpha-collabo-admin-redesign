@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Alphacollabo App — 사용 가이드 (Phone)</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/common.css">
+<link rel="stylesheet" href="../css/app-mobile.css">
+<style>
+  /* 사용 가이드 (백서) — 문서형 레이아웃, 페이지 전용 gd- 프리픽스 */
+
+  /* 표지 카드 */
+  .gd-cover {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 18px 16px;
+    margin-bottom: 12px;
+  }
+  .gd-cover-eyebrow {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--accent-emphasis);
+    margin-bottom: 6px;
+  }
+  .gd-cover-title {
+    font-size: var(--fs-2xl);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .gd-cover-desc {
+    font-size: var(--fs-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+  .gd-cover-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+  }
+  .gd-cover-meta b { color: var(--text-secondary); font-weight: 600; }
+
+  /* 섹션 번호 칩 */
+  .gd-no {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: var(--radius-full);
+    background: var(--bg-inverse);
+    color: var(--text-inverse);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .gd-sec-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px 10px;
+  }
+
+  /* 본문 문단 */
+  .gd-p {
+    font-size: var(--fs-base);
+    color: var(--text-secondary);
+    line-height: 1.65;
+    word-break: keep-all;
+    margin-bottom: 12px;
+  }
+  .gd-p:last-child { margin-bottom: 0; }
+  .gd-p b { color: var(--text-primary); font-weight: 600; }
+
+  /* 소제목 */
+  .gd-h4 {
+    margin: 16px 0 6px;
+    font-size: var(--fs-base);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .gd-h4:first-child { margin-top: 0; }
+
+  /* 파이프라인 스트립 */
+  .gd-flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .gd-flow-step {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+  .gd-flow-arrow {
+    font-size: var(--fs-sm);
+    color: var(--text-disabled);
+  }
+  .gd-flow-note {
+    flex-basis: 100%;
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  /* 단계 리스트 */
+  .gd-steps { display: flex; flex-direction: column; }
+  .gd-step {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .gd-step:last-child { border-bottom: none; }
+  .gd-step-no {
+    width: 20px; height: 20px;
+    border-radius: var(--radius-full);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+  .gd-step-body { flex: 1; min-width: 0; }
+  .gd-step-title {
+    font-size: var(--fs-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+  .gd-step-desc {
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+    line-height: 1.55;
+    word-break: keep-all;
+  }
+  .gd-step-desc a, .gd-term-desc a, .gd-note-body a { color: var(--text-link); text-decoration: none; font-weight: 500; }
+
+  /* 안내 박스 */
+  .gd-note {
+    display: flex;
+    gap: 10px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    margin-top: 12px;
+  }
+  .gd-note svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: var(--text-tertiary); }
+  .gd-note-body {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    line-height: 1.55;
+    word-break: keep-all;
+  }
+  .gd-note-body b { font-weight: 600; color: var(--text-primary); }
+
+  /* 용어 정의 */
+  .gd-terms { display: flex; flex-direction: column; }
+  .gd-term {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .gd-term:last-child { border-bottom: none; }
+  .gd-term-name {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    width: 88px;
+    flex-shrink: 0;
+  }
+  .gd-term-desc {
+    font-size: var(--fs-sm);
+    color: var(--text-tertiary);
+    line-height: 1.5;
+    word-break: keep-all;
+  }
+
+  /* FAQ 아코디언 */
+  .gd-faq { border-bottom: 1px solid var(--border-light); }
+  .gd-faq:last-child { border-bottom: none; }
+  .gd-faq summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 16px;
+    font-size: var(--fs-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    list-style: none;
+    word-break: keep-all;
+  }
+  .gd-faq summary::-webkit-details-marker { display: none; }
+  .gd-faq summary:hover { background: var(--bg-hover); }
+  .gd-faq-q {
+    flex-shrink: 0;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--accent-emphasis);
+  }
+  .gd-faq-chev { margin-left: auto; flex-shrink: 0; color: var(--text-disabled); transition: transform 0.15s ease; }
+  .gd-faq-chev svg { width: 14px; height: 14px; }
+  .gd-faq[open] .gd-faq-chev { transform: rotate(180deg); }
+  .gd-faq-a {
+    padding: 0 16px 14px 42px;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gd-faq-chev { transition: none; }
+  }
+</style>
+</head>
+<body class="app-body-phone">
+<div class="app-phone">
+  <header class="app-header">
+    <button class="app-header-icon" onclick="history.back()" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="app-header-title">사용 가이드</div>
+  </header>
+  <main class="app-body">
+
+    <!-- 표지 ──── -->
+    <div class="gd-cover">
+      <div class="gd-cover-eyebrow">Alphacollabo 백서</div>
+      <div class="gd-cover-title">캠페인 운영의<br>전 과정</div>
+      <div class="gd-cover-desc">알파콜라보가 어떻게 움직이는지, 이 앱으로 무엇을 하는지 — 서비스 구조부터 신청서 파이프라인, 포인트 정산까지 5개 섹션으로 정리했습니다.</div>
+      <div class="gd-cover-meta">
+        <span>버전 <b>1.2</b></span>
+        <span>업데이트 <b>2025-01-03</b></span>
+        <span><b>5</b>개 섹션</span>
+      </div>
+    </div>
+
+    <!-- 목차 pill ──── -->
+    <div class="app-pill-tabs">
+      <a class="app-pill-tab is-active" href="#gd-start">시작</a>
+      <a class="app-pill-tab" href="#gd-select">선정</a>
+      <a class="app-pill-tab" href="#gd-inspect">검수</a>
+      <a class="app-pill-tab" href="#gd-settle">정산</a>
+      <a class="app-pill-tab" href="#gd-faq">FAQ</a>
+    </div>
+
+    <!-- 1. 시작 ──── -->
+    <section class="app-section" id="gd-start">
+      <div class="gd-sec-head">
+        <span class="gd-no">1</span>
+        <span class="app-section-title">시작하기</span>
+      </div>
+      <div class="app-section-body">
+        <p class="gd-p">알파콜라보는 <b>글로벌 인플루언서 리뷰 캠페인 플랫폼</b>입니다. 이 앱은 브랜드사가 자기 캠페인의 지원자를 관리하고, 인플루언서를 탐색하고, 검수와 정산을 운영하는 <b>운영 콘솔</b>입니다.</p>
+        <div class="gd-h4">세 주체가 움직입니다</div>
+        <div class="gd-terms">
+          <div class="gd-term"><span class="gd-term-name">매니저</span><span class="gd-term-desc">캠페인 생성과 정산을 총괄하고 소통을 중개합니다. 계정 발급도 매니저 몫입니다.</span></div>
+          <div class="gd-term"><span class="gd-term-name">브랜드사</span><span class="gd-term-desc">캠페인의 주인이자 이 앱의 사용자. 지원자 선정·검수·운영을 직접 합니다.</span></div>
+          <div class="gd-term"><span class="gd-term-name">인플루언서</span><span class="gd-term-desc">알파콜라보 앱에서 캠페인을 보고 지원하며, 선정되면 콘텐츠를 제작합니다.</span></div>
+        </div>
+        <div class="gd-h4">캠페인이 만들어지는 과정</div>
+        <div class="gd-steps">
+          <div class="gd-step">
+            <span class="gd-step-no">1</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">담당 매니저와 상담으로 캠페인 등록</div>
+              <div class="gd-step-desc">모집 인원·유형·일정을 협의하면 매니저가 캠페인을 등록합니다. 등록된 캠페인은 <a href="campaign-calendar.html">일정 탭</a>에서 확인합니다.</div>
+            </div>
+          </div>
+          <div class="gd-step">
+            <span class="gd-step-no">2</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">캠페인이 인플루언서 앱에 노출</div>
+              <div class="gd-step-desc">인플루언서들이 캠페인을 보고 지원합니다. 모집 인원보다 많은 지원이 들어오는 것이 일반적입니다.</div>
+            </div>
+          </div>
+          <div class="gd-step">
+            <span class="gd-step-no">3</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">지원자가 신청목록에 집계</div>
+              <div class="gd-step-desc">여기서부터가 이 앱의 일입니다. <a href="list.html">신청서관리 탭</a>에서 선정·검수·완료까지 운영합니다.</div>
+            </div>
+          </div>
+        </div>
+        <div class="gd-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div class="gd-note-body">계정은 <b>알파콜라보가 발급</b>합니다 — 별도 가입 절차가 없고, 계정 정보 변경은 담당 매니저에게 요청합니다. 인플루언서와의 소통도 <b>매니저 경유</b>가 원칙입니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 선정 ──── -->
+    <section class="app-section" id="gd-select">
+      <div class="gd-sec-head">
+        <span class="gd-no">2</span>
+        <span class="app-section-title">지원자 선정</span>
+      </div>
+      <div class="app-section-body">
+        <p class="gd-p">선정에는 두 가지 길이 있습니다. 들어온 지원을 고르는 <b>신청서 관리</b>, 그리고 원하는 인플루언서를 먼저 찾아가는 <b>인플루언서 탐색</b>입니다.</p>
+        <div class="gd-h4">들어온 지원 고르기</div>
+        <div class="gd-steps">
+          <div class="gd-step">
+            <span class="gd-step-no">1</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">신청목록에서 지원자 비교</div>
+              <div class="gd-step-desc"><a href="list.html">신청목록</a>에서 국적·플랫폼·팔로워 기준으로 비교하고, 상세보기로 채널과 과거 활동을 확인합니다.</div>
+            </div>
+          </div>
+          <div class="gd-step">
+            <span class="gd-step-no">2</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">리뷰어 선정 / 미선정</div>
+              <div class="gd-step-desc">선정하면 <a href="list-selection.html">선정목록</a>으로, 선정하지 않으면 <a href="list-unselected.html">미선정목록</a>으로 이동합니다. 선정 결과는 인플루언서에게 자동 안내됩니다.</div>
+            </div>
+          </div>
+          <div class="gd-step">
+            <span class="gd-step-no">3</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">배송정보 입력 (제품형)</div>
+              <div class="gd-step-desc">제품형 캠페인은 선정목록에서 배송정보를 입력해야 인플루언서가 제품을 받고 콘텐츠 제작을 시작합니다.</div>
+            </div>
+          </div>
+        </div>
+        <div class="gd-h4">먼저 찾아가기 (탐색)</div>
+        <div class="gd-steps">
+          <div class="gd-step">
+            <span class="gd-step-no">1</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">조건으로 검색</div>
+              <div class="gd-step-desc"><a href="influencer-search.html">인플루언서 탭</a>에서 국적·플랫폼·팔로워·성별·방문예정일로 전체 풀을 거릅니다. 후보는 <a href="saved-influencer.html">저장한 인플루언서</a>에 모아둘 수 있습니다.</div>
+            </div>
+          </div>
+          <div class="gd-step">
+            <span class="gd-step-no">2</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">제안하기</div>
+              <div class="gd-step-desc">제안은 인플루언서의 <b>앱으로 바로 전달</b>됩니다. 확인 중인 동안은 같은 캠페인으로 다시 보낼 수 없고, 확인 후에는 재전송할 수 있습니다.</div>
+            </div>
+          </div>
+        </div>
+        <div class="gd-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div class="gd-note-body"><a href="visit-planned.html"><b>방문 예정</b></a>은 다른 캠페인으로라도 방한 일정이 잡힌 인플루언서를 모은 목록입니다. 방문 비용 장벽이 이미 해결된 사람들이라 "온 김에 우리 것도" 제안이 잘 통합니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 검수 ──── -->
+    <section class="app-section" id="gd-inspect">
+      <div class="gd-sec-head">
+        <span class="gd-no">3</span>
+        <span class="app-section-title">콘텐츠 검수</span>
+      </div>
+      <div class="app-section-body">
+        <p class="gd-p">모든 신청서는 하나의 파이프라인을 따라 움직입니다. 각 단계가 곧 목록입니다.</p>
+        <div class="gd-flow" role="img" aria-label="신청서 파이프라인: 신청, 선정, 검수, 수정, 완료 순서. 검수와 수정은 반복 가능">
+          <span class="gd-flow-step">신청</span><span class="gd-flow-arrow">→</span>
+          <span class="gd-flow-step">선정</span><span class="gd-flow-arrow">→</span>
+          <span class="gd-flow-step">검수</span><span class="gd-flow-arrow">⇄</span>
+          <span class="gd-flow-step">수정</span><span class="gd-flow-arrow">→</span>
+          <span class="gd-flow-step">완료</span>
+          <span class="gd-flow-note">이탈 분기: 미선정 · 선정후 취소 · 인플루언서 취소</span>
+        </div>
+        <div class="gd-terms">
+          <div class="gd-term"><span class="gd-term-name">검수요청</span><span class="gd-term-desc">초안이 제출된 상태. <a href="list-inspection.html">검수요청목록</a>에서 리뷰 검수로 컨펌하면 완료로, 보완이 필요하면 초안수정요청으로 보냅니다. 방문형에서 방문이 이뤄지지 않은 건은 미방문 처리합니다.</span></div>
+          <div class="gd-term"><span class="gd-term-name">수정요청</span><span class="gd-term-desc">보완 사항을 적어 반려한 상태. <a href="list-revision.html">수정요청목록</a>에서 추적하며, 재제출되면 다시 검수합니다 — 통과할 때까지 반복되는 루프입니다.</span></div>
+          <div class="gd-term"><span class="gd-term-name">등록완료</span><span class="gd-term-desc">검수를 통과해 채널에 게시된 상태. <a href="list-completed.html">등록완료목록</a>에 게시 링크와 함께 기록되며, 이 시점에 포인트가 차감됩니다.</span></div>
+          <div class="gd-term"><span class="gd-term-name">이탈 3종</span><span class="gd-term-desc">미선정 / 선정후 취소 / 인플루언서 취소 — 본류에서 빠진 건들은 별도 목록에서 관리합니다.</span></div>
+        </div>
+        <div class="gd-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div class="gd-note-body">수정 사항은 <b>구체적으로</b> 적을수록 빠르게 반영됩니다. 검수 회신이 늦어지면 게시 일정 전체가 밀립니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 정산 ──── -->
+    <section class="app-section" id="gd-settle">
+      <div class="gd-sec-head">
+        <span class="gd-no">4</span>
+        <span class="app-section-title">포인트 정산</span>
+      </div>
+      <div class="app-section-body">
+        <p class="gd-p">캠페인 비용은 충전해 둔 포인트에서 차감됩니다. 차감 시점은 <b>등록완료</b> — 콘텐츠가 실제로 게시된 건에 대해서만 비용이 발생합니다. 단가는 캠페인 유형별 요금표 기준입니다.</p>
+        <div class="gd-h4">요금표 6종</div>
+        <div class="gd-terms">
+          <div class="gd-term"><span class="gd-term-name">제품형/방문형</span><span class="gd-term-desc">기본 리뷰 캠페인. 국가 × 팔로워 구간별 단가. <a href="pricing.html">보기</a></span></div>
+          <div class="gd-term"><span class="gd-term-name">한국방문형</span><span class="gd-term-desc">방한 인플루언서 대상. 구조는 제품형과 동일합니다. <a href="pricing-korea.html">보기</a></span></div>
+          <div class="gd-term"><span class="gd-term-name">IT/식품</span><span class="gd-term-desc">IT·식품 카테고리 전용 단가. <a href="pricing-it.html">보기</a></span></div>
+          <div class="gd-term"><span class="gd-term-name">슈퍼패스</span><span class="gd-term-desc">국가별 정액 지원금 — 팔로워 구간 없이 국가당 한 가격. <a href="pricing-superpass.html">보기</a></span></div>
+          <div class="gd-term"><span class="gd-term-name">통역</span><span class="gd-term-desc">방문 캠페인 통역 지원. 건당/시간당 단가. <a href="pricing-translation.html">보기</a></span></div>
+          <div class="gd-term"><span class="gd-term-name">계정·댓글 관리</span><span class="gd-term-desc">SNS 계정 운영대행 부가서비스 단가표 — 로그인 계정 설정이 아닙니다. <a href="pricing-account.html">보기</a></span></div>
+        </div>
+        <div class="gd-h4">잔액 관리</div>
+        <div class="gd-steps">
+          <div class="gd-step">
+            <span class="gd-step-no">1</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">차감 내역 확인</div>
+              <div class="gd-step-desc"><a href="balance-history.html">더보기 &gt; 내역</a>에서 국가별 차감 합계와 건별 거래내역을 충전 회차별로 확인합니다.</div>
+            </div>
+          </div>
+          <div class="gd-step">
+            <span class="gd-step-no">2</span>
+            <div class="gd-step-body">
+              <div class="gd-step-title">잔액 부족 시 충전</div>
+              <div class="gd-step-desc">잔액이 부족하면 신규 선정이 제한될 수 있습니다. <a href="balance-charge.html">더보기 &gt; 충전</a>에서 진행하거나 담당 매니저와 협의하세요.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FAQ ──── -->
+    <section class="app-section" id="gd-faq">
+      <div class="gd-sec-head">
+        <span class="gd-no">5</span>
+        <span class="app-section-title">자주 묻는 질문</span>
+      </div>
+      <div class="app-section-body no-padding-x" style="padding-top:0">
+        <details class="gd-faq">
+          <summary><span class="gd-faq-q">Q</span>새 캠페인을 앱에서 직접 만들 수 있나요?<span class="gd-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="gd-faq-a">캠페인 등록은 담당 매니저와의 상담으로 진행됩니다. 이 앱은 등록된 캠페인을 운영하는 곳입니다 — 지원자 선정, 검수, 정산이 여기서 이뤄집니다.</div>
+        </details>
+        <details class="gd-faq">
+          <summary><span class="gd-faq-q">Q</span>인플루언서에게 직접 연락할 수 있나요?<span class="gd-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="gd-faq-a">전달할 내용은 담당 매니저를 통해 전합니다. 다만 탐색의 "제안하기"는 인플루언서 앱으로 바로 전달됩니다 — 제안 발송 자체는 매니저를 거치지 않습니다.</div>
+        </details>
+        <details class="gd-faq">
+          <summary><span class="gd-faq-q">Q</span>제안을 보냈는데 응답이 없으면 다시 보낼 수 있나요?<span class="gd-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="gd-faq-a">인플루언서가 확인 중인 동안은 같은 캠페인으로 재전송할 수 없습니다. 확인이 끝나면 다시 보낼 수 있고, 상태는 제안 팝업과 목록에서 확인됩니다.</div>
+        </details>
+        <details class="gd-faq">
+          <summary><span class="gd-faq-q">Q</span>수정요청은 몇 번까지 가능한가요?<span class="gd-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="gd-faq-a">검수와 수정은 통과할 때까지 반복되는 루프입니다. 다만 캠페인 가이드 범위를 벗어나는 요청은 담당 매니저와 협의가 필요합니다.</div>
+        </details>
+        <details class="gd-faq">
+          <summary><span class="gd-faq-q">Q</span>선정 후 인플루언서가 취소하면 비용은 어떻게 되나요?<span class="gd-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="gd-faq-a">포인트 차감은 등록완료 시점에 발생합니다. 등록 전에 취소된 건은 차감되지 않으며, 인플루언서 취소 목록에서 사유와 함께 확인할 수 있습니다.</div>
+        </details>
+        <details class="gd-faq">
+          <summary><span class="gd-faq-q">Q</span>계정 정보를 바꾸고 싶어요.<span class="gd-faq-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+          <div class="gd-faq-a">계정은 알파콜라보가 발급·관리합니다. 앱에는 계정 설정 메뉴가 없으며, 담당자 변경·정보 수정은 담당 매니저에게 요청하세요.</div>
+        </details>
+      </div>
+    </section>
+
+  </main>
+  <nav class="app-tabbar">
+    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>홈</a>
+    <a class="app-tab" href="list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>신청서관리</a>
+    <a class="app-tab" href="influencer-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>인플루언서</a>
+    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
+    <a class="app-tab is-active" href="more.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18" r="1.4"/></svg>더보기</a>
+  </nav>
+</div>
+<script>
+  // 목차 pill 활성 상태 — 앵커 클릭 시 동기화
+  document.querySelectorAll('.app-pill-tabs .app-pill-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.app-pill-tabs .app-pill-tab').forEach(function (t) { t.classList.remove('is-active'); });
+      tab.classList.add('is-active');
+    });
+  });
+</script>
+</body></html>

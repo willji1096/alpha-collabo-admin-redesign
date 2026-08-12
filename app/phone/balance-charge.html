@@ -5,15 +5,17 @@
 <title>Alphacollabo App — 충전하기 (Phone)</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../../css/common.css">
-<link rel="stylesheet" href="../css/app-mobile.css">
+<link rel="stylesheet" href="../css/app-mobile.css?v=260812k">
 <style>
   /* 페이지 전용 스타일만 (토큰 기반) */
-  .charge-balance { background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: var(--space-6); display:flex; align-items: baseline; justify-content: space-between; }
+  .charge-balance { background: var(--bg-surface); border-radius: var(--radius-lg); box-shadow: var(--app-card-shadow); padding: 14px 16px; margin-bottom: 12px; display:flex; align-items: baseline; justify-content: space-between; }
   .charge-balance-label { font-size: var(--fs-sm); color: var(--text-tertiary); font-weight: 500; }
   .charge-balance-value { font-size: var(--fs-xl); font-weight: 700; letter-spacing: -0.3px; font-variant-numeric: tabular-nums; color: var(--text-primary); }
   .charge-balance-value span { font-size: var(--fs-sm); font-weight: 500; margin-left: 2px; color: var(--text-tertiary); }
 
   .charge-amount-input { margin-top: var(--space-3); }
+  .charge-card { background: var(--bg-surface); border-radius: var(--radius-lg); box-shadow: var(--app-card-shadow); padding: 14px 16px; margin-bottom: 12px; }
+  .charge-card .form-label { margin-bottom: 10px; display: block; }
 
   .pay-row { display:flex; align-items:flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border-light); cursor: pointer; }
   .pay-row:last-child { border-bottom: none; }
@@ -23,19 +25,19 @@
   .pay-row input:checked + .pay-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--accent); }
   .pay-row input:focus-visible + .pay-radio { box-shadow: var(--focus-ring); }
   .pay-body { flex: 1; min-width: 0; }
-  .pay-title { font-size: var(--fs-md); font-weight: 600; color: var(--text-primary); }
+  .pay-title { font-size: var(--fs-md); font-weight: var(--fw-semibold); color: var(--text-primary); }
   .pay-desc { font-size: var(--fs-sm); color: var(--text-tertiary); margin-top: 2px; }
 
-  .charge-summary { background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 4px 16px; margin-bottom: var(--space-4); }
+  .charge-summary { background: var(--bg-surface); border-radius: var(--radius-lg); box-shadow: var(--app-card-shadow); padding: 4px 16px; margin-bottom: 12px; }
   .charge-summary-row { display:flex; align-items:center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-light); font-size: var(--fs-sm); }
   .charge-summary-row:last-child { border-bottom: none; }
   .charge-summary-row .sk { color: var(--text-tertiary); }
-  .charge-summary-row .sv { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
-  .charge-summary-row.is-total .sk { color: var(--text-primary); font-weight: 600; }
+  .charge-summary-row .sv { font-weight: var(--fw-semibold); font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  .charge-summary-row.is-total .sk { color: var(--text-primary); font-weight: var(--fw-semibold); }
   .charge-summary-row.is-total .sv { font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.3px; color: var(--text-primary); }
   .charge-summary-note { font-size: var(--fs-xs); color: var(--text-tertiary); }
 
-  .charge-cta { position: sticky; bottom: 0; background: var(--bg-surface); border-top: 1px solid var(--border-default); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); margin: 0 calc(-1 * var(--space-4)); }
+  .charge-cta { position: sticky; bottom: -24px; background: var(--bg-surface); border-top: 1px solid var(--border-default); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); margin: 16px -16px 0; }
   .charge-cta .btn { width: 100%; }
 </style>
 </head>
@@ -53,7 +55,7 @@
       <span class="charge-balance-value">3,420,000<span> 원</span></span>
     </div>
 
-    <div class="form-group">
+    <div class="charge-card">
       <label class="form-label">충전 금액</label>
       <div class="app-filter-chips">
         <label class="app-filter-chip"><input type="radio" name="charge-amt"><span>500,000</span></label>
@@ -66,7 +68,7 @@
       <input class="form-input charge-amount-input" type="text" inputmode="numeric" placeholder="직접 입력 (원)">
     </div>
 
-    <div class="form-group">
+    <div class="charge-card">
       <label class="form-label">결제 수단</label>
       <label class="pay-row">
         <input type="radio" name="charge-pay" checked>
@@ -115,10 +117,10 @@
 
   </main>
   <nav class="app-tabbar">
-    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>홈</a>
+    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.3V21h14V9.3"/><path d="M10 21v-6h4v6"/></svg>홈</a>
+    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
     <a class="app-tab" href="list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>신청서관리</a>
     <a class="app-tab" href="influencer-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>인플루언서</a>
-    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
     <a class="app-tab is-active" href="more.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18" r="1.4"/></svg>더보기</a>
   </nav>
 </div>
@@ -141,5 +143,5 @@
     </div>
   </div>
 </div>
-<script src="../js/sheets.js"></script>
+<script src="../js/sheets.js?v=260812k"></script>
 </body></html>

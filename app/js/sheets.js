@@ -24,6 +24,23 @@
     lockScroll(false);
   };
 
+  /* 토스트 — window.showToast(message) */
+  window.showToast = function (message) {
+    var host = document.querySelector('.app-toast-host');
+    if (!host) {
+      host = document.createElement('div');
+      host.className = 'app-toast-host';
+      document.body.appendChild(host);
+    }
+    var el = document.createElement('div');
+    el.className = 'app-toast';
+    el.setAttribute('role', 'status');
+    el.textContent = message;
+    host.appendChild(el);
+    setTimeout(function () { el.classList.add('is-leave'); }, 2400);
+    setTimeout(function () { el.remove(); }, 2700);
+  };
+
   /* 확인 다이얼로그 — window.confirmDialog({title, desc, tone, okLabel, onOk}) */
   window.confirmDialog = function (opts) {
     opts = opts || {};
@@ -41,6 +58,28 @@
     ok.onclick = function () { window.closeSheet('app-confirm'); if (opts.onOk) opts.onOk(); };
     window.openSheet('app-confirm');
   };
+
+  /* 검색바 상태 시스템 — 입력값 있으면 클리어 버튼 자동 표시 */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.app-search-bar').forEach(function (bar) {
+      var input = bar.querySelector('input');
+      if (!input) return;
+      var clear = document.createElement('button');
+      clear.type = 'button';
+      clear.className = 'app-search-clear';
+      clear.setAttribute('aria-label', '입력 지우기');
+      clear.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+      clear.addEventListener('click', function () {
+        input.value = '';
+        bar.classList.remove('has-value');
+        input.focus();
+      });
+      bar.appendChild(clear);
+      input.addEventListener('input', function () {
+        bar.classList.toggle('has-value', input.value.length > 0);
+      });
+    });
+  });
 
   /* ESC로 최상단 시트 닫기 */
   document.addEventListener('keydown', function (e) {

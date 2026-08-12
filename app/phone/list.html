@@ -7,13 +7,69 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../../css/common.css">
-<link rel="stylesheet" href="../css/app-mobile.css">
+<link rel="stylesheet" href="../css/app-mobile.css?v=260812k">
+<style>
+  /* 보기 전환 (리스트/카드/덱) — 검색 화면과 동일 문법 */
+  .inf-view-seg{display:flex;gap:2px}
+  .inf-view-btn{width:38px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:none;background:none;color:var(--text-tertiary);border-radius:var(--radius-sm);cursor:pointer;transition:color .18s ease,transform .12s ease}
+  .inf-view-btn:active{transform:scale(.86)}
+  .inf-view-btn svg{width:21px;height:21px}
+  .inf-view-btn.is-active{color:var(--text-primary)}
+  @keyframes view-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .app-photo-grid{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  body.view-grid .app-photo-grid{display:grid;animation:view-in .28s ease}
+  body.view-grid .app-section.is-flush{display:none}
+  .pg-card{position:relative;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:3/4;display:block;color:#fff;text-decoration:none;box-shadow:var(--app-card-shadow);background:var(--bg-elevated);transition:transform .15s ease}
+  .pg-card:active{transform:scale(.97)}
+  .pg-card img{width:100%;height:100%;object-fit:cover;display:block}
+  .pg-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,0) 55%)}
+  .pg-info{position:absolute;left:10px;right:10px;bottom:10px}
+  .pg-handle{display:flex;align-items:center;gap:4px;font-size:var(--fs-md);font-weight:var(--fw-bold)}
+  .pg-flag{font-size:var(--fs-md);font-weight:400}
+  .pg-meta{display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;font-size:var(--fs-sm);color:rgba(255,255,255,.88)}
+  .pg-meta b{font-weight:var(--fw-bold);color:#fff}
+  /* 스와이프 선정 덱 */
+  .deck-root{position:fixed;inset:0;z-index:120;background:#141416;display:flex;flex-direction:column;max-width:480px;margin:0 auto;overflow-y:auto;opacity:0;transition:opacity .22s ease}
+  .deck-root.is-open{opacity:1}
+  .deck-root[hidden]{display:none}
+  @keyframes deck-card-in{from{transform:translateY(28px) scale(.95);opacity:0}to{transform:none;opacity:1}}
+  .deck-card.is-enter{animation:deck-card-in .34s cubic-bezier(.2,.8,.3,1)}
+  @keyframes deck-btns-in{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+  .deck-root.is-open .deck-actions{animation:deck-btns-in .3s .08s ease backwards}
+  .deck-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;color:#fff}
+  .deck-title{font-size:var(--fs-md);font-weight:var(--fw-bold)}
+  .deck-count{font-size:var(--fs-sm);color:rgba(255,255,255,.55);font-variant-numeric:tabular-nums}
+  .deck-close{background:none;border:none;color:#fff;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+  .deck-stage{position:relative;flex:1;margin:0 16px;min-height:420px}
+  .deck-card{position:absolute;inset:0;border-radius:16px;overflow:hidden;background:#222;touch-action:none;user-select:none;-webkit-user-select:none}
+  .deck-card img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+  .deck-card .deck-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85),rgba(0,0,0,0) 50%)}
+  .deck-card.is-next{transform:scale(.94) translateY(12px);filter:brightness(.65);transition:transform .3s cubic-bezier(.2,.8,.3,1),filter .3s ease}
+  .deck-info{position:absolute;left:16px;right:16px;bottom:16px;color:#fff}
+  .deck-handle{font-size:var(--fs-xl);font-weight:var(--fw-bold);display:flex;gap:6px;align-items:center}
+  .deck-flag{font-weight:400}
+  .deck-name{font-size:var(--fs-sm);color:rgba(255,255,255,.75);margin-top:1px}
+  .deck-stats{display:flex;gap:14px;margin-top:8px;font-size:var(--fs-sm);color:rgba(255,255,255,.8)}
+  .deck-stats b{color:#fff;font-weight:var(--fw-bold)}
+  .deck-stamp{position:absolute;top:22px;font-size:var(--fs-xl);font-weight:var(--fw-bold);padding:5px 12px;border-radius:var(--radius-md);border:3px solid;opacity:0;transform:rotate(-12deg)}
+  .deck-stamp.go{left:18px;color:#4ADE80;border-color:#4ADE80}
+  .deck-stamp.pass{right:18px;color:rgba(255,255,255,.85);border-color:rgba(255,255,255,.85);transform:rotate(12deg)}
+  .deck-actions{display:flex;justify-content:center;align-items:center;gap:18px;padding:18px 0 28px}
+  .deck-btn{border-radius:999px;border:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s}
+  .deck-btn:active{transform:scale(.92)}
+  .deck-btn.pass{width:54px;height:54px;background:#26262A;color:#fff}
+  .deck-btn.info{width:44px;height:44px;background:#26262A;color:#fff}
+  .deck-btn.go{width:62px;height:62px;background:var(--accent);color:#fff}
+  .deck-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:rgba(255,255,255,.8);text-align:center}
+  .deck-empty b{font-size:var(--fs-lg);color:#fff}
+  .deck-empty button{margin-top:10px;padding:10px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:none;color:#fff;cursor:pointer}
+  @media (prefers-reduced-motion: reduce){.deck-card.is-enter,.deck-root.is-open .deck-actions,body.view-grid .app-photo-grid{animation:none}.deck-root{transition:none}}
+</style>
 </head>
 <body class="app-body-phone">
 <div class="app-phone">
 
   <header class="app-header">
-    <button class="app-header-icon" onclick="history.back()" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
     <div class="app-header-title">신청목록</div>
     <div class="app-header-actions">
       <button class="app-header-icon" onclick="openSheet('sheet-search')" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
@@ -33,29 +89,34 @@
       <a class="app-pill-tab" href="list-cancel-influencer.html">취소</a>
     </div>
 
-    <div class="app-list-toolbar">
-      <div class="app-list-toolbar-count">전체 <b style="color:var(--text-primary)">7</b>건 · 기간 전체 · 접속기기 전체</div>
+    <div class="app-list-controls">
       <select class="app-sort-select">
         <option>최신순</option><option>오래된 순</option><option>단가 높은 순</option>
       </select>
+      <div class="inf-view-seg" role="group" aria-label="보기 방식">
+        <button type="button" class="inf-view-btn is-active" data-view="list" onclick="setView('list')" aria-label="리스트 보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg></button>
+        <button type="button" class="inf-view-btn" data-view="grid" onclick="setView('grid')" aria-label="카드 보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+        <button type="button" class="inf-view-btn" data-view="deck" onclick="openDeck()" aria-label="스와이프 선정"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="4" width="12" height="16" rx="2"/><path d="M4 7v12a1.8 1.8 0 0 0 1 1.6"/></svg></button>
+      </div>
     </div>
+
+    <div class="app-count-line"><b>전체 7건</b>기간 전체 · 접속기기 전체</div>
+
+    <div class="app-photo-grid" id="app-photo-grid" aria-label="카드 보기"></div>
 
     <div class="app-section is-flush">
       <a class="app-list-card" href="influencer-detail.html">
-        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=120&h=120&fit=crop" alt="">
+        <img class="app-list-card-thumb is-person" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop" alt="pianmy">
         <div class="app-list-card-body">
           <div class="app-card-toprow">
-            <span class="c-country-code">JP</span>
-            <span class="app-card-id">#1141</span>
+            <span class="app-list-card-title">pianmy <span class="c-flag" title="JP">🇯🇵</span></span>
           </div>
-          <div class="app-list-card-title">ロダムクリニック釜山</div>
-          <div class="app-list-card-subline">1739439117 · 로담한의원 부산점</div>
           <div class="app-list-card-meta">
-            <span>pianmy</span><span class="app-list-card-meta-sep"></span>
             <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
-            <span>1천~1만</span>
+            <span>1천~1만</span><span class="app-list-card-meta-sep"></span>
+            <span class="is-url">instagram.com/pianmy</span>
           </div>
-          <div class="app-list-card-subline is-url">instagram.com/pianmy</div>
+          <div class="app-list-card-subline is-wrap">ロダムクリニック釜山 · 로담한의원 부산점 · #1141 · 1739439117</div>
           <div class="app-list-card-foot">
             <span class="app-list-card-stat"><b>180,000</b>원 · 2025-05-23</span>
             <span class="app-card-actions">
@@ -66,21 +127,19 @@
         </div>
       </a>
       <a class="app-list-card" href="influencer-detail.html">
-        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=120&h=120&fit=crop" alt="">
+        <img class="app-list-card-thumb is-person" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&h=120&fit=crop" alt="Sarang">
         <div class="app-list-card-body">
           <div class="app-card-toprow">
-            <span class="c-country-code">JP</span>
-            <span class="app-card-id">#1108</span>
+            <span class="app-list-card-title">Sarang <span class="c-flag" title="JP">🇯🇵</span></span>
           </div>
-          <div class="app-list-card-title">ロダムクリニック釜山</div>
-          <div class="app-list-card-subline">1739439117 · 로담한의원 부산점</div>
           <div class="app-list-card-meta">
-            <span>Sarang</span><span class="app-list-card-meta-sep"></span>
-            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg></span>
+            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+            <span>1천~1만</span><span class="app-list-card-meta-sep"></span>
+            <span class="is-url">instagram.com/i.auly_</span>
           </div>
-          <div class="app-list-card-subline is-url">instagram.com/i.auly_...</div>
+          <div class="app-list-card-subline is-wrap">ロダムクリニック釜山 · 로담한의원 부산점 · #1108 · 1739439117</div>
           <div class="app-list-card-foot">
-            <span class="app-list-card-stat">- · 2025-05-23</span>
+            <span class="app-list-card-stat"><span class="is-empty">단가 미입력</span> · 2025-05-23</span>
             <span class="app-card-actions">
               <button type="button" class="app-card-action is-primary" onclick="event.preventDefault();event.stopPropagation();confirmDialog({title:'리뷰어로 선정할까요?', desc:'Sarang 님을 이 캠페인의 리뷰어로 선정합니다.', tone:'info', okLabel:'선정'})" aria-label="Sarang #1108 리뷰어 선정">리뷰어선정</button>
               <button type="button" class="app-card-action" aria-label="Sarang #1108 정보 보기">정보보기</button>
@@ -89,21 +148,19 @@
         </div>
       </a>
       <a class="app-list-card" href="influencer-detail.html">
-        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=120&h=120&fit=crop" alt="">
+        <img class="app-list-card-thumb is-person" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&h=120&fit=crop" alt="mizukieight">
         <div class="app-list-card-body">
           <div class="app-card-toprow">
-            <span class="c-country-code">JP</span>
-            <span class="app-card-id">#977</span>
+            <span class="app-list-card-title">mizukieight <span class="c-flag" title="JP">🇯🇵</span></span>
           </div>
-          <div class="app-list-card-title">ロダムクリニック釜山</div>
-          <div class="app-list-card-subline">1739439117 · 로담한의원 부산점</div>
           <div class="app-list-card-meta">
-            <span>mizukieight</span><span class="app-list-card-meta-sep"></span>
-            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/></svg></span>
+            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+            <span>1천~1만</span><span class="app-list-card-meta-sep"></span>
+            <span class="is-url">instagram.com/oishii_kurumisan</span>
           </div>
-          <div class="app-list-card-subline is-url">instagram.com/oishii_kurumisan</div>
+          <div class="app-list-card-subline is-wrap">ロダムクリニック釜山 · 로담한의원 부산점 · #977 · 1739439117</div>
           <div class="app-list-card-foot">
-            <span class="app-list-card-stat">- · 2025-05-16</span>
+            <span class="app-list-card-stat"><span class="is-empty">단가 미입력</span> · 2025-05-16</span>
             <span class="app-card-actions">
               <button type="button" class="app-card-action is-primary" onclick="event.preventDefault();event.stopPropagation();confirmDialog({title:'리뷰어로 선정할까요?', desc:'mizukieight 님을 이 캠페인의 리뷰어로 선정합니다.', tone:'info', okLabel:'선정'})" aria-label="mizukieight #977 리뷰어 선정">리뷰어선정</button>
               <button type="button" class="app-card-action" aria-label="mizukieight #977 정보 보기">정보보기</button>
@@ -112,21 +169,18 @@
         </div>
       </a>
       <a class="app-list-card" href="influencer-detail.html">
-        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=120&h=120&fit=crop" alt="">
+        <img class="app-list-card-thumb is-person" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&h=120&fit=crop" alt="mika_seoul">
         <div class="app-list-card-body">
           <div class="app-card-toprow">
-            <span class="c-country-code">RU</span>
-            <span class="app-card-id">#339</span>
-            <span class="badge badge-warning badge-sm" style="margin-left:auto"><span class="badge-dot"></span>인기게시물</span>
+            <span class="app-list-card-title">mika_seoul <span class="c-flag" title="KR">🇰🇷</span></span>
+            <span class="badge badge-warning badge-sm"><span class="badge-dot"></span>인기게시물</span>
           </div>
-          <div class="app-list-card-title">봄 인기게시물 노출 캠페인</div>
-          <div class="app-list-card-subline">1769756657 · glowlab_kr</div>
           <div class="app-list-card-meta">
-            <span>mika_seoul</span><span class="app-list-card-meta-sep"></span>
-            <span class="sns-ico tag-xiaohongshu app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
-            <span>1천~1만</span>
+            <span class="sns-ico tag-xiaohongshu app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+            <span>1천~1만</span><span class="app-list-card-meta-sep"></span>
+            <span class="is-url">xiaohongshu.com/mika_seoul</span>
           </div>
-          <div class="app-list-card-subline is-url">xiaohongshu.com/gd</div>
+          <div class="app-list-card-subline is-wrap">봄 인기게시물 노출 캠페인 · glowlab_kr · #339 · 1769756657</div>
           <div class="app-list-card-foot">
             <span class="app-list-card-stat"><b>120,000</b>원 · 2026-01-30</span>
             <span class="app-card-actions">
@@ -137,20 +191,17 @@
         </div>
       </a>
       <a class="app-list-card" href="influencer-detail.html">
-        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=120&h=120&fit=crop" alt="">
+        <img class="app-list-card-thumb is-person" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=120&h=120&fit=crop" alt="natasha_mood">
         <div class="app-list-card-body">
           <div class="app-card-toprow">
-            <span class="c-country-code">RU</span>
-            <span class="app-card-id">#325</span>
+            <span class="app-list-card-title">natasha_mood <span class="c-flag" title="RU">🇷🇺</span></span>
           </div>
-          <div class="app-list-card-title">봄 신메뉴 체험단</div>
-          <div class="app-list-card-subline">1767340856 · glowlab_kr</div>
           <div class="app-list-card-meta">
-            <span>natasha_mood</span><span class="app-list-card-meta-sep"></span>
-            <span class="sns-ico tag-youtube app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/></svg></span>
-            <span>1만~5만</span>
+            <span class="sns-ico tag-youtube app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg></span>
+            <span>1만~5만</span><span class="app-list-card-meta-sep"></span>
+            <span class="is-url">youtube.com/@natasha_mood</span>
           </div>
-          <div class="app-list-card-subline is-url">youtube.com/@test</div>
+          <div class="app-list-card-subline is-wrap">봄 신메뉴 체험단 · glowlab_kr · #325 · 1767340856</div>
           <div class="app-list-card-foot">
             <span class="app-list-card-stat"><b>1,500,000</b>원 · 2026-01-19</span>
             <span class="app-card-actions">
@@ -161,20 +212,17 @@
         </div>
       </a>
       <a class="app-list-card" href="influencer-detail.html">
-        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=120&h=120&fit=crop" alt="">
+        <img class="app-list-card-thumb is-person" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=120&h=120&fit=crop" alt="natasha_mood">
         <div class="app-list-card-body">
           <div class="app-card-toprow">
-            <span class="c-country-code">RU</span>
-            <span class="app-card-id">#324</span>
+            <span class="app-list-card-title">natasha_mood <span class="c-flag" title="RU">🇷🇺</span></span>
           </div>
-          <div class="app-list-card-title">봄 신메뉴 체험단</div>
-          <div class="app-list-card-subline">1767340856 · glowlab_kr</div>
           <div class="app-list-card-meta">
-            <span>natasha_mood</span><span class="app-list-card-meta-sep"></span>
-            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/></svg></span>
-            <span>1천~1만</span>
+            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+            <span>1천~1만</span><span class="app-list-card-meta-sep"></span>
+            <span class="is-url">instagram.com/natasha_mood</span>
           </div>
-          <div class="app-list-card-subline is-url">instagram.com/test</div>
+          <div class="app-list-card-subline is-wrap">봄 신메뉴 체험단 · glowlab_kr · #324 · 1767340856</div>
           <div class="app-list-card-foot">
             <span class="app-list-card-stat"><b>250,000</b>원 · 2026-01-19</span>
             <span class="app-card-actions">
@@ -184,23 +232,20 @@
           </div>
         </div>
       </a>
-      <a class="app-list-card" href="influencer-detail.html" style="border-bottom:none">
-        <img class="app-list-card-thumb" src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=120&h=120&fit=crop" alt="">
+      <a class="app-list-card" href="influencer-detail.html">
+        <img class="app-list-card-thumb is-person" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&h=120&fit=crop" alt="mika_seoul">
         <div class="app-list-card-body">
           <div class="app-card-toprow">
-            <span class="c-country-code">KR</span>
-            <span class="app-card-id">#303</span>
+            <span class="app-list-card-title">mika_seoul <span class="c-flag" title="KR">🇰🇷</span></span>
           </div>
-          <div class="app-list-card-title">비타C 세럼 4월 키트</div>
-          <div class="app-list-card-subline">1766993260</div>
           <div class="app-list-card-meta">
-            <span>mika_seoul</span><span class="app-list-card-meta-sep"></span>
-            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/></svg></span>
-            <span>1천 이하</span>
+            <span class="sns-ico tag-instagram app-sns-ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></span>
+            <span>1천 이하</span><span class="app-list-card-meta-sep"></span>
+            <span class="is-url">instagram.com/mika_seoul</span>
           </div>
-          <div class="app-list-card-subline is-url">instagram.com/etest</div>
+          <div class="app-list-card-subline is-wrap">비타C 세럼 4월 키트 · glowlab_kr · #303 · 1766993260</div>
           <div class="app-list-card-foot">
-            <span class="app-list-card-stat">- · 2025-12-30</span>
+            <span class="app-list-card-stat"><span class="is-empty">단가 미입력</span> · 2025-12-30</span>
             <span class="app-card-actions">
               <button type="button" class="app-card-action is-primary" onclick="event.preventDefault();event.stopPropagation();confirmDialog({title:'리뷰어로 선정할까요?', desc:'mika_seoul 님을 이 캠페인의 리뷰어로 선정합니다.', tone:'info', okLabel:'선정'})" aria-label="mika_seoul #303 리뷰어 선정">리뷰어선정</button>
               <button type="button" class="app-card-action" aria-label="mika_seoul #303 정보 보기">정보보기</button>
@@ -217,10 +262,10 @@
   </main>
 
   <nav class="app-tabbar">
-    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/></svg>홈</a>
+    <a class="app-tab" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.3V21h14V9.3"/><path d="M10 21v-6h4v6"/></svg>홈</a>
+    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
     <a class="app-tab is-active" href="list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>신청서관리</a>
     <a class="app-tab" href="influencer-search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>인플루언서</a>
-    <a class="app-tab" href="campaign-calendar.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>일정</a>
     <a class="app-tab" href="more.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18" r="1.4"/></svg>더보기</a>
   </nav>
 
@@ -245,7 +290,139 @@
   </div>
 </div>
 
-<script src="../js/sheets.js"></script>
+<div class="deck-root" id="deck-root" hidden>
+  <div class="deck-top">
+    <span class="deck-title">스와이프 선정</span>
+    <span class="deck-count" id="deck-count"></span>
+    <button type="button" class="deck-close" onclick="closeDeck()" aria-label="닫기"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="deck-stage" id="deck-stage"></div>
+  <div class="deck-actions">
+    <button type="button" class="deck-btn pass" onclick="deckSwipe(-1)" aria-label="다음"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <button type="button" class="deck-btn info" onclick="location.href='influencer-detail.html'" aria-label="프로필 보기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg></button>
+    <button type="button" class="deck-btn go" onclick="deckSwipe(1)" aria-label="리뷰어 선정"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>
+  </div>
+</div>
+
+<script src="../js/sheets.js?v=260812k"></script>
+<script>
+  var APP = [
+    {h:'pianmy', flag:'\uD83C\uDDEF\uD83C\uDDF5', camp:'ロダムクリニック釜山', fol:'1천~1만', p:'180,000', d:'2025-05-23', img:'photo-1573496359142-b8d87734a5a2'},
+    {h:'Sarang', flag:'\uD83C\uDDEF\uD83C\uDDF5', camp:'ロダムクリニック釜山', fol:'1천~1만', p:'-', d:'2025-05-23', img:'photo-1544005313-94ddf0286df2'},
+    {h:'mizukieight', flag:'\uD83C\uDDEF\uD83C\uDDF5', camp:'ロダムクリニック釜山', fol:'1천~1만', p:'-', d:'2025-05-16', img:'photo-1517841905240-472988babdf9'},
+    {h:'mika_seoul', flag:'\uD83C\uDDF0\uD83C\uDDF7', camp:'봄 인기게시물 노출 캠페인', fol:'1천~1만', p:'120,000', d:'2026-01-30', img:'photo-1524504388940-b1c1722653e1'},
+    {h:'natasha_mood', flag:'\uD83C\uDDF7\uD83C\uDDFA', camp:'봄 신메뉴 체험단', fol:'1만~5만', p:'1,500,000', d:'2026-01-19', img:'photo-1508214751196-bcfd4ca60f91'},
+    {h:'natasha_mood', flag:'\uD83C\uDDF7\uD83C\uDDFA', camp:'봄 신메뉴 체험단', fol:'1천~1만', p:'250,000', d:'2026-01-19', img:'photo-1508214751196-bcfd4ca60f91'},
+    {h:'mika_seoul', flag:'\uD83C\uDDF0\uD83C\uDDF7', camp:'비타C 세럼 4월 키트', fol:'1천 이하', p:'-', d:'2025-12-30', img:'photo-1524504388940-b1c1722653e1'}
+  ];
+  function appImg(p, w, h){ return 'https://images.unsplash.com/' + p.img + '?w=' + w + '&h=' + h + '&fit=crop'; }
+
+  function setView(v){
+    document.body.classList.toggle('view-grid', v === 'grid');
+    document.querySelectorAll('.inf-view-btn').forEach(function(b){
+      b.classList.toggle('is-active', b.dataset.view === v);
+    });
+  }
+
+  (function(){
+    var host = document.getElementById('app-photo-grid');
+    host.innerHTML = APP.map(function(p){
+      var price = p.p === '-' ? '미입력' : '<b>' + p.p + '</b>원';
+      return '<a class="pg-card" href="influencer-detail.html">'
+        + '<img src="' + appImg(p, 400, 534) + '" alt="' + p.h + '" loading="lazy">'
+        + '<span class="pg-grad"></span>'
+        + '<span class="pg-info">'
+        +   '<span class="pg-handle">' + p.h + ' <span class="pg-flag">' + p.flag + '</span></span>'
+        +   '<span class="pg-meta"><span>' + p.fol + '</span><span>' + price + '</span></span>'
+        + '</span></a>';
+    }).join('');
+  })();
+
+  var deckIdx = 0, deckBusy = false;
+  function openDeck(){
+    var root = document.getElementById('deck-root');
+    root.hidden = false;
+    requestAnimationFrame(function(){ root.classList.add('is-open'); });
+    document.body.style.overflow = 'hidden';
+    deckRender(true);
+  }
+  function closeDeck(){
+    var root = document.getElementById('deck-root');
+    root.classList.remove('is-open');
+    setTimeout(function(){ root.hidden = true; }, 220);
+    document.body.style.overflow = '';
+  }
+  function deckRender(entering){
+    var stage = document.getElementById('deck-stage');
+    document.getElementById('deck-count').textContent = Math.min(deckIdx + 1, APP.length) + ' / ' + APP.length;
+    if (deckIdx >= APP.length){
+      stage.innerHTML = '<div class="deck-empty"><b>신청자를 다 봤어요</b><span>남은 신청자는 리스트에서 확인할 수 있어요</span><button type="button" onclick="deckIdx=0;deckRender(true)">처음부터 다시 보기</button></div>';
+      document.getElementById('deck-count').textContent = APP.length + ' / ' + APP.length;
+      return;
+    }
+    var html = '';
+    if (deckIdx + 1 < APP.length) html += deckCardHTML(APP[deckIdx + 1], true);
+    html += deckCardHTML(APP[deckIdx], false);
+    stage.innerHTML = html;
+    if (entering){
+      var top = stage.querySelector('.deck-card:not(.is-next)');
+      if (top) top.classList.add('is-enter');
+    }
+    deckBindDrag(stage.querySelector('.deck-card:not(.is-next)'));
+  }
+  function deckCardHTML(p, isNext){
+    var price = p.p === '-' ? '미입력' : p.p + '원';
+    return '<div class="deck-card' + (isNext ? ' is-next' : '') + '">'
+      + '<img src="' + appImg(p, 640, 900) + '" alt="' + p.h + '">'
+      + '<span class="deck-grad"></span>'
+      + '<span class="deck-stamp go">선정</span><span class="deck-stamp pass">다음</span>'
+      + '<div class="deck-info">'
+      +   '<div class="deck-handle">' + p.h + ' <span class="deck-flag">' + p.flag + '</span></div>'
+      +   '<div class="deck-name">' + p.camp + '</div>'
+      +   '<div class="deck-stats"><span>팔로워 <b>' + p.fol + '</b></span><span>단가 <b>' + price + '</b></span><span>신청 <b>' + p.d + '</b></span></div>'
+      + '</div></div>';
+  }
+  function deckSwipe(dir){
+    if (deckBusy) return;
+    var stage = document.getElementById('deck-stage');
+    var card = stage.querySelector('.deck-card:not(.is-next)');
+    if (!card) return;
+    deckBusy = true;
+    var p = APP[deckIdx];
+    card.style.transition = 'transform .34s cubic-bezier(.3,.7,.4,1), opacity .34s ease';
+    card.style.transform = 'translateX(' + (dir * 560) + 'px) rotate(' + (dir * 18) + 'deg)';
+    card.style.opacity = '0';
+    if (dir > 0) showToast(p.h + ' 님을 리뷰어로 선정했습니다');
+    var next = stage.querySelector('.deck-card.is-next');
+    if (next) next.classList.remove('is-next');
+    setTimeout(function(){ deckIdx++; deckBusy = false; deckRender(); }, 320);
+  }
+  function deckBindDrag(card){
+    if (!card) return;
+    var startX = 0, dx = 0, dragging = false;
+    var stampGo = card.querySelector('.deck-stamp.go'), stampPass = card.querySelector('.deck-stamp.pass');
+    card.addEventListener('pointerdown', function(e){
+      dragging = true; startX = e.clientX; card.setPointerCapture(e.pointerId);
+      card.style.transition = 'none';
+    });
+    card.addEventListener('pointermove', function(e){
+      if (!dragging) return;
+      dx = e.clientX - startX;
+      card.style.transform = 'translateX(' + dx + 'px) rotate(' + (dx / 18) + 'deg)';
+      stampGo.style.opacity = Math.max(0, Math.min(1, dx / 80));
+      stampPass.style.opacity = Math.max(0, Math.min(1, -dx / 80));
+    });
+    card.addEventListener('pointerup', function(){
+      dragging = false;
+      if (dx > 90) return deckSwipe(1);
+      if (dx < -90) return deckSwipe(-1);
+      card.style.transition = 'transform .25s ease';
+      card.style.transform = '';
+      stampGo.style.opacity = 0; stampPass.style.opacity = 0;
+      dx = 0;
+    });
+  }
+</script>
 
 <div class="app-sheet-root" id="sheet-search" hidden>
   <div class="app-sheet-backdrop" onclick="closeSheet('sheet-search')"></div>

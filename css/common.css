@@ -109,6 +109,10 @@
   --status-info-bg:        var(--blue-50);
   --status-info-border:    var(--blue-100);
   --status-info-strong:    var(--blue-700);
+  --status-neutral:        var(--neutral-700);   /* 분류·구분용 무채색 (상태 아님) */
+  --status-neutral-bg:     var(--neutral-100);
+  --status-neutral-border: var(--neutral-300);
+  --status-neutral-strong: var(--neutral-800);
 
   /* ── Border ── */
   --border-default: var(--neutral-200);
@@ -702,6 +706,10 @@ a { color: inherit; text-decoration: none; }
 .badge-error { background: var(--status-error-bg); color: var(--status-error); }
 .badge-error .badge-dot { background: var(--status-error); }
 
+/* Neutral — 상태가 아닌 분류·구분(일반/패스권 등)에만. 상태 색 4종과 톤(옅은 채움·보더 없음) 통일 */
+.badge-neutral { background: var(--status-neutral-bg); color: var(--status-neutral); }
+.badge-neutral .badge-dot { background: var(--neutral-500); }
+
 /* ========== SNS Channel Tags ========== */
 .tag-sns {
   display: inline-flex;
@@ -917,6 +925,8 @@ a { color: inherit; text-decoration: none; }
   animation: modal-backdrop-in var(--duration) ease-out;
 }
 .modal-backdrop[hidden] { display: none; }
+/* hidden 속성은 항상 이긴다 — .btn 같은 display 가진 클래스가 덮어쓰지 않게 (2026-09-04) */
+[hidden] { display: none !important; }
 
 .modal {
   background: var(--bg-surface);
@@ -1026,6 +1036,7 @@ a { color: inherit; text-decoration: none; }
 .badge-outline-success { background: transparent; color: var(--status-success-strong); border: 1px solid var(--status-success-border); }
 .badge-outline-warning { background: transparent; color: var(--status-warning-strong); border: 1px solid var(--status-warning-border); }
 .badge-outline-error   { background: transparent; color: var(--status-error-strong);   border: 1px solid var(--status-error-border); }
+.badge-outline-neutral { background: transparent; color: var(--status-neutral-strong); border: 1px solid var(--status-neutral-border); }
 
 /* Badge sizes */
 .badge-sm { padding: 2px var(--space-2); font-size: var(--fs-xs); gap: 4px; }

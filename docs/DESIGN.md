@@ -387,8 +387,11 @@ tooltip 200
 
 ### 7.3 Tables
 - 헤더: `--bg-elevated`, weight 500
-- 행 호버: `--bg-hover`
-- 선택 행: `--accent-light`
+- 행 호버: `--bg-subtle` (neutral-50). 칩·버튼이 많은 행에서 소음이 되지 않는 최소 단계
+- 선택 행: `--bg-subtle` + 첫 셀 좌측 3px `--accent` 바 (`box-shadow: inset 3px 0 0`)
+- 선택 행 호버: `--bg-hover` (neutral-100). 선택이 호버보다 항상 우선
+- `--accent-light`(red-50)는 `--status-error-bg`와 같은 값이라 **행 선택에 쓰지 않는다** — 레드 틴트는 에러·경고 전용 (2026-09-04, Codex 검토 `_review/codex-table-states.md`)
+- 슈퍼패스 묶음(rowspan) 테이블은 같은 규칙을 묶음(tbody) 단위로 적용
 - 숫자 우측 정렬 + `tabular-nums`
 - 스트라이프 금지 — 호버/선택으로 구분
 
@@ -415,6 +418,9 @@ tooltip 200
 | `badge-warning` | 검수 대기, 수정 요청 |
 | `badge-success` | 완료, 승인 |
 | `badge-error` | 거절, 취소 |
+| `badge-neutral` | **상태가 아닌 분류·구분** — 캠페인 구분(일반), 카테고리. 상태 표현에 쓰지 말 것 |
+
+Neutral 톤 규칙: 상태 배지 4종과 동일하게 **옅은 채움 + 보더 없음**(`--status-neutral-bg` / `--status-neutral`). 같은 컬럼 안에서 채움형·아웃라인형을 섞지 않는다 — 예: 캠페인 구분 컬럼은 `badge-info`(패스권) + `badge-neutral`(일반) 둘 다 채움형. 아웃라인이 필요하면 `badge-outline-neutral`.
 
 ### 7.5 Tabs
 
@@ -992,6 +998,42 @@ Filter Chips(편집 팝오버 요구)의 대체 패턴. read-only 텍스트로 �
   </select>
 </div>
 ```
+
+---
+
+## 12. 슈퍼패스 묶음캠페인 — 운영 화면 규칙 (2026-09-04)
+
+대상 화면: `superpass-first-review.html`(1차신청목록) · `superpass-selection.html`(자동추천관리) · `superpass-selection-list.html`(예약미확정목록). 전용 스타일은 `css/superpass.css`, 인터랙션은 `js/superpass.js`.
+
+### 12.1 진행 단계 정의 (`.pipeline` 5단계)
+
+앱 쪽 4단계(1st review → 2nd review → Scheduling → Booked) 앞에 "신청 접수"를 붙인 것. 어긋남 없음.
+
+| # | 단계 | 주체 | 어드민에서 일어나는 일 |
+|---|------|------|------|
+| 1 | 신청 접수 | 인플루언서 | 앱에서 묶음(#SP-…) 신청 제출 |
+| 2 | 1차 컨펌 | 알파콜라보 운영팀 | 1차신청목록에서 "1차 컨펌 완료" → 신청목록으로 이동 |
+| 3 | 2차 컨펌 | 병원(브랜드사) | 브랜드사 어드민 신청서 관리에서 선정 |
+| 4 | 예약 조율 | 병원 | 기준 일정 3개 중 하나 제안. 안 맞으면 **예약 미확정** → 자동 추천 시작 |
+| 5 | 예약 확정 | 병원 + 인플루언서 | 일정 확정 후 앱에서 예약 인증 제출 |
+
+### 12.2 자동 추천 = 반자동 (시스템 추출 → 운영팀 발송)
+
+- 트리거: 4단계에서 **예약 미확정**으로 바뀌는 순간 시스템이 기준 일정(첫 기준일 −14일 ~ 마지막 +14일) · 시술 유사도 · 위치 · 신청 가능 기간으로 후보를 자동 추출해 자동추천관리에 **추천 대기**로 올린다. 앱 푸시는 아직 없음.
+- 발송: 운영팀이 체크한 캠페인만 "추천 발송" → 인플루언서 앱 알림. 이후 상태는 **발송 완료**, 하단 CTA는 "수정 저장 및 재발송".
+- 상태 배너 `.sp-sent`: 추천 대기 = `.sp-sent--pending`(warning 톤), 발송 완료 = 기본(success 톤). 마크업은 `data-send-state="pending|sent"`로 두 상태를 함께 두고 `hidden` 토글.
+- 앱 문구("Your manager picked campaigns for you")와 주체가 일치해야 하므로 "자동 발송"이라는 표현은 쓰지 않는다.
+
+### 12.3 캠페인 구분 · 국가
+
+- 캠페인 구분 컬럼: `badge-info`(패스권) + `badge-neutral`(일반), 둘 다 sm 채움형, dot 없음 (§7.4).
+- 국가: `c-country-code` 텍스트 칩 유지(§9). `js/components.js`가 코드 → 한글 국가명을 `title`로 자동 부여해 툴팁으로 보완. 국기 이모지·이미지 도입 안 함(OS별 렌더 차이, 대만·홍콩 표기 이슈).
+
+### 12.4 하단 고정 저장 바 `.sp-actionbar`
+
+- 슈퍼패스 전용(공용 승격 안 함). 사이드바 오른쪽 ~ 화면 끝, 바닥 고정, `.page`에 96px 하단 여백.
+- 버튼은 페이지 단위 동작이라 **md(40)**. 주 CTA 1개(primary) + 이동 링크는 `btn-ghost`로 위계 분리.
+- 토스트는 우상단 고정이라 바와 겹치지 않음.
 
 ---
 

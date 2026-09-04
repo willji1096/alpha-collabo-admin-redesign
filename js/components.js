@@ -3,8 +3,12 @@
  * 사이드바/헤더를 외부 파일에서 불러와 삽입하고, 현재 페이지에 맞춰 활성 상태를 설정
  */
 
-// ===== Auth Guard — login.html 외 모든 페이지에서 세션 체크 =====
+// ===== Auth Guard =====
+// 시안 검토 단계에서는 꺼둔다 — 로그인 없이 모든 화면을 바로 열어볼 수 있어야 한다.
+// 개발 이관 시 AUTH_GUARD 를 true 로 바꾸면 기존 세션 체크가 그대로 동작한다.
+const AUTH_GUARD = false;
 (function authGuard() {
+  if (!AUTH_GUARD) return;
   const file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const PUBLIC = ['login.html', 'index.html', 'index-v1.html', 'design-system.html', ''];
   if (PUBLIC.includes(file)) return;
@@ -79,7 +83,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   wireSortableHeaders();
   wireHeaderPopovers();
   wireInfluencerDrawer();
-  wireMessageModal();
   wireImageLightbox();
   wireViewToggle();
 
@@ -1352,147 +1355,6 @@ function wireImageLightbox() {
   });
 }
 
-/** 메시지 모달 (슈퍼패스 보내기) — 페이지 로드 시 상주 */
-async function wireMessageModal() {
-  if (document.querySelectorAll('.js-open-message').length === 0) return;
-  const bust = `?v=${Date.now()}`;
-  const res = await fetch('components/modal-message.html' + bust, { cache: 'no-store' });
-  const html = await res.text();
-  const wrap = document.createElement('div');
-  wrap.innerHTML = html;
-  Array.from(wrap.children).forEach(el => document.body.appendChild(el));
-
-  const backdrop = document.querySelector('.js-message-backdrop');
-  const modal = backdrop && backdrop.querySelector('.modal-message');
-  if (!backdrop || !modal) return;
-
-  // 탭 전환
-  const tabs = backdrop.querySelectorAll('[data-msg]');
-  const panels = backdrop.querySelectorAll('[data-msg-panel]');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); });
-      tab.classList.add('is-active');
-      tab.setAttribute('aria-selected', 'true');
-      const code = tab.dataset.msg;
-      panels.forEach(p => { p.hidden = p.dataset.msgPanel !== code; });
-    });
-  });
-
-  // 메시지 카드 펼치기/접기 (헤더 클릭)
-  backdrop.addEventListener('click', (e) => {
-    if (e.target.closest('.mm-msg-chk, .mm-msg-actions, button')) return;
-    const head = e.target.closest('.mm-msg-head');
-    if (!head) return;
-    const msg = head.closest('.mm-msg');
-    const body = msg && msg.querySelector('.mm-msg-body');
-    if (!msg || !body) return;
-    const opening = body.hidden;
-    body.hidden = !opening;
-    msg.classList.toggle('is-open', opening);
-    if (opening && msg.dataset.msgRead === 'false') {
-      msg.dataset.msgRead = 'true';
-      const unreadDot = msg.querySelector('.mm-msg-unread');
-      if (unreadDot) unreadDot.remove();
-    }
-  });
-
-  // 답장 버튼 — 작성 탭으로 전환 + 수신자 채움
-  backdrop.addEventListener('click', (e) => {
-    const btn = e.target.closest('.js-msg-reply');
-    if (!btn) return;
-    const to = btn.dataset.msgTo;
-    if (to) {
-      backdrop.querySelectorAll('[data-message-recipient]').forEach(el => {
-        if (el.tagName === 'INPUT') el.value = to;
-        else el.textContent = to;
-      });
-    }
-    activateTab('compose');
-    const ta = backdrop.querySelector('.mm-textarea');
-    if (ta) setTimeout(() => ta.focus(), 50);
-  });
-
-  // 텍스트 카운트
-  const textarea = backdrop.querySelector('.mm-textarea');
-  const counter = backdrop.querySelector('[data-message-count]');
-  if (textarea && counter) {
-    textarea.addEventListener('input', () => {
-      counter.textContent = textarea.value.length;
-    });
-  }
-
-  // 발송 버튼 — 토스트 + 모달 닫기 + textarea 리셋
-  backdrop.querySelectorAll('.js-send-message').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const content = textarea && textarea.value.trim();
-      if (!content) {
-        if (typeof showToast === 'function') showToast('warning', '내용을 입력하세요');
-        return;
-      }
-      if (typeof showToast === 'function') showToast('success', '메시지 발송 완료');
-      if (textarea) { textarea.value = ''; if (counter) counter.textContent = '0'; }
-      close();
-    });
-  });
-
-  // 닫기
-  backdrop.querySelectorAll('.js-close-message').forEach(b => b.addEventListener('click', close));
-  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
-  document.addEventListener('keydown', (e) => {
-    if (!backdrop.hidden && e.key === 'Escape') close();
-  });
-
-  function activateTab(code) {
-    tabs.forEach(t => {
-      const on = t.dataset.msg === code;
-      t.classList.toggle('is-active', on);
-      t.setAttribute('aria-selected', String(on));
-    });
-    panels.forEach(p => { p.hidden = p.dataset.msgPanel !== code; });
-  }
-
-  function open(triggerEl) {
-    // 트리거 행에서 인플루언서 이름 추출해서 수신자 자리에 표시
-    let recipient = null;
-    const row = triggerEl && triggerEl.closest('tr');
-    if (row) {
-      const table = row.closest('table');
-      const headers = table ? Array.from(table.querySelectorAll('thead th')) : [];
-      const idx = headers.findIndex(h => /인플루언서|회원정보/.test(h.textContent.trim()));
-      if (idx >= 0 && row.cells[idx]) {
-        const txt = row.cells[idx].textContent.trim().split(/\s+/)[0];
-        if (txt) recipient = txt;
-      }
-    }
-    if (recipient) {
-      backdrop.querySelectorAll('[data-message-recipient]').forEach(el => {
-        if (el.tagName === 'INPUT') el.value = recipient;
-        else el.textContent = recipient;
-      });
-    }
-    // 행에서 열렸으면 '작성' 탭, 그 외는 '받은 메시지' 탭
-    activateTab(triggerEl ? 'compose' : 'inbox');
-    backdrop.hidden = false;
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => { if (textarea) textarea.focus(); }, 50);
-  }
-
-  function close() {
-    backdrop.hidden = true;
-    document.body.style.overflow = '';
-  }
-
-  // 트리거 버튼 클릭
-  document.addEventListener('click', (e) => {
-    const trigger = e.target.closest('.js-open-message');
-    if (!trigger) return;
-    e.preventDefault();
-    open(trigger);
-  });
-}
-
 /** 인플루언서 상세 Drawer — 페이지 로드 시 상주 (이미지 preload 보장) */
 async function wireInfluencerDrawer() {
   // 이 페이지에 트리거가 하나도 없으면 로드 스킵
@@ -1593,11 +1455,10 @@ async function wireInfluencerDrawer() {
   });
 }
 
-/** 헤더/사이드바 팝오버 (알림 벨, 유저 메뉴) */
+/** 헤더 팝오버 (알림 벨) */
 function wireHeaderPopovers() {
   const pairs = [
-    ['notif-btn', 'notif-popover'],
-    ['user-menu-btn', 'user-menu-popover']
+    ['notif-btn', 'notif-popover']
   ];
   pairs.forEach(([btnId, popId]) => {
     const btn = document.getElementById(btnId);
@@ -1715,7 +1576,8 @@ function wireToastAutoTriggers() {
     if (!btn) return;
     // 모달/드로어/필터 토글/복사버튼 등 기능성 버튼은 제외
     if (btn.closest('.modal, .drawer, .cmdk, .toast') ||
-        btn.matches('.js-open-influencer, .js-open-message, .js-close-message, .js-send-message, .js-open-propose, .js-close-propose, .js-send-propose, .js-open-shipping, .js-close-shipping, .js-save-shipping, .js-open-address, .js-close-address, .js-save-address-memo, .js-open-review, .js-close-review, .js-review-confirm, .js-review-ack, .js-open-lightbox, .js-open-revision, .js-close-revision, .js-send-revision, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-user-btn, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item, .user-menu-item')) return;
+        btn.matches('[data-modal-open], [data-modal-close], [data-toast-title], [data-check-all]') ||
+        btn.matches('.js-open-influencer, .js-open-propose, .js-close-propose, .js-send-propose, .js-open-shipping, .js-close-shipping, .js-save-shipping, .js-open-address, .js-close-address, .js-save-address-memo, .js-open-review, .js-close-review, .js-review-confirm, .js-review-ack, .js-open-lightbox, .js-open-revision, .js-close-revision, .js-send-revision, .js-confirm-ok, .js-confirm-cancel, .modal-close, .toast-close, .bulk-close, .filter-chip-remove, .filter-chip-add, .country-selector, .cmdk-item, .tab, .density-btn, .btn-icon, .copy-btn, .cal-event, .cal-cell, .day-event-card, .day-event-filter-btn, .cal-nav-btn, .cal-monthnav-side, .cal-today-btn, .pg-btn, .f-pre, .pt-country, .sidebar-ws-switch, .h-icon-btn, .tool-toggle, .h-menu-btn, .sidebar-cmdk, [data-cmdk-trigger], .widget-toggle, .htab, .nav-item, .ds-side-link, .modal-close, .h-popover-action, .notif-item')) return;
     // href가 있는 a 태그면 네비게이션이므로 제외
     if (btn.tagName === 'A' && btn.getAttribute('href') && btn.getAttribute('href') !== '#') return;
 
@@ -1743,7 +1605,7 @@ function wireToastAutoTriggers() {
       '리뷰어선정':   ['confirm:warning', '인플루언서를 선정하시겠습니까?', '선정 후에는 취소할 수 없어요.', 'success', '리뷰어 선정 완료'],
       '리뷰어 선정':  ['confirm:warning', '인플루언서를 선정하시겠습니까?', '선정 후에는 취소할 수 없어요.', 'success', '리뷰어 선정 완료'],
       '인플루언서미방문': ['confirm:danger', '미방문 처리하시겠습니까?', '차감금은 복구됩니다', 'error', '미방문 처리됨'],
-      '리뷰어 미선정':['warning', '리뷰어 미선정 처리'],
+      '미선정':       ['confirm:danger', '미선정 처리하시겠습니까?', '해당 인플루언서는 미선정 목록으로 이동하며, 앱으로 미선정 알림이 발송됩니다.', 'success', '미선정 처리 완료', '미선정 목록에서 확인할 수 있어요'],
       '알림 발송':    ['success', '알림 발송 완료'],
       '일괄 채택':    ['success', '일괄 채택 완료'],
       '일괄 저장':    ['success', '일괄 저장 완료'],
@@ -1788,13 +1650,21 @@ function activateSidebarNav() {
     if (label) label.style.display = visibleGroups.length > 1 ? '' : 'none';
   });
 
-  // 현재 페이지 활성화
+  // 현재 페이지 활성화 — 파일명 일치 우선, 없으면 body[data-active-page] 메뉴명으로 (메뉴가 없는 하위 화면용)
+  let matched = false;
   document.querySelectorAll('.nav-item').forEach(item => {
     const href = item.getAttribute('href');
     if (href === currentFile) {
       item.classList.add('active');
+      matched = true;
     }
   });
+  const activePage = document.body.dataset.activePage;
+  if (!matched && activePage) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      if (item.textContent.replace(/\s+/g, '') === activePage.replace(/\s+/g, '')) item.classList.add('active');
+    });
+  }
 }
 
 /** data-active-tab 속성 기준으로 헤더 탭 활성화 ("계정"은 탭 외 영역 — 강조 생략) */
@@ -2074,3 +1944,18 @@ function wireMobileSidebar() {
   backdrop.addEventListener('click', close);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 }
+
+
+/* ========== 국가 코드 칩 툴팁 — 코드만으로 부족한 가독성 보완 (국기 이모지·이미지는 DESIGN.md §9 금지) ========== */
+(function () {
+  const COUNTRY_NAMES = { JP: '일본', KR: '한국', CN: '중국', TW: '대만', HK: '홍콩', TH: '태국', VN: '베트남', SG: '싱가포르', PH: '필리핀', MY: '말레이시아', ID: '인도네시아', RU: '러시아', US: '미국' };
+  function labelCountryChips(root) {
+    (root || document).querySelectorAll('.c-country-code:not([title])').forEach(el => {
+      const name = COUNTRY_NAMES[el.textContent.trim()];
+      if (name) el.title = name;
+    });
+  }
+  document.addEventListener('DOMContentLoaded', () => labelCountryChips());
+  new MutationObserver(muts => muts.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) labelCountryChips(n); })))
+    .observe(document.documentElement, { childList: true, subtree: true });
+})();

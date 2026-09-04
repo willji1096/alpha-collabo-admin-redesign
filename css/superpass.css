@@ -1,0 +1,520 @@
+/* =========================================================================
+   superpass.css — 슈퍼패스 화면 전용 컴포넌트 (기존 어드민 셸 위에 얹음)
+   common.css(토큰) + admin.css(레이아웃/테이블/필터)를 그대로 쓰고,
+   여기에는 슈퍼패스 화면에서 새로 필요한 것만 둔다.
+   raw hex 금지 — 모든 색은 common.css 토큰에서 가져온다.
+   ========================================================================= */
+
+/* 신청 종류 칩 — DS badge 위에 중립(일반) 변형만 보탬. DS에 neutral 변형이 없어 여기서만 씀 */
+
+/* ── 페이지 헤더 우측 상태 pill ──────────────────────────────────── */
+.pg-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+/* 어드민 컨테이너는 테두리만 — 상세 카드 두 장의 DS 카드 쉐도우 제거 */
+.card.sp-card--who, .card.sp-card--criteria { box-shadow: none; }
+
+/* 표 머리글 ⓘ 툴팁 — 아이콘 세로 중앙, 긴 설명은 줄바꿈 */
+.tbl th .tooltip-wrap { align-items: center; gap: var(--space-1); }
+.tbl th .tooltip-wrap svg { color: var(--text-tertiary); }
+.tbl th .tooltip { white-space: normal; width: max-content; max-width: 220px; text-align: left; font-weight: var(--fw-regular); }
+
+/* ── 안내 스트립 (테이블 위/아래 규칙 설명) ───────────────────────── */
+.sp-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--text-secondary);
+}
+.sp-note svg { flex-shrink: 0; margin-top: 1px; color: var(--text-tertiary); }
+.sp-note b { color: var(--text-primary); font-weight: var(--fw-semibold); }
+
+/* ── 묶음(rowspan) 셀은 위쪽 정렬 ──────────────────────────────── */
+.tbl td.sp-merged-top { vertical-align: top; }
+.tbl td.c-chk.sp-merged-top { padding-top: 14px; }
+
+/* 신청 묶음 = 한 덩어리: 묶음(tbody) 단위로 hover·선택 강조 (규칙은 admin.css 행 상태와 동일, 단위만 묶음).
+   행 단위 hover는 rowspan 셀이 첫 행에만 붙어 있어 반쪽 하이라이트가 되므로 쓰지 않는다. */
+.tbl .sp-bundle:hover tr { background: var(--bg-subtle); }
+.tbl .sp-bundle:has(.c-chk input:checked) tr { background: var(--bg-subtle); }
+.tbl .sp-bundle:has(.c-chk input:checked) tr:first-child > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.tbl .sp-bundle:has(.c-chk input:checked):hover tr { background: var(--bg-hover); }
+.tbl .sp-bundle tr:last-child td { border-bottom: 1px solid var(--border-default); }
+.tbl .sp-bundle:last-child tr:last-child td { border-bottom: none; }
+
+/* ── 신청 묶음 ID + 선택 혜택 ───────────────────────────────────── */
+.sp-bundle-id {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.sp-bundle-count { color: var(--text-secondary); font-weight: var(--fw-medium); }
+
+.sp-benefit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.sp-benefit svg { flex-shrink: 0; color: var(--text-tertiary); }
+
+/* ── 일정 칩 ────────────────────────────────────────────────────── */
+.sp-dates {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+.sp-dates--row { flex-direction: row; flex-wrap: wrap; }
+.sp-date {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  padding: 3px var(--space-2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sp-date b { font-weight: var(--fw-semibold); }
+.sp-date span { color: var(--text-tertiary); }
+
+/* ── 캠페인 구분 배지 (패스권 / 일반) ────────────────────────────── */
+
+
+
+
+/* ── 행 액션 버튼 묶음 ──────────────────────────────────────────── */
+.sp-rowact {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: stretch;
+}
+.sp-rowact .btn { width: 100%; }
+
+/* =========================================================================
+   선정목록 · 자동 추천 관리
+   ========================================================================= */
+
+/* 5단계 진행 바 — 링크가 아닌 상태 표시이므로 정적 변형 */
+.pipeline-static .pipeline-step { cursor: default; }
+.pipeline-static .pipeline-step:hover { background: transparent; }
+.pipeline-static .pipeline-step.is-current { background: var(--bg-surface); }
+.pipeline-static .pipeline-step.is-current { color: var(--accent); }
+
+/* 브리핑 영역: 좌 인플루언서 카드 / 우 추천 기준 */
+.sp-brief {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.85fr) minmax(0, 2fr);
+  align-items: stretch;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+@media (max-width: 1100px) { .sp-brief { grid-template-columns: 1fr; } }
+
+
+.sp-card-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-3);
+}
+
+.sp-who-name {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.sp-who-name .c-country-code { vertical-align: middle; margin-left: 4px; }
+.sp-who-id {
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+.sp-card-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: var(--space-3) 0;
+}
+.sp-field { margin-bottom: var(--space-3); }
+.sp-field:last-child { margin-bottom: 0; }
+.sp-field-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+  margin-bottom: 5px;
+}
+.sp-field-label svg { color: var(--text-disabled); }
+.sp-field-value {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  line-height: var(--lh-normal);
+}
+
+/* 추천 기준 패널 — 위: 값 4칸 / 아래: 안내 + 발송 상태 */
+.sp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+.sp-card-head .sp-card-title { margin: 0; }
+
+.sp-box {
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+
+/* 기준 일정(입력) → 추천 기간·시술·위치(산출)를 한 박스 안에 가로로 */
+.sp-facts {
+  display: grid;
+  grid-template-columns: minmax(0, 2.3fr) repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+.sp-fact { padding: 0 var(--space-4); }
+.sp-fact:first-child { padding-left: 0; }
+.sp-fact:last-child { padding-right: 0; }
+.sp-fact + .sp-fact { border-left: 1px solid var(--border-light); }
+@media (max-width: 1400px) {
+  .sp-facts { grid-template-columns: 1fr 1fr; gap: var(--space-4) 0; }
+  .sp-fact--dates { grid-column: 1 / -1; padding-left: 0; }
+  .sp-fact:nth-child(2) { padding-left: 0; border-left: none; }
+  .sp-fact--dates + .sp-fact { border-left: none; }
+}
+
+/* 자동 발송 상태 — 가로 한 줄. 기본(발송 완료)=success, .sp-sent--pending(추천 대기)=warning */
+.sp-sent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-2) var(--space-4);
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success-border);
+  border-radius: var(--radius-md);
+}
+.sp-sent-head {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--status-success);
+  white-space: nowrap;
+}
+.sp-sent-sub {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.sp-sent--pending { background: var(--status-warning-bg); border-color: var(--status-warning-border); }
+.sp-sent--pending .sp-sent-head { color: var(--status-warning); }
+
+/* 하단 고정 액션 바 — 사이드바 오른쪽부터 화면 끝까지, 항상 바닥 고정 */
+.sp-actionbar {
+  position: fixed;
+  left: var(--sidebar-width);
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--page-padding);
+  /* 우하단 플로팅 요소(프리뷰 도구·도움말 버튼)와 겹치지 않게 우측 여유 */
+  padding-right: calc(var(--page-padding) + 88px);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  box-shadow: var(--shadow-3);
+  transition: left 200ms var(--ease-out);
+}
+/* 바에 가려지지 않도록 페이지 아래 여백 확보 */
+.page:has(.sp-actionbar) { padding-bottom: 96px; }
+@media (max-width: 1024px) { .sp-actionbar { left: var(--sidebar-collapsed); } }
+@media (max-width: 768px)  { .sp-actionbar { left: 0; } }
+.sp-actionbar-info {
+  font-size: var(--fs-base);
+  color: var(--text-secondary);
+}
+.sp-actionbar-info b {
+  color: var(--accent);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+.sp-actionbar-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+}
+.sp-actionbar-btns { display: flex; align-items: center; gap: var(--space-2); }
+
+/* =========================================================================
+   채팅 이력 모달
+   ========================================================================= */
+.modal-chat { max-width: 960px; }
+.modal-chat .modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sp-chat {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+}
+@media (max-width: 860px) { .sp-chat { grid-template-columns: 1fr; } }
+
+.sp-chat-side {
+  padding: var(--space-4);
+  border-right: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  overflow-y: auto;
+}
+@media (max-width: 860px) { .sp-chat-side { border-right: none; border-bottom: 1px solid var(--border-light); } }
+
+.sp-chat-side .sp-dates--row { display: flex; }
+.sp-chat-side .sp-dates--row .sp-date { flex: 1; justify-content: center; padding: 3px 4px; }
+
+.sp-chat-who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+.sp-chat-who-name {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+}
+.sp-chat-who-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: 3px;
+}
+.sp-chat-handle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+}
+
+.sp-chat-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.sp-chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+}
+.sp-chat-head-right { display: flex; align-items: center; gap: var(--space-2); }
+.sp-chat-head-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.sp-chat-log {
+  flex: 1;
+  min-height: 240px;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--bg-page);
+}
+
+.sp-msg { display: flex; gap: var(--space-3); align-items: flex-start; max-width: 82%; }
+.sp-msg:first-child { margin-top: auto; } /* 메시지를 입력창 쪽(아래)에 붙인다 */
+.sp-msg--out { margin-left: auto; flex-direction: row-reverse; }
+.sp-msg-av {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+.sp-msg-av--ops { background: var(--accent); color: var(--text-inverse); }
+.sp-msg-body { min-width: 0; }
+.sp-msg--out .sp-msg-body { text-align: right; }
+.sp-msg-name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+}
+.sp-bubble {
+  display: inline-block;
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-base);
+  line-height: var(--lh-relaxed);
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+}
+.sp-bubble--plain { background: var(--bg-surface); }
+.sp-bubble--ops { background: var(--accent-light); border-color: var(--accent-subtle); }
+.sp-msg-time {
+  margin-top: 4px;
+  font-size: var(--fs-xs);
+  color: var(--text-disabled);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 추천 카드형 메시지 */
+.sp-msg-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  max-width: 320px;
+}
+.sp-msg-card-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+.sp-msg-card-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+.sp-msg-card-sub {
+  margin: 2px 0 var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+}
+
+.sp-msg-card-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--accent);
+  text-decoration: none;
+}
+.sp-msg-card-link:hover { text-decoration: underline; }
+
+/* 답장 입력 — 이 모달의 유일한 주 액션 */
+.sp-compose {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-surface);
+}
+.sp-compose .form-input { flex: 1; min-width: 0; }
+
+/* 관리자 메모 — 대상 정보와 같은 열, 보조 액션 */
+.sp-memo-input {
+  width: 100%;
+  height: auto;
+  min-height: 72px;
+  padding-top: 8px;
+  resize: vertical;
+  line-height: var(--lh-normal);
+}
+.sp-memo-save { display: flex; margin: var(--space-2) 0 0 auto; }
+
+/* 검색 조건 — 라벨·입력 3쌍을 격자로 세워 두 줄의 열이 맞도록 */
+.sp-frow {
+  display: grid;
+  grid-template-columns: 84px 220px 72px 220px 72px 220px;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: start;
+}
+.sp-frow .f-label { width: auto; }
+.sp-frow .f-input, .sp-frow .f-sel { width: 100%; }
+@media (max-width: 1280px) {
+  .sp-frow { grid-template-columns: 84px minmax(0, 1fr) 72px minmax(0, 1fr); }
+}
+
+/* 모달 본문이 자체 레이아웃(그리드)을 가질 때 패딩 제거 */
+.modal-body.modal-body--flush { padding: 0; }
+
+/* 상위 블록 바로 아래 붙는 안내 스트립 */
+.sp-note--tight { margin: var(--space-3) 0 0; }
+
+/* 12열짜리 1차신청목록: 좁은 화면에서 뭉개지지 않고 가로 스크롤되게 */
+.tbl--wide { min-width: 1180px; }
+
+/* 값 아래 붙는 규칙 설명 */
+
+
+/* 인플루언서 카드 — 이름 위, 항목은 2열로 가로 배치 */
+.sp-card--who .sp-who-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-4);
+}
+.sp-card--who .sp-field { margin-bottom: 0; }
+.sp-card--who .sp-field:last-child { grid-column: 1 / -1; }
+.sp-card--who .sp-who-sep { margin: var(--space-3) 0; }
+

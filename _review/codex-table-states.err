@@ -1,0 +1,1926 @@
+OpenAI Codex v0.153.0
+--------
+workdir: /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+model: gpt-5.6-luna
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a06a3e-6c02-7be0-b1de-41fc4eefc8b9
+--------
+user
+# 검토 요청: 어드민 테이블 행 호버·선택(체크) 상태 규칙 — 전체 어드민 기준
+
+너는 읽기 전용 리뷰어다. 파일을 수정하지 말고 보고서만 써라. 웹 검색으로 레퍼런스(Linear, Stripe Dashboard, Airtable, Notion DB, Shopify Polaris IndexTable, Atlassian, Material Data Table 등)의 행 hover/selected 처리 관행을 1~3곳 확인해 근거로 붙여라.
+
+## 맥락
+- 프로젝트: 알파콜라보 브랜드사 어드민(광고주가 직접 쓰는 웹 어드민). 규칙 문서 docs/DESIGN.md, docs/styleseed-rules.md, 프로젝트 규칙 CLAUDE.md.
+- 첨부 이미지 2장: 슈퍼패스 1차신청목록(superpass-first-review.html) 테이블.
+  - 이미지 1 = 행 hover: 묶음(tbody.sp-bundle) 전체가 회색(--bg-hover = neutral-100 #F0F0F0)으로 채워짐.
+  - 이미지 2 = 체크박스 선택: 묶음 전체가 레드 틴트(--accent-light = red-50 #FEF2F2). 브랜드 액센트가 레드(#E53935 계열)라 선택 행이 "에러/경고"처럼 읽힐 우려.
+- 현재 규칙(전 테이블 공통): css/admin.css:1345 `.tbl tbody tr:hover{background:var(--bg-hover)}`, 1369/1385 선택 행 `--accent-light`. docs/DESIGN.md:390-391 "행 호버 --bg-hover / 선택 행 --accent-light". 슈퍼패스는 css/superpass.css:47-49에서 묶음(tbody) 단위로 같은 규칙 적용.
+- 이 테이블은 한 인플루언서의 신청 묶음이 3개 캠페인 행으로 rowspan 되어 있고, 행 안에 버튼(1차 컨펌 완료 primary red, 미선정, 상세보기)·배지·날짜 칩이 많다.
+- 절대 금지: 새 기능/새 컬럼/새 화면 제안. 토큰 밖 raw hex 제안 금지(있으면 토큰 이름으로).
+
+## 질문 (각각 결론 + 근거 + 리스크)
+1. 행 hover에 회색 전체 채움이 맞나? 정보 밀도가 높고 버튼·칩이 많은 행에서 hover 채움이 오히려 소음이 되는지. 대안: hover 제거 / 더 옅게(neutral-50) / 좌측 바만 / 행 경계만.
+2. 선택 행에 브랜드 레드 틴트(red-50)가 맞나? 레드 = 에러 의미와 충돌하는지. 대안: 중립(neutral-100/50) + 좌측 accent 바 / 파랑 info-bg / 체크박스 컬럼만 색 / 테두리만. 레드 primary 버튼(1차 컨펌 완료)이 레드 틴트 위에 올라갈 때 대비·위계 문제.
+3. hover와 selected가 동시에 걸릴 때(선택된 행 위에 마우스) 규칙. 지금은 hover(회색)가 선택(레드)을 덮을 수 있음.
+4. 묶음(rowspan 3행) 단위 강조가 맞나, 캠페인 행 단위가 맞나? 1차 컨펌 버튼은 캠페인 행마다 있는데 선택은 묶음 단위인 불일치.
+5. 위 결론을 어드민 전체 규칙 한 줄(DESIGN.md 7.x에 넣을 문장)로 써라. 토큰만 사용.
+
+## 보고 형식 (고정)
+- 항목마다: `파일:라인 + 현재값→제안값 + 근거(레퍼런스 URL 포함)`. 산문 금지, 표 또는 불릿.
+- 마지막에 "우선순위 상위 3개"만 따로.
+
+warning: failed to parse plugin hooks config /Users/willji/.codex/plugins/cache/aing-marketplace/aing/2.9.21/hooks/hooks.json: unknown field `$schema`, expected `description` or `hooks` at line 2 column 11
+warning: Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+codex
+읽기 전용 리뷰로 진행합니다. 먼저 프로젝트의 `DESIGN.md`·`styleseed-rules.md`·`CLAUDE.md`와 prompt-vault의 디자인 기준을 확인하고, 이어서 공식 레퍼런스 1~3곳을 검색해 근거를 붙이겠습니다. 파일은 수정하지 않습니다.
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc "pwd; rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g 'docs/DESIGN.md' -g 'docs/styleseed-rules.md' -g 'css/admin.css' -g 'css/superpass.css' -g 'superpass-first-review.html' . ~/Desktop/prompt-vault/design-md 2>/dev/null" in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 0ms:
+/Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+./CLAUDE.md
+./superpass-first-review.html
+./docs/styleseed-rules.md
+./docs/DESIGN.md
+./css/admin.css
+./css/superpass.css
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc "sed -n '1,240p' /Users/willji/.agents/skills/agent-reach/SKILL.md; sed -n '1,220p' /Users/willji/.codex/skills/.system/openai-docs/SKILL.md 2>/dev/null; rg --files ~/Desktop/prompt-vault/design-md 2>/dev/null" in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 0ms:
+---
+name: agent-reach
+description: >
+  MUST USE when user wants to 调研/research/搜索/search/查/找/look up anything
+  on the internet — e.g. 全网调研 X / 帮我调研一下 X / 查一下 X / 搜搜 X /
+  看看大家怎么评价 X / X 上有什么讨论 / research this topic。
+
+  Also MUST USE when user mentions any platform or shares any URL/链接:
+  小红书/xiaohongshu/xhs, Twitter/推特/X, B站/bilibili, Reddit, Facebook,
+  Instagram, V2EX, LinkedIn/领英/招聘/求职/jobs, YouTube, GitHub code search, 小宇宙播客,
+  雪球/股票行情, RSS feeds, or any web URL.
+
+  15 platforms, multi-backend routing (OpenCLI / per-platform CLIs / APIs).
+  Zero config for 6 channels. Run `agent-reach doctor --json` to see which
+  backend serves each platform right now.
+
+  NOT for: 写报告/数据分析/翻译等内容加工（本 skill 只负责从互联网获取内容）；
+  发帖/评论/点赞等写操作；已有专门 skill 的平台（先用专门 skill）。
+
+  【路由方式】SKILL.md 包含路由表和常用命令，复杂场景需按需阅读对应分类的 references/*.md。
+  分类：search / social (小红书/推特/B站/V2EX/Reddit/Facebook/Instagram) / career(LinkedIn) / dev(github) / web(网页/文章/RSS) / video(YouTube/B站/播客) / finance(雪球/股票)。
+metadata:
+  homepage: https://github.com/Panniantong/Agent-Reach
+---
+
+# Agent Reach — 互联网能力路由器
+
+15 平台、多后端。**本 skill 存在时必须用它访问这些平台，不要自己发明方案。**
+
+## 常驻规则（全程适用）
+
+1. **动手前先体检**：多后端/登录态平台（小红书/Reddit/B站/Twitter/Facebook/Instagram）先跑
+   `agent-reach doctor --json`。`active_backend` 有值时按它选命令组；`active_backend: null`
+   表示 Doctor 为避免触发浏览器 Cookie 读取或远端写入而没有做实时验证，不代表后端不存在。
+   只有用户任务明确需要该平台时，才按对应 reference 的只读命令手动验证。
+2. **声明你在用什么**：开始干活前说一句「使用 agent-reach 的 X 平台 / Y 后端」。
+3. **失败按 references 里的重试链处理**，不要瞎猜命令。
+4. **全网调研类任务**：组合多平台（Exa 搜索 + Twitter/Reddit 看讨论 + 小红书/B站看中文场景），并行收集再汇总。
+5. **替用户盯版本**：完成一次较大的调研/多平台任务后，顺手跑
+   `agent-reach check-update`（很快，一个 API 调用）。有新版就在收尾汇报里附一句：
+   「Agent Reach 有新版 vX.Y.Z，复制这句话给我即可更新：帮我更新 Agent Reach：
+   https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md」。
+   不要中断当前任务去更新，也不要重复提醒同一个版本。
+
+## 路由表
+
+| 用户意图 | 分类 | 详细文档 |
+|---------|------|---------|
+| 网页搜索/代码搜索 | search | [references/search.md](references/search.md) |
+| 小红书/推特/B站/V2EX/Reddit/Facebook/Instagram | social | [references/social.md](references/social.md) |
+| 招聘/职位/LinkedIn | career | [references/career.md](references/career.md) |
+| GitHub/代码 | dev | [references/dev.md](references/dev.md) |
+| 网页/文章/RSS | web | [references/web.md](references/web.md) |
+| YouTube/B站/播客字幕 | video | [references/video.md](references/video.md) |
+| 雪球/股票行情 | finance | [references/finance.md](references/finance.md) |
+
+## 零配置快速命令
+
+```bash
+# Exa 网页搜索
+mcporter call exa.web_search_exa query="query" numResults=5
+
+# 通用网页阅读
+curl -s "https://r.jina.ai/URL"
+
+# GitHub 搜索
+gh search repos "query" --sort stars --limit 10
+
+# YouTube 字幕（注意：B站不要用 yt-dlp，失败重试链见 video.md）
+yt-dlp --write-sub --write-auto-sub --skip-download -o "/tmp/%(id)s" "URL"
+
+# V2EX 热门
+curl -s "https://www.v2ex.com/api/topics/hot.json" -H "User-Agent: agent-reach/1.0"
+
+# B站搜索（bili-cli，无需登录）
+bili search "query" --type video -n 5
+```
+
+## 需登录态的平台（按 doctor 的 active_backend 选命令）
+
+Twitter 注意：`agent-reach configure twitter-cookies` 保存的 Cookie 只供
+`doctor` 检查配置是否齐全；`doctor` 不执行 `twitter status`，也不会设置当前
+Shell。直接运行 `twitter` 前，必须在子进程环境中显式提供
+`TWITTER_AUTH_TOKEN` 和 `TWITTER_CT0`，不得在日志或命令回显中暴露值。
+
+小红书注意：Agent Reach 不替用户登录，也不读取浏览器 Cookie。OpenCLI 只用
+用户已有且明确控制的 Chrome 会话；没有现成会话时不要自动登录，改用
+Cookie-Editor 手工导出后配置 xiaohongshu-mcp / 存量工具。
+
+```bash
+# Twitter 搜索（twitter-cli 首选；失败重试链见 social.md）
+twitter search "query" -n 10
+
+# Reddit（无零配置路径：OpenCLI 或 rdt-cli，必须登录态）
+opencli reddit search "query" -f yaml   # 桌面
+rdt search "query" --limit 10            # 存量/服务器
+
+# 小红书（桌面首选 OpenCLI）
+opencli xiaohongshu search "query" -f yaml
+
+# Facebook / Instagram（桌面 OpenCLI，复用浏览器登录态）
+opencli facebook search "query" -f yaml
+opencli facebook groups -f yaml
+opencli instagram search "query" -f yaml       # 搜用户
+opencli instagram user USERNAME -f yaml        # 读指定用户最近帖子
+```
+
+## 环境检查
+
+```bash
+# 检查可用 channel 与每个平台当前激活的后端
+agent-reach doctor --json
+```
+
+## OpenCLI 适配器发现
+
+路由表没有覆盖用户需要的平台或命令时，先用 `opencli list` 查已有适配器，再用
+`opencli <平台> --help` 查看公开命令。发现适配器只证明命令存在，不证明登录态或
+目标内容可用；仅在用户任务明确需要该平台时执行只读命令，并以实际非空内容验收。
+
+## 工作区规则
+
+**不要在 agent workspace 创建文件。** 使用 `/tmp/` 存放临时输出，`~/.agent-reach/` 存放持久数据。
+
+## 详细文档
+
+根据用户需求，阅读对应的详细文档：
+
+- [搜索工具](references/search.md) — Exa AI 搜索
+- [社交媒体](references/social.md) — 小红书, Twitter, B站, V2EX, Reddit, Facebook, Instagram（多后端/登录态命令组）
+- [职场招聘](references/career.md) — LinkedIn
+- [开发工具](references/dev.md) — GitHub CLI
+- [网页阅读](references/web.md) — Jina Reader, RSS
+- [视频播客](references/video.md) — YouTube, B站, 小宇宙
+- [金融行情](references/finance.md) — 雪球股票行情、搜索、热门内容
+
+## 配置渠道
+
+如果某个 channel 需要配置，获取安装指南：
+https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md
+
+用户只需提供 cookies，其他配置由 agent 完成。
+---
+name: "openai-docs"
+description: "Use for Codex models/pricing, scheduled tasks, skills, settings, setup, troubleshooting, customization, automations, and self-knowledge—including 'you,' 'your,' 'this app,' or 'this coding agent' when they refer to Codex—and for OpenAI APIs/products and ChatGPT Work. Also use for model choice/migration, prompting, SDKs, Responses, Realtime, agents, evals, and Chat/Work/Codex comparisons. Do not use for generic app/software tasks that merely mention Codex."
+metadata:
+  short-description: "Codex models/pricing, scheduled tasks, skills, settings, setup, troubleshooting, and self-knowledge; OpenAI APIs and ChatGPT Work. 'You'/'this app' means Codex only."
+---
+
+# OpenAI Docs
+
+Provide current, cited OpenAI product, API, model, and Codex guidance. Read zero or one primary reference.
+
+**First substantive action:** Search the user's exact requested official OpenAI documentation topic and any explicitly named model using a concise, topic-specific query of 2-6 essential terms. When an already-available direct official documentation search and page-retrieval capability is present, use it first: search, then fetch or open the matching official page before general web search. Otherwise, immediately use official-domain web search, then actually open or fetch the relevant official page. Complete this source order before reading a reference, inspecting local or repository files, running a Codex manual or model resolver, drafting a plan, or answering from memory. Use the actual fetched page, not a search snippet or an unopened link. If one official search or page does not establish the answer, search another appropriate official domain and actually open or fetch the result. Preserve the exact requested model; never substitute a newer model.
+
+**Only exception:** An explicitly requested, genuinely broad, cross-topic Codex setup, orientation, or system-map synthesis may use the manual first when shell execution and an allowed temporary cache are available. A specific Codex feature, setting, command, error, model, or requested citation remains docs-first. Mixed Chat/Work/Codex comparisons are official documentation questions, not manual-first Codex requests.
+
+For generic software tasks, answer the software task directly. OpenAI implementation, debugging, SDK, API, prompting, agent, and eval requests are not generic.
+
+For a straightforward factual or citation-only request, follow the source order and do not read a route reference. This includes straightforward API facts, ChatGPT Work or mixed Chat/Work/Codex comparisons, model tiers, aliases, Pro mode, reasoning settings, factual migration baselines, and narrow Codex facts. Prioritize `learn.chatgpt.com` for ChatGPT Work.
+
+## Choose one primary route
+
+Use the first matching route, and read its reference only when the requested task needs that specialized workflow:
+
+- **Explicitly requested local documentation integration:** Read [integration guidance](references/mcp-diagnostics.md) only when the user explicitly requests that local integration.
+- **Model migration, upgrades, or model-specific prompting:** Read [model-migration.md](references/model-migration.md) for actual migration planning, implementation, dynamic target resolution, or prompt changes. Preserve an explicitly requested target.
+- **Model selection and comparisons:** Read [model-selection.md](references/model-selection.md) only when nuanced current, latest, default, cost, latency, quality, or modality tradeoffs need more guidance. Do not run a migration resolver for selection alone.
+- **Product, API, ChatGPT Work, and mixed Chat/Work/Codex documentation:** Read [official-docs.md](references/official-docs.md) only when fetched official pages leave source selection, API schemas, or the requested implementation unresolved. This route is not manual-first.
+- **Explicitly broad Codex setup, orientation, or cross-topic synthesis:** Read [codex-self-knowledge.md](references/codex-self-knowledge.md) when the eligible Codex manual or deeper Codex procedures are needed.
+
+Read at most one primary reference. Do not open every route, bundled model guide, or helper script. Read a supporting reference or run a helper only when the chosen workflow demonstrably needs it.
+
+## Source and execution boundaries
+
+- Search, open, fetch, and cite only `developers.openai.com`, `platform.openai.com`, and `learn.chatgpt.com`. Cite the page that supports the claim. State uncertainty when official sources do not establish pricing, availability, account access, limits, or behavior.
+- Preserve an explicitly requested model for selection, migration, and prompting. Resolve an unspecified latest or current migration target only after searching and fetching current official guidance.
+- Use `references/latest-model.md` only as a disclosed fallback after current official model guidance does not answer the question. Read `references/upgrading-to-gpt-5p6-sol.md` only for an actual, requested GPT-5.6-family migration; read `references/prompting-guide.md` only for requested prompting work.
+- Before building, running, editing, debugging, or testing an API-backed app or tool, use `openai-platform-api-key` first when available. Documentation, conceptual examples, model selection, and read-only guidance do not require an API key.
+- Say "OpenAI Docs" or "official OpenAI documentation" in user-facing answers. Keep exact official citations and examples concise.
+/Users/willji/Desktop/prompt-vault/design-md/design-systems-index.md
+/Users/willji/Desktop/prompt-vault/design-md/linear.md
+/Users/willji/Desktop/prompt-vault/design-md/styleseed-rules.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/lamborghini.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/hashicorp.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/replicate.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/airtable.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/mongodb.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/claude.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/cal.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/coinbase.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/voltagent.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/posthog.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/renault.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/tesla.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/baemin.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/lovable.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/revolut.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/bmw.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/pinterest.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/sanity.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/nvidia.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/mistral.ai.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/spacex.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/kakao.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/mintlify.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/opencode.ai.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/webflow.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/minimax.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/supabase.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/zapier.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/runwayml.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/kraken.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/x.ai.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/clickhouse.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/ibm.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/karrot.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/vercel.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/ferrari.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/expo.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/sentry.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/stripe.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/cohere.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/spotify.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/elevenlabs.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/toss.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/notion.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/together.ai.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/linear.app.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/raycast.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/airbnb.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/cursor.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/intercom.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/superhuman.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/ollama.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/figma.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/apple.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/miro.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/composio.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/uber.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/wise.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/clay.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/warp.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/resend.md
+/Users/willji/Desktop/prompt-vault/design-md/oh-my-design/framer.md
+/Users/willji/Desktop/prompt-vault/design-md/hearth.md
+/Users/willji/Desktop/prompt-vault/design-md/stripe.md
+/Users/willji/Desktop/prompt-vault/design-md/airbnb.md
+/Users/willji/Desktop/prompt-vault/design-md/motionsites-heroes.md
+/Users/willji/Desktop/prompt-vault/design-md/typography-references.md
+/Users/willji/Desktop/prompt-vault/design-md/claude-design-canvases.md
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+codex
+`agent-reach` 검색 라우팅을 사용해 공식 문서 중심으로 조사하겠습니다. 프로젝트가 광고주용 SaaS 어드민이므로 prompt-vault의 `stripe.md`와 로컬 규칙을 기준으로 판단하겠습니다.
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc "sed -n '1,260p' ~/Desktop/prompt-vault/design-md/stripe.md; sed -n '1,220p' CLAUDE.md; sed -n '360,420p' docs/DESIGN.md; sed -n '1,220p' docs/styleseed-rules.md; sed -n '1325,1405p' css/admin.css; sed -n '1,90p' css/superpass.css; rg -n \"tbody|sp-bundle|selected|checked|hover|rowspan|1차 컨펌\" superpass-first-review.html css/admin.css css/superpass.css docs/DESIGN.md docs/styleseed-rules.md" in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 0ms:
+---
+source: https://github.com/VoltAgent/awesome-design-md
+origin: stripe.com
+fetched_via: npx getdesign@latest add stripe
+added: 2026-04-11
+tags: [design-system, fintech, light-mode, gradient]
+---
+
+# Design System Inspired by Stripe
+
+## 1. Visual Theme & Atmosphere
+
+Stripe's website is the gold standard of fintech design -- a system that manages to feel simultaneously technical and luxurious, precise and warm. The page opens on a clean white canvas (`#ffffff`) with deep navy headings (`#061b31`) and a signature purple (`#533afd`) that functions as both brand anchor and interactive accent. This isn't the cold, clinical purple of enterprise software; it's a rich, saturated violet that reads as confident and premium. The overall impression is of a financial institution redesigned by a world-class type foundry.
+
+The custom `sohne-var` variable font is the defining element of Stripe's visual identity. Every text element enables the OpenType `"ss01"` stylistic set, which modifies character shapes for a distinctly geometric, modern feel. At display sizes (48px-56px), sohne-var runs at weight 300 -- an extraordinarily light weight for headlines that creates an ethereal, almost whispered authority. This is the opposite of the "bold hero headline" convention; Stripe's headlines feel like they don't need to shout. The negative letter-spacing (-1.4px at 56px, -0.96px at 48px) tightens the text into dense, engineered blocks. At smaller sizes, the system also uses weight 300 with proportionally reduced tracking, and tabular numerals via `"tnum"` for financial data display.
+
+What truly distinguishes Stripe is its shadow system. Rather than the flat or single-layer approach of most sites, Stripe uses multi-layer, blue-tinted shadows: the signature `rgba(50,50,93,0.25)` combined with `rgba(0,0,0,0.1)` creates shadows with a cool, almost atmospheric depth -- like elements are floating in a twilight sky. The blue-gray undertone of the primary shadow color (50,50,93) ties directly to the navy-purple brand palette, making even elevation feel on-brand.
+
+**Key Characteristics:**
+- sohne-var with OpenType `"ss01"` on all text -- a custom stylistic set that defines the brand's letterforms
+- Weight 300 as the signature headline weight -- light, confident, anti-convention
+- Negative letter-spacing at display sizes (-1.4px at 56px, progressive relaxation downward)
+- Blue-tinted multi-layer shadows using `rgba(50,50,93,0.25)` -- elevation that feels brand-colored
+- Deep navy (`#061b31`) headings instead of black -- warm, premium, financial-grade
+- Conservative border-radius (4px-8px) -- nothing pill-shaped, nothing harsh
+- Ruby (`#ea2261`) and magenta (`#f96bee`) accents for gradient and decorative elements
+- `SourceCodePro` as the monospace companion for code and technical labels
+
+## 2. Color Palette & Roles
+
+### Primary
+- **Stripe Purple** (`#533afd`): Primary brand color, CTA backgrounds, link text, interactive highlights. A saturated blue-violet that anchors the entire system.
+- **Deep Navy** (`#061b31`): `--hds-color-heading-solid`. Primary heading color. Not black, not gray -- a very dark blue that adds warmth and depth to text.
+- **Pure White** (`#ffffff`): Page background, card surfaces, button text on dark backgrounds.
+
+### Brand & Dark
+- **Brand Dark** (`#1c1e54`): `--hds-color-util-brand-900`. Deep indigo for dark sections, footer backgrounds, and immersive brand moments.
+- **Dark Navy** (`#0d253d`): `--hds-color-core-neutral-975`. The darkest neutral -- almost-black with a blue undertone for maximum depth without harshness.
+
+### Accent Colors
+- **Ruby** (`#ea2261`): `--hds-color-accentColorMode-ruby-icon-solid`. Warm red-pink for icons, alerts, and accent elements.
+- **Magenta** (`#f96bee`): `--hds-color-accentColorMode-magenta-icon-gradientMiddle`. Vivid pink-purple for gradients and decorative highlights.
+- **Magenta Light** (`#ffd7ef`): `--hds-color-util-accent-magenta-100`. Tinted surface for magenta-themed cards and badges.
+
+### Interactive
+- **Primary Purple** (`#533afd`): Primary link color, active states, selected elements.
+- **Purple Hover** (`#4434d4`): Darker purple for hover states on primary elements.
+- **Purple Deep** (`#2e2b8c`): `--hds-color-button-ui-iconHover`. Dark purple for icon hover states.
+- **Purple Light** (`#b9b9f9`): `--hds-color-action-bg-subduedHover`. Soft lavender for subdued hover backgrounds.
+- **Purple Mid** (`#665efd`): `--hds-color-input-selector-text-range`. Range selector and input highlight color.
+
+### Neutral Scale
+- **Heading** (`#061b31`): Primary headings, nav text, strong labels.
+- **Label** (`#273951`): `--hds-color-input-text-label`. Form labels, secondary headings.
+- **Body** (`#64748d`): Secondary text, descriptions, captions.
+- **Success Green** (`#15be53`): Status badges, success indicators (with 0.2-0.4 alpha for backgrounds/borders).
+- **Success Text** (`#108c3d`): Success badge text color.
+- **Lemon** (`#9b6829`): `--hds-color-core-lemon-500`. Warning and highlight accent.
+
+### Surface & Borders
+- **Border Default** (`#e5edf5`): Standard border color for cards, dividers, and containers.
+- **Border Purple** (`#b9b9f9`): Active/selected state borders on buttons and inputs.
+- **Border Soft Purple** (`#d6d9fc`): Subtle purple-tinted borders for secondary elements.
+- **Border Magenta** (`#ffd7ef`): Pink-tinted borders for magenta-themed elements.
+- **Border Dashed** (`#362baa`): Dashed borders for drop zones and placeholder elements.
+
+### Shadow Colors
+- **Shadow Blue** (`rgba(50,50,93,0.25)`): The signature -- blue-tinted primary shadow color.
+- **Shadow Dark Blue** (`rgba(3,3,39,0.25)`): Deeper blue shadow for elevated elements.
+- **Shadow Black** (`rgba(0,0,0,0.1)`): Secondary shadow layer for depth reinforcement.
+- **Shadow Ambient** (`rgba(23,23,23,0.08)`): Soft ambient shadow for subtle elevation.
+- **Shadow Soft** (`rgba(23,23,23,0.06)`): Minimal ambient shadow for light lift.
+
+## 3. Typography Rules
+
+### Font Family
+- **Primary**: `sohne-var`, with fallback: `SF Pro Display`
+- **Monospace**: `SourceCodePro`, with fallback: `SFMono-Regular`
+- **OpenType Features**: `"ss01"` enabled globally on all sohne-var text; `"tnum"` for tabular numbers on financial data and captions.
+
+### Hierarchy
+
+| Role | Font | Size | Weight | Line Height | Letter Spacing | Features | Notes |
+|------|------|------|--------|-------------|----------------|----------|-------|
+| Display Hero | sohne-var | 56px (3.50rem) | 300 | 1.03 (tight) | -1.4px | ss01 | Maximum size, whisper-weight authority |
+| Display Large | sohne-var | 48px (3.00rem) | 300 | 1.15 (tight) | -0.96px | ss01 | Secondary hero headlines |
+| Section Heading | sohne-var | 32px (2.00rem) | 300 | 1.10 (tight) | -0.64px | ss01 | Feature section titles |
+| Sub-heading Large | sohne-var | 26px (1.63rem) | 300 | 1.12 (tight) | -0.26px | ss01 | Card headings, sub-sections |
+| Sub-heading | sohne-var | 22px (1.38rem) | 300 | 1.10 (tight) | -0.22px | ss01 | Smaller section heads |
+| Body Large | sohne-var | 18px (1.13rem) | 300 | 1.40 | normal | ss01 | Feature descriptions, intro text |
+| Body | sohne-var | 16px (1.00rem) | 300-400 | 1.40 | normal | ss01 | Standard reading text |
+| Button | sohne-var | 16px (1.00rem) | 400 | 1.00 (tight) | normal | ss01 | Primary button text |
+| Button Small | sohne-var | 14px (0.88rem) | 400 | 1.00 (tight) | normal | ss01 | Secondary/compact buttons |
+| Link | sohne-var | 14px (0.88rem) | 400 | 1.00 (tight) | normal | ss01 | Navigation links |
+| Caption | sohne-var | 13px (0.81rem) | 400 | normal | normal | ss01 | Small labels, metadata |
+| Caption Small | sohne-var | 12px (0.75rem) | 300-400 | 1.33-1.45 | normal | ss01 | Fine print, timestamps |
+| Caption Tabular | sohne-var | 12px (0.75rem) | 300-400 | 1.33 | -0.36px | tnum | Financial data, numbers |
+| Micro | sohne-var | 10px (0.63rem) | 300 | 1.15 (tight) | 0.1px | ss01 | Tiny labels, axis markers |
+| Micro Tabular | sohne-var | 10px (0.63rem) | 300 | 1.15 (tight) | -0.3px | tnum | Chart data, small numbers |
+| Nano | sohne-var | 8px (0.50rem) | 300 | 1.07 (tight) | normal | ss01 | Smallest labels |
+| Code Body | SourceCodePro | 12px (0.75rem) | 500 | 2.00 (relaxed) | normal | -- | Code blocks, syntax |
+| Code Bold | SourceCodePro | 12px (0.75rem) | 700 | 2.00 (relaxed) | normal | -- | Bold code, keywords |
+| Code Label | SourceCodePro | 12px (0.75rem) | 500 | 2.00 (relaxed) | normal | uppercase | Technical labels |
+| Code Micro | SourceCodePro | 9px (0.56rem) | 500 | 1.00 (tight) | normal | ss01 | Tiny code annotations |
+
+### Principles
+- **Light weight as signature**: Weight 300 at display sizes is Stripe's most distinctive typographic choice. Where others use 600-700 to command attention, Stripe uses lightness as luxury -- the text is so confident it doesn't need weight to be authoritative.
+- **ss01 everywhere**: The `"ss01"` stylistic set is non-negotiable. It modifies specific glyphs (likely alternate `a`, `g`, `l` forms) to create a more geometric, contemporary feel across all sohne-var text.
+- **Two OpenType modes**: `"ss01"` for display/body text, `"tnum"` for tabular numerals in financial data. These never overlap -- a number in a paragraph uses ss01, a number in a data table uses tnum.
+- **Progressive tracking**: Letter-spacing tightens proportionally with size: -1.4px at 56px, -0.96px at 48px, -0.64px at 32px, -0.26px at 26px, normal at 16px and below.
+- **Two-weight simplicity**: Primarily 300 (body and headings) and 400 (UI/buttons). No bold (700) in the primary font -- SourceCodePro uses 500/700 for code contrast.
+
+## 4. Component Stylings
+
+### Buttons
+
+**Primary Purple**
+- Background: `#533afd`
+- Text: `#ffffff`
+- Padding: 8px 16px
+- Radius: 4px
+- Font: 16px sohne-var weight 400, `"ss01"`
+- Hover: `#4434d4` background
+- Use: Primary CTA ("Start now", "Contact sales")
+
+**Ghost / Outlined**
+- Background: transparent
+- Text: `#533afd`
+- Padding: 8px 16px
+- Radius: 4px
+- Border: `1px solid #b9b9f9`
+- Font: 16px sohne-var weight 400, `"ss01"`
+- Hover: background shifts to `rgba(83,58,253,0.05)`
+- Use: Secondary actions
+
+**Transparent Info**
+- Background: transparent
+- Text: `#2874ad`
+- Padding: 8px 16px
+- Radius: 4px
+- Border: `1px solid rgba(43,145,223,0.2)`
+- Use: Tertiary/info-level actions
+
+**Neutral Ghost**
+- Background: transparent (`rgba(255,255,255,0)`)
+- Text: `rgba(16,16,16,0.3)`
+- Padding: 8px 16px
+- Radius: 4px
+- Outline: `1px solid rgb(212,222,233)`
+- Use: Disabled or muted actions
+
+### Cards & Containers
+- Background: `#ffffff`
+- Border: `1px solid #e5edf5` (standard) or `1px solid #061b31` (dark accent)
+- Radius: 4px (tight), 5px (standard), 6px (comfortable), 8px (featured)
+- Shadow (standard): `rgba(50,50,93,0.25) 0px 30px 45px -30px, rgba(0,0,0,0.1) 0px 18px 36px -18px`
+- Shadow (ambient): `rgba(23,23,23,0.08) 0px 15px 35px 0px`
+- Hover: shadow intensifies, often adding the blue-tinted layer
+
+### Badges / Tags / Pills
+**Neutral Pill**
+- Background: `#ffffff`
+- Text: `#000000`
+- Padding: 0px 6px
+- Radius: 4px
+- Border: `1px solid #f6f9fc`
+- Font: 11px weight 400
+
+**Success Badge**
+- Background: `rgba(21,190,83,0.2)`
+- Text: `#108c3d`
+- Padding: 1px 6px
+- Radius: 4px
+- Border: `1px solid rgba(21,190,83,0.4)`
+- Font: 10px weight 300
+
+### Inputs & Forms
+- Border: `1px solid #e5edf5`
+- Radius: 4px
+- Focus: `1px solid #533afd` or purple ring
+- Label: `#273951`, 14px sohne-var
+- Text: `#061b31`
+- Placeholder: `#64748d`
+
+### Navigation
+- Clean horizontal nav on white, sticky with blur backdrop
+- Brand logotype left-aligned
+- Links: sohne-var 14px weight 400, `#061b31` text with `"ss01"`
+- Radius: 6px on nav container
+- CTA: purple button right-aligned ("Sign in", "Start now")
+- Mobile: hamburger toggle with 6px radius
+
+### Decorative Elements
+**Dashed Borders**
+- `1px dashed #362baa` (purple) for placeholder/drop zones
+- `1px dashed #ffd7ef` (magenta) for magenta-themed decorative borders
+
+**Gradient Accents**
+- Ruby-to-magenta gradients (`#ea2261` to `#f96bee`) for hero decorations
+- Brand dark sections use `#1c1e54` backgrounds with white text
+
+## 5. Layout Principles
+
+### Spacing System
+- Base unit: 8px
+- Scale: 1px, 2px, 4px, 6px, 8px, 10px, 11px, 12px, 14px, 16px, 18px, 20px
+- Notable: The scale is dense at the small end (every 2px from 4-12), reflecting Stripe's precision-oriented UI for financial data
+
+### Grid & Container
+- Max content width: approximately 1080px
+- Hero: centered single-column with generous padding, lightweight headlines
+- Feature sections: 2-3 column grids for feature cards
+- Full-width dark sections with `#1c1e54` background for brand immersion
+- Code/dashboard previews as contained cards with blue-tinted shadows
+
+### Whitespace Philosophy
+- **Precision spacing**: Unlike the vast emptiness of minimalist systems, Stripe uses measured, purposeful whitespace. Every gap is a deliberate typographic choice.
+- **Dense data, generous chrome**: Financial data displays (tables, charts) are tightly packed, but the UI chrome around them is generously spaced. This creates a sense of controlled density -- like a well-organized spreadsheet in a beautiful frame.
+- **Section rhythm**: White sections alternate with dark brand sections (`#1c1e54`), creating a dramatic light/dark cadence that prevents monotony without introducing arbitrary color.
+
+### Border Radius Scale
+- Micro (1px): Fine-grained elements, subtle rounding
+- Standard (4px): Buttons, inputs, badges, cards -- the workhorse
+- Comfortable (5px): Standard card containers
+- Relaxed (6px): Navigation, larger interactive elements
+- Large (8px): Featured cards, hero elements
+- Compound: `0px 0px 6px 6px` for bottom-rounded containers (tab panels, dropdown footers)
+
+## 6. Depth & Elevation
+
+| Level | Treatment | Use |
+|-------|-----------|-----|
+| Flat (Level 0) | No shadow | Page background, inline text |
+| Ambient (Level 1) | `rgba(23,23,23,0.06) 0px 3px 6px` | Subtle card lift, hover hints |
+| Standard (Level 2) | `rgba(23,23,23,0.08) 0px 15px 35px` | Standard cards, content panels |
+| Elevated (Level 3) | `rgba(50,50,93,0.25) 0px 30px 45px -30px, rgba(0,0,0,0.1) 0px 18px 36px -18px` | Featured cards, dropdowns, popovers |
+| Deep (Level 4) | `rgba(3,3,39,0.25) 0px 14px 21px -14px, rgba(0,0,0,0.1) 0px 8px 17px -8px` | Modals, floating panels |
+| Ring (Accessibility) | `2px solid #533afd` outline | Keyboard focus ring |
+
+**Shadow Philosophy**: Stripe's shadow system is built on a principle of chromatic depth. Where most design systems use neutral gray or black shadows, Stripe's primary shadow color (`rgba(50,50,93,0.25)`) is a deep blue-gray that echoes the brand's navy palette. This creates shadows that don't just add depth -- they add brand atmosphere. The multi-layer approach pairs this blue-tinted shadow with a pure black secondary layer (`rgba(0,0,0,0.1)`) at a different offset, creating a parallax-like depth where the branded shadow sits farther from the element and the neutral shadow sits closer. The negative spread values (-30px, -18px) ensure shadows don't extend beyond the element's footprint horizontally, keeping elevation vertical and controlled.
+
+### Decorative Depth
+- Dark brand sections (`#1c1e54`) create immersive depth through background color contrast
+- Gradient overlays with ruby-to-magenta transitions for hero decorations
+- Shadow color `rgba(0,55,112,0.08)` (`--hds-color-shadow-sm-top`) for top-edge shadows on sticky elements
+
+## 7. Do's and Don'ts
+
+### Do
+- Use sohne-var with `"ss01"` on every text element -- the stylistic set IS the brand
+- Use weight 300 for all headlines and body text -- lightness is the signature
+- Apply blue-tinted shadows (`rgba(50,50,93,0.25)`) for all elevated elements
+- Use `#061b31` (deep navy) for headings instead of `#000000` -- the warmth matters
+- Keep border-radius between 4px-8px -- conservative rounding is intentional
+- Use `"tnum"` for any tabular/financial number display
+- Layer shadows: blue-tinted far + neutral close for depth parallax
+- Use `#533afd` purple as the primary interactive/CTA color
+
+### Don't
+- Don't use weight 600-700 for sohne-var headlines -- weight 300 is the brand voice
+# 알파 콜라보 어드민 개선 프로젝트
+
+## 프로젝트 개요
+- **목적**: 기존 알파 콜라보 어드민의 화면 디자인 개선
+- **우리 역할**: 디자인(HTML/CSS 목업) 산출물 제작 — 개발은 개발팀이 직접 수행
+- **산출물**: 개선된 화면 디자인 (HTML/CSS, 필요 시 Figma)
+- **전달 방식**: 코드가 Source of Truth — `docs/DESIGN.md` + `css/common.css` + `css/admin.css` + 개별 화면 HTML
+
+## 서비스 플로우 (정정판)
+> 과거 "클라이언트가 어드민에서 캠페인 등록"은 **부정확**. 캠페인 생성 주체는 매니저다.
+
+1. **브랜드사 ↔ 매니저 상담** → **매니저가 캠페인 생성** (브랜드사 직접 생성 아님)
+2. 캠페인이 **알파콜라보 앱(인플루언서용)** 에 등록·노출
+3. **인플루언서가 앱에서 지원** (예: 10명 모집에 100명 지원)
+4. 지원자가 **브랜드사 어드민 → 신청서 관리(신청목록)** 에 집계
+5. **브랜드사가 어드민에서 리뷰어 선정 → 검수 → 수정 → 등록완료**
+6. 병행: 브랜드사가 인플루언서 탐색/방문예정에서 **능동 제안**
+
+## 핵심 정책 (도메인 — 반드시 준수)
+
+### Surface 4개 구분 (혼동 금지)
+- **최고관리자 어드민** = 알파콜라보 운영/매니저용. 캠페인 생성·전체 총괄. **우리 작업 아님.**
+- **브랜드사 어드민(웹) + `app/phone`** = 브랜드사(광고주)용. 신청서 관리·탐색·선정. **우리가 작업 중.**
+- **알파콜라보 앱(인플루언서용)** = 캠페인 보고 지원. 별개(`~/Desktop/_cursor/alphacollabo*`). 우리 작업 아님.
+- 경로 주의: `_cursor/alphacollabo`, `alphacollabo-new`는 인플루언서 앱이지 어드민 아님 — 자주 혼동.
+- **실사용자 = 클라이언트(광고주 마케팅 담당/사장)가 직접 사용** (매니저 대행 아님). 화면 눈높이는 "광고주 본인이 직접 보고 채택·검수 결정". 페르소나 상세: `docs/CONCEPT-페르소나.md`.
+
+### 브랜드사 어드민의 역할 경계
+- 브랜드사 어드민은 "캠페인 만드는 곳"이 아니라 **"이미 만들어진 캠페인을 운영하는 곳"**. 풀스펙 캠페인 생성 UI는 매니저 영역 — 임의 확대 금지.
+- **"신청목록" = 우리 캠페인에 지원한 인플루언서들** → 카드 주체는 캠페인이 아니라 인플루언서(아바타/핸들 강조).
+
+### 인플루언서 직접소통 금지 (핵심 해자)
+- 인플루언서는 알파콜라보의 자산. 클라이언트↔인플루언서 **직접 소통 창구 금지**(실시간 채팅·쪽지 모두) — 우회·직접계약(디스인터미디에이션) 방지. 소통은 매니저 경유(매니저↔클라이언트는 카카오).
+- 구현 결정(완료): `influencer-chat/manager-chat/messages.html` 삭제, 하단 탭은 메시지 탭 제거 후 **인플루언서 탭으로 교체(5탭: 홈/캠페인/인플루언서/일정/더보기)**. 알림센터는 유지하되 직접소통 버튼 제거, 액션 CTA(충전/검수/제안)만.
+
+### 제안(propose) = 앱 직접 푸시
+- 제안은 매니저 경유가 아니라 **인플루언서 앱으로 바로 푸시**(직거래). 제안 모달의 "매니저를 통해 전달" 문구는 **제거**.
+- 단 직접소통 금지는 유효 — 연락처/이메일/자유채팅은 차단(드로어 마스킹). **구조화된 캠페인 제안 푸시 = OK / 자유 연락 = 금지.**
+- 중복 도배 방지(인플루언서×캠페인 상태 + 쿨다운): 미제안→전송가능 / 확인중→재전송 잠금(예 48h) / 확인함→재전송 가능. 팝업 행마다 상태 칩 + "재전송 가능 시각", 테이블엔 진행 요약(예 "제안 3·확인 1·대기 2").
+
+### "방문 예정" 메뉴 의도
+- `visit-planned.html`은 "우리 캠페인에 선정돼 방문하는 사람" 목록이 아님. **타 업체·타 캠페인 등 어떤 이유로든 한국 방문 일정이 잡힌 인플루언서 전체**를 모아 "기왕 온 김에 우리 것도" 능동 제안하는 **영업 핫리스트**. 방문비용 장벽이 해결된 사람이라 매칭 성사 쉬움(슈퍼패스 항공권 지원과 결 맞음).
+- 탐색 라인: 1) 인플루언서 탐색=전체 풀 조건검색 → 2) 방문 예정=곧 올 확정자 즉시 제안(가장 적극적) → 3) 저장한 인플루언서=찜.
+
+### 계정 관리 주체
+- 클라이언트 계정은 **알파콜라보 운영팀이 발급** — self-service 없음.
+- 어드민에 "계정 설정/프로필 편집/비밀번호 변경/회원 탈퇴" 페이지·메뉴 만들지 말 것. 헤더 우측도 아바타 드롭다운 X — **잔액 pill + 로그아웃만**. "계정" 영역은 빌링/정산(차감 현황·충전 내역·세금계산서)만.
+
+### 추가 절대 금지 (개선/수리만)
+- 기존 내용 **개선·수리는 OK, 새로 추가는 절대 금지** (사용자 명시).
+- 금지: 새 화면/페이지, 새 메뉴, 새 필드/컬럼, 없던 데이터, 새 기능.
+- 허용: 깨진 동선 복구, 죽은 버튼 살리기, 상태화면(빈/로딩/에러) 표준화, 위계·정합·일관성 정리, 토큰/비주얼 다듬기.
+- `docs/GAP-AUDIT.md`의 "신설/추가" 항목은 제안만 하고 실행은 승인 후. 애매하면 "추가"로 보고 먼저 확인.
+
+## 디자인 원칙 (필수 준수)
+- **`docs/DESIGN.md`가 단일 기준** — raw hex·raw px 직접 사용 금지, Semantic/Component 토큰만 사용
+- **`docs/redesign-skill.md`** 체크리스트로 AI 클리셰·일반 패턴 제거 여부 검증
+- **`docs/styleseed-rules.md`** 대시보드·테이블 공통 규칙 적용
+- `design-system.html`에 이미 존재하는 컴포넌트는 **그대로 재사용** (중복 생성 금지)
+
+## 샘플 데이터 규칙 (위반 = drift)
+- **국기 이모지 사용 금지** (🇯🇵 🇰🇷 🇷🇺 등) — `<span class="c-country-code">JP</span>` 칩으로만
+- **테스트성 이름 금지** (`milla`, `milla2`, `test`, `test5`) — 실제같은 글로벌 인플루언서 핸들 사용
+  - 예: `mika_seoul`, `natasha_mood`, `yuki_tokyo`, `kumi_osaka`, `lina_k`
+- 숫자는 둥근 값(`50%`, `100,000`) 대신 유기적 값(`47.2%`, `180,000`) 사용
+- Lorem Ipsum / `John Doe` / AI 클리셰(`Elevate`, `Seamless`, `Next-gen`) 금지
+
+## 작업 규칙
+1. **진단 → 개선** — 기존 화면 자료를 받으면 먼저 문제 진단, 그 다음 개선안 제작
+2. **Before/After 비교 가능한 형태**로 작업
+3. **컴포넌트 단위** — 사이드바·헤더는 `components/*.html`에 한 번만, 페이지별 inline 금지
+4. **인수인계 고려** — CSS 변수, 컴포넌트 클래스, 네이밍 규칙 통일
+5. **접근성** — ARIA, `:focus-visible`, `prefers-reduced-motion` 유지
+
+## AI 에이전트 활용 (~/Desktop/prompt-vault/personas)
+
+### 작업 중 수시 호출
+- **`drift-watcher`** — 편집한 HTML 붙여넣기 + DESIGN.md 기준으로 일탈(국기 이모지, 테스트 이름, raw px 등) 즉시 탐지
+- **`scope-watcher`** — 새 화면 착수 직전 "이 작업이 디자인 범위 내인가" 판정
+
+### 마무리 단계
+- **`design-qa-inspector`** — 화면 완성 직후 8개 카테고리 Ship/Not Ship 판정
+- **`handoff-inspector`** — 커밋 직전 "개발팀 전달 가능한 형식인가" 검수
+
+### 신규 화면 제작 시
+- **`designer-ui-microcopy`** — 빈 상태/에러/로딩 문구 일괄 초안
+- **`designer-mobile-ux-checklist`** — 1280/1024/768 브레이크포인트 검증
+
+## 커밋 규율
+- **작업 단위로 커밋** — 한 화면 추가, 한 카테고리 리팩터링 등
+- 메시지 형식: `[scope]: 행위` 예: `list: 국기 이모지 → country-code 칩 치환`
+- 대형 일괄 수정은 근거(DESIGN.md §9 등)를 본문에 기재
+
+## 배포
+- Netlify 설정: `netlify.toml`
+- 프리뷰 공유는 커밋 푸시 후 Netlify가 자동 빌드
+  <button class="btn btn-sm btn-secondary is-active">일간</button>
+  <button class="btn btn-sm btn-secondary">주간</button>
+  <button class="btn btn-sm btn-secondary">월간</button>
+</div>
+```
+
+연속된 버튼을 하나의 컴포넌트로 감싼 것. radius 자동 처리.
+
+#### 예전에 분산됐던 컨텍스트 버튼 (여전히 존재, 그러나 선호 순서 낮음)
+
+이 아래 버튼들은 **컨텍스트별 특수 스타일**이라 별도 유지. 신규 기능엔 **위 세트를 우선** 사용.
+
+- `.c-btn`, `.c-link` — 테이블 셀 내부 버튼 (→ `.btn btn-sm btn-secondary` / `.btn-link`로 마이그레이션 권장)
+- `.f-pre`, `.f-pre.on` — 날짜 프리셋 토글 (토글 그룹 특수)
+- `.pg-btn`, `.pg-btn.active` — 페이지네이션 (숫자 정렬 특수)
+- `.density-btn` — 세그먼트 아이콘 그룹 (3개 고정)
+- `.pt-country` — 포인트 계산기 국가 선택 (작은 칩)
+- `.tab` — 탭 네비게이션 (의미 다름)
+- `.modal-close`, `.toast-close`, `.bulk-close` — 닫기 버튼 (위치 특수)
+- `.filter-chip-add`, `.filter-chip-remove`, `.filter-chip-clear` — 칩 내부 버튼
+
+### 7.2 Cards
+- 배경: `--bg-surface`
+- 테두리: `1px solid --border-default`
+- 섀도우: `--shadow-1`
+- 호버(클릭 가능): `--shadow-2`
+- 패딩: 20~24px
+
+### 7.3 Tables
+- 헤더: `--bg-elevated`, weight 500
+- 행 호버: `--bg-hover`
+- 선택 행: `--accent-light`
+- 숫자 우측 정렬 + `tabular-nums`
+- 스트라이프 금지 — 호버/선택으로 구분
+
+### 7.4 Status Badges
+
+**3가지 variant** 지원:
+
+```html
+<!-- Subtle (기본) -->
+<span class="badge badge-info"><span class="badge-dot"></span>모집중</span>
+
+<!-- Solid (강조) -->
+<span class="badge badge-solid-success">완료</span>
+
+<!-- Outline -->
+<span class="badge badge-outline-warning"><span class="badge-dot"></span>대기</span>
+```
+
+사이즈: `.badge-sm` / `.badge-md` / `.badge-lg`
+
+| 상태 | 사용 |
+|------|------|
+| `badge-info` | 모집중, 진행중(초기) |
+| `badge-warning` | 검수 대기, 수정 요청 |
+| `badge-success` | 완료, 승인 |
+| `badge-error` | 거절, 취소 |
+| `badge-neutral` | **상태가 아닌 분류·구분** — 캠페인 구분(일반), 카테고리. 상태 표현에 쓰지 말 것 |
+
+Neutral 톤 규칙: 상태 배지 4종과 동일하게 **옅은 채움 + 보더 없음**(`--status-neutral-bg` / `--status-neutral`). 같은 컬럼 안에서 채움형·아웃라인형을 섞지 않는다 — 예: 캠페인 구분 컬럼은 `badge-info`(패스권) + `badge-neutral`(일반) 둘 다 채움형. 아웃라인이 필요하면 `badge-outline-neutral`.
+---
+source: https://github.com/bitjaru/styleseed
+origin_file: engine/DESIGN-LANGUAGE.md
+added: 2026-04-11
+tags: [design-rules, meta, mobile, dashboard, universal]
+note: "브랜드 특화가 아닌 보편 디자인 규칙 69개 (리듬/액센트/그레이스케일/밀도 등). 어떤 프로젝트에든 적용 가능."
+---
+
+# StyleSeed Design Language
+> Visual design rules for professional mobile dashboard design
+
+## Table of Contents
+
+### Part 1: Core Visual Rules
+| # | Rule | Key Point |
+|---|------|-----------|
+| 1 | [Color Philosophy](#1-color-philosophy) | Single accent color, 5-level grayscale |
+| 2 | [Number/Currency Display](#2-numbercurrency-display-rules) | Big number + small unit, 2:1 ratio |
+| 3 | [Text Hierarchy](#3-text-hierarchy-rules) | 5-level typography system |
+| 4 | [Trend Indicators](#4-trend-indicator-rules) | Up/down arrows with color |
+| 5 | [Gauge/Progress Bar](#5-gaugeprogress-bar-rules) | Linear vs segmented |
+| 6 | [Donut Chart](#6-donut-chart-rules) | Key color highlight, grayscale rest |
+| 7 | [Icon Badge](#7-icon-badge-rules) | Size by context, 10% opacity bg |
+| 8 | [Card Structure](#8-card-internal-structure) | Header → Content → Footer |
+| 9 | [List Item](#9-list-item-rules) | Status dot + text same color |
+| 10 | [Selection UI](#10-selection-ui-rules-toggle--select) | Pill toggle only, no dropdowns |
+| 11 | [Briefing Cards](#11-briefingalert-card-rules) | Horizontal carousel |
+| 12 | [Shadow System](#12-shadow-system) | Opacity 4-8%, barely visible |
+| 13 | [Page Layout](#13-page-layout-structure) | 430px, space-y-6, pb-24 |
+| 14 | [**Four Section Types**](#14-four-section-types) | **A(mx-6) B(px-6) C(carousel) D(hero)** |
+| 15 | [Card Division](#15-card-internal-division-rules) | border-t between chart and stats |
+| 16 | [Title Margins](#16-title-margin-rules) | Varies by content type |
+| 17 | [Chart Style](#17-chart-style-rules) | Area/bar chart styling |
+| 18 | [**Prohibition Rules**](#18-prohibition-rules-absolute-donts) | **30+ "never do this" rules** |
+| 19 | [**Page Checklist**](#19-new-page-creation-checklist) | **Step-by-step build guide** |
+| 20 | [Information Pyramid](#20-information-pyramid-structure) | Top = important, bottom = detail |
+| 21 | [Data Density](#21-data-density-rules) | Max 4 items per card |
+
+### Part 2: Extended Rules
+| # | Rule | Key Point |
+|---|------|-----------|
+| 28 | [Scroll & Spacing](#28-scroll--spacing-detail-rules) | Overscroll, carousel snap |
+| 29 | [Loading/Skeleton](#29-loading-state-skeleton-rules) | Match layout shape, 300ms delay |
+| 30 | [Empty/Error States](#30-empty-state--error-state-rules) | Suggest next action |
+| 34 | [Microcopy Tone](#34-microcopy-tone-guide) | Casual, active voice, positive |
+| 38 | [Chart Selection](#38-chart-type-selection-guide) | When to use which chart |
+| 40 | [Applying to Projects](#40-design-system-application-guide) | Change brand color, keep structure |
+| 45 | [Dark Mode](#45-dark-mode-guide) | Card brighter than background |
+| 46 | [Button Design](#46-button-design-rules) | 7 variants, 4 sizes |
+| 50 | [Dark Pattern Prevention](#50-dark-pattern-prevention-rules) | No forced sheets, always dismissable |
+| 59 | [Framer Motion](#59-animation-wrapper-rules-framer-motion) | Preset animations, token mapping |
+
+### Part 3: Page Composition & Visual Rhythm
+| # | Rule | Key Point |
+|---|------|-----------|
+| 61 | [**Visual Rhythm**](#61-visual-rhythm--breaking-monotony) | **Never repeat same section type** |
+| 62 | [**KPI Card Variation**](#62-kpi-card-variation--the-4-card-rule) | **Vary secondary elements** |
+| 63 | [**Composition Recipes**](#63-section-composition-recipes) | **SaaS, e-commerce, fintech, analytics** |
+| 64 | [Element Diversity](#64-element-diversity-within-cards) | Mix content types across page |
+| 65 | [Accent Distribution](#65-color-accent-distribution) | Scarcity rule |
+| 66 | [Card Size Variation](#66-card-size-variation) | Skyline rule |
+| 67 | [Progressive Density](#67-progressive-information-density) | Font size decreases down page |
+| 68 | [Min Section Count](#68-empty-page-prevention) | Min 4, max 7 sections |
+| 69 | [Chart + Context](#69-chart--context-pairing) | Never chart alone |
+
+> **Start here:** Rules 14, 18, 19, 61-63 are the most critical for page construction.
+
+---
+
+## 1. Color Philosophy
+
+### Key Color Principle — A Single Accent for Unity
+- **Create unity with a single key color (your brand color, defined by skin)**
+- Key color is used **only for active/selected states**
+- Everything else is **grayscale** so the key color stands out
+
+```
+✓ Key color usage: active nav, selected chart, progress bar fill, icon badge
+✗ Key color forbidden: body text, large background areas, general borders
+```
+
+### Impact Colors — Small, Strong
+- Urgent/warning colors are used in **very small areas only** (dot, badge text)
+- Never painted across large surfaces
+- **Dot (6px) + text (11px)** combination is the maximum size
+
+| Role | Color | Size | Usage |
+|------|-------|------|-------|
+| Completed/Up | `#6B9B7A` | dot 6px + text 13px | trend %, Completed |
+| Urgent | `#C85A54` | icon 16px + text 12px | "Urgent" badge |
+| In Progress | `#3B82F6` | dot 6px + text 11px | "In Progress" |
+| Pending | `#F59E0B` | dot 6px + text 11px | "Pending" |
+| Notification | `#FF4444` | dot 6px | notification badge (single dot) |
+
+### Grayscale — 5-Level Text Hierarchy
+Pure black (#000) is **never used**. Soft blacks for a gentle tone.
+
+| Level | Hex | Role | Example |
+|-------|-----|------|---------|
+| **Strong** | `#2A2A2A` | Strongest emphasis | donut center value, briefing title |
+| **Primary** | `#3C3C3C` | Metrics, section titles | "$48.2K", "Recent Activity" |
+| **Secondary** | `#6A6A6A` | Labels, captions | "Today's Revenue", "Web" |
+| **Tertiary** | `#7A7A7A` | Subtitles, dates, descriptions | "vs. last month", date |
+| **Disabled** | `#9B9B9B` | Inactive, placeholder | inactive nav, unselected period |
+
+### Backgrounds — Depth Through Subtle Differences
+| Background | Hex | Usage |
+|------------|-----|-------|
+| Page | `#FAFAFA` | Full page (not pure white) |
+| Card | `#FFFFFF` | Card interior |
+| List row | `#FAFAF9` | Row background (subtle warm tone) |
+| Inactive | `#E8E6E1` | Progress track, dividers |
+| Key color tint | `#F0E8FF` | Selected row background |
+
+---
+
+## 2. Number/Currency Display Rules
+
+### Core Principle: **Large Numbers + Small Units**
+Numbers are large and bold, units are small and attached so **the eye goes to the number first**.
+
+### Unit Size Ratio Table
+
+| Context | Number Size | Unit Size | Ratio | Gap | Example |
+|---------|------------|-----------|-------|-----|---------|
+| Hero metric | 48px | 24px | **2:1** | `ms-0.5` | 3.8`M` |
+| KPI metric | 36px | 18px | **2:1** | `ms-0.5` | $48.2`K` |
+| Donut center | 24px | 12px | **2:1** | `ms-0.5` | 66`%` |
+| Chart bottom price | 18px | 10px | **1.8:1** | `ms-0.5` | 1,648`/mo` |
+| List amount | 17px | 11px | **1.5:1** | `ms-0.5` | 840`K` |
+| Inventory quantity | 15px | 10px | **1.5:1** | `ms-0.5` | 32.0`GB` |
+
+### Currency Notation
+```
+✓ Abbreviated: number + suffix (3.8M, $48.2K)
+✓ Dollar: symbol prefix ($68.4)
+✓ List price: $ + number ($1,520)
+✓ Thousand separators required (1,870 / 1,648)
+```
+
+### Code Pattern
+```tsx
+{/* Hero: 48px + 24px */}
+<p className="text-text-primary text-[48px] font-bold leading-none">
+  3.8<span className="text-[24px] ms-0.5">M</span>
+</p>
+
+{/* KPI: 36px + 18px */}
+<p className="text-text-primary text-[36px] font-bold leading-none">
+  $48.2<span className="text-[18px] ms-0.5">K</span>
+</p>
+
+{/* List amount: 17px + 11px */}
+<p className="text-text-primary font-bold text-[17px]">
+  840<span className="text-[11px] ms-0.5">K</span>
+</p>
+```
+
+---
+
+## 3. Text Hierarchy Rules
+
+### 5-Level Typography
+
+| Level | Size | Weight | Color | Line Height | Letter Spacing | Usage |
+|-------|------|--------|-------|-------------|----------------|-------|
+| **Display** | 48px | bold | #3C3C3C | none | -0.02em | Hero metric |
+| **Headline** | 36px | bold | #3C3C3C | none | -0.02em | KPI metric |
+| **Title** | 18px | bold | #3C3C3C | snug | — | Section title |
+| **Body** | 14-15px | bold/semi | #2A2A2A~#3C3C3C | normal | — | List name, description |
+| **Label** | 12px | medium | #6A6A6A | normal | 0.05em | Uppercase label |
+| **Caption** | 11px | bold/medium | #6A6A6A~#7A7A7A | normal | — | Status, annotation, unit |
+| **Micro** | 10px | medium | #7A7A7A | normal | — | Donut label, smallest unit |
+
+### Label Style (Uppercase + Letter Spacing)
+All category labels use **uppercase + tracking-wide**:
+```tsx
+className="text-[12px] text-text-secondary font-medium uppercase tracking-[0.05em]"
+// "Today's Revenue", "Active Users", "Revenue Trend"
+```
+
+### CRITICAL: Font Size Implementation in Tailwind v4
+```
+✓ CORRECT:  text-[36px]                        — explicit, predictable
+✗ WRONG:    text-[var(--text-sm)]               — Tailwind reads as COLOR, not font-size!
+✗ WRONG:    text-[length:var(--text-sm)]        — fragile workaround, breaks at scale
+✗ WRONG:    --text-sm: 13px in theme.css        — conflicts with Tailwind --text-* namespace
+
+Font sizes are NOT tokenized as CSS variables. Use explicit px values.
+The "Font Size by Context" table in CLAUDE.md is the canonical reference.
+```
+
+---
+
+## 4. Trend Indicator Rules
+
+### Upward Trend
+```
+Color: #6B9B7A (muted green, not vivid green)
+Icon: TrendingUp (lucide)
+Format: +{number}%
+```
+
+### Trend Patterns by Size
+
+| Context | % Size | Icon Size | Weight | Label |
+|---------|--------|-----------|--------|-------|
+| Hero | 15px | 16px (w-4) | bold | "vs. last month" (13px, #7A7A7A) |
+| KPI card | 13px | 14px (w-3.5) | bold | none |
+| Chart header | 13px | 14px (w-3.5) | bold | none |
+
+### Structure
+```tsx
+{/* Hero trend: % + icon + label */}
+<div className="flex items-center gap-3">
+  <div className="flex items-center gap-1">
+    <span className="text-success text-[15px] font-bold">+12.4%</span>
+    <TrendingUp className="size-4 text-success" strokeWidth={2.5} />
+  </div>
+  <span className="text-[13px] text-text-tertiary font-medium">vs. last month</span>
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath fill='%23EE2128' d='M4 5l-4-5h8z'/%3E%3C/svg%3E");
+  background-size: 8px 5px;
+}
+.tbl th.sortable.is-asc,
+.tbl th.sortable.is-desc {
+  color: var(--accent);
+  font-weight: var(--fw-semibold);
+}
+
+.tbl td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  vertical-align: middle;
+  text-align: center;
+  font-size: 14px;
+}
+.tbl td:last-child { border-right: none; }
+
+.tbl tbody tr { transition: background 100ms; }
+.tbl tbody tr:hover { background: var(--bg-hover); }
+.tbl tbody tr:last-child td { border-bottom: none; }
+
+/* Row selection 하이라이트 — 체크박스 체크 시 행 전체 accent-light */
+.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) {
+  background: var(--accent-light);
+}
+.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked):hover {
+  background: color-mix(in srgb, var(--accent-light) 80%, var(--accent) 5%);
+}
+
+/* Sticky 첫 데이터 컬럼 — .tbl.has-sticky 테이블에서 체크박스 + 다음 1컬럼 고정 */
+.tbl.has-sticky th.c-chk,
+.tbl.has-sticky td.c-chk {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--bg-surface);
+}
+.tbl.has-sticky thead th.c-chk {
+  background: var(--bg-elevated);
+  z-index: 3;
+}
+.tbl.has-sticky tbody tr:hover td.c-chk { background: var(--bg-hover); }
+.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.c-chk { background: var(--accent-light); }
+
+.tbl.has-sticky th.sticky-col,
+.tbl.has-sticky td.sticky-col {
+  position: sticky;
+  left: 40px;  /* c-chk width */
+  z-index: 2;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  box-shadow: 2px 0 4px -2px rgba(17,17,17,0.08);
+}
+.tbl.has-sticky thead th.sticky-col {
+  background: var(--bg-elevated);
+  z-index: 3;
+}
+.tbl.has-sticky tbody tr:hover td.sticky-col { background: var(--bg-hover); }
+.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-col { background: var(--accent-light); }
+
+/* 가로 스크롤 가시성 — 넓은 테이블은 스크롤바 항상 표시 */
+.tbl-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neutral-300) transparent;
+}
+.tbl-scroll::-webkit-scrollbar { height: 12px; }
+.tbl-scroll::-webkit-scrollbar-track { background: var(--bg-page); }
+.tbl-scroll::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+  border-radius: 6px;
+  border: 2px solid var(--bg-page);
+}
+.tbl-scroll::-webkit-scrollbar-thumb:hover { background: var(--neutral-400); }
+
+.tbl .c-chk { width: 40px; text-align: center; }
+.tbl .c-chk .checkbox-input { width: 16px; height: 16px; }
+.tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
+.tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
+/* =========================================================================
+   superpass.css — 슈퍼패스 화면 전용 컴포넌트 (기존 어드민 셸 위에 얹음)
+   common.css(토큰) + admin.css(레이아웃/테이블/필터)를 그대로 쓰고,
+   여기에는 슈퍼패스 화면에서 새로 필요한 것만 둔다.
+   raw hex 금지 — 모든 색은 common.css 토큰에서 가져온다.
+   ========================================================================= */
+
+/* 신청 종류 칩 — DS badge 위에 중립(일반) 변형만 보탬. DS에 neutral 변형이 없어 여기서만 씀 */
+
+/* ── 페이지 헤더 우측 상태 pill ──────────────────────────────────── */
+.pg-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+/* 어드민 컨테이너는 테두리만 — 상세 카드 두 장의 DS 카드 쉐도우 제거 */
+.card.sp-card--who, .card.sp-card--criteria { box-shadow: none; }
+
+/* 표 머리글 ⓘ 툴팁 — 아이콘 세로 중앙, 긴 설명은 줄바꿈 */
+.tbl th .tooltip-wrap { align-items: center; gap: var(--space-1); }
+.tbl th .tooltip-wrap svg { color: var(--text-tertiary); }
+.tbl th .tooltip { white-space: normal; width: max-content; max-width: 220px; text-align: left; font-weight: var(--fw-regular); }
+
+/* ── 안내 스트립 (테이블 위/아래 규칙 설명) ───────────────────────── */
+.sp-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--text-secondary);
+}
+.sp-note svg { flex-shrink: 0; margin-top: 1px; color: var(--text-tertiary); }
+.sp-note b { color: var(--text-primary); font-weight: var(--fw-semibold); }
+
+/* ── 묶음(rowspan) 셀은 위쪽 정렬 ──────────────────────────────── */
+.tbl td.sp-merged-top { vertical-align: top; }
+.tbl td.c-chk.sp-merged-top { padding-top: 14px; }
+
+/* 신청 묶음 = 한 덩어리: 묶음(tbody) 단위로 hover·선택 강조, 묶음 사이만 진한 경계 */
+.tbl .sp-bundle:hover tr { background: var(--bg-hover); }
+.tbl .sp-bundle:has(.c-chk input:checked) tr { background: var(--accent-light); }
+.tbl .sp-bundle tr:last-child td { border-bottom: 1px solid var(--border-default); }
+.tbl .sp-bundle:last-child tr:last-child td { border-bottom: none; }
+
+/* ── 신청 묶음 ID + 선택 혜택 ───────────────────────────────────── */
+.sp-bundle-id {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.sp-bundle-count { color: var(--text-secondary); font-weight: var(--fw-medium); }
+
+.sp-benefit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.sp-benefit svg { flex-shrink: 0; color: var(--text-tertiary); }
+
+/* ── 일정 칩 ────────────────────────────────────────────────────── */
+.sp-dates {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+.sp-dates--row { flex-direction: row; flex-wrap: wrap; }
+.sp-date {
+  display: inline-flex;
+superpass-first-review.html:46:          <option>전체</option><option>1차 컨펌 대기</option><option>1차 컨펌 완료</option><option>미선정</option>
+superpass-first-review.html:64:      <span>같은 <b>신청 묶음</b>은 인플루언서 정보와 선택 혜택만 병합해 보여주며, <b>캠페인별 1차 컨펌은 개별로 처리</b>합니다. <b>1차 컨펌 완료</b>한 캠페인은 신청목록으로 이동합니다.</span>
+superpass-first-review.html:87:          <tbody class="sp-bundle">
+superpass-first-review.html:91:              <td class="c-chk sp-merged-top" rowspan="3"><input class="checkbox-input" type="checkbox" aria-label="suzunyan08 신청 묶음 선택"></td>
+superpass-first-review.html:92:              <td class="sp-merged-top" rowspan="3"><span class="c-country-code">JP</span></td>
+superpass-first-review.html:93:              <td class="sp-merged-top" rowspan="3">
+superpass-first-review.html:97:              <td class="sp-merged-top" rowspan="3">
+superpass-first-review.html:98:                <span class="sp-bundle-id">#SP-20260520-01 <span class="sp-bundle-count">· 3건</span></span>
+superpass-first-review.html:104:              <td class="sp-merged-top" rowspan="3">
+superpass-first-review.html:123:              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+superpass-first-review.html:127:                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="루미에르 피부과 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+superpass-first-review.html:145:              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+superpass-first-review.html:149:                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="온유 클리닉 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+superpass-first-review.html:167:              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+superpass-first-review.html:171:                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="메디엘 의원 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+superpass-first-review.html:177:          </tbody>
+superpass-first-review.html:178:          <tbody class="sp-bundle">
+superpass-first-review.html:181:              <td class="c-chk sp-merged-top" rowspan="2"><input class="checkbox-input" type="checkbox" aria-label="mei_shanghai 신청 묶음 선택"></td>
+superpass-first-review.html:182:              <td class="sp-merged-top" rowspan="2"><span class="c-country-code">CN</span></td>
+superpass-first-review.html:183:              <td class="sp-merged-top" rowspan="2">
+superpass-first-review.html:187:              <td class="sp-merged-top" rowspan="2">
+superpass-first-review.html:188:                <span class="sp-bundle-id">#SP-20260521-04 <span class="sp-bundle-count">· 2건</span></span>
+superpass-first-review.html:194:              <td class="sp-merged-top" rowspan="2">
+superpass-first-review.html:213:              <td><span class="badge badge-success badge-sm"><span class="badge-dot"></span>1차 컨펌 완료</span></td>
+superpass-first-review.html:230:              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+superpass-first-review.html:234:                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="이든 스킨 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+superpass-first-review.html:240:          </tbody>
+docs/DESIGN.md:55:| `--red-600` | `#D41920` | accent-hover |
+docs/DESIGN.md:67:| `--neutral-100` | `#F0F0EE` | hover, light border |
+docs/DESIGN.md:69:| `--neutral-300` | `#D0D0CE` | strong border, hover border |
+docs/DESIGN.md:84:| `--bg-hover` | `--neutral-100` | 호버 상태 |
+docs/DESIGN.md:100:| `--accent-hover` | `--red-600` | 호버 |
+docs/DESIGN.md:125:| `--interactive-hover-bg` | `--neutral-100` | 일반 호버 |
+docs/DESIGN.md:268:- `--duration-fast`: 150ms — hover/focus
+docs/DESIGN.md:351:- **hover**: `translateY(-1px)` + colored shadow (primary: shadow-accent, danger: shadow-error)
+docs/DESIGN.md:390:- 행 호버: `--bg-hover`
+docs/DESIGN.md:565:    <li role="option" data-code="JP" aria-selected="true">일본<span class="country-dropdown-code">JP</span></li>
+docs/DESIGN.md:575:- 선택 시 `aria-selected="true"` + accent-light 배경 + 체크마크
+docs/DESIGN.md:610:- `.cal-cell.is-selected` = accent 2px 인셋 보더 + accent-light 배경
+docs/DESIGN.md:639:    <tbody><!-- 행들 --></tbody>
+docs/DESIGN.md:730:    <tbody><tr><td class="c-chk"><input type="checkbox"></td>...</tr></tbody>
+docs/DESIGN.md:952:| `.app-reason-box-title` | `font-weight:600` 첫 줄 타이틀 (list-cancel-selected 구조) | 1 | 1 |
+docs/DESIGN.md:1012:| 2 | 1차 컨펌 | 알파콜라보 운영팀 | 1차신청목록에서 "1차 컨펌 완료" → 신청목록으로 이동 |
+css/superpass.css:43:/* ── 묶음(rowspan) 셀은 위쪽 정렬 ──────────────────────────────── */
+css/superpass.css:47:/* 신청 묶음 = 한 덩어리: 묶음(tbody) 단위로 hover·선택 강조, 묶음 사이만 진한 경계 */
+css/superpass.css:48:.tbl .sp-bundle:hover tr { background: var(--bg-hover); }
+css/superpass.css:49:.tbl .sp-bundle:has(.c-chk input:checked) tr { background: var(--accent-light); }
+css/superpass.css:50:.tbl .sp-bundle tr:last-child td { border-bottom: 1px solid var(--border-default); }
+css/superpass.css:51:.tbl .sp-bundle:last-child tr:last-child td { border-bottom: none; }
+css/superpass.css:54:.sp-bundle-id {
+css/superpass.css:63:.sp-bundle-count { color: var(--text-secondary); font-weight: var(--fw-medium); }
+css/superpass.css:124:.pipeline-static .pipeline-step:hover { background: transparent; }
+css/superpass.css:459:.sp-msg-card-link:hover { text-decoration: underline; }
+docs/styleseed-rules.md:74:- Key color is used **only for active/selected states**
+docs/styleseed-rules.md:78:✓ Key color usage: active nav, selected chart, progress bar fill, icon badge
+docs/styleseed-rules.md:104:| **Disabled** | `#9B9B9B` | Inactive, placeholder | inactive nav, unselected period |
+docs/styleseed-rules.md:312:- **Only the selected item uses the key color (var(--brand))**, the rest are grayscale
+docs/styleseed-rules.md:313:- Unselected opacity: `0.3` (dimmed)
+docs/styleseed-rules.md:329:### Gray Palette (Unselected Segments)
+docs/styleseed-rules.md:460:- Unselected: gray + opacity 0.3
+docs/styleseed-rules.md:492:| hover | `0 2px 4px rgba(0,0,0,0.08)` | Hover state |
+docs/styleseed-rules.md:703:Key color is for **small elements only**: icon badges (10% opacity), progress fill, selected dots, active nav, badge pills.
+docs/styleseed-rules.md:796:- [ ] Is the key color used only for active/selected states?
+docs/styleseed-rules.md:945:| TopBar icon button | Tap | Shadow change (hover) |
+docs/styleseed-rules.md:954:| Shadow change | `shadow-card` → `shadow-card-hover` | Icon buttons |
+docs/styleseed-rules.md:1009:| `0.3` | Unselected UI (donut segments) | Unselected pie slices |
+docs/styleseed-rules.md:1010:| `0.4` | Unselected UI (legend text) | Unselected legend rows |
+docs/styleseed-rules.md:1035:1. Unity through one key color, used only for active/selected states
+docs/styleseed-rules.md:1788:NO  hover:bg-{color}/90 (darken via opacity) -- use a distinct darker shade
+docs/styleseed-rules.md:1950:| Highlighted row | `border-2 border-brand` (selected item) |
+docs/styleseed-rules.md:2325:| `--duration-fast` (100ms) | `duration: 0.1` | Tap, hover |
+docs/styleseed-rules.md:2543:✓ 1 chart highlight (selected segment or line)
+css/admin.css:80:.sidebar-ws-switch:hover { background: var(--bg-elevated); color: var(--text-primary); }
+css/admin.css:98:.sidebar-cmdk:hover {
+css/admin.css:99:  background: var(--bg-hover);
+css/admin.css:132:.sidebar-scroll::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+css/admin.css:192:.nav-item:hover {
+css/admin.css:193:  background: var(--bg-hover);
+css/admin.css:246:.tool-toggle:hover { background: var(--bg-hover); color: var(--text-primary); }
+css/admin.css:358:.memo-new-btn:hover { background: var(--accent-hover); box-shadow: var(--shadow-1); }
+css/admin.css:383:.memo-item:hover { background: var(--bg-hover); }
+css/admin.css:440:.memo-empty-cta:hover { background: var(--accent-hover); }
+css/admin.css:484:.dm-pin-btn:hover { color: var(--text-primary); background: var(--bg-hover); }
+css/admin.css:583:.dm-tag-chip-remove:hover { color: var(--text-primary); background: var(--bg-hover); }
+css/admin.css:614:.dm-delete-btn:hover { background: var(--status-error-bg); border-color: var(--status-error-bg); }
+css/admin.css:676:.pt-country:hover {
+css/admin.css:678:  background: var(--bg-hover);
+css/admin.css:743:.h-menu-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+css/admin.css:764:.htab:hover { color: var(--text-primary); }
+css/admin.css:803:.h-track-btn:hover { color: var(--text-primary); }
+css/admin.css:828:.h-icon-btn:hover {
+css/admin.css:829:  background: var(--bg-hover);
+css/admin.css:859:.h-balance:hover {
+css/admin.css:895:.h-balance:hover .h-balance-link { color: var(--accent-emphasis); }
+css/admin.css:937:.h-popover-action:hover { color: var(--accent); }
+css/admin.css:950:.notif-item:hover { background: var(--bg-hover); }
+css/admin.css:952:.notif-item.is-unread:hover { background: color-mix(in srgb, var(--accent-light) 80%, var(--accent) 5%); }
+css/admin.css:997:.h-btn:hover { background: var(--bg-elevated); color: var(--text-primary); }
+css/admin.css:999:.h-btn.danger:hover { background: var(--status-error-bg); }
+css/admin.css:1210:.f-pre:hover { background: var(--bg-hover); border-color: var(--border-default); }
+css/admin.css:1302:.tbl th.sortable:hover { background: var(--bg-hover); color: var(--text-secondary); }
+css/admin.css:1344:.tbl tbody tr { transition: background 100ms; }
+css/admin.css:1345:.tbl tbody tr:hover { background: var(--bg-hover); }
+css/admin.css:1346:.tbl tbody tr:last-child td { border-bottom: none; }
+css/admin.css:1349:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) {
+css/admin.css:1352:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked):hover {
+css/admin.css:1368:.tbl.has-sticky tbody tr:hover td.c-chk { background: var(--bg-hover); }
+css/admin.css:1369:.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.c-chk { background: var(--accent-light); }
+css/admin.css:1384:.tbl.has-sticky tbody tr:hover td.sticky-col { background: var(--bg-hover); }
+css/admin.css:1385:.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-col { background: var(--accent-light); }
+css/admin.css:1400:.tbl-scroll::-webkit-scrollbar-thumb:hover { background: var(--neutral-400); }
+css/admin.css:1404:.tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
+css/admin.css:1446:.img-lightbox-btn:hover { background: rgba(255, 255, 255, 0.22); }
+css/admin.css:1632:.drawer-influencer .di-tab:hover { color: var(--text-primary); background: var(--bg-hover); }
+css/admin.css:1710:.drawer-influencer .di-url:hover { text-decoration: underline; }
+css/admin.css:1758:.drawer-influencer .di-post:hover img { transform: scale(1.03); }
+css/admin.css:1917:.c-textarea:hover { border-color: var(--border-strong); }
+css/admin.css:1960:.pg-btn:hover { background: var(--bg-hover); }
+css/admin.css:1996:.country-selector:hover {
+css/admin.css:1997:  background: var(--bg-hover);
+css/admin.css:2066:.country-dropdown li:hover { background: var(--bg-hover); color: var(--text-primary); }
+css/admin.css:2067:.country-dropdown li[aria-selected="true"] {
+css/admin.css:2079:.country-dropdown li[aria-selected="true"] .country-dropdown-check {
+css/admin.css:2124:.cal-monthnav-side:hover {
+css/admin.css:2125:  background: var(--bg-hover);
+css/admin.css:2166:.cal-today-btn:hover {
+css/admin.css:2167:  background: var(--bg-hover);
+css/admin.css:2213:.cal-cell:hover { background: var(--bg-page); }
+css/admin.css:2260:.cal-event:hover {
+css/admin.css:2280:.cal-cell.is-selected {
+css/admin.css:2286:.cal-cell.is-selected .cal-day:not(.today) {
+css/admin.css:2290:.cal-cell[data-day]:hover:not(.other-month) {
+css/admin.css:2330:.day-tbl tbody td {
+css/admin.css:2335:.day-tbl tbody tr { transition: background var(--transition-fast); cursor: pointer; }
+css/admin.css:2336:.day-tbl tbody tr:hover { background: var(--bg-page); }
+css/admin.css:2337:.day-tbl tbody tr:last-child td { border-bottom: none; }
+css/admin.css:2490:.pipeline-step:hover { background: var(--bg-surface); }
+css/admin.css:2590:.day-event-filter-btn:hover { color: var(--text-primary); }
+css/admin.css:2673:.sns-chip:hover {
+css/admin.css:2674:  border-color: var(--border-hover);
+css/admin.css:2675:  background: var(--bg-hover);
+css/admin.css:2678:.sns-chip-ig:has(input:checked), .sns-chip-ig.on { background: var(--sns-ig-bg); color: var(--sns-ig); border-color: var(--sns-ig); }
+css/admin.css:2679:.sns-chip-yt:has(input:checked), .sns-chip-yt.on { background: var(--sns-yt-bg); color: var(--sns-yt); border-color: var(--sns-yt); }
+css/admin.css:2680:.sns-chip-tt:has(input:checked), .sns-chip-tt.on { background: var(--sns-tt-bg); color: var(--sns-tt); border-color: var(--sns-tt); }
+css/admin.css:2681:.sns-chip-xhs:has(input:checked), .sns-chip-xhs.on { background: var(--sns-xhs-bg); color: var(--sns-xhs); border-color: var(--sns-xhs); }
+css/admin.css:2682:.sns-chip-fb:has(input:checked), .sns-chip-fb.on { background: var(--sns-fb-bg); color: var(--sns-fb); border-color: var(--sns-fb); }
+css/admin.css:2683:.sns-chip-tw:has(input:checked), .sns-chip-tw.on { background: var(--sns-tw-bg); color: var(--sns-tw); border-color: var(--sns-tw); }
+css/admin.css:2880:.chatbot-bubble:hover { transform: scale(1.08) translateY(-2px); }
+css/admin.css:2898:.chatbot[data-state="hover"] .chatbot-face .mouth-smile,
+css/admin.css:2922:.chatbot-bubble:hover .chatbot-face .bubble-bg { filter: drop-shadow(0 0 12px rgba(238, 33, 40, 0.5)); transition: filter var(--duration) var(--ease); }
+css/admin.css:2936:.chatbot-bubble:hover .chatbot-tooltip, .chatbot-bubble:focus-visible .chatbot-tooltip { opacity: 1; }
+css/admin.css:2958:.chatbot-panel-close:hover { background: var(--bg-hover); color: var(--text-primary); }
+css/admin.css:2967:.chatbot-faq-item:hover { background: var(--accent-light); border-color: var(--accent-subtle); transform: translateX(2px); }
+css/admin.css:2977:.chatbot-back:hover { color: var(--accent); }
+css/admin.css:2982:.chatbot-kakao-btn:hover { filter: brightness(0.96); transform: translateY(-1px); }
+css/admin.css:2987:  .chatbot-bubble, .chatbot-bubble:hover, .chatbot-face .zzz-1, .chatbot-face .zzz-2 { animation: none; transform: none; }
+css/admin.css:3060:.modal-confirm[data-variant="danger"] .js-confirm-ok:hover {
+css/admin.css:3221:.mp-chip:hover { border-color: var(--border-strong); }
+css/admin.css:3223:.mp-chip:has(input:checked) {
+css/admin.css:3250:.mp-camp-label:hover { background: var(--bg-hover); }
+css/admin.css:3284:.mp-camp:has(input:checked) { background: var(--accent-light); }
+css/admin.css:3285:.mp-camp:has(input:checked) .mp-camp-name { color: var(--accent-emphasis); }
+css/admin.css:3306:.mp-camp.is-locked .mp-camp-label:hover { background: transparent; }
+css/admin.css:3481:.ms-input:hover { border-color: var(--border-strong); }
+css/admin.css:3510:.ms-select:hover { border-color: var(--border-strong); }
+css/admin.css:3681:.ma-textarea:hover { border-color: var(--border-strong); }
+css/admin.css:3757:.c-superpass[data-tip]:hover::before,
+css/admin.css:3758:.c-superpass[data-tip]:hover::after { opacity: 1; }
+css/admin.css:3772:.c-superpass:hover {
+css/admin.css:3776:.c-superpass:hover .c-superpass-svg {
+css/admin.css:3784:.c-superpass.is-on:hover {
+css/admin.css:3859:.mr-summary-link:hover { text-decoration: underline; }
+css/admin.css:3910:.mr-file-thumb:hover {
+css/admin.css:4076:.drawer-revision .drawer-body::-webkit-scrollbar-thumb:hover {
+css/admin.css:4275:.dv-input:hover { border-color: var(--border-strong); }
+css/admin.css:4570:.view-toggle-btn:hover { color: var(--text-secondary); }
+css/admin.css:4599:.inf-card:hover {
+css/admin.css:4788:.price-tbl tbody tr:last-child td { border-bottom: none; }
+css/admin.css:4789:.price-tbl tbody tr:hover { background: var(--bg-hover); }
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc "nl -ba docs/DESIGN.md | sed -n '45,90p;380,400p'; nl -ba docs/styleseed-rules.md | sed -n '60,90p;300,320p;1935,1960p'; nl -ba css/admin.css | sed -n '1338,1390p'; nl -ba css/superpass.css | sed -n '43,53p'; nl -ba superpass-first-review.html | sed -n '58,75p;84,180p'" in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 0ms:
+    45	### 2.1 Accent Scale (Tier 1)
+    46	
+    47	| Token | Hex | 용도 |
+    48	|-------|-----|------|
+    49	| `--red-50`  | `#FEF2F2` | accent-light, 뱃지 배경, 활성 탭 배경 |
+    50	| `--red-100` | `#FEE2E3` | accent-subtle, 호버 강조 |
+    51	| `--red-200` | `#FCC6C8` | 보더 강조 |
+    52	| `--red-300` | `#F99A9E` | 보조 강조 |
+    53	| `--red-400` | `#F56267` | 중간 톤 |
+    54	| `--red-500` | `#EE2128` | **브랜드 Primary** (`--accent`) |
+    55	| `--red-600` | `#D41920` | accent-hover |
+    56	| `--red-700` | `#B11319` | accent-emphasis (링크, 강조 텍스트) |
+    57	| `--red-800` | `#800B1C` | accent-dark (로고 서브) |
+    58	| `--red-900` | `#5A0913` | 극제한적 사용 |
+    59	
+    60	### 2.2 Neutral Scale
+    61	
+    62	| Token | Hex | 용도 |
+    63	|-------|-----|------|
+    64	| `--neutral-0`   | `#FFFFFF` | surface |
+    65	| `--neutral-25`  | `#FAFAF8` | page 배경 (warm tint) |
+    66	| `--neutral-50`  | `#F5F5F3` | elevated, subtle |
+    67	| `--neutral-100` | `#F0F0EE` | hover, light border |
+    68	| `--neutral-200` | `#E5E5E3` | default border |
+    69	| `--neutral-300` | `#D0D0CE` | strong border, hover border |
+    70	| `--neutral-400` | `#B8B8B8` | disabled text |
+    71	| `--neutral-500` | `#8C8C8C` | tertiary text |
+    72	| `--neutral-600` | `#6E6E6E` | - |
+    73	| `--neutral-700` | `#4A4A4A` | secondary text |
+    74	| `--neutral-800` | `#2A2A2A` | - |
+    75	| `--neutral-900` | `#111111` | primary text, inverse bg |
+    76	
+    77	### 2.3 Semantic Surface/Text (Tier 2 — 실사용 토큰)
+    78	
+    79	| Token | 참조 | 설명 |
+    80	|-------|------|------|
+    81	| `--bg-page` | `--neutral-25` | 페이지 전체 |
+    82	| `--bg-surface` | `--neutral-0` | 카드/패널/모달 |
+    83	| `--bg-elevated` | `--neutral-50` | 사이드바/테이블 헤더 |
+    84	| `--bg-hover` | `--neutral-100` | 호버 상태 |
+    85	| `--bg-subtle` | `--neutral-50` | 섹션 구분용 |
+    86	| `--bg-inverse` | `--neutral-900` | 툴팁/다크 요소 |
+    87	| `--text-primary` | `--neutral-900` | 제목, 중요 텍스트 |
+    88	| `--text-secondary` | `--neutral-700` | 본문, 설명 |
+    89	| `--text-tertiary` | `--neutral-500` | 플레이스홀더, 메타 |
+    90	| `--text-disabled` | `--neutral-400` | 비활성 |
+   380	
+   381	### 7.2 Cards
+   382	- 배경: `--bg-surface`
+   383	- 테두리: `1px solid --border-default`
+   384	- 섀도우: `--shadow-1`
+   385	- 호버(클릭 가능): `--shadow-2`
+   386	- 패딩: 20~24px
+   387	
+   388	### 7.3 Tables
+   389	- 헤더: `--bg-elevated`, weight 500
+   390	- 행 호버: `--bg-hover`
+   391	- 선택 행: `--accent-light`
+   392	- 숫자 우측 정렬 + `tabular-nums`
+   393	- 스트라이프 금지 — 호버/선택으로 구분
+   394	
+   395	### 7.4 Status Badges
+   396	
+   397	**3가지 variant** 지원:
+   398	
+   399	```html
+   400	<!-- Subtle (기본) -->
+    60	| 65 | [Accent Distribution](#65-color-accent-distribution) | Scarcity rule |
+    61	| 66 | [Card Size Variation](#66-card-size-variation) | Skyline rule |
+    62	| 67 | [Progressive Density](#67-progressive-information-density) | Font size decreases down page |
+    63	| 68 | [Min Section Count](#68-empty-page-prevention) | Min 4, max 7 sections |
+    64	| 69 | [Chart + Context](#69-chart--context-pairing) | Never chart alone |
+    65	
+    66	> **Start here:** Rules 14, 18, 19, 61-63 are the most critical for page construction.
+    67	
+    68	---
+    69	
+    70	## 1. Color Philosophy
+    71	
+    72	### Key Color Principle — A Single Accent for Unity
+    73	- **Create unity with a single key color (your brand color, defined by skin)**
+    74	- Key color is used **only for active/selected states**
+    75	- Everything else is **grayscale** so the key color stands out
+    76	
+    77	```
+    78	✓ Key color usage: active nav, selected chart, progress bar fill, icon badge
+    79	✗ Key color forbidden: body text, large background areas, general borders
+    80	```
+    81	
+    82	### Impact Colors — Small, Strong
+    83	- Urgent/warning colors are used in **very small areas only** (dot, badge text)
+    84	- Never painted across large surfaces
+    85	- **Dot (6px) + text (11px)** combination is the maximum size
+    86	
+    87	| Role | Color | Size | Usage |
+    88	|------|-------|------|-------|
+    89	| Completed/Up | `#6B9B7A` | dot 6px + text 13px | trend %, Completed |
+    90	| Urgent | `#C85A54` | icon 16px + text 12px | "Urgent" badge |
+   300	Rules:
+   301	- Linear progress (`h-4`) is a **supplementary indicator**, placed small below the metric
+   302	- Segment bar (`h-6`) is a **primary visualization** with equal weight to the metric
+   303	- Gauge fill percentage uses `w-[{n}%]` inline style for dynamic rendering
+   304	- Gauge track is always `bg-surface-muted`, fill is always `bg-brand`
+   305	- Both track and fill use `rounded-full` (linear) or `rounded` (segment)
+   306	
+   307	---
+   308	
+   309	## 6. Donut Chart Rules
+   310	
+   311	### Key Color Highlight Principle
+   312	- **Only the selected item uses the key color (var(--brand))**, the rest are grayscale
+   313	- Unselected opacity: `0.3` (dimmed)
+   314	- Selected glow: `box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 25%, transparent)`
+   315	
+   316	### Chart Dimensions
+   317	
+   318	| Property | Value | Ratio |
+   319	|----------|-------|-------|
+   320	| Container | 128x128px (`size-32`) | — |
+  1935	|----------|-------|---------|
+  1936	| Inside card: between chart and stats | `border-t border-surface-muted` | Above `pt-5`, below `mt-6` |
+  1937	| Top of BottomNav | `border-t border-surface-muted` | None |
+  1938	
+  1939	### Divider Prohibitions
+  1940	```
+  1941	NO  Between sections (use cards + space-y-6 for separation)
+  1942	NO  Between list items (use space-y-3 for separation)
+  1943	NO  Card borders (use shadow for separation)
+  1944	NO  Vertical dividers
+  1945	```
+  1946	
+  1947	### Border Usage
+  1948	| Purpose | Style |
+  1949	|---------|-------|
+  1950	| Highlighted row | `border-2 border-brand` (selected item) |
+  1951	| Input focus | `border-brand ring-2 ring-brand/20` |
+  1952	| Input error | `border-destructive ring-2 ring-destructive/20` |
+  1953	| Notification left | `border-l-4 border-{severity}` |
+  1954	
+  1955	**No borders in the default state.** Separating cards with shadow is the design principle.
+  1956	
+  1957	---
+  1958	
+  1959	## 49. UX Writing Details (Conversational Tone)
+  1960	
+  1338	  vertical-align: middle;
+  1339	  text-align: center;
+  1340	  font-size: 14px;
+  1341	}
+  1342	.tbl td:last-child { border-right: none; }
+  1343	
+  1344	.tbl tbody tr { transition: background 100ms; }
+  1345	.tbl tbody tr:hover { background: var(--bg-hover); }
+  1346	.tbl tbody tr:last-child td { border-bottom: none; }
+  1347	
+  1348	/* Row selection 하이라이트 — 체크박스 체크 시 행 전체 accent-light */
+  1349	.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) {
+  1350	  background: var(--accent-light);
+  1351	}
+  1352	.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked):hover {
+  1353	  background: color-mix(in srgb, var(--accent-light) 80%, var(--accent) 5%);
+  1354	}
+  1355	
+  1356	/* Sticky 첫 데이터 컬럼 — .tbl.has-sticky 테이블에서 체크박스 + 다음 1컬럼 고정 */
+  1357	.tbl.has-sticky th.c-chk,
+  1358	.tbl.has-sticky td.c-chk {
+  1359	  position: sticky;
+  1360	  left: 0;
+  1361	  z-index: 2;
+  1362	  background: var(--bg-surface);
+  1363	}
+  1364	.tbl.has-sticky thead th.c-chk {
+  1365	  background: var(--bg-elevated);
+  1366	  z-index: 3;
+  1367	}
+  1368	.tbl.has-sticky tbody tr:hover td.c-chk { background: var(--bg-hover); }
+  1369	.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.c-chk { background: var(--accent-light); }
+  1370	
+  1371	.tbl.has-sticky th.sticky-col,
+  1372	.tbl.has-sticky td.sticky-col {
+  1373	  position: sticky;
+  1374	  left: 40px;  /* c-chk width */
+  1375	  z-index: 2;
+  1376	  background: var(--bg-surface);
+  1377	  border-right: 1px solid var(--border-default);
+  1378	  box-shadow: 2px 0 4px -2px rgba(17,17,17,0.08);
+  1379	}
+  1380	.tbl.has-sticky thead th.sticky-col {
+  1381	  background: var(--bg-elevated);
+  1382	  z-index: 3;
+  1383	}
+  1384	.tbl.has-sticky tbody tr:hover td.sticky-col { background: var(--bg-hover); }
+  1385	.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-col { background: var(--accent-light); }
+  1386	
+  1387	/* 가로 스크롤 가시성 — 넓은 테이블은 스크롤바 항상 표시 */
+  1388	.tbl-scroll {
+  1389	  overflow-x: auto;
+  1390	  scrollbar-width: thin;
+    43	/* ── 묶음(rowspan) 셀은 위쪽 정렬 ──────────────────────────────── */
+    44	.tbl td.sp-merged-top { vertical-align: top; }
+    45	.tbl td.c-chk.sp-merged-top { padding-top: 14px; }
+    46	
+    47	/* 신청 묶음 = 한 덩어리: 묶음(tbody) 단위로 hover·선택 강조, 묶음 사이만 진한 경계 */
+    48	.tbl .sp-bundle:hover tr { background: var(--bg-hover); }
+    49	.tbl .sp-bundle:has(.c-chk input:checked) tr { background: var(--accent-light); }
+    50	.tbl .sp-bundle tr:last-child td { border-bottom: 1px solid var(--border-default); }
+    51	.tbl .sp-bundle:last-child tr:last-child td { border-bottom: none; }
+    52	
+    53	/* ── 신청 묶음 ID + 선택 혜택 ───────────────────────────────────── */
+    58	      </div>
+    59	    </section>
+    60	
+    61	    <!-- ===== 규칙 안내 ===== -->
+    62	    <p class="sp-note">
+    63	      <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    64	      <span>같은 <b>신청 묶음</b>은 인플루언서 정보와 선택 혜택만 병합해 보여주며, <b>캠페인별 1차 컨펌은 개별로 처리</b>합니다. <b>1차 컨펌 완료</b>한 캠페인은 신청목록으로 이동합니다.</span>
+    65	    </p>
+    66	
+    67	    <!-- ===== 목록 ===== -->
+    68	    <div class="tbl-wrap">
+    69	      <div class="tbl-scroll">
+    70	        <table class="tbl tbl--wide" id="sp-first-table">
+    71	          <caption class="sr-only">1차 신청 목록 — 신청 묶음 단위로 인플루언서·선택 혜택·기준 일정이 병합되어 표시됩니다</caption>
+    72	          <thead>
+    73	            <tr>
+    74	              <th class="c-chk" scope="col"><input class="checkbox-input" type="checkbox" data-check-all="sp-first-table" aria-label="전체 선택"></th>
+    75	              <th scope="col">국가</th>
+    84	              <th scope="col">관리</th>
+    85	            </tr>
+    86	          </thead>
+    87	          <tbody class="sp-bundle">
+    88	
+    89	            <!-- ── 묶음 1: suzunyan08 · 3건 ─────────────────────── -->
+    90	            <tr>
+    91	              <td class="c-chk sp-merged-top" rowspan="3"><input class="checkbox-input" type="checkbox" aria-label="suzunyan08 신청 묶음 선택"></td>
+    92	              <td class="sp-merged-top" rowspan="3"><span class="c-country-code">JP</span></td>
+    93	              <td class="sp-merged-top" rowspan="3">
+    94	                <div class="c-camp-name">suzunyan08</div>
+    95	                <div class="c-camp-sub">ID 10234</div>
+    96	              </td>
+    97	              <td class="sp-merged-top" rowspan="3">
+    98	                <span class="sp-bundle-id">#SP-20260520-01 <span class="sp-bundle-count">· 3건</span></span>
+    99	                <span class="sp-benefit">
+   100	                  <svg width="11" height="11" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+   101	                  에어패스 · 항공권 지원
+   102	                </span>
+   103	              </td>
+   104	              <td class="sp-merged-top" rowspan="3">
+   105	                <div class="sp-dates">
+   106	                  <span class="sp-date"><b>5/20</b> <span>10:30</span></span>
+   107	                  <span class="sp-date"><b>5/21</b> <span>14:00</span></span>
+   108	                  <span class="sp-date"><b>5/22</b> <span>11:00</span></span>
+   109	                </div>
+   110	              </td>
+   111	              <td><span class="badge badge-sm badge-info">패스권</span></td>
+   112	              <td>
+   113	                <div class="c-camp-name">루미에르 피부과</div>
+   114	                <div class="c-camp-sub">리프팅 체험</div>
+   115	              </td>
+   116	              <td>
+   117	                <div class="sp-dates sp-dates--row">
+   118	                  <span class="sp-date"><b>5/20</b> <span>10:30</span></span>
+   119	                  <span class="sp-date"><b>5/21</b> <span>14:00</span></span>
+   120	                  <span class="sp-date"><b>5/22</b> <span>11:00</span></span>
+   121	                </div>
+   122	              </td>
+   123	              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+   124	              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+   125	              <td>
+   126	                <div class="sp-rowact">
+   127	                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="루미에르 피부과 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+   128	                  <button class="btn btn-sm btn-secondary" type="button">미선정</button>
+   129	                </div>
+   130	              </td>
+   131	            </tr>
+   132	            <tr>
+   133	              <td><span class="badge badge-sm badge-neutral">일반</span></td>
+   134	              <td>
+   135	                <div class="c-camp-name">온유 클리닉</div>
+   136	                <div class="c-camp-sub">스킨부스터 시술</div>
+   137	              </td>
+   138	              <td>
+   139	                <div class="sp-dates sp-dates--row">
+   140	                  <span class="sp-date"><b>5/20</b> <span>11:00</span></span>
+   141	                  <span class="sp-date"><b>5/21</b> <span>15:30</span></span>
+   142	                  <span class="sp-date"><b>5/22</b> <span>13:30</span></span>
+   143	                </div>
+   144	              </td>
+   145	              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+   146	              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+   147	              <td>
+   148	                <div class="sp-rowact">
+   149	                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="온유 클리닉 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+   150	                  <button class="btn btn-sm btn-secondary" type="button">미선정</button>
+   151	                </div>
+   152	              </td>
+   153	            </tr>
+   154	            <tr>
+   155	              <td><span class="badge badge-sm badge-neutral">일반</span></td>
+   156	              <td>
+   157	                <div class="c-camp-name">메디엘 의원</div>
+   158	                <div class="c-camp-sub">피부관리</div>
+   159	              </td>
+   160	              <td>
+   161	                <div class="sp-dates sp-dates--row">
+   162	                  <span class="sp-date"><b>5/20</b> <span>09:30</span></span>
+   163	                  <span class="sp-date"><b>5/21</b> <span>13:00</span></span>
+   164	                  <span class="sp-date"><b>5/22</b> <span>10:30</span></span>
+   165	                </div>
+   166	              </td>
+   167	              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+   168	              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+   169	              <td>
+   170	                <div class="sp-rowact">
+   171	                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="메디엘 의원 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+   172	                  <button class="btn btn-sm btn-secondary" type="button">미선정</button>
+   173	                </div>
+   174	              </td>
+   175	            </tr>
+   176	
+   177	          </tbody>
+   178	          <tbody class="sp-bundle">
+   179	            <!-- ── 묶음 2: mei_shanghai · 2건 ───────────────────── -->
+   180	            <tr>
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc "sed -n '1,220p' /Users/willji/.agents/skills/agent-reach/references/search.md; agent-reach doctor --json" in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 1102ms:
+{
+  "github": {
+    "status": "warn",
+    "name": "GitHub 仓库和代码",
+    "message": "gh CLI 可执行，且检测到显式认证配置；Doctor 不执行会写 device-id 的 `gh auth status`，因此未实时验证，未标记为可用。",
+    "tier": 0,
+    "backends": [
+      "gh CLI"
+    ],
+    "active_backend": null
+  },
+  "twitter": {
+    "status": "warn",
+    "name": "Twitter/X 推文",
+    "message": "Twitter CLI 未安装。安装方式：\n  pipx install twitter-cli\n或：\n  uv tool install twitter-cli",
+    "tier": 1,
+    "backends": [
+      "twitter-cli",
+      "OpenCLI",
+      "bird CLI (legacy)"
+    ],
+    "active_backend": null
+  },
+  "youtube": {
+    "status": "ok",
+    "name": "YouTube 视频和字幕",
+    "message": "可提取视频信息和字幕",
+    "tier": 0,
+    "backends": [
+      "yt-dlp"
+    ],
+    "active_backend": "yt-dlp"
+  },
+  "reddit": {
+    "status": "off",
+    "name": "Reddit 帖子和评论",
+    "message": "未安装任何 Reddit 后端。注意：Reddit 没有零配置路径（匿名 .json 已被封，官方 API 需人工审批），必须用登录态。推荐：\n  桌面：agent-reach install --system --channels opencli\n       （复用 Chrome 登录态，登录过 reddit.com 即可用）\n  服务器/存量：pipx install 'git+https://github.com/public-clis/rdt-cli.git@5e4fb3720d5c174e976cd425ccc3b879d52cac66'\n       然后 `rdt login` 或手动写入 Cookie（见 doctor 提示）\n中国大陆访问 Reddit 需要代理",
+    "tier": 1,
+    "backends": [
+      "OpenCLI",
+      "rdt-cli"
+    ],
+    "active_backend": null
+  },
+  "facebook": {
+    "status": "off",
+    "name": "Facebook 帖子、主页和群组",
+    "message": "未安装 Facebook 帖子、主页和群组 后端。安装：\n  agent-reach install --system --channels opencli\n然后在 Chrome 里登录 facebook.com",
+    "tier": 1,
+    "backends": [
+      "OpenCLI"
+    ],
+    "active_backend": null
+  },
+  "instagram": {
+    "status": "off",
+    "name": "Instagram 用户、主页和指定用户帖子",
+    "message": "未安装 Instagram 用户、主页和指定用户帖子 后端。安装：\n  agent-reach install --system --channels opencli\n然后在 Chrome 里登录 instagram.com",
+    "tier": 1,
+    "backends": [
+      "OpenCLI"
+    ],
+    "active_backend": null
+  },
+  "bilibili": {
+    "status": "off",
+    "name": "B站视频、字幕和搜索",
+    "message": "没有可用的 B站后端（搜索 API 也不可达，可能是网络问题）。推荐：\n  pipx install bilibili-cli（搜索/热门/视频详情，无需登录）\n  或桌面装 OpenCLI（额外解锁字幕）：agent-reach install --system --channels opencli",
+    "tier": 1,
+    "backends": [
+      "bili-cli",
+      "OpenCLI",
+      "B站搜索 API"
+    ],
+    "active_backend": null
+  },
+  "xiaohongshu": {
+    "status": "off",
+    "name": "小红书笔记",
+    "message": "未安装任何小红书后端。推荐：\n  桌面：agent-reach install --system --channels opencli\n       （复用 Chrome 登录态，刷过小红书即零配置可用）\n  服务器：xiaohongshu-mcp：https://github.com/xpzouying/xiaohongshu-mcp\n       登录只使用 Cookie-Editor 明确导出：\n       agent-reach configure xhs-cookies（隐藏输入）",
+    "tier": 1,
+    "backends": [
+      "OpenCLI",
+      "xiaohongshu-mcp",
+      "xhs-cli (xiaohongshu-cli)"
+    ],
+    "active_backend": null
+  },
+  "linkedin": {
+    "status": "off",
+    "name": "LinkedIn 职业社交",
+    "message": "基本内容可通过 Jina Reader 读取。完整功能需要：\n  先安装 uv/uvx：https://docs.astral.sh/uv/getting-started/installation/\n  uvx mcp-server-linkedin@latest --login\n  mcporter config add linkedin --command uvx --arg mcp-server-linkedin@latest --env UV_HTTP_TIMEOUT=300 --scope home\n  详见 https://github.com/stickerdaniel/linkedin-mcp-server",
+    "tier": 2,
+    "backends": [
+      "mcp-server-linkedin",
+      "Jina Reader"
+    ],
+    "active_backend": null
+  },
+  "xiaoyuzhou": {
+    "status": "off",
+    "name": "小宇宙播客转文字",
+    "message": "转录脚本未安装。运行：\n  agent-reach install --env=auto --system --channels=xiaoyuzhou\n  或手动复制 transcribe.sh 到 ~/.agent-reach/tools/xiaoyuzhou/",
+    "tier": 1,
+    "backends": [
+      "groq-whisper",
+      "ffmpeg"
+    ],
+    "active_backend": null
+  },
+  "v2ex": {
+    "status": "warn",
+    "name": "V2EX 节点、主题与回复",
+    "message": "V2EX API 连接失败（可能需要代理）：<urlopen error [Errno 8] nodename nor servname provided, or not known>",
+    "tier": 0,
+    "backends": [
+      "V2EX API (public)"
+    ],
+    "active_backend": null
+  },
+  "xueqiu": {
+    "status": "warn",
+    "name": "雪球股票行情与社区动态",
+    "message": "Xueqiu API 连接失败：<urlopen error [Errno 8] nodename nor servname provided, or not known>。如需登录 Cookie，请运行：agent-reach configure --from-browser chrome --platform xueqiu；doctor 不会自动读取浏览器 Cookie。",
+    "tier": 1,
+    "backends": [
+      "Xueqiu API (需要登录 Cookie)"
+    ],
+    "active_backend": null
+  },
+  "rss": {
+    "status": "ok",
+    "name": "RSS/Atom 订阅源",
+    "message": "可读取 RSS/Atom 源",
+    "tier": 0,
+    "backends": [
+      "feedparser"
+    ],
+    "active_backend": "feedparser"
+  },
+  "exa_search": {
+    "status": "off",
+    "name": "全网语义搜索",
+    "message": "需要 mcporter + Exa MCP。安装：\n  npm install -g mcporter\n  mcporter config add exa https://mcp.exa.ai/mcp --scope home",
+    "tier": 0,
+    "backends": [
+      "Exa via mcporter"
+    ],
+    "active_backend": null
+  },
+  "web": {
+    "status": "ok",
+    "name": "任意网页",
+    "message": "通过 Jina Reader 读取任意网页（curl https://r.jina.ai/URL）",
+    "tier": 0,
+    "backends": [
+      "Jina Reader"
+    ],
+    "active_backend": "Jina Reader"
+  }
+}
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+codex
+로컬 규칙에서 현재 선택 행의 브랜드 컬러 사용과 `--accent-light` 지정이 확인됐지만, styleseed는 넓은 면적에 impact color를 칠하지 말라고도 합니다. 이 충돌을 공식 컴포넌트 문서의 선택/호버 패턴과 대조 중입니다.
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+web search: 
+web search: site:polaris.shopify.com/components/tables/index-table selected rows hover IndexTable ...
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+web search: 
+web search: https://polaris.shopify.com/components/tables/index-table
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+web search: 
+web search: site:shopify.dev/docs/api/polaris web components table row selected hover ...
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+web search: 
+web search: 
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc 'agent-reach check-update' in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 3233ms:
+当前版本: v1.5.0
+[!] 无法检查更新（DNS 解析失败，已重试 3 次）
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+codex
+## 검토 보고서
+
+| 항목 | 결론 | 파일:라인 + 현재값→제안값 | 근거 | 리스크 |
+|---|---|---|---|---|
+| 1. Hover | 회색 전체 채움은 다소 강함. 유지하되 더 옅게 조정 | `css/admin.css:1345`, `css/superpass.css:48` — `--bg-hover` → `--bg-subtle` | Shopify는 테이블 행을 개별 레코드 단위로 취급하고, Material은 hover를 상호작용 상태로 사용함. 밀도 높은 행에서는 `neutral-50`이 정보·버튼 대비를 덜 방해함. [Shopify Polaris Table](https://shopify.dev/docs/api/app-home/v1.1-rc/web-components/layout-and-structure/table), [Material States](https://m3.material.io/foundations/interaction/states/overview) | 너무 옅으면 포인터 위치 인지가 약해질 수 있음 |
+| 2. Selected | `red-50` 전체 채움은 부적절. 선택은 중립 배경 + 좌측 브랜드 바 권장 | `css/admin.css:1349-1354`, `1369`, `1385`; `css/superpass.css:49` — `--accent-light` → `--bg-subtle` + `3px solid var(--accent)` 좌측 바 | styleseed의 “impact color는 작은 영역에만” 원칙과 충돌. 레드 배경 위의 `--accent` Primary 버튼은 위계가 합쳐져 선택/에러/실행 버튼 구분이 약해짐. Atlassian도 hover·selected를 별도 상태 토큰으로 분리함. [Atlassian Color](https://atlassian.design/foundations/color-new/) | 좌측 바가 누락된 테이블에서는 선택 상태가 약하게 보일 수 있음 |
+| 3. Selected + Hover | hover가 selected를 덮지 않도록 selected 우선 규칙 고정 | `css/admin.css:1352-1354`, `css/superpass.css:48-49` — `color-mix(...)` 및 cascade 의존 → `selected:hover`도 `--bg-subtle` 유지 | Material은 selection과 hover가 동시에 적용될 수 있으므로 상태 조합 규칙을 명시하라고 안내함. [Material States](https://m3.material.io/foundations/interaction/states/overview) | 별도 우선순위가 없으면 테이블별 CSS 로딩 순서에 따라 시각 상태가 달라짐 |
+| 4. 묶음 vs 캠페인 행 | 선택은 신청 묶음, hover는 캠페인 행으로 분리 | `superpass-first-review.html:91-104`, `css/superpass.css:47-49` — checkbox·병합 셀·선택·hover 모두 묶음 단위 → checkbox 선택은 묶음 유지, hover는 `.sp-bundle tr:hover` | checkbox와 influencer 정보가 `rowspan` 묶음에 속하지만, `1차 컨펌 완료`·`미선정`은 캠페인 행별 액션임. Shopify도 각 `table row`를 하나의 레코드/행동 단위로 정의함. [Shopify Polaris Table](https://shopify.dev/docs/api/app-home/v1.1-rc/web-components/layout-and-structure/table) | 선택 배경과 hover 대상이 달라 초기 학습 비용이 생길 수 있음 |
+| 5. 전체 어드민 규칙 | 행 hover는 중립 약한 표면, 선택은 중립 표면 + accent 바, 선택 상태가 hover보다 우선 | `docs/DESIGN.md:388-393` — `행 호버: --bg-hover / 선택 행: --accent-light` → `행 호버: --bg-subtle / 선택 행: --bg-subtle + 좌측 3px --accent 바 / selected:hover 동일 유지` | 현재 브랜드 레드의 의미 충돌을 피하면서 styleseed의 단일 accent 원칙을 유지함 | 기존 문서·CSS·개별 화면 규칙을 함께 갱신하지 않으면 화면별 불일치 발생 |
+
+### DESIGN.md 7.x 삽입 문장
+
+- `행 호버는 --bg-subtle, 선택 행은 --bg-subtle과 좌측 3px --accent 바를 사용하며, 선택 상태는 hover보다 우선한다.`
+
+## 우선순위 상위 3개
+
+1. 선택 행의 `--accent-light` 전체 채움을 `--bg-subtle` + 좌측 `--accent` 바으로 변경
+2. selected + hover 우선순위를 전 어드민 공통 규칙으로 고정
+3. 슈퍼패스에서 hover는 캠페인 행, 선택은 신청 묶음 단위로 분리
+
+파일은 수정하지 않았습니다.
+hook: Stop
+hook: Stop
+hook: Stop
+hook: Stop Completed
+hook: Stop Completed
+hook: Stop Completed
+tokens used
+72,982

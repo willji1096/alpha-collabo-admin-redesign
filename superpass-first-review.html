@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 슈퍼패스 · 1차신청목록</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/superpass.css">
+</head>
+<body data-active-tab="거래처관리" data-active-page="1차신청목록">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">1차신청목록</h1>
+      <div class="pg-crumb">거래처관리 / 슈퍼패스묶음캠페인 / <b>1차신청목록</b></div>
+    </div>
+
+    <!-- ===== 검색 필터 ===== -->
+    <section class="filters" aria-label="검색 조건">
+      <div class="f-row sp-frow">
+        <label class="f-label" for="f-period">방문 기간</label>
+        <input class="f-input" id="f-period" type="text" value="2026-05-20 ~ 2026-05-22">
+        <label class="f-label" for="f-country">국가</label>
+        <select class="f-sel" id="f-country">
+          <option>전체</option><option>일본</option><option>중국</option><option>대만</option><option>태국</option>
+        </select>
+        <label class="f-label" for="f-inf">인플루언서</label>
+        <input class="f-input" id="f-inf" type="search" placeholder="이름 또는 ID 입력">
+      </div>
+      <div class="f-row sp-frow">
+        <label class="f-label" for="f-bundle">신청 묶음 ID</label>
+        <input class="f-input" id="f-bundle" type="search" placeholder="예) SP-20260520-01">
+        <label class="f-label" for="f-camp">캠페인명</label>
+        <input class="f-input" id="f-camp" type="search" placeholder="캠페인명 입력">
+        <label class="f-label" for="f-status">진행 상태</label>
+        <select class="f-sel" id="f-status">
+          <option>전체</option><option>1차 컨펌 대기</option><option>1차 컨펌 완료</option><option>미선정</option>
+        </select>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-sm btn-secondary" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><path d="M3 2v6h6"/><path d="M3 13a9 9 0 1 0 3-7.7L3 8"/></svg>
+          초기화
+        </button>
+        <button class="btn btn-sm btn-primary" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          검색
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== 규칙 안내 ===== -->
+    <p class="sp-note">
+      <svg width="14" height="14" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      <span>같은 <b>신청 묶음</b>은 인플루언서 정보와 선택 혜택만 병합해 보여주며, <b>캠페인별 1차 컨펌은 개별로 처리</b>합니다. <b>1차 컨펌 완료</b>한 캠페인은 신청목록으로 이동합니다.</span>
+    </p>
+
+    <!-- ===== 목록 ===== -->
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+        <table class="tbl tbl--wide" id="sp-first-table">
+          <caption class="sr-only">1차 신청 목록 — 신청 묶음 단위로 인플루언서·선택 혜택·기준 일정이 병합되어 표시됩니다</caption>
+          <thead>
+            <tr>
+              <th class="c-chk" scope="col"><input class="checkbox-input" type="checkbox" data-check-all="sp-first-table" aria-label="전체 선택"></th>
+              <th scope="col">국가</th>
+              <th scope="col">인플루언서</th>
+              <th scope="col">신청 묶음 / 선택 혜택</th>
+              <th scope="col"><span class="tooltip-wrap" tabindex="0">기준 일정 <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span class="tooltip tooltip-bottom">리뷰쓰기(1차 신청)에서 인플루언서가 고른 최종 방문 가능 일정 범위</span></span></th>
+              <th scope="col">캠페인 구분</th>
+              <th scope="col">신청 캠페인</th>
+              <th scope="col">캠페인별 방문 가능 일정</th>
+              <th scope="col">진행 상태</th>
+              <th scope="col">상세정보</th>
+              <th scope="col">관리</th>
+            </tr>
+          </thead>
+          <tbody class="sp-bundle">
+
+            <!-- ── 묶음 1: suzunyan08 · 3건 ─────────────────────── -->
+            <tr>
+              <td class="c-chk sp-merged-top" rowspan="3"><input class="checkbox-input" type="checkbox" aria-label="suzunyan08 신청 묶음 선택"></td>
+              <td class="sp-merged-top" rowspan="3"><span class="c-country-code">JP</span></td>
+              <td class="sp-merged-top" rowspan="3">
+                <div class="c-camp-name">suzunyan08</div>
+                <div class="c-camp-sub">ID 10234</div>
+              </td>
+              <td class="sp-merged-top" rowspan="3">
+                <span class="sp-bundle-id">#SP-20260520-01 <span class="sp-bundle-count">· 3건</span></span>
+                <span class="sp-benefit">
+                  <svg width="11" height="11" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  에어패스 · 항공권 지원
+                </span>
+              </td>
+              <td class="sp-merged-top" rowspan="3">
+                <div class="sp-dates">
+                  <span class="sp-date"><b>5/20</b> <span>10:30</span></span>
+                  <span class="sp-date"><b>5/21</b> <span>14:00</span></span>
+                  <span class="sp-date"><b>5/22</b> <span>11:00</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-sm badge-info">패스권</span></td>
+              <td>
+                <div class="c-camp-name">루미에르 피부과</div>
+                <div class="c-camp-sub">리프팅 체험</div>
+              </td>
+              <td>
+                <div class="sp-dates sp-dates--row">
+                  <span class="sp-date"><b>5/20</b> <span>10:30</span></span>
+                  <span class="sp-date"><b>5/21</b> <span>14:00</span></span>
+                  <span class="sp-date"><b>5/22</b> <span>11:00</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+              <td>
+                <div class="sp-rowact">
+                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="루미에르 피부과 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+                  <button class="btn btn-sm btn-secondary" type="button">미선정</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-sm badge-neutral">일반</span></td>
+              <td>
+                <div class="c-camp-name">온유 클리닉</div>
+                <div class="c-camp-sub">스킨부스터 시술</div>
+              </td>
+              <td>
+                <div class="sp-dates sp-dates--row">
+                  <span class="sp-date"><b>5/20</b> <span>11:00</span></span>
+                  <span class="sp-date"><b>5/21</b> <span>15:30</span></span>
+                  <span class="sp-date"><b>5/22</b> <span>13:30</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+              <td>
+                <div class="sp-rowact">
+                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="온유 클리닉 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+                  <button class="btn btn-sm btn-secondary" type="button">미선정</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-sm badge-neutral">일반</span></td>
+              <td>
+                <div class="c-camp-name">메디엘 의원</div>
+                <div class="c-camp-sub">피부관리</div>
+              </td>
+              <td>
+                <div class="sp-dates sp-dates--row">
+                  <span class="sp-date"><b>5/20</b> <span>09:30</span></span>
+                  <span class="sp-date"><b>5/21</b> <span>13:00</span></span>
+                  <span class="sp-date"><b>5/22</b> <span>10:30</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+              <td>
+                <div class="sp-rowact">
+                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="메디엘 의원 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+                  <button class="btn btn-sm btn-secondary" type="button">미선정</button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+          <tbody class="sp-bundle">
+            <!-- ── 묶음 2: mei_shanghai · 2건 ───────────────────── -->
+            <tr>
+              <td class="c-chk sp-merged-top" rowspan="2"><input class="checkbox-input" type="checkbox" aria-label="mei_shanghai 신청 묶음 선택"></td>
+              <td class="sp-merged-top" rowspan="2"><span class="c-country-code">CN</span></td>
+              <td class="sp-merged-top" rowspan="2">
+                <div class="c-camp-name">mei_shanghai</div>
+                <div class="c-camp-sub">ID 10871</div>
+              </td>
+              <td class="sp-merged-top" rowspan="2">
+                <span class="sp-bundle-id">#SP-20260521-04 <span class="sp-bundle-count">· 2건</span></span>
+                <span class="sp-benefit">
+                  <svg width="11" height="11" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  호텔패스 · 숙박 지원
+                </span>
+              </td>
+              <td class="sp-merged-top" rowspan="2">
+                <div class="sp-dates">
+                  <span class="sp-date"><b>5/21</b> <span>13:00</span></span>
+                  <span class="sp-date"><b>5/23</b> <span>10:00</span></span>
+                  <span class="sp-date"><b>5/24</b> <span>16:30</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-sm badge-info">패스권</span></td>
+              <td>
+                <div class="c-camp-name">세인트 클리닉</div>
+                <div class="c-camp-sub">보톡스 체험</div>
+              </td>
+              <td>
+                <div class="sp-dates sp-dates--row">
+                  <span class="sp-date"><b>5/21</b> <span>13:00</span></span>
+                  <span class="sp-date"><b>5/23</b> <span>10:00</span></span>
+                  <span class="sp-date"><b>5/24</b> <span>16:30</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-success badge-sm"><span class="badge-dot"></span>1차 컨펌 완료</span></td>
+              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+              <td><span class="c-null">—</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-sm badge-neutral">일반</span></td>
+              <td>
+                <div class="c-camp-name">이든 스킨</div>
+                <div class="c-camp-sub">수분 관리 프로그램</div>
+              </td>
+              <td>
+                <div class="sp-dates sp-dates--row">
+                  <span class="sp-date"><b>5/21</b> <span>15:00</span></span>
+                  <span class="sp-date"><b>5/23</b> <span>14:30</span></span>
+                  <span class="sp-date"><b>5/24</b> <span>11:30</span></span>
+                </div>
+              </td>
+              <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>1차 컨펌 대기</span></td>
+              <td><button class="btn btn-sm btn-secondary" type="button">상세보기</button></td>
+              <td>
+                <div class="sp-rowact">
+                  <button class="btn btn-sm btn-primary" type="button" data-toast-title="이든 스킨 1차 컨펌 완료" data-toast-desc="신청목록으로 이동했습니다">1차 컨펌 완료</button>
+                  <button class="btn btn-sm btn-secondary" type="button">미선정</button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <button class="pg-btn nav" type="button" aria-label="첫 페이지">&laquo;</button>
+        <button class="pg-btn nav" type="button" aria-label="이전 페이지">&lsaquo;</button>
+        <button class="pg-btn active" type="button" aria-current="page">1</button>
+        <button class="pg-btn" type="button">2</button>
+        <button class="pg-btn" type="button">3</button>
+        <button class="pg-btn nav" type="button" aria-label="다음 페이지">&rsaquo;</button>
+        <button class="pg-btn nav" type="button" aria-label="마지막 페이지">&raquo;</button>
+      </div>
+    </div>
+
+
+  </div>
+</main>
+
+</div>
+
+<div class="toast-region" role="region" aria-live="polite" aria-label="알림"></div>
+
+<script src="js/components.js"></script>
+<script src="js/superpass.js"></script>
+</body>
+</html>

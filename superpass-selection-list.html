@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 슈퍼패스 · 예약미확정목록</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/superpass.css">
+</head>
+<body data-active-tab="거래처관리" data-active-page="예약미확정목록">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">예약 미확정 목록</h1>
+      <div class="pg-crumb">거래처관리 / 슈퍼패스묶음캠페인 / <b>예약미확정목록</b></div>
+    </div>
+
+    <!-- ===== 검색 ===== -->
+    <section class="filters" aria-label="검색 조건">
+      <div class="f-row">
+        <div class="f-label">캠페인</div>
+        <div class="f-body">
+          <select class="f-sel" aria-label="캠페인 선택">
+            <option>전체 캠페인</option>
+            <option>루미에르 피부과 · 리프팅 체험</option>
+            <option>온유 클리닉 · 스킨부스터 시술</option>
+            <option>메디엘 의원 · 피부관리</option>
+          </select>
+          <input class="f-input" type="search" placeholder="인플루언서 ID 또는 신청 묶음 ID" aria-label="인플루언서 또는 신청 묶음 검색">
+        </div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-sm btn-secondary" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><path d="M3 2v6h6"/><path d="M3 13a9 9 0 1 0 3-7.7L3 8"/></svg>
+          초기화
+        </button>
+        <button class="btn btn-sm btn-primary" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          검색
+        </button>
+      </div>
+    </section>
+
+    <div class="chip-bar">
+      <div class="chip-bar-summary">
+        <span class="f-summary-label">현재 조건</span>
+        캠페인 <strong>전체</strong><span class="f-summary-sep">·</span>상태 <strong>예약 미확정</strong>
+      </div>
+      <div class="chip-bar-right">
+        <button class="btn btn-sm btn-secondary" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          엑셀 다운로드
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== 목록 ===== -->
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption class="sr-only">선정 목록 — 예약 확정 대기 중인 인플루언서</caption>
+        <thead>
+          <tr>
+            <th scope="col">인플루언서</th>
+            <th scope="col">국가</th>
+            <th scope="col">신청 묶음</th>
+            <th scope="col">기준 캠페인</th>
+            <th scope="col">선정 혜택</th>
+            <th scope="col">진행 상태</th>
+            <th scope="col">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="c-camp-name">suzunyan08</td>
+            <td><span class="c-country-code">JP</span></td>
+            <td class="c-num">#SP-20260520-01</td>
+            <td>
+              <div class="c-camp-name">루미에르 피부과</div>
+              <div class="c-camp-sub">리프팅 체험</div>
+            </td>
+            <td>에어패스 · 항공권 지원</td>
+            <td><span class="badge badge-error badge-sm"><span class="badge-dot"></span>예약 미확정</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-camp-name">mei_shanghai</td>
+            <td><span class="c-country-code">CN</span></td>
+            <td class="c-num">#SP-20260521-04</td>
+            <td>
+              <div class="c-camp-name">세인트 클리닉</div>
+              <div class="c-camp-sub">보톡스 체험</div>
+            </td>
+            <td>호텔패스 · 숙박 지원</td>
+            <td><span class="badge badge-error badge-sm"><span class="badge-dot"></span>예약 미확정</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-camp-name">yuki_tokyo</td>
+            <td><span class="c-country-code">JP</span></td>
+            <td class="c-num">#SP-20260521-09</td>
+            <td>
+              <div class="c-camp-name">온유 클리닉</div>
+              <div class="c-camp-sub">스킨부스터 시술</div>
+            </td>
+            <td>에어패스 · 항공권 지원</td>
+            <td><span class="badge badge-error badge-sm"><span class="badge-dot"></span>예약 미확정</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-camp-name">natasha_mood</td>
+            <td><span class="c-country-code">RU</span></td>
+            <td class="c-num">#SP-20260522-02</td>
+            <td>
+              <div class="c-camp-name">메디엘 의원</div>
+              <div class="c-camp-sub">피부관리</div>
+            </td>
+            <td>호텔패스 · 숙박 지원</td>
+            <td><span class="badge badge-success badge-sm"><span class="badge-dot"></span>예약 확정</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-camp-name">lina_k</td>
+            <td><span class="c-country-code">TW</span></td>
+            <td class="c-num">#SP-20260522-07</td>
+            <td>
+              <div class="c-camp-name">이든 스킨</div>
+              <div class="c-camp-sub">수분 관리 프로그램</div>
+            </td>
+            <td>에어패스 · 항공권 지원</td>
+            <td><span class="badge badge-error badge-sm"><span class="badge-dot"></span>예약 미확정</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-camp-name">kumi_osaka</td>
+            <td><span class="c-country-code">JP</span></td>
+            <td class="c-num">#SP-20260523-01</td>
+            <td>
+              <div class="c-camp-name">프리미엄 피부과</div>
+              <div class="c-camp-sub">리프팅 체험</div>
+            </td>
+            <td>에어패스 · 항공권 지원</td>
+            <td><span class="badge badge-error badge-sm"><span class="badge-dot"></span>예약 미확정</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-camp-name">nana_bkk</td>
+            <td><span class="c-country-code">TH</span></td>
+            <td class="c-num">#SP-20260523-06</td>
+            <td>
+              <div class="c-camp-name">세인트 클리닉</div>
+              <div class="c-camp-sub">보톡스 체험</div>
+            </td>
+            <td>호텔패스 · 숙박 지원</td>
+            <td><span class="badge badge-error badge-sm"><span class="badge-dot"></span>예약 미확정</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-camp-name">mika_seoul</td>
+            <td><span class="c-country-code">JP</span></td>
+            <td class="c-num">#SP-20260524-03</td>
+            <td>
+              <div class="c-camp-name">온유 클리닉</div>
+              <div class="c-camp-sub">스킨부스터 시술</div>
+            </td>
+            <td>에어패스 · 항공권 지원</td>
+            <td><span class="badge badge-warning badge-sm"><span class="badge-dot"></span>일정 조율 중</span></td>
+            <td><button class="btn btn-sm btn-secondary" type="button" data-modal-open="modal-chat">상세보기</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button class="pg-btn nav" type="button" aria-label="첫 페이지">&laquo;</button>
+        <button class="pg-btn nav" type="button" aria-label="이전 페이지">&lsaquo;</button>
+        <button class="pg-btn active" type="button" aria-current="page">1</button>
+        <button class="pg-btn" type="button">2</button>
+        <button class="pg-btn" type="button">3</button>
+        <button class="pg-btn" type="button">4</button>
+        <button class="pg-btn" type="button">5</button>
+        <button class="pg-btn nav" type="button" aria-label="다음 페이지">&rsaquo;</button>
+        <button class="pg-btn nav" type="button" aria-label="마지막 페이지">&raquo;</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</div>
+
+<!-- ===================== 채팅 이력 모달 ===================== -->
+<div class="modal-backdrop" id="modal-chat" hidden data-modal-close="modal-chat">
+  <div class="modal modal-chat" role="dialog" aria-modal="true" aria-labelledby="modal-chat-title">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-chat-title">채팅 이력</h2>
+      <button class="modal-close" type="button" aria-label="닫기" data-modal-close="modal-chat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body modal-body--flush">
+      <div class="sp-chat">
+
+        <!-- 좌: 대상 요약 -->
+        <aside class="sp-chat-side" aria-label="대상 인플루언서 정보">
+          <div class="sp-chat-who">
+            <span class="avatar avatar-lg" aria-hidden="true">S</span>
+            <div>
+              <div class="sp-chat-who-name">suzunyan08</div>
+              <div class="sp-chat-who-meta">
+                <span class="c-country-code">JP</span>
+                <span class="sp-chat-handle">
+                  <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+                  @suzunyan08
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="sp-field">
+            <div class="sp-field-label">신청 묶음</div>
+            <div class="sp-field-value font-mono">#SP-20260520-01</div>
+          </div>
+
+          <div class="sp-card-divider" role="presentation"></div>
+
+          <div class="sp-field">
+            <div class="sp-field-label">현재 상태</div>
+            <span class="badge badge-error badge-md"><span class="badge-dot"></span>예약 미확정</span>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" class="icon-stroke" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              선정 혜택
+            </div>
+            <div class="sp-field-value">에어패스 · 항공권 지원</div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-label">기준 캠페인</div>
+            <div class="sp-field-value">루미에르 피부과 · 리프팅 체험</div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-label">기준 일정</div>
+            <div class="sp-dates sp-dates--row">
+              <span class="sp-date"><b>5/20</b> <span>10:30</span></span>
+              <span class="sp-date"><b>5/21</b> <span>14:00</span></span>
+              <span class="sp-date"><b>5/22</b> <span>11:00</span></span>
+            </div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-field-label">추천 기간 (자동 추천)</div>
+            <div class="sp-field-value">5/6 ~ 6/5</div>
+          </div>
+
+          <div class="sp-card-divider" role="presentation"></div>
+
+          <div class="sp-field">
+            <label class="sp-field-label" for="ops-memo">관리자 메모</label>
+            <textarea class="form-input sp-memo-input" id="ops-memo" rows="3" placeholder="운영팀에게만 보입니다."></textarea>
+            <button class="btn btn-sm btn-secondary sp-memo-save" type="button" data-toast-title="메모를 저장했습니다" data-toast-desc="운영팀에게만 보입니다">메모 저장</button>
+          </div>
+        </aside>
+
+        <!-- 우: 대화 -->
+        <div class="sp-chat-main">
+          <div class="sp-chat-head">
+            <span class="sp-chat-head-title">suzunyan08 · 알파콜라보 운영팀</span>
+            <div class="sp-chat-head-right">
+              <span class="badge badge-success badge-sm"><span class="badge-dot"></span>추천 발송 완료</span>
+              <span class="tooltip-wrap">
+                <a class="btn btn-sm btn-secondary" href="superpass-selection.html">추천 결과 수정</a>
+                <span class="tooltip">추천 목록을 바꾸면 인플루언서에게 앱 알림으로 다시 안내됩니다.</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="sp-chat-log" role="log" aria-label="대화 내역">
+
+            <div class="sp-msg sp-msg--out">
+              <span class="sp-msg-av sp-msg-av--ops" aria-hidden="true">α</span>
+              <div class="sp-msg-body">
+                <div class="sp-msg-name">알파콜라보 운영팀</div>
+                <p class="sp-bubble sp-bubble--ops">예약 일정 조율이 완료되지 않아, 입력하신 일정과 시술 유사도를 기준으로 대체 캠페인을 자동 추천드렸습니다.</p>
+                <div class="sp-msg-time">05/20 10:32</div>
+              </div>
+            </div>
+
+            <div class="sp-msg">
+              <span class="sp-msg-av" aria-hidden="true">S</span>
+              <div class="sp-msg-body">
+                <div class="sp-msg-name">suzunyan08</div>
+                <p class="sp-bubble sp-bubble--plain">확인해 볼게요. 추천 목록을 보고 선택할게요.</p>
+                <div class="sp-msg-time">05/20 10:33</div>
+              </div>
+            </div>
+
+            <div class="sp-msg sp-msg--out">
+              <span class="sp-msg-av sp-msg-av--ops" aria-hidden="true">α</span>
+              <div class="sp-msg-body">
+                <div class="sp-msg-name">알파콜라보 운영팀</div>
+                <div class="sp-msg-card">
+                  <span class="sp-msg-card-icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" class="icon-stroke"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  </span>
+                  <div>
+                    <div class="sp-msg-card-title">내 일정 맞춤 추천 3개</div>
+                    <div class="sp-msg-card-sub">기준 일정 · 시술 유사도 · 위치 반영</div>
+                    <a class="sp-msg-card-link" href="superpass-selection.html">추천 목록 보기 ›</a>
+                  </div>
+                </div>
+                <div class="sp-msg-time">05/20 10:33</div>
+              </div>
+            </div>
+
+            <div class="sp-msg sp-msg--out">
+              <span class="sp-msg-av sp-msg-av--ops" aria-hidden="true">α</span>
+              <div class="sp-msg-body">
+                <div class="sp-msg-name">알파콜라보 운영팀</div>
+                <p class="sp-bubble sp-bubble--ops">추천 목록이 변경되면 앱 알림으로 다시 안내드릴게요.</p>
+                <div class="sp-msg-time">05/20 10:34</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="sp-compose">
+            <input class="form-input" id="ops-reply" type="text" aria-label="메시지" placeholder="인플루언서에게 보낼 메시지를 입력하세요">
+            <button class="btn btn-md btn-primary" type="button" data-toast-title="메시지를 보냈습니다" data-toast-desc="인플루언서 앱 알림으로 전달됩니다">보내기</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-region" role="region" aria-live="polite" aria-label="알림"></div>
+
+<script src="js/components.js"></script>
+<script src="js/superpass.js"></script>
+</body>
+</html>

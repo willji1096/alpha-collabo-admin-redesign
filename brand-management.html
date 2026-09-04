@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphacollabo Admin — 브랜드사</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-active-tab="거래처관리" data-active-page="브랜드사">
+<div class="layout">
+
+<div id="sidebar-slot"></div>
+<div id="header-slot"></div>
+
+<!-- ===== Main ===== -->
+<main class="main">
+  <div class="page">
+
+    <div class="pg-header">
+      <h1 class="pg-title">브랜드사</h1>
+      <div class="pg-crumb">거래처관리 / AM팀 / <b>브랜드사</b></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters" id="brand-filters">
+      <div class="f-row">
+        <span class="f-label">모집국가</span>
+        <div class="f-body">
+          <select class="f-sel" style="width:120px">
+            <option>전체</option><option>중국</option><option selected>일본</option><option>미국</option><option>대만</option><option>홍콩</option><option>싱가포르</option><option>베트남</option><option>태국</option><option>인도네시아</option><option>말레이시아</option><option>필리핀</option><option>러시아</option>
+          </select>
+          <span class="f-label" style="margin-left:16px; width:auto">AM담당자</span>
+          <select class="f-sel" style="width:130px">
+            <option>전체</option><option>Irina</option><option>ella</option><option>julia</option><option>mimi</option><option>quinnie</option><option>rena</option><option>rita</option><option>sarah</option>
+          </select>
+          <span class="f-label" style="margin-left:16px; width:auto">지역</span>
+          <select class="f-sel" style="width:150px">
+            <option>전체</option><option>서울 강남구</option><option>서울 서초구</option><option>서울 마포구</option><option>서울 성동구</option><option>서울 중구</option><option>부산 해운대구</option><option>부산 부산진구</option><option>인천 남동구</option><option>경기 수원시</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-row">
+        <span class="f-label">잔여금액</span>
+        <div class="f-body">
+          <input class="f-input" style="width:100px" type="number" placeholder="최소" aria-label="잔여금액 최소">
+          <span class="f-sep">~</span>
+          <input class="f-input" style="width:100px" type="number" placeholder="최대" aria-label="잔여금액 최대">
+          <span class="f-label" style="margin-left:16px; width:auto">병원명</span>
+          <input class="f-input" style="width:150px" type="text" placeholder="병원명 검색">
+          <span class="f-label" style="margin-left:16px; width:auto">브랜드</span>
+          <select class="f-sel" style="width:150px">
+            <option>전체</option><option>루미에르 피부과</option><option>온유 클리닉</option><option>메디엘 의원</option><option>르메종 코스메틱</option><option>이든 스킨</option><option>소울 브로우</option><option>브릿지 치과</option><option>리버 의원</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-primary btn-sm">검색하기</button>
+        <button class="btn btn-ghost btn-sm">엑셀다운</button>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="t-toolbar">
+      <div class="t-count">전체 <strong>187</strong>건 (최신순 상위 500건까지 표시)</div>
+      <div class="t-right">
+        <button type="button" class="btn btn-sm btn-secondary">컬럼숨기기</button>
+        <select class="t-sel"><option>10개씩 보기</option><option selected>20개씩 보기</option><option>50개씩 보기</option><option>전체보기</option></select>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+      <table class="tbl has-sticky">
+        <thead>
+          <tr>
+            <th class="c-chk"><input class="checkbox-input" type="checkbox" aria-label="전체 선택"></th>
+            <th class="sortable sticky-col">지역</th>
+            <th class="c-num sortable">잔여포인트</th>
+            <th class="sortable">병원명</th>
+            <th>국가별 채널</th>
+            <th>특이사항</th>
+            <th>방문선호요일</th>
+            <th>공동작업자</th>
+            <th>병원명(언어별)</th>
+            <th>모집 현황</th>
+            <th>시술방식</th>
+            <th>캠페인 유형</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">서울 강남구</td>
+            <td class="c-num">1,240,000P</td>
+            <td>루미에르 피부과</td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td>주차 2시간 지원</td>
+            <td>화·목 오후</td>
+            <td><span class="c-null">—</span></td>
+            <td>ルミエール皮膚科 Lumière Skin Clinic</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>모집중</span></td>
+            <td><span class="tooltip-wrap" tabindex="0">1인 제공 내역: 1. 티타늄 리프팅 (정가 98만원) 2. 물광주사 2cc<span class="tooltip tooltip-bottom">1인 제공 내역: 1. 티타늄 리프팅 (정가 98만원) 2. 물광주사 2cc (정가 33만원). 시술 후 2주 내 초안 제출</span></span></td>
+            <td>방문형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">서울 마포구</td>
+            <td class="c-num">380,000P</td>
+            <td>온유 클리닉</td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span> <span class="c-tag c-tag-tt">틱톡</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>월~금</td>
+            <td>김서현</td>
+            <td>オンユクリニック Onyu Clinic</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>모집중</span></td>
+            <td>1. 아쿠아필 + LED 2. 리쥬란 2cc</td>
+            <td>방문형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">부산 해운대구</td>
+            <td class="c-num">0P</td>
+            <td>메디엘 의원</td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td>일본어 상담 가능</td>
+            <td>토</td>
+            <td><span class="c-null">—</span></td>
+            <td>メディエル医院 Mediel Clinic</td>
+            <td><span class="badge badge-info">모집예정</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>방문형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col"><span class="c-null">—</span></td>
+            <td class="c-num">2,050,000P</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span> <span class="c-tag c-tag-yt">유튜브</span></td>
+            <td>해외배송 · 관세 포함</td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>ルメゾン Le Maison Cosmetics</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>모집중</span></td>
+            <td>1인 제공 내역: 세럼 2종 중 택1 (정가 68,000원)</td>
+            <td>배송형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">서울 서초구</td>
+            <td class="c-num">-215,000P</td>
+            <td>이든 스킨</td>
+            <td><span class="c-tag c-tag-tw">트위터</span> <span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td>잔액 부족 안내 완료</td>
+            <td>수·금</td>
+            <td>박지우</td>
+            <td>イドゥンスキン Eden Skin</td>
+            <td><span class="badge badge-outline-warning">모집종료</span></td>
+            <td>1. 슈링크 300샷</td>
+            <td>방문형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">서울 성동구</td>
+            <td class="c-num">760,000P</td>
+            <td>소울 브로우</td>
+            <td><span class="c-tag c-tag-tt">틱톡</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>월·화</td>
+            <td><span class="c-null">—</span></td>
+            <td>ソウルブロウ Soul Brow</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>모집중</span></td>
+            <td>1. 눈썹 반영구 2. 입술 반영구 (1개 선택)</td>
+            <td>방문형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">서울 강남구</td>
+            <td class="c-num">1,900,000P</td>
+            <td>브릿지 치과</td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span> <span class="c-tag c-tag-xhs">샤오홍슈</span></td>
+            <td>중국어 코디네이터 상주</td>
+            <td>화~토</td>
+            <td>최민준</td>
+            <td>ブリッジ歯科 Bridge Dental</td>
+            <td><span class="badge badge-success"><span class="badge-dot"></span>모집중</span></td>
+            <td>1. 치아 미백 2. 스케일링 + 구강 검진</td>
+            <td>방문형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+          <tr>
+            <td class="c-chk"><input class="checkbox-input" type="checkbox"></td>
+            <td class="sticky-col">인천 남동구</td>
+            <td class="c-num">120,000P</td>
+            <td>리버 의원</td>
+            <td><span class="c-tag c-tag-ig">인스타그램</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>リバー医院 River Clinic</td>
+            <td><span class="badge badge-info">모집예정</span></td>
+            <td><span class="c-null">—</span></td>
+            <td>방문형</td>
+            <td><button type="button" class="btn btn-sm btn-secondary">상세보기</button></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="pagination">
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn">3</button>
+        <button class="pg-btn">4</button>
+        <button class="pg-btn">5</button>
+        <button class="pg-btn">6</button>
+        <button class="pg-btn">7</button>
+        <button class="pg-btn">8</button>
+        <button class="pg-btn">9</button>
+        <button class="pg-btn">10</button>
+        <button class="pg-btn nav">맨끝</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</div>
+<script src="js/components.js"></script>
+</body>
+</html>

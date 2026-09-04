@@ -1,0 +1,470 @@
+OpenAI Codex v0.153.0
+--------
+workdir: /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+model: gpt-5.6-luna
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a06a3e-6c02-7be0-b1de-41fc4eefc8b9
+--------
+user
+후속 확인 요청 (같은 주제, 읽기 전용, 파일 수정 금지, 출력은 표/불릿만).
+
+너의 1차 보고를 재판정해 아래처럼 적용했다. 항목 4(호버는 캠페인 행 단위)는 반려했다 — rowspan 셀(인플루언서·묶음·기준 일정)이 첫 행에만 붙어 있어 2·3번째 캠페인 행에 hover하면 왼쪽 절반은 흰색, 오른쪽만 회색인 반쪽 하이라이트가 되기 때문. 체크박스가 묶음 단위이므로 hover도 묶음 단위 유지.
+
+적용 규칙(어드민 전체):
+- 행 hover = --bg-subtle(neutral-50)
+- 선택 행 = --bg-subtle + 첫 셀 box-shadow: inset 3px 0 0 var(--accent)
+- 선택 행 hover = --bg-hover(neutral-100)  ← 너는 "동일 유지"라 했지만 선택 행에서 마우스 반응이 사라져 한 단계 올렸다
+- 선택이 hover보다 우선. --accent-light는 --status-error-bg와 같은 값(#FEF2F2)이라 행 선택에 사용 금지.
+
+적용 파일: css/admin.css 1343-1358(행 상태), 1368-1370·1385-1387(has-sticky 고정 컬럼), css/superpass.css 47-52(묶음 단위), docs/DESIGN.md §7.3.
+
+확인할 것 (각 항목 `파일:라인 + 판정(OK/수정) + 근거` 형식):
+1. 위 CSS를 실제로 읽고, 선택 우선순위가 cascade 순서나 specificity에 의존하지 않고 보장되는지. 깨지는 조합이 있으면 정확한 셀렉터로 지적.
+2. has-sticky 고정 컬럼(td.c-chk, td.sticky-col)은 배경을 따로 가지는데 3가지 상태 모두 본체 행과 같은 값인지.
+3. 좌측 3px 바를 첫 셀 inset box-shadow로 넣은 방식의 리스크(sticky z-index, border-collapse, 셀 padding과 체크박스 겹침). 더 안전한 토큰 기반 대안이 있으면.
+4. 선택 행 hover를 neutral-100으로 올린 내 보정에 대한 판정.
+5. DESIGN.md §7.3에 넣을 최종 규칙 문장을 3줄 이내로 확정해라 (토큰명만 사용).
+
+warning: failed to parse plugin hooks config /Users/willji/.codex/plugins/cache/aing-marketplace/aing/2.9.21/hooks/hooks.json: unknown field `$schema`, expected `description` or `hooks` at line 2 column 11
+hook: SessionStart
+hook: SessionStart
+hook: SessionStart Completed
+hook: SessionStart Completed
+hook: UserPromptSubmit
+hook: UserPromptSubmit
+hook: UserPromptSubmit Completed
+hook: UserPromptSubmit Completed
+codex
+적용된 실제 CSS와 `DESIGN.md §7.3`만 다시 읽어 cascade, sticky 컬럼, 묶음 selector의 상호작용을 검증하겠습니다. 읽기 전용으로 확인하며 파일은 수정하지 않습니다.
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc "nl -ba css/admin.css | sed -n '1338,1392p'; nl -ba css/superpass.css | sed -n '43,55p'; nl -ba docs/DESIGN.md | sed -n '386,397p'; rg -n \"tbl|sp-bundle|has-sticky|sticky-col|c-chk|checkbox-input\" css/admin.css css/superpass.css superpass-first-review.html | head -160" in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 0ms:
+  1338	  vertical-align: middle;
+  1339	  text-align: center;
+  1340	  font-size: 14px;
+  1341	}
+  1342	.tbl td:last-child { border-right: none; }
+  1343	
+  1344	.tbl tbody tr { transition: background 100ms; }
+  1345	/* 행 상태 규칙 (2026-09-04, DESIGN.md §7.3)
+  1346	   hover = --bg-subtle(neutral-50) · 선택 = --bg-subtle + 좌측 3px --accent 바 · 선택+hover = --bg-hover(neutral-100)
+  1347	   선택이 hover보다 항상 우선. 레드 틴트(--accent-light)는 에러 배경과 같은 값이라 행 선택에 쓰지 않는다. */
+  1348	.tbl tbody tr:hover { background: var(--bg-subtle); }
+  1349	.tbl tbody tr:last-child td { border-bottom: none; }
+  1350	
+  1351	.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) {
+  1352	  background: var(--bg-subtle);
+  1353	}
+  1354	.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) > td:first-child {
+  1355	  box-shadow: inset 3px 0 0 var(--accent);
+  1356	}
+  1357	.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked):hover {
+  1358	  background: var(--bg-hover);
+  1359	}
+  1360	
+  1361	/* Sticky 첫 데이터 컬럼 — .tbl.has-sticky 테이블에서 체크박스 + 다음 1컬럼 고정 */
+  1362	.tbl.has-sticky th.c-chk,
+  1363	.tbl.has-sticky td.c-chk {
+  1364	  position: sticky;
+  1365	  left: 0;
+  1366	  z-index: 2;
+  1367	  background: var(--bg-surface);
+  1368	}
+  1369	.tbl.has-sticky thead th.c-chk {
+  1370	  background: var(--bg-elevated);
+  1371	  z-index: 3;
+  1372	}
+  1373	.tbl.has-sticky tbody tr:hover td.c-chk { background: var(--bg-subtle); }
+  1374	.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.c-chk { background: var(--bg-subtle); }
+  1375	.tbl.has-sticky tbody tr:has(.c-chk input:checked):hover td.c-chk { background: var(--bg-hover); }
+  1376	
+  1377	.tbl.has-sticky th.sticky-col,
+  1378	.tbl.has-sticky td.sticky-col {
+  1379	  position: sticky;
+  1380	  left: 40px;  /* c-chk width */
+  1381	  z-index: 2;
+  1382	  background: var(--bg-surface);
+  1383	  border-right: 1px solid var(--border-default);
+  1384	  box-shadow: 2px 0 4px -2px rgba(17,17,17,0.08);
+  1385	}
+  1386	.tbl.has-sticky thead th.sticky-col {
+  1387	  background: var(--bg-elevated);
+  1388	  z-index: 3;
+  1389	}
+  1390	.tbl.has-sticky tbody tr:hover td.sticky-col { background: var(--bg-subtle); }
+  1391	.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-col { background: var(--bg-subtle); }
+  1392	.tbl.has-sticky tbody tr:has(.c-chk input:checked):hover td.sticky-col { background: var(--bg-hover); }
+    43	/* ── 묶음(rowspan) 셀은 위쪽 정렬 ──────────────────────────────── */
+    44	.tbl td.sp-merged-top { vertical-align: top; }
+    45	.tbl td.c-chk.sp-merged-top { padding-top: 14px; }
+    46	
+    47	/* 신청 묶음 = 한 덩어리: 묶음(tbody) 단위로 hover·선택 강조 (규칙은 admin.css 행 상태와 동일, 단위만 묶음).
+    48	   행 단위 hover는 rowspan 셀이 첫 행에만 붙어 있어 반쪽 하이라이트가 되므로 쓰지 않는다. */
+    49	.tbl .sp-bundle:hover tr { background: var(--bg-subtle); }
+    50	.tbl .sp-bundle:has(.c-chk input:checked) tr { background: var(--bg-subtle); }
+    51	.tbl .sp-bundle:has(.c-chk input:checked) tr:first-child > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+    52	.tbl .sp-bundle:has(.c-chk input:checked):hover tr { background: var(--bg-hover); }
+    53	.tbl .sp-bundle tr:last-child td { border-bottom: 1px solid var(--border-default); }
+    54	.tbl .sp-bundle:last-child tr:last-child td { border-bottom: none; }
+    55	
+   386	- 패딩: 20~24px
+   387	
+   388	### 7.3 Tables
+   389	- 헤더: `--bg-elevated`, weight 500
+   390	- 행 호버: `--bg-subtle` (neutral-50). 칩·버튼이 많은 행에서 소음이 되지 않는 최소 단계
+   391	- 선택 행: `--bg-subtle` + 첫 셀 좌측 3px `--accent` 바 (`box-shadow: inset 3px 0 0`)
+   392	- 선택 행 호버: `--bg-hover` (neutral-100). 선택이 호버보다 항상 우선
+   393	- `--accent-light`(red-50)는 `--status-error-bg`와 같은 값이라 **행 선택에 쓰지 않는다** — 레드 틴트는 에러·경고 전용 (2026-09-04, Codex 검토 `_review/codex-table-states.md`)
+   394	- 슈퍼패스 묶음(rowspan) 테이블은 같은 규칙을 묶음(tbody) 단위로 적용
+   395	- 숫자 우측 정렬 + `tabular-nums`
+   396	- 스트라이프 금지 — 호버/선택으로 구분
+   397	
+css/superpass.css:22:.tbl th .tooltip-wrap { align-items: center; gap: var(--space-1); }
+css/superpass.css:23:.tbl th .tooltip-wrap svg { color: var(--text-tertiary); }
+css/superpass.css:24:.tbl th .tooltip { white-space: normal; width: max-content; max-width: 220px; text-align: left; font-weight: var(--fw-regular); }
+css/superpass.css:44:.tbl td.sp-merged-top { vertical-align: top; }
+css/superpass.css:45:.tbl td.c-chk.sp-merged-top { padding-top: 14px; }
+css/superpass.css:49:.tbl .sp-bundle:hover tr { background: var(--bg-subtle); }
+css/superpass.css:50:.tbl .sp-bundle:has(.c-chk input:checked) tr { background: var(--bg-subtle); }
+css/superpass.css:51:.tbl .sp-bundle:has(.c-chk input:checked) tr:first-child > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+css/superpass.css:52:.tbl .sp-bundle:has(.c-chk input:checked):hover tr { background: var(--bg-hover); }
+css/superpass.css:53:.tbl .sp-bundle tr:last-child td { border-bottom: 1px solid var(--border-default); }
+css/superpass.css:54:.tbl .sp-bundle:last-child tr:last-child td { border-bottom: none; }
+css/superpass.css:57:.sp-bundle-id {
+css/superpass.css:66:.sp-bundle-count { color: var(--text-secondary); font-weight: var(--fw-medium); }
+css/superpass.css:506:.tbl--wide { min-width: 1180px; }
+superpass-first-review.html:68:    <div class="tbl-wrap">
+superpass-first-review.html:69:      <div class="tbl-scroll">
+superpass-first-review.html:70:        <table class="tbl tbl--wide" id="sp-first-table">
+superpass-first-review.html:74:              <th class="c-chk" scope="col"><input class="checkbox-input" type="checkbox" data-check-all="sp-first-table" aria-label="전체 선택"></th>
+superpass-first-review.html:87:          <tbody class="sp-bundle">
+superpass-first-review.html:91:              <td class="c-chk sp-merged-top" rowspan="3"><input class="checkbox-input" type="checkbox" aria-label="suzunyan08 신청 묶음 선택"></td>
+superpass-first-review.html:98:                <span class="sp-bundle-id">#SP-20260520-01 <span class="sp-bundle-count">· 3건</span></span>
+superpass-first-review.html:178:          <tbody class="sp-bundle">
+superpass-first-review.html:181:              <td class="c-chk sp-merged-top" rowspan="2"><input class="checkbox-input" type="checkbox" aria-label="mei_shanghai 신청 묶음 선택"></td>
+superpass-first-review.html:188:                <span class="sp-bundle-id">#SP-20260521-04 <span class="sp-bundle-count">· 2건</span></span>
+css/admin.css:1270:.tbl-wrap {
+css/admin.css:1277:.tbl {
+css/admin.css:1282:.tbl th {
+css/admin.css:1293:.tbl th:last-child { border-right: none; }
+css/admin.css:1296:.tbl th.sortable {
+css/admin.css:1302:.tbl th.sortable:hover { background: var(--bg-hover); color: var(--text-secondary); }
+css/admin.css:1303:.tbl th.sortable::after {
+css/admin.css:1316:.tbl th.sortable.is-asc::after,
+css/admin.css:1317:.tbl th.sortable.is-desc::after {
+css/admin.css:1320:.tbl th.sortable.is-asc::after {
+css/admin.css:1324:.tbl th.sortable.is-desc::after {
+css/admin.css:1328:.tbl th.sortable.is-asc,
+css/admin.css:1329:.tbl th.sortable.is-desc {
+css/admin.css:1334:.tbl td {
+css/admin.css:1342:.tbl td:last-child { border-right: none; }
+css/admin.css:1344:.tbl tbody tr { transition: background 100ms; }
+css/admin.css:1348:.tbl tbody tr:hover { background: var(--bg-subtle); }
+css/admin.css:1349:.tbl tbody tr:last-child td { border-bottom: none; }
+css/admin.css:1351:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) {
+css/admin.css:1354:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) > td:first-child {
+css/admin.css:1357:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked):hover {
+css/admin.css:1361:/* Sticky 첫 데이터 컬럼 — .tbl.has-sticky 테이블에서 체크박스 + 다음 1컬럼 고정 */
+css/admin.css:1362:.tbl.has-sticky th.c-chk,
+css/admin.css:1363:.tbl.has-sticky td.c-chk {
+css/admin.css:1369:.tbl.has-sticky thead th.c-chk {
+css/admin.css:1373:.tbl.has-sticky tbody tr:hover td.c-chk { background: var(--bg-subtle); }
+css/admin.css:1374:.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.c-chk { background: var(--bg-subtle); }
+css/admin.css:1375:.tbl.has-sticky tbody tr:has(.c-chk input:checked):hover td.c-chk { background: var(--bg-hover); }
+css/admin.css:1377:.tbl.has-sticky th.sticky-col,
+css/admin.css:1378:.tbl.has-sticky td.sticky-col {
+css/admin.css:1380:  left: 40px;  /* c-chk width */
+css/admin.css:1386:.tbl.has-sticky thead th.sticky-col {
+css/admin.css:1390:.tbl.has-sticky tbody tr:hover td.sticky-col { background: var(--bg-subtle); }
+css/admin.css:1391:.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-col { background: var(--bg-subtle); }
+css/admin.css:1392:.tbl.has-sticky tbody tr:has(.c-chk input:checked):hover td.sticky-col { background: var(--bg-hover); }
+css/admin.css:1395:.tbl-scroll {
+css/admin.css:1400:.tbl-scroll::-webkit-scrollbar { height: 12px; }
+css/admin.css:1401:.tbl-scroll::-webkit-scrollbar-track { background: var(--bg-page); }
+css/admin.css:1402:.tbl-scroll::-webkit-scrollbar-thumb {
+css/admin.css:1407:.tbl-scroll::-webkit-scrollbar-thumb:hover { background: var(--neutral-400); }
+css/admin.css:1409:.tbl .c-chk { width: 40px; text-align: center; }
+css/admin.css:1410:.tbl .c-chk .checkbox-input { width: 16px; height: 16px; }
+css/admin.css:1411:.tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
+css/admin.css:1412:.tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
+css/admin.css:1843:.tbl td.c-num,
+css/admin.css:1844:.tbl .c-date-multi,
+css/admin.css:1845:.tbl .c-badge-warn {
+css/admin.css:1849:.tbl td { word-break: keep-all; }
+css/admin.css:1851:.tbl .c-camp-name,
+css/admin.css:1852:.tbl .c-camp-sub { overflow-wrap: break-word; }
+css/admin.css:1868:.tbl-scroll { overflow-x: auto; }
+css/admin.css:1871:.tbl-warning {
+css/admin.css:1881:.tbl .c-btn-stack {
+css/admin.css:1888:.tbl .c-btn-stack > .btn { width: 100%; }
+css/admin.css:2311:.day-tbl-wrap {
+css/admin.css:2317:.day-tbl {
+css/admin.css:2322:.day-tbl thead th {
+css/admin.css:2337:.day-tbl tbody td {
+css/admin.css:2342:.day-tbl tbody tr { transition: background var(--transition-fast); cursor: pointer; }
+css/admin.css:2343:.day-tbl tbody tr:hover { background: var(--bg-page); }
+css/admin.css:2344:.day-tbl tbody tr:last-child td { border-bottom: none; }
+css/admin.css:2347:.day-tbl .col-campaign {
+css/admin.css:2352:.day-tbl-campaign {
+css/admin.css:2357:.day-tbl-thumb {
+css/admin.css:2371:.day-tbl-thumb img { width: 100%; height: 100%; object-fit: cover; }
+css/admin.css:2372:.day-tbl-camp-body { min-width: 0; }
+css/admin.css:2373:.day-tbl-camp-name {
+css/admin.css:2381:.day-tbl-camp-meta {
+css/admin.css:2389:.day-tbl-camp-meta code {
+css/admin.css:2398:.day-tbl-sns {
+css/admin.css:2537:.day-tbl-stack {
+css/admin.css:2543:.day-tbl-recruit {
+css/admin.css:2551:.day-tbl-date {
+css/admin.css:2559:.day-tbl-date small {
+css/admin.css:2563:.day-tbl-date-empty { color: var(--text-disabled); }
+css/admin.css:2566:.day-tbl-views {
+css/admin.css:2789:  .tbl-wrap { overflow-x: auto; }
+css/admin.css:2790:  .tbl { min-width: 720px; }
+css/admin.css:2840:  body[data-active-tab="사이트관리"] .tbl th:first-child,
+css/admin.css:2841:  body[data-active-tab="사이트관리"] .tbl td:first-child,
+css/admin.css:2842:  body[data-active-tab="사이트관리"] .tbl th:nth-child(5),
+css/admin.css:2843:  body[data-active-tab="사이트관리"] .tbl td:nth-child(5) {
+css/admin.css:2846:  body[data-active-tab="사이트관리"] .tbl { min-width: auto; }
+css/admin.css:2861:  .price-tbl { min-width: 640px; }
+css/admin.css:4764:.price-tbl {
+css/admin.css:4773:.price-tbl th {
+css/admin.css:4784:.price-tbl th:last-child { border-right: none; }
+css/admin.css:4785:.price-tbl td {
+css/admin.css:4794:.price-tbl td:last-child { border-right: none; }
+css/admin.css:4795:.price-tbl tbody tr:last-child td { border-bottom: none; }
+css/admin.css:4796:.price-tbl tbody tr:hover { background: var(--bg-hover); }
+css/admin.css:4797:.price-tbl .row-label {
+css/admin.css:4803:.price-tbl .total-row td {
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+hook: PreToolUse
+hook: PreToolUse
+hook: PreToolUse Completed
+hook: PreToolUse Completed
+exec
+/bin/zsh -lc "nl -ba css/admin.css | sed -n '1268,1343p;1405,1415p'; rg -n \"\\.tbl|background: var\\(--bg-surface\\)|border-collapse\" css/common.css css/admin.css css/superpass.css | head -100" in /Users/willji/Desktop/글로벌알파미디어/알파콜라보/어드민
+ succeeded in 0ms:
+  1268	
+  1269	/* ===== Data Table ===== */
+  1270	.tbl-wrap {
+  1271	  background: var(--bg-surface);
+  1272	  border: 1px solid var(--border-default);
+  1273	  border-radius: 10px;
+  1274	  overflow: hidden;
+  1275	}
+  1276	
+  1277	.tbl {
+  1278	  width: 100%;
+  1279	  border-collapse: collapse;
+  1280	}
+  1281	
+  1282	.tbl th {
+  1283	  background: var(--bg-elevated);
+  1284	  font-size: 13px;
+  1285	  font-weight: 600;
+  1286	  color: var(--text-tertiary);
+  1287	  text-align: center;
+  1288	  padding: 10px 14px;
+  1289	  border-bottom: 1px solid var(--border-default);
+  1290	  border-right: 1px solid var(--border-light);
+  1291	  white-space: nowrap;
+  1292	}
+  1293	.tbl th:last-child { border-right: none; }
+  1294	
+  1295	/* Sortable column header */
+  1296	.tbl th.sortable {
+  1297	  cursor: pointer;
+  1298	  user-select: none;
+  1299	  transition: background var(--transition-fast);
+  1300	  position: relative;
+  1301	}
+  1302	.tbl th.sortable:hover { background: var(--bg-hover); color: var(--text-secondary); }
+  1303	.tbl th.sortable::after {
+  1304	  content: '';
+  1305	  display: inline-block;
+  1306	  margin-left: 6px;
+  1307	  vertical-align: middle;
+  1308	  width: 8px;
+  1309	  height: 8px;
+  1310	  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='10' viewBox='0 0 8 10'%3E%3Cpath fill='%23B8B8B8' d='M4 0l4 4H0z'/%3E%3Cpath fill='%23B8B8B8' d='M4 10l-4-4h8z'/%3E%3C/svg%3E");
+  1311	  background-size: 8px 10px;
+  1312	  background-repeat: no-repeat;
+  1313	  background-position: center;
+  1314	  opacity: 0.5;
+  1315	}
+  1316	.tbl th.sortable.is-asc::after,
+  1317	.tbl th.sortable.is-desc::after {
+  1318	  opacity: 1;
+  1319	}
+  1320	.tbl th.sortable.is-asc::after {
+  1321	  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath fill='%23EE2128' d='M4 0l4 5H0z'/%3E%3C/svg%3E");
+  1322	  background-size: 8px 5px;
+  1323	}
+  1324	.tbl th.sortable.is-desc::after {
+  1325	  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath fill='%23EE2128' d='M4 5l-4-5h8z'/%3E%3C/svg%3E");
+  1326	  background-size: 8px 5px;
+  1327	}
+  1328	.tbl th.sortable.is-asc,
+  1329	.tbl th.sortable.is-desc {
+  1330	  color: var(--accent);
+  1331	  font-weight: var(--fw-semibold);
+  1332	}
+  1333	
+  1334	.tbl td {
+  1335	  padding: 12px 14px;
+  1336	  border-bottom: 1px solid var(--border-light);
+  1337	  border-right: 1px solid var(--border-light);
+  1338	  vertical-align: middle;
+  1339	  text-align: center;
+  1340	  font-size: 14px;
+  1341	}
+  1342	.tbl td:last-child { border-right: none; }
+  1343	
+  1405	  border: 2px solid var(--bg-page);
+  1406	}
+  1407	.tbl-scroll::-webkit-scrollbar-thumb:hover { background: var(--neutral-400); }
+  1408	
+  1409	.tbl .c-chk { width: 40px; text-align: center; }
+  1410	.tbl .c-chk .checkbox-input { width: 16px; height: 16px; }
+  1411	.tbl .c-chk .checkbox-input:checked::after { left: 4px; top: 1px; width: 5px; height: 8px; }
+  1412	.tbl .c-num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
+  1413	
+  1414	/* ===== Image Lightbox ===== */
+  1415	.img-lightbox {
+css/superpass.css:22:.tbl th .tooltip-wrap { align-items: center; gap: var(--space-1); }
+css/superpass.css:23:.tbl th .tooltip-wrap svg { color: var(--text-tertiary); }
+css/superpass.css:24:.tbl th .tooltip { white-space: normal; width: max-content; max-width: 220px; text-align: left; font-weight: var(--fw-regular); }
+css/superpass.css:44:.tbl td.sp-merged-top { vertical-align: top; }
+css/superpass.css:45:.tbl td.c-chk.sp-merged-top { padding-top: 14px; }
+css/superpass.css:49:.tbl .sp-bundle:hover tr { background: var(--bg-subtle); }
+css/superpass.css:50:.tbl .sp-bundle:has(.c-chk input:checked) tr { background: var(--bg-subtle); }
+css/superpass.css:51:.tbl .sp-bundle:has(.c-chk input:checked) tr:first-child > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+css/superpass.css:52:.tbl .sp-bundle:has(.c-chk input:checked):hover tr { background: var(--bg-hover); }
+css/superpass.css:53:.tbl .sp-bundle tr:last-child td { border-bottom: 1px solid var(--border-default); }
+css/superpass.css:54:.tbl .sp-bundle:last-child tr:last-child td { border-bottom: none; }
+css/superpass.css:76:  background: var(--bg-surface);
+css/superpass.css:99:  background: var(--bg-surface);
+css/superpass.css:128:.pipeline-static .pipeline-step.is-current { background: var(--bg-surface); }
+css/superpass.css:263:  background: var(--bg-surface);
+css/superpass.css:312:  background: var(--bg-surface);
+css/superpass.css:411:.sp-bubble--plain { background: var(--bg-surface); }
+css/superpass.css:426:  background: var(--bg-surface);
+css/superpass.css:470:  background: var(--bg-surface);
+css/superpass.css:506:.tbl--wide { min-width: 1180px; }
+css/common.css:449:  background: var(--bg-surface);
+css/common.css:595:  background: var(--bg-surface);
+css/common.css:734:  background: var(--bg-surface);
+css/common.css:752:  border-collapse: collapse;
+css/common.css:873:  background: var(--bg-surface);
+css/common.css:932:  background: var(--bg-surface);
+css/common.css:1013:  background: var(--bg-surface);
+css/common.css:1126:  background: var(--bg-surface);
+css/common.css:1163:  background: var(--bg-surface);
+css/common.css:1313:  background: var(--bg-surface);
+css/common.css:1441:  background: var(--bg-surface);
+css/common.css:1476:  background: var(--bg-surface);
+css/common.css:1732:[data-density="compact"] .tbl td,
+css/common.css:1734:[data-density="compact"] .tbl th,
+css/common.css:1737:[data-density="default"] .tbl td,
+css/common.css:1739:[data-density="default"] .tbl th,
+css/common.css:1741:[data-density="comfortable"] .tbl td,
+css/common.css:1743:[data-density="comfortable"] .tbl th,
+css/common.css:1769:  background: var(--bg-surface);
+css/common.css:1808:  background: var(--bg-surface);
+css/common.css:1878:  background: var(--bg-surface);
+css/common.css:1986:  background: var(--bg-surface);
+css/admin.css:18:  background: var(--bg-surface);
+css/admin.css:278:  background: var(--bg-surface);
+css/admin.css:334:  background: var(--bg-surface);
+css/admin.css:525:.dm-body-input:focus { border-color: var(--accent); box-shadow: var(--focus-ring); background: var(--bg-surface); }
+css/admin.css:565:  background: var(--bg-surface);
+css/admin.css:669:  background: var(--bg-surface);
+css/admin.css:715:  background: var(--bg-surface);
+css/admin.css:806:  background: var(--bg-surface);
+css/admin.css:857:  background: var(--bg-surface);
+css/admin.css:904:  background: var(--bg-surface);
+css/admin.css:991:  background: var(--bg-surface);
+css/admin.css:1053:  background: var(--bg-surface);
+css/admin.css:1154:  background: var(--bg-surface);
+css/admin.css:1172:  background: var(--bg-surface);
+css/admin.css:1257:  background: var(--bg-surface);
+css/admin.css:1270:.tbl-wrap {
+css/admin.css:1271:  background: var(--bg-surface);
+css/admin.css:1277:.tbl {
+css/admin.css:1279:  border-collapse: collapse;
+css/admin.css:1282:.tbl th {
+css/admin.css:1293:.tbl th:last-child { border-right: none; }
+css/admin.css:1296:.tbl th.sortable {
+css/admin.css:1302:.tbl th.sortable:hover { background: var(--bg-hover); color: var(--text-secondary); }
+css/admin.css:1303:.tbl th.sortable::after {
+css/admin.css:1316:.tbl th.sortable.is-asc::after,
+css/admin.css:1317:.tbl th.sortable.is-desc::after {
+css/admin.css:1320:.tbl th.sortable.is-asc::after {
+css/admin.css:1324:.tbl th.sortable.is-desc::after {
+css/admin.css:1328:.tbl th.sortable.is-asc,
+css/admin.css:1329:.tbl th.sortable.is-desc {
+css/admin.css:1334:.tbl td {
+css/admin.css:1342:.tbl td:last-child { border-right: none; }
+css/admin.css:1344:.tbl tbody tr { transition: background 100ms; }
+css/admin.css:1348:.tbl tbody tr:hover { background: var(--bg-subtle); }
+css/admin.css:1349:.tbl tbody tr:last-child td { border-bottom: none; }
+css/admin.css:1351:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) {
+css/admin.css:1354:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked) > td:first-child {
+css/admin.css:1357:.tbl tbody tr:has(.c-chk input[type="checkbox"]:checked):hover {
+css/admin.css:1361:/* Sticky 첫 데이터 컬럼 — .tbl.has-sticky 테이블에서 체크박스 + 다음 1컬럼 고정 */
+css/admin.css:1362:.tbl.has-sticky th.c-chk,
+css/admin.css:1363:.tbl.has-sticky td.c-chk {
+css/admin.css:1367:  background: var(--bg-surface);
+css/admin.css:1369:.tbl.has-sticky thead th.c-chk {
+css/admin.css:1373:.tbl.has-sticky tbody tr:hover td.c-chk { background: var(--bg-subtle); }
+css/admin.css:1374:.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.c-chk { background: var(--bg-subtle); }
+css/admin.css:1375:.tbl.has-sticky tbody tr:has(.c-chk input:checked):hover td.c-chk { background: var(--bg-hover); }
+css/admin.css:1377:.tbl.has-sticky th.sticky-col,
+css/admin.css:1378:.tbl.has-sticky td.sticky-col {
+css/admin.css:1382:  background: var(--bg-surface);
+css/admin.css:1386:.tbl.has-sticky thead th.sticky-col {
+css/admin.css:1390:.tbl.has-sticky tbody tr:hover td.sticky-col { background: var(--bg-subtle); }
+css/admin.css:1391:.tbl.has-sticky tbody tr:has(.c-chk input:checked) td.sticky-col { background: var(--bg-subtle); }
+css/admin.css:1392:.tbl.has-sticky tbody tr:has(.c-chk input:checked):hover td.sticky-col { background: var(--bg-hover); }
+css/admin.css:1395:.tbl-scroll {
+css/admin.css:1400:.tbl-scroll::-webkit-scrollbar { height: 12px; }
+css/admin.css:1401:.tbl-scroll::-webkit-scrollbar-track { background: var(--bg-page); }
+css/admin.css:1402:.tbl-scroll::-webkit-scrollbar-thumb {
+css/admin.css:1407:.tbl-scroll::-webkit-scrollbar-thumb:hover { background: var(--neutral-400); }
+
+hook: PostToolUse
+hook: PostToolUse
+hook: PostToolUse Completed
+hook: PostToolUse Completed
+codex
+| 항목 | 파일:라인 + 판정 | 근거 |
+|---|---|---|
+| 1. 선택 우선순위 | `css/admin.css:1351-1358` — **OK**. `.tbl tbody tr:has(...:checked):hover`가 일반 hover보다 specificity가 높아 `--bg-hover`를 적용함. `css/superpass.css:49-52` — **OK**. `.tbl .sp-bundle:has(...):hover tr`가 묶음 전체에 적용됨. 단, 일반 rowspan 테이블에서는 `css/admin.css:1351`이 체크박스를 포함한 첫 `tr`만 선택 처리하므로 후속 행은 선택 배경이 누락될 수 있음. | 현재 조합에서는 cascade 순서가 바뀌어도 selected-hover selector가 일반 hover보다 specificity가 높음. rowspan 일반 테이블까지 보장하려면 `tbody:has(.c-chk input:checked) tr` 계열이 필요함. |
+| 2. sticky 고정 컬럼 | `css/admin.css:1362-1392` — **OK**. `td.c-chk`, `td.sticky-col` 모두 hover=`--bg-subtle`, selected=`--bg-subtle`, selected-hover=`--bg-hover`로 본체와 일치함. 기본 상태의 `--bg-surface`도 `.tbl-wrap` 표면과 동일함. | 상태별 고정 컬럼 배경 selector가 각각 존재하고 selected-hover가 마지막에 선언됨. |
+| 3. 좌측 3px inset bar | `css/admin.css:1354-1356`, `css/superpass.css:51` — **OK, 조건부**. `box-shadow: inset 3px 0 0 var(--accent)`는 `border-collapse: collapse`의 셀 크기·열 폭을 변경하지 않아 border 방식보다 안전함. sticky `z-index: 2`와도 충돌 없음. 체크박스는 셀 중앙에 있어 일반적으로 겹치지 않음. | 리스크는 첫 셀 폭이 과도하게 좁거나 `padding`이 별도 변경되는 테이블에서만 발생. `border-inline-start`는 border-collapse와 border conflict/폭 변화 가능성이 있어 현재 방식 유지가 더 안전함. |
+| 4. 선택 행 hover `--bg-hover` 보정 | `css/admin.css:1357-1358`, `css/admin.css:1375`, `1392`, `css/superpass.css:52` — **OK**. 선택 상태를 잃지 않고 포인터 반응만 한 단계 강화함. | “선택이 hover보다 우선”은 선택 행이 일반 hover selector에 의해 무시되지 않는다는 의미이며, selected-hover의 표면값을 `--bg-hover`로 별도 정의하는 것은 유효함. |
+| 5. DESIGN.md §7.3 최종 문장 | `docs/DESIGN.md:388-396` — **수정 권장** | 아래 3줄로 확정. |
+
+- 기본 행 hover는 `--bg-subtle`을 사용한다.
+- 선택 행은 `--bg-subtle`과 첫 셀 inset `3px --accent` 바를 사용한다.
+- 선택 행 hover는 `--bg-hover`를 사용하며, rowspan 묶음 테이블은 hover·선택을 `tbody` 묶음 단위로 적용한다.
+hook: Stop
+hook: Stop
+hook: Stop
+hook: Stop Completed
+hook: Stop Completed
+hook: Stop Completed
+tokens used
+77,072
